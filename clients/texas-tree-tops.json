@@ -1,0 +1,350 @@
+{
+  "slug": "texas-tree-tops",
+  "name": "Texas Tree Tops",
+  "serviceArea": "West Dallas, TX",
+  "serviceAreaList": [
+    "Highland Park",
+    "University Park",
+    "Kessler Park",
+    "Colleyville",
+    "Coppell",
+    "Flower Mound",
+    "Cedar Hill",
+    "DeSoto",
+    "Duncanville",
+    "Southlake",
+    "Grapevine",
+    "Keller",
+    "Trophy Club",
+    "Westlake",
+    "Mansfield",
+    "Fort Worth",
+    "Hurst",
+    "Euless",
+    "Bedford",
+    "Carrollton",
+    "Farmers Branch",
+    "Addison",
+    "Irving",
+    "Grand Prairie",
+    "West Dallas"
+  ],
+  "brand": {
+    "logoUrl": "/assets/texas-tree-tops/logo-mobile-and-footer-28a2c9eb.webp",
+    "primaryColor": "#1f3d2b",
+    "accentColor": "#c8952b",
+    "onPrimaryColor": "#ffffff"
+  },
+  "phone": {
+    "e164": "+16824520735",
+    "kind": "ghl-tracking",
+    "displayOverride": null
+  },
+  "leadDestination": {
+    "thankYouUrl": "/thank-you",
+    "isExternalAllowed": false
+  },
+  "consent": {
+    "smsCopy": "By checking this box you agree to receive text messages from Texas Tree Tops about your estimate and service. Message frequency varies. Message and data rates may apply. Reply STOP to opt out or HELP for help.",
+    "required": false,
+    "privacyPolicyUrl": "https://links.treeleads.io/preview/mKHiwloWMigr9M9z00tv",
+    "termsOfServiceUrl": "https://links.treeleads.io/preview/Q3OqcRO0SoaE5nnwNGcK"
+  },
+  "crm": {
+    "ghlLocationId": "zfoeYpKrqshgdFr4gG3b",
+    "adClickIdFieldId": null,
+    "leadTags": [
+      "google-ads",
+      "landing-page"
+    ],
+    "leadSource": "Google Ads — Landing Page"
+  },
+  "tracking": {
+    "gtmContainerId": "GTM-W32M4C6F",
+    "callRailSwapScriptUrl": null
+  },
+  "photos": {
+    "removal": [
+      {
+        "src": "/assets/texas-tree-tops/gallery-01-16d71434.mp4",
+        "alt": "Texas Tree Tops tree removal in Fort Worth",
+        "width": null,
+        "height": null,
+        "kind": "video"
+      },
+      {
+        "src": "/assets/texas-tree-tops/gallery-02-bbfa6cba.webp",
+        "alt": "Texas Tree Tops tree removal in Fort Worth",
+        "width": 680,
+        "height": 510
+      },
+      {
+        "src": "/assets/texas-tree-tops/gallery-03-d51219d3.webp",
+        "alt": "Texas Tree Tops tree removal in Fort Worth",
+        "width": 382,
+        "height": 510
+      },
+      {
+        "src": "/assets/texas-tree-tops/gallery-04-1f2fc961.webp",
+        "alt": "Texas Tree Tops tree removal in Fort Worth",
+        "width": 680,
+        "height": 510
+      },
+      {
+        "src": "/assets/texas-tree-tops/gallery-05-9d8b0283.webp",
+        "alt": "Texas Tree Tops tree removal in Fort Worth",
+        "width": 382,
+        "height": 510
+      },
+      {
+        "src": "/assets/texas-tree-tops/gallery-07-aaac105d.webp",
+        "alt": "Texas Tree Tops tree removal in Fort Worth",
+        "width": 382,
+        "height": 510
+      },
+      {
+        "src": "/assets/texas-tree-tops/gallery-08-f5253877.webp",
+        "alt": "Texas Tree Tops tree removal in Fort Worth",
+        "width": 382,
+        "height": 510
+      },
+      {
+        "src": "/assets/texas-tree-tops/gallery-09-f3f5fea6.webp",
+        "alt": "Texas Tree Tops tree removal in Fort Worth",
+        "width": 382,
+        "height": 510
+      },
+      {
+        "src": "/assets/texas-tree-tops/gallery-10-78d34cc1.webp",
+        "alt": "Texas Tree Tops tree removal in Fort Worth",
+        "width": 680,
+        "height": 510
+      },
+      {
+        "src": "/assets/texas-tree-tops/gallery-11-16f8deda.webp",
+        "alt": "Texas Tree Tops tree removal in Fort Worth",
+        "width": 382,
+        "height": 510
+      },
+      {
+        "src": "/assets/texas-tree-tops/gallery-12-de4155a7.webp",
+        "alt": "Texas Tree Tops tree removal in Fort Worth",
+        "width": 287,
+        "height": 510
+      },
+      {
+        "src": "/assets/texas-tree-tops/gallery-13-51dec991.webp",
+        "alt": "Texas Tree Tops tree removal in Fort Worth",
+        "width": 382,
+        "height": 510
+      },
+      {
+        "src": "/assets/texas-tree-tops/gallery-14-98accb98.webp",
+        "alt": "Texas Tree Tops tree removal in Fort Worth",
+        "width": 382,
+        "height": 510
+      },
+      {
+        "src": "/assets/texas-tree-tops/gallery-15-f94f6126.webp",
+        "alt": "Texas Tree Tops tree removal in Fort Worth",
+        "width": 382,
+        "height": 510
+      },
+      {
+        "src": "/assets/texas-tree-tops/restoration-photo-1-64e65fab.webp",
+        "alt": "",
+        "width": 1200,
+        "height": 1200
+      },
+      {
+        "src": "/assets/texas-tree-tops/restoration-grid-2-5247928c.webp",
+        "alt": "",
+        "width": 1200,
+        "height": 1200
+      },
+      {
+        "src": "/assets/texas-tree-tops/restoration-photo-3-2f02713f.webp",
+        "alt": "",
+        "width": 1200,
+        "height": 1200
+      },
+      {
+        "src": "/assets/texas-tree-tops/restoration-photo-4-874dca20.webp",
+        "alt": "",
+        "width": 1200,
+        "height": 1200
+      },
+      {
+        "src": "/assets/texas-tree-tops/restoration-photo-5-d8516a62.webp",
+        "alt": "",
+        "width": 1200,
+        "height": 1200
+      },
+      {
+        "src": "/assets/_shared/services-card-photo-1-ecd55f38.webp",
+        "alt": "",
+        "width": 1080,
+        "height": 618
+      },
+      {
+        "src": "/assets/_shared/services-card-photo-2-a6cb4660.webp",
+        "alt": "",
+        "width": 1080,
+        "height": 618
+      },
+      {
+        "src": "/assets/_shared/services-card-photo-3-1290bfcd.webp",
+        "alt": "",
+        "width": 1080,
+        "height": 618
+      }
+    ],
+    "storm": [
+      {
+        "src": "/assets/texas-tree-tops/hero-photo-1-eca8bf99.webp",
+        "alt": "",
+        "width": 800,
+        "height": 600
+      },
+      {
+        "src": "/assets/texas-tree-tops/hero-photo-2-ae43518a.webp",
+        "alt": "",
+        "width": 800,
+        "height": 600
+      },
+      {
+        "src": "/assets/texas-tree-tops/gallery-01-16d71434.mp4",
+        "alt": "Texas Tree Tops tree removal in Fort Worth",
+        "width": null,
+        "height": null,
+        "kind": "video"
+      },
+      {
+        "src": "/assets/texas-tree-tops/gallery-02-bbfa6cba.webp",
+        "alt": "Texas Tree Tops tree removal in Fort Worth",
+        "width": 680,
+        "height": 510
+      },
+      {
+        "src": "/assets/texas-tree-tops/gallery-03-d51219d3.webp",
+        "alt": "Texas Tree Tops tree removal in Fort Worth",
+        "width": 382,
+        "height": 510
+      },
+      {
+        "src": "/assets/texas-tree-tops/gallery-04-1f2fc961.webp",
+        "alt": "Texas Tree Tops tree removal in Fort Worth",
+        "width": 680,
+        "height": 510
+      },
+      {
+        "src": "/assets/texas-tree-tops/gallery-05-9d8b0283.webp",
+        "alt": "Texas Tree Tops tree removal in Fort Worth",
+        "width": 382,
+        "height": 510
+      },
+      {
+        "src": "/assets/texas-tree-tops/gallery-07-aaac105d.webp",
+        "alt": "Texas Tree Tops tree removal in Fort Worth",
+        "width": 382,
+        "height": 510
+      },
+      {
+        "src": "/assets/texas-tree-tops/gallery-08-f5253877.webp",
+        "alt": "Texas Tree Tops tree removal in Fort Worth",
+        "width": 382,
+        "height": 510
+      },
+      {
+        "src": "/assets/texas-tree-tops/gallery-09-f3f5fea6.webp",
+        "alt": "Texas Tree Tops tree removal in Fort Worth",
+        "width": 382,
+        "height": 510
+      },
+      {
+        "src": "/assets/texas-tree-tops/gallery-10-78d34cc1.webp",
+        "alt": "Texas Tree Tops tree removal in Fort Worth",
+        "width": 680,
+        "height": 510
+      },
+      {
+        "src": "/assets/texas-tree-tops/gallery-11-16f8deda.webp",
+        "alt": "Texas Tree Tops tree removal in Fort Worth",
+        "width": 382,
+        "height": 510
+      },
+      {
+        "src": "/assets/texas-tree-tops/gallery-12-de4155a7.webp",
+        "alt": "Texas Tree Tops tree removal in Fort Worth",
+        "width": 287,
+        "height": 510
+      },
+      {
+        "src": "/assets/texas-tree-tops/gallery-13-51dec991.webp",
+        "alt": "Texas Tree Tops tree removal in Fort Worth",
+        "width": 382,
+        "height": 510
+      },
+      {
+        "src": "/assets/texas-tree-tops/gallery-14-98accb98.webp",
+        "alt": "Texas Tree Tops tree removal in Fort Worth",
+        "width": 382,
+        "height": 510
+      },
+      {
+        "src": "/assets/texas-tree-tops/gallery-15-f94f6126.webp",
+        "alt": "Texas Tree Tops tree removal in Fort Worth",
+        "width": 382,
+        "height": 510
+      },
+      {
+        "src": "/assets/texas-tree-tops/restoration-grid-1-35883848.webp",
+        "alt": "",
+        "width": 800,
+        "height": 600
+      },
+      {
+        "src": "/assets/texas-tree-tops/restoration-grid-2-5247928c.webp",
+        "alt": "",
+        "width": 1200,
+        "height": 1200
+      },
+      {
+        "src": "/assets/texas-tree-tops/restoration-grid-3-9ff2b2b0.webp",
+        "alt": "",
+        "width": 800,
+        "height": 600
+      },
+      {
+        "src": "/assets/texas-tree-tops/restoration-grid-4-4756a237.webp",
+        "alt": "",
+        "width": 800,
+        "height": 600
+      },
+      {
+        "src": "/assets/texas-tree-tops/restoration-grid-5-03d8d07f.webp",
+        "alt": "",
+        "width": 800,
+        "height": 600
+      }
+    ]
+  },
+  "reviews": [
+    {
+      "author": "Amy Pulaski",
+      "meta": "Google Review · a month ago",
+      "body": "Great service! I had a dead tree removed and replaced. Daniel sent numerous photos of trees for my approval. The two gentlemen who came to do the work were on time, courteous, and professional. They went above and beyond to make sure I was happy when they finished. I would highly recommend them."
+    },
+    {
+      "author": "Carol Malcik",
+      "meta": "Local Guide · 9 months ago",
+      "body": "Texas Tree Tops removed a massive tree over 100 feet tall from our backyard. The removal was challenging due to the tree's proximity to our house, the neighbors' house, the fence, and our pool. The team demonstrated exceptional skill and care."
+    },
+    {
+      "author": "John Bundren",
+      "meta": "Google Review · 11 months ago",
+      "body": "The Texas Tree Tops team did an amazing job taking down a huge pecan tree in our yard. They were fast, professional, and affordable. They had to navigate a tricky overhang on our neighbor's house as well. Daniel was also great to work with."
+    }
+  ],
+  "copyOverrides": {}
+}

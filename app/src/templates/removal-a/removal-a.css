@@ -1,0 +1,1289 @@
+/* ====================================================================
+   removal-a — THE CONTROL, restyled.
+
+   Rules this stylesheet is written under:
+
+   BRAND COLOUR NEVER APPEARS AS A LITERAL. Every brand-coloured surface is
+   var(--brand-primary) / var(--brand-accent) / var(--brand-on-primary), set on
+   .removal-a from client.brand by index.tsx, with the fallbacks in styles/base.css
+   catching a half-filled record. The hex literals below are NEUTRALS — ink, paper,
+   hairlines — plus Google's own six letter colours in the rating badge. Tints and
+   shades are derived with color-mix() from the brand properties, so a client with a
+   navy brand gets navy tints without a second variable to fill in.
+
+   MOBILE FIRST. Base rules are the phone; min-width queries add the desktop. Most of
+   this traffic is someone standing in a yard looking at a damaged tree.
+
+   PERFORMANCE IS PART OF THE DESIGN. No icon font, no carousel, no animation
+   library, no webfont. The gallery is CSS scroll-snap, the FAQ is <details>, the
+   marquee is one keyframe, the icons are inline SVG or mask-image data URIs. Every
+   <img> carries measured width/height attributes from the P1 manifest, and the rules
+   below only ever override them proportionally, so CLS stays at zero.
+
+   THE SECTION BACKGROUND PLATES are the same five self-hosted files the source
+   paints, kept as CSS backgrounds exactly as the source has them. Nothing here
+   points at images.leadconnectorhq.com or assets.cdn.filesafe.space.
+   ==================================================================== */
+
+.removal-a {
+  /* ---- neutrals + geometry (never client-specific) ---- */
+  --ra-ink: #101720;
+  --ra-ink-2: #46535f;
+  --ra-muted: #5b6773;
+  --ra-paper: #ffffff;
+  --ra-line: #e4e9ee;
+
+  /* ---- brand-derived, no literal ---- */
+  --ra-tint: color-mix(in srgb, var(--brand-primary) 5%, #ffffff);
+  --ra-tint-2: color-mix(in srgb, var(--brand-primary) 11%, #ffffff);
+  --ra-hairline: color-mix(in srgb, var(--brand-primary) 14%, var(--ra-line));
+  --ra-deep: color-mix(in srgb, var(--brand-primary) 86%, #000000);
+  --ra-deeper: color-mix(in srgb, var(--brand-primary) 62%, #000000);
+
+  --ra-max: 1180px;
+  --ra-gutter: clamp(20px, 5vw, 44px);
+  --ra-pad: clamp(56px, 8vw, 116px);
+  --ra-radius: 18px;
+  --ra-radius-sm: 12px;
+  --ra-shadow: 0 1px 2px rgba(16, 23, 32, 0.05), 0 18px 44px -22px rgba(16, 23, 32, 0.35);
+  --ra-shadow-lift: 0 2px 4px rgba(16, 23, 32, 0.06), 0 28px 60px -26px rgba(16, 23, 32, 0.45);
+
+  color: var(--ra-ink);
+  background: var(--ra-paper);
+  font-synthesis-weight: none;
+  overflow-x: hidden;
+}
+
+/* The mid-page CTA is an in-page link to the form. */
+@media (prefers-reduced-motion: no-preference) {
+  html:has(.removal-a) {
+    scroll-behavior: smooth;
+  }
+}
+
+/* ---------------------------------------------------------------- *
+ * Layout primitives
+ * ---------------------------------------------------------------- */
+
+.removal-a .ra-container {
+  width: 100%;
+  max-width: var(--ra-max);
+  margin-inline: auto;
+  padding-inline: var(--ra-gutter);
+}
+
+.removal-a .ra-section {
+  padding-block: var(--ra-pad);
+}
+
+.removal-a .ra-section--tint {
+  background: var(--ra-tint);
+}
+
+.removal-a .ra-measure {
+  max-width: 62ch;
+}
+
+.removal-a .ra-measure--center {
+  margin-inline: auto;
+  text-align: center;
+}
+
+/* ---------------------------------------------------------------- *
+ * Type scale
+ * ---------------------------------------------------------------- */
+
+.removal-a h1,
+.removal-a h2,
+.removal-a h3 {
+  margin: 0;
+  font-weight: 760;
+  letter-spacing: -0.028em;
+  text-wrap: balance;
+}
+
+.removal-a .ra-h1 {
+  font-size: clamp(2.15rem, 5.6vw, 3.5rem);
+  line-height: 1.03;
+}
+
+.removal-a .ra-h2 {
+  font-size: clamp(1.7rem, 4.6vw, 2.7rem);
+  line-height: 1.07;
+}
+
+.removal-a .ra-h3 {
+  font-size: clamp(1.1rem, 2.4vw, 1.35rem);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+.removal-a .ra-heading--stacked > span {
+  display: block;
+}
+
+.removal-a .ra-accent {
+  color: var(--brand-accent);
+}
+
+.removal-a .ra-h2--onDark .ra-accent {
+  color: color-mix(in srgb, var(--brand-accent) 78%, #ffffff);
+}
+
+.removal-a .ra-body {
+  margin: 0;
+  color: var(--ra-ink-2);
+  font-size: 1.0625rem;
+  line-height: 1.68;
+}
+
+.removal-a .ra-lede {
+  margin-top: clamp(16px, 2.4vw, 22px);
+  font-size: clamp(1rem, 1.9vw, 1.125rem);
+  text-wrap: pretty;
+}
+
+.removal-a .ra-eyebrow {
+  margin: 0 0 var(--space-3);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--brand-primary);
+}
+
+/* ---------------------------------------------------------------- *
+ * Buttons + the shared call CTA
+ *
+ * <PhoneLink/> renders: <a class="ra-call …"><span data-dni-text>NUMBER</span>
+ * <span class="phone-sub">sub-label</span></a>. The number stays ONE uninterrupted
+ * text node — CallRail's DOM scan needs that — so the layout is done with grid
+ * areas rather than by wrapping parts of the string.
+ * ---------------------------------------------------------------- */
+
+.removal-a .ra-btn,
+.removal-a .ra-call {
+  --ra-arrow: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M4 12h15M13 6l6 6-6 6' fill='none' stroke='%23000' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  position: relative;
+  display: inline-grid;
+  grid-template-columns: 1fr auto;
+  grid-template-areas:
+    'label arrow'
+    'sub   arrow';
+  align-items: center;
+  gap: 0 16px;
+  min-height: var(--tap);
+  padding: 12px 20px;
+  border: 0;
+  border-radius: 999px;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease;
+}
+
+.removal-a .ra-btn::after,
+.removal-a .ra-call::after {
+  content: '';
+  grid-area: arrow;
+  width: 20px;
+  height: 20px;
+  background: currentColor;
+  -webkit-mask: var(--ra-arrow) center / contain no-repeat;
+  mask: var(--ra-arrow) center / contain no-repeat;
+  transition: transform 0.18s ease;
+}
+
+.removal-a .ra-btn:hover::after,
+.removal-a .ra-call:hover::after {
+  transform: translateX(3px);
+}
+
+.removal-a .ra-call [data-dni-text],
+.removal-a .ra-btn-label {
+  grid-area: label;
+  font-size: 1.15rem;
+  font-weight: 750;
+  letter-spacing: -0.015em;
+  line-height: 1.25;
+}
+
+.removal-a .ra-call .phone-sub,
+.removal-a .ra-btn-sub {
+  grid-area: sub;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  line-height: 1.35;
+  opacity: 0.78;
+}
+
+/* Solid — the default on light sections. */
+.removal-a .ra-call--solid,
+.removal-a .ra-btn--primary {
+  color: var(--brand-on-primary);
+  background: var(--brand-primary);
+  box-shadow: var(--ra-shadow);
+}
+
+.removal-a .ra-call--solid:hover,
+.removal-a .ra-btn--primary:hover {
+  background: var(--ra-deep);
+  box-shadow: var(--ra-shadow-lift);
+  transform: translateY(-1px);
+}
+
+/* On the dark plates: paper on ink, so contrast never depends on the brand hue. */
+.removal-a .ra-call--onDark {
+  color: var(--ra-ink);
+  background: var(--ra-paper);
+  box-shadow: 0 20px 44px -20px rgba(0, 0, 0, 0.6);
+}
+
+.removal-a .ra-call--onDark:hover {
+  transform: translateY(-1px);
+  background: color-mix(in srgb, var(--brand-accent) 16%, #ffffff);
+}
+
+/* Header bar — compact, and the whole thing is a tap target. */
+.removal-a .ra-call--bar {
+  gap: 0 10px;
+  padding: 8px 16px;
+  color: var(--brand-on-primary);
+  background: var(--brand-primary);
+}
+
+/* The number must never wrap: it is one text node and it is the whole point of the
+   bar. It shrinks instead. */
+.removal-a .ra-call--bar [data-dni-text] {
+  font-size: clamp(0.9rem, 3.4vw, 1.0625rem);
+  white-space: nowrap;
+}
+
+.removal-a .ra-call--bar .phone-sub {
+  font-size: 0.7rem;
+  white-space: nowrap;
+}
+
+.removal-a .ra-call--bar::after {
+  width: 16px;
+  height: 16px;
+}
+
+.removal-a .ra-btn--stack {
+  margin-top: clamp(24px, 3vw, 32px);
+}
+
+.removal-a .ra-cta-row {
+  display: flex;
+  justify-content: center;
+  margin-top: clamp(32px, 4.5vw, 56px);
+}
+
+/* ---------------------------------------------------------------- *
+ * S1 — header bar
+ * ---------------------------------------------------------------- */
+
+.removal-a .ra-header {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  background: color-mix(in srgb, var(--ra-paper) 88%, transparent);
+  backdrop-filter: saturate(1.4) blur(12px);
+  -webkit-backdrop-filter: saturate(1.4) blur(12px);
+  border-bottom: 1px solid var(--ra-hairline);
+}
+
+.removal-a .ra-header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  min-height: 68px;
+  padding-block: 10px;
+}
+
+/* max-height + overflow so a wrong or missing logo FILE (a client record can point
+   at a path that no longer exists) degrades to a clipped box instead of dropping
+   oversized alt text through the header. */
+.removal-a .ra-logo {
+  height: 40px;
+  width: auto;
+  max-width: 190px;
+  overflow: hidden;
+  object-fit: contain;
+  font-size: 0.8125rem;
+  line-height: 1.2;
+}
+
+/* No logo file on the record: the client's name as a wordmark, never a broken image. */
+.removal-a span.ra-logo {
+  display: inline-block;
+  height: auto;
+  font-size: 1.05rem;
+  font-weight: 760;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  color: var(--brand-primary);
+}
+
+@media (min-width: 768px) {
+  .removal-a .ra-header-inner {
+    min-height: 84px;
+  }
+
+  .removal-a .ra-logo {
+    height: 52px;
+    max-width: 240px;
+  }
+}
+
+/* ---------------------------------------------------------------- *
+ * S1 — hero
+ * ---------------------------------------------------------------- */
+
+.removal-a .ra-hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding-block: clamp(36px, 6vw, 76px) clamp(44px, 6vw, 84px);
+  background: var(--ra-deep);
+  color: #ffffff;
+}
+
+.removal-a .ra-hero-plate {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+}
+
+.removal-a .ra-hero-plate-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 35%;
+}
+
+.removal-a .ra-hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(120% 90% at 15% 0%, color-mix(in srgb, var(--brand-primary) 45%, transparent) 0%, transparent 62%),
+    linear-gradient(180deg, color-mix(in srgb, var(--ra-deep) 72%, transparent) 0%, color-mix(in srgb, var(--ra-deeper) 88%, transparent) 100%);
+}
+
+.removal-a .ra-hero-grid {
+  display: grid;
+  gap: clamp(28px, 5vw, 56px);
+}
+
+.removal-a .ra-hero-copy {
+  max-width: 40ch;
+}
+
+.removal-a .ra-hero .ra-h1 {
+  margin-top: clamp(18px, 2.5vw, 26px);
+  color: #ffffff;
+}
+
+.removal-a .ra-hero-sub {
+  margin: clamp(16px, 2.4vw, 22px) 0 0;
+  font-size: clamp(1.05rem, 2.4vw, 1.3rem);
+  font-weight: 600;
+  line-height: 1.35;
+  color: color-mix(in srgb, var(--brand-accent) 88%, #ffffff);
+  text-wrap: pretty;
+}
+
+.removal-a .ra-hero-body {
+  margin-top: clamp(14px, 2vw, 18px);
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 1rem;
+}
+
+/* Google rating badge — the six letter colours are Google's own, not the client's. */
+.removal-a .ra-rating {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 12px;
+  padding: 9px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  font-size: 0.8125rem;
+}
+
+.removal-a .ra-rating-logo {
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.removal-a .ra-rating-letter:nth-child(6n + 1) { color: #4285f4; }
+.removal-a .ra-rating-letter:nth-child(6n + 2) { color: #ea4335; }
+.removal-a .ra-rating-letter:nth-child(6n + 3) { color: #fbbc05; }
+.removal-a .ra-rating-letter:nth-child(6n + 4) { color: #4285f4; }
+.removal-a .ra-rating-letter:nth-child(6n + 5) { color: #34a853; }
+.removal-a .ra-rating-letter:nth-child(6n + 6) { color: #ea4335; }
+
+.removal-a .ra-rating-score {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.removal-a .ra-rating-stars {
+  color: var(--brand-accent);
+  letter-spacing: 0.06em;
+}
+
+.removal-a .ra-rating-number {
+  font-weight: 750;
+}
+
+.removal-a .ra-rating-caption {
+  color: rgba(255, 255, 255, 0.72);
+}
+
+/* The form card */
+.removal-a .ra-form-card {
+  scroll-margin-top: 96px;
+  padding: clamp(20px, 4vw, 30px);
+  border-radius: var(--ra-radius);
+  background: var(--ra-paper);
+  color: var(--ra-ink);
+  box-shadow: var(--ra-shadow-lift);
+}
+
+.removal-a .ra-form-heading {
+  font-size: clamp(1.35rem, 3.4vw, 1.6rem);
+  line-height: 1.15;
+}
+
+.removal-a .ra-form-subline {
+  margin: 10px 0 0;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  color: var(--ra-muted);
+}
+
+.removal-a .ra-form {
+  margin-top: clamp(18px, 2.6vw, 24px);
+}
+
+.removal-a .ra-form .field label {
+  font-size: 0.8125rem;
+  letter-spacing: 0.01em;
+  color: var(--ra-ink-2);
+}
+
+.removal-a .ra-form .field input[type='text'],
+.removal-a .ra-form .field input[type='tel'],
+.removal-a .ra-form .field input[type='email'] {
+  border-color: var(--ra-line);
+  border-radius: var(--ra-radius-sm);
+  background: color-mix(in srgb, var(--brand-primary) 3%, #ffffff);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.removal-a .ra-form .field input:focus {
+  border-color: var(--brand-primary);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--brand-primary) 18%, transparent);
+  outline: none;
+}
+
+.removal-a .ra-form .btn-primary {
+  min-height: 54px;
+  border-radius: 999px;
+  font-size: 1rem;
+  letter-spacing: -0.01em;
+  box-shadow: var(--ra-shadow);
+}
+
+.removal-a .ra-form .btn-primary:hover:not(:disabled) {
+  background: var(--ra-deep);
+}
+
+.removal-a .ra-hero-proof {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: clamp(10px, 2vw, 18px);
+  margin: clamp(28px, 4vw, 44px) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.removal-a .ra-hero-proof-img {
+  width: 100%;
+  height: clamp(160px, 32vw, 280px);
+  object-fit: cover;
+  border-radius: var(--ra-radius-sm);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+}
+
+@media (min-width: 900px) {
+  .removal-a .ra-hero-grid {
+    grid-template-columns: minmax(0, 1fr) minmax(370px, 440px);
+    align-items: start;
+  }
+
+  .removal-a .ra-hero-copy {
+    padding-top: clamp(8px, 2vw, 28px);
+  }
+}
+
+/* ---------------------------------------------------------------- *
+ * S2 — recent-jobs rail (CSS scroll-snap, no carousel library)
+ * ---------------------------------------------------------------- */
+
+.removal-a .ra-gallery {
+  padding-block: clamp(28px, 4vw, 44px);
+  background: var(--ra-tint);
+  border-bottom: 1px solid var(--ra-hairline);
+}
+
+.removal-a .ra-rail {
+  display: flex;
+  gap: clamp(10px, 1.6vw, 16px);
+  margin: 0;
+  padding: 4px var(--ra-gutter) 14px;
+  list-style: none;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: thin;
+  scrollbar-color: var(--ra-hairline) transparent;
+}
+
+.removal-a .ra-rail-item {
+  flex: 0 0 auto;
+  scroll-snap-align: center;
+}
+
+.removal-a .ra-rail-img,
+.removal-a .ra-rail-video {
+  height: clamp(190px, 40vw, 320px);
+  width: auto;
+  max-width: none;
+  border-radius: var(--ra-radius-sm);
+  object-fit: cover;
+  background: var(--ra-tint-2);
+}
+
+.removal-a .ra-rail-video {
+  border: 1px solid var(--ra-hairline);
+  background: var(--ra-deep);
+}
+
+@media (min-width: 1024px) {
+  .removal-a .ra-rail {
+    padding-inline: max(var(--ra-gutter), calc((100vw - var(--ra-max)) / 2 + var(--ra-gutter)));
+  }
+}
+
+/* ---------------------------------------------------------------- *
+ * S3 — benefit strip
+ * ---------------------------------------------------------------- */
+
+.removal-a .ra-split {
+  display: grid;
+  gap: clamp(28px, 5vw, 64px);
+  align-items: center;
+}
+
+.removal-a .ra-media-img {
+  width: 100%;
+  height: clamp(240px, 52vw, 520px);
+  object-fit: cover;
+  border-radius: var(--ra-radius);
+  box-shadow: var(--ra-shadow);
+}
+
+.removal-a .ra-benefit-list {
+  display: grid;
+  gap: clamp(12px, 1.8vw, 18px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.removal-a .ra-benefit {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 16px;
+  padding: clamp(14px, 2vw, 18px) clamp(16px, 2.2vw, 22px);
+  border: 1px solid var(--ra-hairline);
+  border-radius: var(--ra-radius-sm);
+  background: var(--ra-paper);
+}
+
+/* The manifest measured no intrinsic size for these SVGs, so the box is fixed here
+   rather than left to the file — an unsized icon is a layout shift waiting to happen. */
+.removal-a .ra-benefit-icon {
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
+}
+
+.removal-a .ra-benefit-text {
+  font-size: 1.0625rem;
+  font-weight: 620;
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+}
+
+.removal-a .ra-benefits .ra-call {
+  margin-top: clamp(24px, 3vw, 34px);
+}
+
+@media (min-width: 900px) {
+  .removal-a .ra-split {
+    grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+  }
+}
+
+/* ---------------------------------------------------------------- *
+ * Background plates — the same five self-hosted files the source paints.
+ * Each carries a scrim so the text contrast never depends on the photograph.
+ * ---------------------------------------------------------------- */
+
+.removal-a .ra-why,
+.removal-a .ra-services,
+.removal-a .ra-areas {
+  background-color: var(--ra-tint);
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-blend-mode: luminosity;
+}
+
+.removal-a .ra-why {
+  background-image:
+    linear-gradient(color-mix(in srgb, var(--ra-tint) 88%, transparent), color-mix(in srgb, var(--ra-tint) 94%, transparent)),
+    url('/assets/texas-tree-tops/bg-section-evifliwtqp-6b6b2797.webp');
+}
+
+.removal-a .ra-services {
+  background-image:
+    linear-gradient(color-mix(in srgb, var(--ra-tint) 90%, transparent), color-mix(in srgb, var(--ra-tint) 94%, transparent)),
+    url('/assets/texas-tree-tops/bg-section-pt0s1qtmn0-d26338c9.webp');
+}
+
+.removal-a .ra-areas {
+  background-image: linear-gradient(color-mix(in srgb, var(--ra-tint) 92%, transparent), color-mix(in srgb, var(--ra-tint) 96%, transparent));
+}
+
+/* ---------------------------------------------------------------- *
+ * S4 — why choose us + Google reviews
+ * ---------------------------------------------------------------- */
+
+.removal-a .ra-reviews {
+  display: grid;
+  gap: clamp(14px, 2vw, 22px);
+  margin: clamp(32px, 4.5vw, 56px) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.removal-a .ra-review {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: clamp(20px, 3vw, 28px);
+  border: 1px solid var(--ra-hairline);
+  border-radius: var(--ra-radius);
+  background: var(--ra-paper);
+  box-shadow: var(--ra-shadow);
+}
+
+.removal-a .ra-review-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.removal-a .ra-review-stars {
+  height: 18px;
+  width: auto;
+}
+
+.removal-a .ra-review-google {
+  height: 22px;
+  width: auto;
+}
+
+.removal-a .ra-review-body {
+  margin: 0;
+  font-size: 0.9875rem;
+  line-height: 1.62;
+  color: var(--ra-ink-2);
+}
+
+.removal-a .ra-review-who {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-top: auto;
+  padding-top: 6px;
+  border-top: 1px solid var(--ra-hairline);
+}
+
+.removal-a .ra-review-author {
+  font-weight: 700;
+  font-size: 0.9375rem;
+}
+
+.removal-a .ra-review-meta {
+  font-size: 0.8125rem;
+  color: var(--ra-muted);
+}
+
+@media (min-width: 860px) {
+  .removal-a .ra-reviews {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* ---------------------------------------------------------------- *
+ * S5 — restoration mosaic (2 + 3, exactly as the source groups them)
+ * ---------------------------------------------------------------- */
+
+.removal-a .ra-grid-mosaic {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(10px, 1.6vw, 16px);
+  margin: clamp(32px, 4.5vw, 56px) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.removal-a .ra-mosaic-img {
+  width: 100%;
+  height: clamp(140px, 30vw, 300px);
+  object-fit: cover;
+  border-radius: var(--ra-radius-sm);
+}
+
+/* An odd number of photos would leave the last one stranded in a half-width cell
+   on a phone. However many the client supplies, the grid closes cleanly. */
+@media (max-width: 859px) {
+  .removal-a .ra-grid-mosaic > li:last-child:nth-child(odd) {
+    grid-column: span 2;
+  }
+}
+
+@media (min-width: 860px) {
+  .removal-a .ra-grid-mosaic {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+
+  .removal-a .ra-grid-mosaic > li:nth-child(1),
+  .removal-a .ra-grid-mosaic > li:nth-child(2) {
+    grid-column: span 3;
+  }
+
+  .removal-a .ra-grid-mosaic > li:nth-child(1) .ra-mosaic-img,
+  .removal-a .ra-grid-mosaic > li:nth-child(2) .ra-mosaic-img {
+    height: clamp(240px, 30vw, 380px);
+  }
+
+  .removal-a .ra-grid-mosaic > li:nth-child(n + 3) {
+    grid-column: span 2;
+  }
+}
+
+/* ---------------------------------------------------------------- *
+ * S6 — services we offer
+ * ---------------------------------------------------------------- */
+
+.removal-a .ra-service-cols {
+  display: grid;
+  gap: clamp(20px, 3vw, 28px);
+  margin-top: clamp(32px, 4.5vw, 56px);
+}
+
+.removal-a .ra-service-col {
+  overflow: hidden;
+  border: 1px solid var(--ra-hairline);
+  border-radius: var(--ra-radius);
+  background: var(--ra-paper);
+  box-shadow: var(--ra-shadow);
+}
+
+.removal-a .ra-service-photo {
+  width: 100%;
+  height: clamp(150px, 24vw, 190px);
+  object-fit: cover;
+}
+
+.removal-a .ra-service-list {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+  padding: clamp(18px, 2.6vw, 26px);
+  list-style: none;
+}
+
+.removal-a .ra-service-list li,
+.removal-a .ra-request-list li {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 11px;
+  align-items: start;
+  font-size: 0.9875rem;
+  line-height: 1.45;
+  color: var(--ra-ink-2);
+}
+
+.removal-a .ra-service-check,
+.removal-a .ra-request-check {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 21px;
+  height: 21px;
+  margin-top: 1px;
+  border-radius: 999px;
+  color: var(--brand-on-primary);
+  background: var(--brand-primary);
+}
+
+.removal-a .ra-service-check .ra-icon,
+.removal-a .ra-request-check .ra-icon {
+  width: 13px;
+  height: 13px;
+}
+
+@media (min-width: 860px) {
+  .removal-a .ra-service-cols {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* ---------------------------------------------------------------- *
+ * S7 — areas we serve marquee
+ *
+ * Two identical groups per track, translated -50%: the loop is seamless because the
+ * second group takes over exactly where the first began. The clone is aria-hidden,
+ * so a screen reader hears each city once.
+ * ---------------------------------------------------------------- */
+
+.removal-a .ra-areas-sub {
+  margin: clamp(14px, 2vw, 18px) 0 0;
+  font-size: clamp(1rem, 2vw, 1.15rem);
+  font-weight: 600;
+  color: var(--ra-ink-2);
+}
+
+.removal-a .ra-marquees {
+  display: grid;
+  gap: clamp(10px, 1.6vw, 14px);
+  margin-top: clamp(32px, 4.5vw, 52px);
+  margin-inline: calc(var(--ra-gutter) * -1);
+}
+
+.removal-a .ra-marquee {
+  overflow: hidden;
+  padding-block: 10px;
+  background: url('/assets/texas-tree-tops/bg-row-sreex03pnx-4a4f2b51.webp') center / cover no-repeat;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+}
+
+.removal-a .ra-marquee-track {
+  display: flex;
+  width: max-content;
+  animation: ra-marquee 46s linear infinite;
+}
+
+.removal-a .ra-marquee-track--reverse {
+  animation-duration: 58s;
+  animation-direction: reverse;
+}
+
+.removal-a .ra-marquee:hover .ra-marquee-track {
+  animation-play-state: paused;
+}
+
+.removal-a .ra-marquee-group {
+  display: flex;
+  gap: 10px;
+  padding-right: 10px;
+}
+
+.removal-a .ra-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 16px;
+  border: 1px solid var(--ra-hairline);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--ra-paper) 88%, transparent);
+  color: var(--ra-ink);
+  font-size: 0.875rem;
+  font-weight: 620;
+  white-space: nowrap;
+}
+
+.removal-a .ra-icon--pin {
+  color: var(--brand-accent);
+  flex: 0 0 auto;
+}
+
+@keyframes ra-marquee {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .removal-a .ra-marquee {
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+
+  .removal-a .ra-marquee-track {
+    animation: none;
+    width: 100%;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .removal-a .ra-marquee-group {
+    flex-wrap: wrap;
+    justify-content: center;
+    padding-right: 0;
+  }
+
+  .removal-a .ra-marquee-group[data-clone='true'] {
+    display: none;
+  }
+}
+
+/* ---------------------------------------------------------------- *
+ * S8 — long-form block
+ * ---------------------------------------------------------------- */
+
+.removal-a .ra-longform-grid {
+  display: grid;
+  gap: clamp(28px, 4vw, 56px);
+  align-items: start;
+}
+
+.removal-a .ra-longform-main {
+  max-width: 68ch;
+}
+
+.removal-a .ra-longform-lede {
+  margin: clamp(16px, 2.4vw, 22px) 0 clamp(16px, 2.4vw, 22px);
+  font-size: clamp(1.05rem, 2.2vw, 1.25rem);
+  font-weight: 620;
+  line-height: 1.4;
+  letter-spacing: -0.015em;
+  color: var(--ra-ink);
+}
+
+.removal-a .ra-longform-main .ra-body + .ra-body {
+  margin-top: clamp(14px, 2vw, 18px);
+}
+
+.removal-a .ra-requests {
+  padding: clamp(22px, 3vw, 32px);
+  border: 1px solid var(--ra-hairline);
+  border-radius: var(--ra-radius);
+  background: var(--ra-tint);
+}
+
+.removal-a .ra-request-list {
+  display: grid;
+  gap: 13px;
+  margin: clamp(18px, 2.4vw, 22px) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+@media (min-width: 980px) {
+  .removal-a .ra-longform-grid {
+    grid-template-columns: minmax(0, 1.15fr) minmax(300px, 0.85fr);
+  }
+}
+
+/* ---------------------------------------------------------------- *
+ * S9 — mid-page CTA + the "Ready To Get / That Tree Handled?" band
+ * ---------------------------------------------------------------- */
+
+.removal-a .ra-nearyou .ra-btn--primary {
+  justify-items: start;
+}
+
+.removal-a .ra-nearyou .ra-btn-label {
+  font-size: 1.0625rem;
+}
+
+.removal-a .ra-ready {
+  position: relative;
+  isolation: isolate;
+  padding-block: clamp(48px, 7vw, 88px);
+  color: #ffffff;
+  background:
+    linear-gradient(color-mix(in srgb, var(--ra-deep) 84%, transparent), color-mix(in srgb, var(--ra-deeper) 90%, transparent)),
+    url('/assets/texas-tree-tops/bg-row-yixqrlnvyw-3d3ce344.webp') center / cover no-repeat;
+}
+
+.removal-a .ra-ready-inner {
+  display: grid;
+  gap: clamp(22px, 3vw, 32px);
+  justify-items: center;
+  text-align: center;
+}
+
+.removal-a .ra-h2--onDark {
+  color: #ffffff;
+}
+
+/* ---------------------------------------------------------------- *
+ * S10 — how it works
+ * ---------------------------------------------------------------- */
+
+.removal-a .ra-steps {
+  display: grid;
+  gap: clamp(14px, 2vw, 20px);
+  margin: clamp(32px, 4.5vw, 56px) 0 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: ra-step;
+}
+
+.removal-a .ra-step {
+  position: relative;
+  padding: clamp(22px, 3vw, 28px);
+  border: 1px solid var(--ra-hairline);
+  border-radius: var(--ra-radius);
+  background: var(--ra-paper);
+}
+
+.removal-a .ra-step::before {
+  content: '';
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 3px;
+  border-radius: var(--ra-radius) 0 0 var(--ra-radius);
+  background: var(--brand-accent);
+}
+
+.removal-a .ra-step-label {
+  display: inline-block;
+  margin-bottom: 10px;
+  font-size: 0.6875rem;
+  font-weight: 750;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--brand-primary);
+}
+
+.removal-a .ra-step-h {
+  margin: 0 0 8px;
+  font-size: clamp(1.05rem, 2.2vw, 1.2rem);
+  line-height: 1.25;
+}
+
+.removal-a .ra-step-body {
+  margin: 0;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: var(--ra-ink-2);
+}
+
+@media (min-width: 900px) {
+  .removal-a .ra-steps {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .removal-a .ra-step::before {
+    inset: 0 0 auto 0;
+    width: auto;
+    height: 3px;
+    border-radius: var(--ra-radius) var(--ra-radius) 0 0;
+  }
+}
+
+/* ---------------------------------------------------------------- *
+ * S11 — FAQ (native <details>, zero JS)
+ * ---------------------------------------------------------------- */
+
+.removal-a .ra-faq-list {
+  max-width: 860px;
+  margin: clamp(32px, 4.5vw, 52px) auto 0;
+  border-top: 1px solid var(--ra-hairline);
+}
+
+.removal-a .ra-faq-item {
+  border-bottom: 1px solid var(--ra-hairline);
+}
+
+.removal-a .ra-faq-q {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: clamp(16px, 2.4vw, 22px) 2px;
+  cursor: pointer;
+  font-size: clamp(1rem, 2.1vw, 1.125rem);
+  font-weight: 650;
+  letter-spacing: -0.015em;
+  line-height: 1.35;
+  list-style: none;
+}
+
+.removal-a .ra-faq-q::-webkit-details-marker {
+  display: none;
+}
+
+.removal-a .ra-faq-q:hover {
+  color: var(--brand-primary);
+}
+
+.removal-a .ra-icon--chevron {
+  flex: 0 0 auto;
+  color: var(--brand-primary);
+  transition: transform 0.2s ease;
+}
+
+.removal-a .ra-faq-item[open] .ra-icon--chevron {
+  transform: rotate(180deg);
+}
+
+.removal-a .ra-faq-a {
+  margin: 0;
+  padding: 0 44px clamp(20px, 2.6vw, 26px) 2px;
+  font-size: 0.9875rem;
+  line-height: 1.68;
+  color: var(--ra-ink-2);
+}
+
+/* ---------------------------------------------------------------- *
+ * S12 — final CTA
+ * ---------------------------------------------------------------- */
+
+.removal-a .ra-final {
+  padding-block: clamp(56px, 8vw, 110px);
+  color: #ffffff;
+  background:
+    linear-gradient(color-mix(in srgb, var(--ra-deep) 86%, transparent), color-mix(in srgb, var(--ra-deeper) 92%, transparent)),
+    url('/assets/texas-tree-tops/bg-section-zzw8wc9z7t-02ec5eac.webp') center / cover no-repeat;
+}
+
+.removal-a .ra-final-inner {
+  display: grid;
+  gap: clamp(18px, 2.6vw, 26px);
+  justify-items: center;
+  max-width: 760px;
+  text-align: center;
+}
+
+.removal-a .ra-final-body {
+  margin: 0;
+  font-size: clamp(1rem, 2vw, 1.1rem);
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.84);
+  text-wrap: pretty;
+}
+
+.removal-a .ra-final .ra-call {
+  margin-top: 6px;
+}
+
+/* ---------------------------------------------------------------- *
+ * S13 — footer
+ * ---------------------------------------------------------------- */
+
+.removal-a .ra-footer {
+  padding-block: clamp(36px, 5vw, 60px);
+  background: var(--ra-deep);
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 0.875rem;
+}
+
+.removal-a .ra-footer-inner {
+  display: grid;
+  justify-items: center;
+  gap: 12px;
+  text-align: center;
+}
+
+.removal-a .ra-footer-logo {
+  height: 52px;
+  width: auto;
+  max-width: 220px;
+  object-fit: contain;
+}
+
+.removal-a span.ra-footer-logo {
+  height: auto;
+  font-size: 1.1rem;
+  font-weight: 760;
+  letter-spacing: -0.02em;
+  color: #ffffff;
+}
+
+.removal-a .ra-footer-name {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.removal-a .ra-footer-copy {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.removal-a .ra-footer-legal {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px 22px;
+  margin-top: 6px;
+}
+
+.removal-a .ra-footer-legal a {
+  color: #ffffff;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+}
+
+/* ---------------------------------------------------------------- *
+ * Focus + motion
+ * ---------------------------------------------------------------- */
+
+.removal-a a:focus-visible,
+.removal-a summary:focus-visible,
+.removal-a button:focus-visible,
+.removal-a .ra-rail:focus-visible {
+  outline: 3px solid var(--brand-accent);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .removal-a .ra-btn,
+  .removal-a .ra-call,
+  .removal-a .ra-icon--chevron {
+    transition: none;
+  }
+
+  .removal-a .ra-btn:hover,
+  .removal-a .ra-call:hover {
+    transform: none;
+  }
+}

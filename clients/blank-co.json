@@ -1,0 +1,49 @@
+{
+  "_comment": "R5 FIXTURE — deliberately minimal. No logo, no photos, no reviews, no service-area list, no GTM, no legal URLs. Every template must render this without crashing and without printing 'undefined'. Do not 'fix' this record; it exists to fail loudly if the graceful-degradation guarantees regress.",
+
+  "slug": "blank-co",
+  "name": "Blank Co",
+  "serviceArea": "",
+  "serviceAreaList": [],
+
+  "brand": {
+    "logoUrl": null,
+    "primaryColor": "#2b2b2b",
+    "accentColor": "#767676",
+    "onPrimaryColor": null
+  },
+
+  "phone": {
+    "e164": "+15550000000",
+    "kind": "direct",
+    "displayOverride": null
+  },
+
+  "leadDestination": {
+    "thankYouUrl": "https://titantreeservicetx.com/thank-you-page-89169333-2226",
+    "isExternalAllowed": false
+  },
+
+  "consent": {
+    "smsCopy": "",
+    "required": false,
+    "privacyPolicyUrl": "",
+    "termsOfServiceUrl": ""
+  },
+
+  "crm": {
+    "ghlLocationId": "",
+    "adClickIdFieldId": null,
+    "leadTags": [],
+    "leadSource": ""
+  },
+
+  "tracking": {
+    "gtmContainerId": null,
+    "callRailSwapScriptUrl": null
+  },
+
+  "photos": {},
+  "reviews": [],
+  "copyOverrides": {}
+}

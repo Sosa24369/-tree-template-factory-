@@ -10,3 +10,8 @@ dist/
 # Raw fetched HTML of the source pages (large, regenerable via scripts/fetch-source.sh).
 # The distilled source of truth in source/ IS committed.
 source/_raw/
+
+# Vite app
+app/node_modules/
+app/dist/
+node_modules/

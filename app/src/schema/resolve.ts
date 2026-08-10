@@ -1,0 +1,145 @@
+/**
+ * Turns a raw client JSON file into a fully-populated record that templates can
+ * render without defensive checks scattered through every component.
+ *
+ * Two jobs:
+ *  1. Fill defaults so a half-filled record still renders (R5).
+ *  2. Enforce the guards the schema promises — most importantly that a lead is
+ *     never redirected off-domain unless someone explicitly allowed it (FIX 1).
+ */
+
+import { CLIENT_DEFAULTS, type ClientRecord, type TemplateId } from './client';
+
+export interface ResolveIssue {
+  level: 'error' | 'warning';
+  field: string;
+  message: string;
+}
+
+export interface ResolvedClient extends ClientRecord {
+  /** Display string for the phone, always derived unless explicitly overridden. */
+  phoneDisplay: string;
+  /** tel: href, always derived from the same e164 as phoneDisplay. */
+  phoneHref: string;
+  /** Post-submit destination after the external-domain guard has been applied. */
+  safeThankYouUrl: string;
+}
+
+/** One canonical display format for the whole factory: (214) 985-7697 */
+export function formatPhoneDisplay(e164: string): string {
+  const digits = (e164 || '').replace(/\D/g, '');
+  const ten = digits.length === 11 && digits.startsWith('1') ? digits.slice(1) : digits;
+  if (ten.length !== 10) return e164 || '';
+  return `(${ten.slice(0, 3)}) ${ten.slice(3, 6)}-${ten.slice(6)}`;
+}
+
+export function isExternalUrl(url: string): boolean {
+  return /^[a-z][a-z0-9+.-]*:\/\//i.test(url) || url.startsWith('//');
+}
+
+export function resolveClient(raw: ClientRecord): {
+  client: ResolvedClient;
+  issues: ResolveIssue[];
+} {
+  const issues: ResolveIssue[] = [];
+
+  // ---- Phone (FIX 3) ------------------------------------------------------
+  const e164 = (raw.phone?.e164 ?? '').trim();
+  if (!e164) {
+    issues.push({ level: 'error', field: 'phone.e164', message: 'No phone number set. Phone CTAs will not render.' });
+  } else if (!/^\+\d{10,15}$/.test(e164)) {
+    issues.push({
+      level: 'error',
+      field: 'phone.e164',
+      message: `"${e164}" is not E.164. Expected +1XXXXXXXXXX. Display and tel: are both derived from this value, so a bad value breaks every CTA at once.`,
+    });
+  }
+  const phoneDisplay = raw.phone?.displayOverride?.trim() || formatPhoneDisplay(e164);
+  const phoneHref = e164 ? `tel:${e164}` : '';
+
+  // ---- Lead destination (FIX 1) -------------------------------------------
+  const requested = (raw.leadDestination?.thankYouUrl ?? '').trim() || CLIENT_DEFAULTS.leadDestination.thankYouUrl;
+  const externalAllowed = raw.leadDestination?.isExternalAllowed === true;
+  let safeThankYouUrl = requested;
+
+  if (isExternalUrl(requested) && !externalAllowed) {
+    // This is the titantreeservicetx.com guard. Refuse, do not silently obey.
+    issues.push({
+      level: 'error',
+      field: 'leadDestination.thankYouUrl',
+      message: `Refusing to redirect leads to the external URL "${requested}" because leadDestination.isExternalAllowed is not true. Falling back to ${CLIENT_DEFAULTS.leadDestination.thankYouUrl}.`,
+    });
+    safeThankYouUrl = CLIENT_DEFAULTS.leadDestination.thankYouUrl;
+  } else if (isExternalUrl(requested) && externalAllowed) {
+    issues.push({
+      level: 'warning',
+      field: 'leadDestination.thankYouUrl',
+      message: `Leads are being sent off-domain to "${requested}". Conversion tracking fires on our page before the redirect, but verify this domain is actually this client's.`,
+    });
+  }
+
+  // ---- Consent (FIX 4) ----------------------------------------------------
+  const consent = {
+    smsCopy: raw.consent?.smsCopy?.trim() || CLIENT_DEFAULTS.consent.smsCopy,
+    required: raw.consent?.required ?? CLIENT_DEFAULTS.consent.required,
+    privacyPolicyUrl: raw.consent?.privacyPolicyUrl ?? '',
+    termsOfServiceUrl: raw.consent?.termsOfServiceUrl ?? '',
+  };
+  if (!consent.privacyPolicyUrl || !consent.termsOfServiceUrl) {
+    issues.push({
+      level: 'warning',
+      field: 'consent',
+      message: 'Privacy Policy and/or Terms of Service URL missing. A2P registration requires both to be linked next to the opt-in.',
+    });
+  }
+
+  // ---- CRM / tracking -----------------------------------------------------
+  if (!raw.crm?.ghlLocationId) {
+    issues.push({ level: 'warning', field: 'crm.ghlLocationId', message: 'No GHL location id. Form submissions cannot be routed until P4.' });
+  }
+  if (!raw.tracking?.gtmContainerId) {
+    issues.push({ level: 'warning', field: 'tracking.gtmContainerId', message: 'No GTM container. Conversions will not fire for this client.' });
+  }
+  if (!raw.crm?.adClickIdFieldId) {
+    issues.push({
+      level: 'warning',
+      field: 'crm.adClickIdFieldId',
+      message: 'No GHL custom-field id for the ad click id. Click ids are still captured and submitted under "ad_click_id", but will not land on a mapped GHL field until this is set.',
+    });
+  }
+
+  const client: ResolvedClient = {
+    ...raw,
+    serviceAreaList: raw.serviceAreaList ?? [],
+    reviews: raw.reviews ?? [],
+    photos: raw.photos ?? {},
+    copyOverrides: raw.copyOverrides ?? {},
+    consent,
+    leadDestination: { thankYouUrl: requested, isExternalAllowed: externalAllowed },
+    phoneDisplay,
+    phoneHref,
+    safeThankYouUrl,
+  };
+
+  return { client, issues };
+}
+
+/**
+ * Copy resolution: template default unless this client overrides that key.
+ * Returns '' for an unknown key rather than throwing or rendering "undefined" (R5).
+ */
+export function makeCopy(
+  client: ResolvedClient,
+  templateId: TemplateId,
+  defaults: Record<string, string>
+) {
+  const overrides = client.copyOverrides?.[templateId] ?? {};
+  return function copy(key: string): string {
+    const value = overrides[key] ?? defaults[key];
+    if (value === undefined) {
+      if (import.meta.env.DEV) console.warn(`[copy] missing key "${key}" for ${templateId}`);
+      return '';
+    }
+    return value;
+  };
+}

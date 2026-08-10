@@ -1,0 +1,155 @@
+{
+  "slug": "j-valdez",
+  "name": "J Valdez Tree Services",
+  "serviceArea": "East Dallas, TX",
+  "serviceAreaList": [
+    "Mesquite",
+    "Garland",
+    "Rowlett",
+    "Rockwall",
+    "Sunnyvale",
+    "Heath",
+    "Fate",
+    "Forney",
+    "Lake Ray Hubbard",
+    "East Dallas"
+  ],
+  "brand": {
+    "logoUrl": "/assets/j-valdez/logo-circle-badge-cea46949.svg",
+    "primaryColor": "#14342b",
+    "accentColor": "#e0913a",
+    "onPrimaryColor": "#ffffff"
+  },
+  "phone": {
+    "e164": "+14694021196",
+    "kind": "ghl-tracking",
+    "displayOverride": null
+  },
+  "leadDestination": {
+    "thankYouUrl": "/thank-you",
+    "isExternalAllowed": false
+  },
+  "consent": {
+    "smsCopy": "By checking this box you agree to receive text messages from J Valdez Tree Services about your estimate and service. Message frequency varies. Message and data rates may apply. Reply STOP to opt out or HELP for help.",
+    "required": false,
+    "privacyPolicyUrl": "https://links.treeleads.io/preview/mKHiwloWMigr9M9z00tv",
+    "termsOfServiceUrl": "https://links.treeleads.io/preview/Q3OqcRO0SoaE5nnwNGcK"
+  },
+  "crm": {
+    "ghlLocationId": "FaHof000UZrAJUKORVCj",
+    "adClickIdFieldId": "DTlYvWAb5Y0M3iXyWfcH",
+    "leadTags": [
+      "google-ads",
+      "landing-page"
+    ],
+    "leadSource": "Google Ads — Landing Page"
+  },
+  "tracking": {
+    "gtmContainerId": "GTM-PFZPR33H",
+    "callRailSwapScriptUrl": null
+  },
+  "photos": {
+    "trimming": [
+      {
+        "src": "/assets/j-valdez/hero-photo-1-223e4399.webp",
+        "alt": "",
+        "width": 1080,
+        "height": 1080
+      },
+      {
+        "src": "/assets/j-valdez/hero-photo-2-c029d1c8.webp",
+        "alt": "",
+        "width": 1080,
+        "height": 1080
+      },
+      {
+        "src": "/assets/j-valdez/gallery-slide-1-aebe3c9c.webp",
+        "alt": "Before and after tree trimming - cleared branches and debris hauled away, East Dallas TX",
+        "width": 1080,
+        "height": 1080
+      },
+      {
+        "src": "/assets/j-valdez/gallery-slide-2-b339d5fe.webp",
+        "alt": "Before and after tree trimming - overgrown driveway cleared and canopy raised, East Dallas TX",
+        "width": 1080,
+        "height": 1080
+      },
+      {
+        "src": "/assets/j-valdez/gallery-slide-3-650f67b6.webp",
+        "alt": "Professionally trimmed trees with raised canopies along a residential street, East Dallas TX",
+        "width": 1080,
+        "height": 1080
+      },
+      {
+        "src": "/assets/j-valdez/gallery-slide-4-07c07931.webp",
+        "alt": "Clean tree trimming result over walkway with lake view, East Dallas TX",
+        "width": 1080,
+        "height": 1080
+      },
+      {
+        "src": "/assets/j-valdez/gallery-slide-5-10241b58.webp",
+        "alt": "Trimmed mature oak in front yard after professional tree trimming service",
+        "width": 1080,
+        "height": 1080
+      },
+      {
+        "src": "/assets/j-valdez/work-photo-1-1f1fbae2.webp",
+        "alt": "",
+        "width": 1080,
+        "height": 1080
+      },
+      {
+        "src": "/assets/j-valdez/work-photo-2-a945a9cf.webp",
+        "alt": "",
+        "width": 1080,
+        "height": 1080
+      },
+      {
+        "src": "/assets/j-valdez/work-photo-3-1e169c6d.webp",
+        "alt": "",
+        "width": 1080,
+        "height": 1080
+      },
+      {
+        "src": "/assets/j-valdez/work-photo-4-8f836a7b.webp",
+        "alt": "",
+        "width": 1080,
+        "height": 1080
+      },
+      {
+        "src": "/assets/j-valdez/work-photo-5-50729f8b.webp",
+        "alt": "",
+        "width": 1080,
+        "height": 1080
+      }
+    ]
+  },
+  "reviews": [
+    {
+      "author": "Christopher Medley",
+      "meta": "3 weeks ago",
+      "body": "Outstanding work! Above and beyond my expectations! Felix and his crew were very careful and very thorough. My neighbors are all very pleased with their work also. Highly recommend! And at a great price too!"
+    },
+    {
+      "author": "Phil Vidrine",
+      "meta": "1 week ago",
+      "body": "They did a fantastic job. I wanted a clear view of the river and they did a great job. They worked quickly and checked with me multiple times during the job to make sure I was satisfied. Very professional job! If you need tree work, you should use them!"
+    },
+    {
+      "author": "Jameon Bolin",
+      "meta": "a month ago",
+      "body": "I'm very happy with the work they did to remove 5 trees & cut 2 back from my house. Their cleanup was thorough & they didn't tear up my yard anymore than absolutely necessary. They ground down the stumps & 4 or 5 other stumps left by other tree companies. I think this company definitely gets 5 stars!!!"
+    },
+    {
+      "author": "Elizabeth Gonzalez",
+      "meta": "2 months ago",
+      "body": "Zero question why these guys have a 5 Star average, the owner is extremely diligent, their crew is very focused and hard working, they high quality equipment and attention to detail. Clean up afterwards was excellent, they even cleaned our pool and brushed excess leaves/debris. Highly recommend."
+    },
+    {
+      "author": "Tom Slater",
+      "meta": "2 months ago",
+      "body": "Excellent work, very professional and careful not to cut wires or damage outdoor furniture, cleaned up as if they were never here - highly recommend this tree service!"
+    }
+  ],
+  "copyOverrides": {}
+}
