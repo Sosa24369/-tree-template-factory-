@@ -1,0 +1,212 @@
+{
+  "page": "https://texastreetopsllc.com/storm",
+  "capturedAt": "2026-08-08",
+  "summary": "Exactly ONE first-party marketing tag is CONFIGURED on this page: a Google Tag Manager container. Read the servedInHtml / injectedAtHydration split below before treating it as observed — in the served HTML only the body <noscript> iframe is present; the head <script> bootstrap lives in the __NUXT_DATA__ payload and is injected at hydration. There is NO hardcoded GA4 tag, NO Google Ads conversion tag, NO Facebook/Meta pixel and NO CallRail script anywhere in the page HTML or in the payload. Any GA4 / Ads / pixel firing must be happening from inside the GTM container, which is not inspectable from the static HTML.",
+  "captureCaveat": "This capture is a GHL PREVIEW render, not the public production response. Evidence: every runtime JS chunk is served from stcdn.leadconnectorhq.com/_preview/... (36 occurrences of the token /_preview/: 35 full stcdn.leadconnectorhq.com URLs plus the Nuxt buildAssetsDir:\"/_preview/\" config value) and the form wrapper carries is-preview=\"true\". form.json already flags this for form behaviour; it applies equally here. Treat head-injected tags as CONFIGURED, not as OBSERVED — a production render could differ in what is server-side vs client-side injected. Everything recorded under notFound was verified absent from BOTH the rendered DOM and the resolved Nuxt payload, so those absences are robust to the preview/production difference.",
+  "containers": [
+    {
+      "vendor": "Google Tag Manager",
+      "id": "GTM-W32M4C6F",
+      "type": "GTM container",
+      "installedVia": "GHL funnel-level tracking code: globalHeadTrackingCode (the standard GTM <script> bootstrap) and globalBodyTrackingCode (the <noscript> iframe). ONLY the body <noscript> iframe is server-rendered. The head <script> is NOT in the served HTML — it is carried as an escaped string inside the __NUXT_DATA__ payload and injected client-side at hydration.",
+      "servedInHtml": [
+        "<noscript><iframe src=\"https://www.googletagmanager.com/ns.html?id=GTM-W32M4C6F\" height=\"0\" width=\"0\" style=\"display:none;visibility:hidden\"></iframe></noscript>  — rendered in the BODY, immediately before <div id=\"gb-track-hl-custom-code\"></div>."
+      ],
+      "injectedAtHydration": [
+        "(function(w,d,s,l,i){...})(window,document,'script','dataLayer','GTM-W32M4C6F');  — stored as globalHeadTrackingCode in the __NUXT_DATA__ payload (escaped, e.g. \\u003Cscript>), not present as a <script> in the served <head>."
+      ],
+      "occurrenceCensus": "grep -o 'GTM-W32M4C6F' raw/storm.html | wc -l -> 3. Occurrence 1 = the rendered body <noscript> iframe. Occurrences 2 and 3 = the escaped globalHeadTrackingCode and globalBodyTrackingCode strings inside the Nuxt payload. Zero occurrences of 'googletagmanager' anywhere before </head>. The only <script> tags in the served <head> are: libphonenumber-js.min.js, intl-tel-input utils.min.js, intlTelInput.min.js, a type=\"module\" chunk from stcdn.leadconnectorhq.com/_preview/zC2SjMv-.js, and one application/ld+json block.",
+      "dataLayerName": "dataLayer"
+    }
+  ],
+  "notFound": [
+    {
+      "vendor": "Google Analytics 4",
+      "id": null,
+      "evidence": "Zero matches for the G-XXXXXXX measurement-id pattern and zero gtag() calls in the document."
+    },
+    {
+      "vendor": "Google Ads (conversion / remarketing)",
+      "id": null,
+      "evidence": "Zero matches for the AW-NNNNNNNNN pattern and no conversion linker snippet."
+    },
+    {
+      "vendor": "Universal Analytics",
+      "id": null,
+      "evidence": "Zero matches for the UA-NNNNNNN-N pattern."
+    },
+    {
+      "vendor": "Facebook / Meta Pixel",
+      "id": null,
+      "evidence": "No fbq( calls, no connect.facebook.net script. GHL's own meta-pixel plugin state is present but inert: metaPixelOptions = {pixelID: null, disabled: false, isEnabled: true, manualMode: true, track: 'PageView', pixelLoaded: false}. The funnel-level pixelToInit array is empty."
+    },
+    {
+      "vendor": "CallRail",
+      "id": null,
+      "evidence": "No cdn.callrail.com script, no swap.js, no CallRail selector attributes anywhere in the HTML. NOTE: this is the tag that would need to be added for the call-conversion work — today the tel: hrefs are all static."
+    },
+    {
+      "vendor": "Microsoft Clarity / Hotjar / LinkedIn / TikTok / Snap / Pinterest",
+      "id": null,
+      "evidence": "No matching script hosts or init calls."
+    }
+  ],
+  "ghlIdentifiers": {
+    "locationId": "zfoeYpKrqshgdFr4gG3b",
+    "companyId": "uZWQSzAbUkONW06eq8ex",
+    "locationCode": "US",
+    "funnelId": "4IyapKatFKoZ1AIiK8Gd",
+    "funnelName": "Storm Removal (storm watch) - Google Ads Copy",
+    "funnelDomain": "texastreetopsllc.com",
+    "pageUrl": "/storm",
+    "pageId": "l6L9JyOnEOP1VhzZDpzj",
+    "pageName": "Storm Removal- Landing Page",
+    "stepId": "f31770a5-097f-4334-8f65-339a50d06d46",
+    "funnelNextStep": "/thank-you-page-89169333-2226-1418",
+    "funnelNextPageId": "PzQcXJTqS6kEXm01czpN",
+    "formIdCandidates": [
+      {
+        "id": "vj6sZGG1Fi4M9PAsIZRx",
+        "name": "Storm Watch Form",
+        "confidence": "confirmed",
+        "evidence": "Bound to the page's only form element (nodeId cform-5gd7-YxgNV) and used as the prefix of every field DOM id, e.g. el_vj6sZGG1Fi4M9PAsIZRx_phone_2."
+      }
+    ],
+    "pageElementIdForForm": "form-5gd7-YxgNV",
+    "popupId": "hl_main_popup-eJnCVAV3I5",
+    "popupNote": "Referenced as the default popupId by every button on the page and as the real action target of four of them (mobile Privacy Policy, mobile Terms of Service, and the never-visible 'Call (469) 402-1196' button). The popup's elements array in the page payload is EMPTY, so it opens with no content.",
+    "favicon": "https://stcdn.leadconnectorhq.com/funnel/icon/favicon.ico",
+    "agencyBranding": {
+      "companyName": "Scale And Automate",
+      "companyDomain": "login.treeleads.io",
+      "logoURL": "https://msgsndr-private.storage.googleapis.com/companyPhotos/cd31f25c-2dd5-4205-bd6c-74e08898c992.png",
+      "note": "Agency-level branding carried in the form config. Not rendered on the page."
+    }
+  },
+  "thirdPartyAssetHosts": [
+    {
+      "vendor": "GoHighLevel / LeadConnector",
+      "hosts": [
+        "stcdn.leadconnectorhq.com",
+        "images.leadconnectorhq.com",
+        "backend.leadconnectorhq.com",
+        "services.leadconnectorhq.com",
+        "assets.cdn.filesafe.space",
+        "cdn.filesafe.space",
+        "storage.googleapis.com",
+        "msgsndr-private.storage.googleapis.com"
+      ],
+      "purpose": "Funnel runtime JS chunks, image resizer, form backend, media. storage.googleapis.com/msgsndr/... is the OTHER canonical host GHL uses for the same media library — it carries the two row bgImage.url values, the JSON-LD schema logo, the FAQ items' inert image and the three Satoshi .otf webfonts; the CSS routes the same media ids through images.leadconnectorhq.com over assets.cdn.filesafe.space. msgsndr-private.storage.googleapis.com serves the agency logo referenced in the form config (see ghlIdentifiers.agencyBranding)."
+    },
+    {
+      "vendor": "GoHighLevel platform config (referenced in window.__NUXT__.config, no request made from this page)",
+      "hosts": [
+        "apisystem.tech",
+        "content.apisystem.tech",
+        "cdn.msgsndr.com",
+        "assets.cdn.msgsndr.com",
+        "js.authorize.net",
+        "jstest.authorize.net",
+        "secure.safewebservices.com"
+      ],
+      "purpose": "Runtime config values only, not loaded assets: serverBaseUrl (apisystem.tech), HLS_URL (content.apisystem.tech), OLD_STORAGE_API_URL1_CDN / OLD_STORAGE_API_URL2_CDN (cdn.msgsndr.com, assets.cdn.msgsndr.com), and the payment-provider script URLs authorizeAcceptJsUrlLiveMode / authorizeAcceptJsUrlTestMode / nmiPaymentProviderScriptUrl. This page has no payment element, so none of the authorize.net / safewebservices scripts is requested. Recorded because they appear in the document, not because they fire."
+    },
+    {
+      "vendor": "TreeLeads (agency-owned) — NOT the client domain",
+      "hosts": [
+        "links.treeleads.io"
+      ],
+      "purpose": "The desktop footer's legal links point OFF the client domain: button-EnX_GwsXa4_btn -> https://links.treeleads.io/preview/mKHiwloWMigr9M9z00tv and button-Iig4QLysbo_btn -> https://links.treeleads.io/preview/Q3OqcRO0SoaE5nnwNGcK (Privacy Policy / Terms of Service, in row-xdA6wLUcIY). 4 occurrences. The mobile equivalents are <button> elements opening the EMPTY popup instead — see structure.md."
+    },
+    {
+      "vendor": "Third-party company domain referenced by the form's redirect",
+      "hosts": [
+        "titantreeservicetx.com"
+      ],
+      "purpose": "The GHL form's configured redirectUrl (https://titantreeservicetx.com/thank-you-page-89169333-2226) — a DIFFERENT company's domain. See form.json > formActionOnSubmit. Recorded as found, not corrected."
+    },
+    {
+      "vendor": "GoHighLevel (intl-tel-input 17.0.12)",
+      "hosts": [
+        "stcdn.leadconnectorhq.com"
+      ],
+      "purpose": "Phone-field country picker: intlTelInput.min.js, utils.min.js, intlTelInput.min.css, flags.png / flags@2x.png sprite."
+    },
+    {
+      "vendor": "GoHighLevel (libphonenumber-js 1.12.41)",
+      "hosts": [
+        "stcdn.leadconnectorhq.com"
+      ],
+      "purpose": "Phone-number validation on the form."
+    },
+    {
+      "vendor": "Cloudflare cdnjs",
+      "hosts": [
+        "cdnjs.cloudflare.com"
+      ],
+      "purpose": "Swiper 8.0.5 JS + CSS. Loaded TWICE — once by the Section 2 photo slider custom-HTML block and once by the Section 4 reviews slider custom-HTML block."
+    },
+    {
+      "vendor": "Fontshare",
+      "hosts": [
+        "api.fontshare.com"
+      ],
+      "purpose": "Satoshi 400/500/700 webfont, requested by the Section 2, 4 and 8 custom-HTML blocks."
+    },
+    {
+      "vendor": "CDN Fonts",
+      "hosts": [
+        "fonts.cdnfonts.com"
+      ],
+      "purpose": "Satoshi webfont, requested by the Section 7 marquee custom-HTML block. A second, different source for the same typeface."
+    },
+    {
+      "vendor": "Google Fonts",
+      "hosts": [
+        "fonts.googleapis.com",
+        "fonts.gstatic.com"
+      ],
+      "purpose": "Inter and Roboto families, injected by the GHL theme."
+    },
+    {
+      "vendor": "Google user content",
+      "hosts": [
+        "lh3.googleusercontent.com"
+      ],
+      "purpose": "The 15 Google Business Profile job photos hot-linked into the Section 2 slider."
+    },
+    {
+      "vendor": "Google Tag Manager",
+      "hosts": [
+        "www.googletagmanager.com"
+      ],
+      "purpose": "GTM container GTM-W32M4C6F."
+    }
+  ],
+  "structuredData": {
+    "type": "JSON-LD, injected as the funnel page's schemaMarkup",
+    "graph": [
+      "HomeAndConstructionBusiness (#business-1)",
+      "Service (#service-tree-removal)",
+      "Offer (#offer-summer300)",
+      "FAQPage"
+    ],
+    "businessName": "Texas Tree Tops Tree Service LLC",
+    "telephonePrimary": "(682) 452-0735",
+    "telephoneContactPoints": [
+      "(682) 452-0735",
+      "(469) 402-1196"
+    ],
+    "addressLocality": "West Dallas",
+    "addressRegion": "TX",
+    "warning": "This schema block is STALE — it is carried over from the tree-removal page, not written for the storm page. It advertises a '$300 Off ... All Summer! Save $300 though August-31st' offer that appears nowhere in the visible copy, an East-Dallas-centric areaServed list, and a 10-question FAQPage whose Q&A are entirely different from the 10 visible FAQ items on this page. Recorded, not corrected."
+  },
+  "notes": [
+    "Because GTM is the only tag on the page, ALL downstream measurement (GA4 pageviews, Ads conversions, any pixel) depends on container GTM-W32M4C6F. Nothing in this HTML proves what that container fires.",
+    "For the CallRail DNI work: there is currently no call-tracking script of any kind on the page, and the nine tel: anchors are hardcoded. Three distinct numbers are in play and one anchor's label does not match its href — see structure.md > PHONE TREATMENT before installing any swap.",
+    "One tel href is not E.164: tel:682-452-0735 on button-Tk8AUj2tvs_btn (the mobile-only Section 3 CTA). A number-swap rule matching only 'tel:+1...' will miss it.",
+    "The GHL Meta-pixel integration is enabled but has a null pixelID, so it initialises and does nothing. If a pixel id is ever added at the location level it will start firing PageView automatically in manual mode.",
+    "No cookie-consent or CMP script is present (cookieConsent is unset and disablePageLevelCookieConsent is false).",
+    "thirdPartyAssetHosts above is now the COMPLETE host census. Full count from the served HTML (after unescaping \\u002F): assets.cdn.filesafe.space 191, images.leadconnectorhq.com 143, stcdn.leadconnectorhq.com 62, lh3.googleusercontent.com 30, storage.googleapis.com 13, backend.leadconnectorhq.com 10, fonts.googleapis.com 8, cdnjs.cloudflare.com 8, api.fontshare.com 6, schema.org 4, links.treeleads.io 4, www.googletagmanager.com 3, cdn.filesafe.space 2, services.leadconnectorhq.com 2, fonts.cdnfonts.com 2, apisystem.tech 2, fonts.gstatic.com 1, www.w3.org 1, cdn.msgsndr.com 1, assets.cdn.msgsndr.com 1, content.apisystem.tech 1, jstest.authorize.net 1, js.authorize.net 1, secure.safewebservices.com 1, msgsndr-private.storage.googleapis.com 1, titantreeservicetx.com 1. schema.org and www.w3.org are namespace URIs (JSON-LD @context and the SVG xmlns), not asset hosts, and are deliberately not listed as vendors."
+  ]
+}

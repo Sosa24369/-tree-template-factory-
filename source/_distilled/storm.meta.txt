@@ -1,0 +1,41 @@
+== TRACKING IDS ==
+GTM: GTM-W32M4C6F
+GA4: 
+Google Ads: 
+Facebook Pixel: 
+CallRail: 
+
+== TEL LINKS (in document order, with duplicates) ==
++16823657478
++14694021196
++16823657478
+682-452-0735
++16823657478
++16823657478
++16823657478
++16823657478
++16823657478
++14694021196
++16823657478
+
+== TITLE / META ==
+title: Emergency Storm Tree Removal Fort Worth | Texas Tree Tops
+<meta name="viewport" content="minimum-scale=1.0, width=device-width, maximum-scale=1, user-scalable=no">
+<meta name="title" content="Emergency Storm Tree Removal Fort Worth | Texas Tree Tops">
+<meta property="og:title" content="Emergency Storm Tree Removal Fort Worth | Texas Tree Tops">
+<meta name="description" content="Tree on your house? Fast storm damage tree removal, fence repair & debris cleanup in Fort Worth. Licensed, insured, free estimates. Call (682) 452-0735.">
+<meta property="og:description" content="Tree on your house? Fast storm damage tree removal, fence repair & debris cleanup in Fort Worth. Licensed, insured, free estimates. Call (682) 452-0735.">
+<meta name="author" content="Texas Tree Tops">
+<meta property="og:author" content="Texas Tree Tops">
+<meta name="image" content="https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a6a849e93f4ab90d4382a5a.jpg">
+<meta property="og:image" content="https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a6a849e93f4ab90d4382a5a.jpg">
+<meta name="keywords" content="emergency tree removal fort worth, storm damage tree removal, tree fell on house, downed tree removal">
+<meta property="og:keywords" content="emergency tree removal fort worth, storm damage tree removal, tree fell on house, downed tree removal">
+<meta property="og:type" content="website">
+<meta property="twitter:type" content="website">
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+== GHL IDS ==
+locationId candidates: 
+formId candidates: 
+contact.* field keys: 

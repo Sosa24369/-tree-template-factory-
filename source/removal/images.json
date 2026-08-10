@@ -1,0 +1,794 @@
+[
+  {
+    "id": "hdr-logo-desktop",
+    "role": "logo",
+    "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/30d28dd8-9edb-4699-94f4-1c1cc58b612d.svg+xml",
+    "variants": [
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_900/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/30d28dd8-9edb-4699-94f4-1c1cc58b612d.svg+xml",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_768/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/30d28dd8-9edb-4699-94f4-1c1cc58b612d.svg+xml",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_640/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/30d28dd8-9edb-4699-94f4-1c1cc58b612d.svg+xml",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_320/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/30d28dd8-9edb-4699-94f4-1c1cc58b612d.svg+xml"
+    ],
+    "alt": "",
+    "width": null,
+    "height": null,
+    "section": "S1 Header + Hero + Lead Form"
+  },
+  {
+    "id": "hdr-badge-desktop",
+    "role": "other",
+    "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a549b17baf5f6da408e5c4a.jpg",
+    "variants": [
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_900/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a549b17baf5f6da408e5c4a.jpg",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_768/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a549b17baf5f6da408e5c4a.jpg",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_640/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a549b17baf5f6da408e5c4a.jpg",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_320/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a549b17baf5f6da408e5c4a.jpg"
+    ],
+    "alt": "",
+    "width": null,
+    "height": null,
+    "section": "S1 Header + Hero + Lead Form"
+  },
+  {
+    "id": "logo-mobile-and-footer",
+    "role": "logo",
+    "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a549dd5524a3ec4c60bd331.png",
+    "variants": [
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_900/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a549dd5524a3ec4c60bd331.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_768/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a549dd5524a3ec4c60bd331.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_640/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a549dd5524a3ec4c60bd331.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_320/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a549dd5524a3ec4c60bd331.png"
+    ],
+    "alt": "",
+    "width": null,
+    "height": null,
+    "section": [
+      "S1 Header + Hero + Lead Form",
+      "S13 Footer"
+    ],
+    "renderedInstances": 2,
+    "wrapperIds": [
+      "image-AsROCxR7PD",
+      "image-9_ZzhOR81P"
+    ]
+  },
+  {
+    "id": "hero-below-form-1",
+    "role": "other",
+    "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a54a921d74b27c6af171076.png",
+    "variants": [
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_900/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a54a921d74b27c6af171076.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_768/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a54a921d74b27c6af171076.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_640/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a54a921d74b27c6af171076.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_320/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a54a921d74b27c6af171076.png"
+    ],
+    "alt": "",
+    "width": null,
+    "height": null,
+    "section": "S1 Header + Hero + Lead Form"
+  },
+  {
+    "id": "hero-below-form-2",
+    "role": "other",
+    "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a54a922baf5f6da40924908.png",
+    "variants": [
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_900/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a54a922baf5f6da40924908.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_768/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a54a922baf5f6da40924908.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_640/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a54a922baf5f6da40924908.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_320/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a54a922baf5f6da40924908.png"
+    ],
+    "alt": "",
+    "width": null,
+    "height": null,
+    "section": "S1 Header + Hero + Lead Form"
+  },
+  {
+    "id": "cta-arrow-glyph",
+    "role": "icon",
+    "src": "https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a443a9a4c02d14b8db7c6ed.svg",
+    "variants": [],
+    "alt": null,
+    "width": null,
+    "height": null,
+    "section": [
+      "S1 Header + Hero + Lead Form",
+      "S3 Benefit Strip + Call CTA",
+      "S4 Why Choose Us + Google Reviews",
+      "S5 Restoration Results Guaranteed",
+      "S6 Services We Offer",
+      "S9 Mid-page CTA",
+      "S12 Final CTA"
+    ],
+    "delivery": "css-background",
+    "live": true,
+    "renderedInstances": 10,
+    "cssRules": [
+      {
+        "selector": ".btn-arrow .main-heading-group::after",
+        "declarations": "content: \"\" !important; display: inline-block !important; width: 35px !important; height: 35px !important; margin-left: 10px !important; background: url(\"https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a443a9a4c02d14b8db7c6ed.svg\") no-repeat center !important; background-size: contain !important; flex-shrink: 0 !important;",
+        "boxWidthFromCss": "35px",
+        "boxHeightFromCss": "35px",
+        "matchingElements": 1,
+        "elementIds": ["button-qwl5Ux0JZe_btn"]
+      },
+      {
+        "selector": ".mob-btn-arrow .main-heading-group::after",
+        "declarations": "content: \"\" !important; display: inline-block !important; width: 35px !important; height: 35px !important; margin-left: 3px !important; background: url(\"https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a443a9a4c02d14b8db7c6ed.svg\") no-repeat center !important; background-size: contain !important; flex-shrink: 0 !important;",
+        "boxWidthFromCss": "35px",
+        "boxHeightFromCss": "35px",
+        "matchingElements": 1,
+        "elementIds": ["button-ilOPxA15xd_btn"]
+      },
+      {
+        "selector": ".left_arrow::before",
+        "declarations": "content: \"\"; position: absolute; left: 24px; top: 50%; transform: translateY(-50%); width: 36px; height: 36px; background: url(\"https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a443a9a4c02d14b8db7c6ed.svg\") no-repeat center; background-size: contain; pointer-events: none;",
+        "boxWidthFromCss": "36px",
+        "boxHeightFromCss": "36px",
+        "matchingElements": 8,
+        "elementIds": [
+          "button-w6i_nJR0lW_btn",
+          "button-Tk8AUj2tvs_btn",
+          "button--kIKpIzaUL_btn",
+          "button-GecFCrteC2_btn",
+          "button-_LS21RqVvN_btn",
+          "button-T5sp7p0n-b_btn",
+          "button-kwfdGgdu0L_btn",
+          "button-gyo6-qwTP1_btn"
+        ]
+      }
+    ],
+    "note": "Decorative arrow glyph on the CTA buttons. It is a CSS background on a ::before / ::after pseudo-element, never an <img>, so nothing about it is discoverable from the image manifest of the DOM. Drop it and all ten CTA buttons lose their arrow. alt is null because a CSS background has no alt attribute — the attribute is absent, not empty. width/height are null: the SVG has no intrinsic dimensions anywhere in the served HTML; the px values under cssRules are the CSS box sizes of the pseudo-element and are quoted from the rule named in `selector`, they are NOT the asset's intrinsic size. Served from GHL location FaHof000UZrAJUKORVCj, not this page's own location."
+  },
+  {
+    "id": "form-email-envelope-icon",
+    "role": "icon",
+    "src": "inline-svg",
+    "variants": [],
+    "alt": null,
+    "width": null,
+    "height": null,
+    "section": "S1 Header + Hero + Lead Form",
+    "delivery": "inline-svg",
+    "live": true,
+    "renderedInstances": 1,
+    "markup": "<svg xmlns=\"http://www.w3.org/2000/svg\" fill=\"none\" viewbox=\"0 0 24 24\" stroke-width=\"2\" stroke=\"currentColor\" aria-hidden=\"true\" class=\"input-icon\" style=\"color:#1C1C1CFF;\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M2 7l8.165 5.715c.661.463.992.695 1.351.784a2 2 0 00.968 0c.36-.09.69-.32 1.351-.784L22 7M6.8 20h10.4c1.68 0 2.52 0 3.162-.327a3 3 0 001.311-1.311C22 17.72 22 16.88 22 15.2V8.8c0-1.68 0-2.52-.327-3.162a3 3 0 00-1.311-1.311C19.72 4 18.88 4 17.2 4H6.8c-1.68 0-2.52 0-3.162.327a3 3 0 00-1.311 1.311C2 6.28 2 7.12 2 8.8v6.4c0 1.68 0 2.52.327 3.162a3 3 0 001.311 1.311C4.28 20 5.12 20 6.8 20z\"></path></svg>",
+    "parent": "<div class=\"flex email-input relative\"> inside el_jEE2tj056VFJ9l6M50lU_email_3",
+    "cssSizing": ".input-icon{height:16px;left:12px;pointer-events:none;position:absolute;top:50%;transform:translateY(-50%);width:16px;z-index:1} — from the GHL form-builder stylesheet",
+    "boxWidthFromCss": "16px",
+    "boxHeightFromCss": "16px",
+    "note": "Envelope glyph rendered as inline SVG inside the email field wrapper — the ONLY inline SVG on the page that is not a city-pill map pin (1 of 51 inline <svg> elements in the served body). It has aria-hidden=\"true\" and no alt/title, so alt is null (attribute absent, not empty). This icon is the reason the email <input> carries the inline style padding-left:36px !important; see form.json. width/height are null because the element declares none; boxWidthFromCss / boxHeightFromCss come from the .input-icon rule quoted in cssSizing, not from the markup. Only the email field has an icon — first_name, last_name and phone have none."
+  },
+  {
+    "id": "gallery-01",
+    "role": "gallery",
+    "src": "https://lh3.googleusercontent.com/gps-cs-s/APNQkAEfUSfjUuxwgTbHRboIuyF_tA0_YdoMvH690IL0_2nFypdM3MKu0WNcNZiGwrMxbH56UXNkCo9h5KaNIeg4ql8Epkz7gDfKvtCOldTL-P7GKJZVvcmOx_rJEsWyg4X61fEzSus=m18",
+    "variants": [],
+    "alt": "Texas Tree Tops tree removal in Fort Worth",
+    "width": "680",
+    "height": "510",
+    "section": "S2 Recent Jobs Photo Gallery"
+  },
+  {
+    "id": "gallery-02",
+    "role": "gallery",
+    "src": "https://lh3.googleusercontent.com/gps-cs-s/APNQkAGTSYTHsMC2dE75Lh9J0BLZiWHmzqPw9Fc0RoJAJdYTc91-J8bycbCR13lH-TBLHiJufYAKzGKV3EfxkQ5hUOt8svIPNBblpH3I1dp5cfmLyxXJrlo9Ot8FQxUQHWoVf2funXQf_QN-ai4=s680-w680-h510-rw",
+    "variants": [],
+    "alt": "Texas Tree Tops tree removal in Fort Worth",
+    "width": "680",
+    "height": "510",
+    "section": "S2 Recent Jobs Photo Gallery"
+  },
+  {
+    "id": "gallery-03",
+    "role": "gallery",
+    "src": "https://lh3.googleusercontent.com/gps-cs-s/APNQkAGUX-tJVjuwUK3ESpBoxOXKEmkeKpk9QAKP8oikshCFf8bKY9WRvsVQCxIVIAXVLPstO8_LoQ66Hup6tqo7v84wsEz9Uyflg0oc5K-fRhzQW29Ns8tLpvzaVrf7buEtzAvJmCXWD2TvA9c=s680-w680-h510-rw",
+    "variants": [],
+    "alt": "Texas Tree Tops tree removal in Fort Worth",
+    "width": "680",
+    "height": "510",
+    "section": "S2 Recent Jobs Photo Gallery"
+  },
+  {
+    "id": "gallery-04",
+    "role": "gallery",
+    "src": "https://lh3.googleusercontent.com/gps-cs-s/APNQkAFsp7kKInJ4dqWgg7p148NIYHM2sgzlyi2whSCe_Kx3aNPyX5Me-DvwaQKZ2TNHUmhxMfHerg4kWhLHrsJAFylMDsVsrHQNrets3vMuvCgTXz5sXnJ_1pWtbU8e09MszJ-yBzQVNrlz6RsE=s680-w680-h510-rw",
+    "variants": [],
+    "alt": "Texas Tree Tops tree removal in Fort Worth",
+    "width": "680",
+    "height": "510",
+    "section": "S2 Recent Jobs Photo Gallery"
+  },
+  {
+    "id": "gallery-05",
+    "role": "gallery",
+    "src": "https://lh3.googleusercontent.com/gps-cs-s/APNQkAE_Xpg0QECwM2B6LOTiz0VgmI_NSJdxaTtqx4NgskPCh06yoLuVEBBFphsns_oOL6v6mysqgLL8oofJPTL5e8lQtfZe4iETB_4GoDtIT2bRi7YAs5YU7W-y26bRRt7cSxoFiwGw8rWEDtK1=s680-w680-h510-rw",
+    "variants": [],
+    "alt": "Texas Tree Tops tree removal in Fort Worth",
+    "width": "680",
+    "height": "510",
+    "section": "S2 Recent Jobs Photo Gallery"
+  },
+  {
+    "id": "gallery-06",
+    "role": "gallery",
+    "src": "https://lh3.googleusercontent.com/gps-cs-s/APNQkAG8JmEm6YGrjuyzFqrVmfXdWran7TPRgDZO1ilFmqBcbLDswyZaEnMY-4m4zjUCMyXD-EyldLZw75-WhqEnyLUXGHi_kTvNATenctgHXePm7X5gmpXM74JooQwdyNvmSg8oUgL3rLBmpsOC=s680-w680-h510-rw",
+    "variants": [],
+    "alt": "Texas Tree Tops tree removal in Fort Worth",
+    "width": "680",
+    "height": "510",
+    "section": "S2 Recent Jobs Photo Gallery"
+  },
+  {
+    "id": "gallery-07",
+    "role": "gallery",
+    "src": "https://lh3.googleusercontent.com/gps-cs-s/APNQkAERnCnOfy8a4EkiABI7P71ZvY1tHMv3BAVzQZnOtCJD4a-5PzPV4M3_NEnv45GRRHhiQzi316-C52kV1TE_fYbf1KfzGd_Ggx4Pi0plr5eiFRXcLpWnXijnv2-v6iSjvlpbi04QNdk9m9yb=s680-w680-h510-rw",
+    "variants": [],
+    "alt": "Texas Tree Tops tree removal in Fort Worth",
+    "width": "680",
+    "height": "510",
+    "section": "S2 Recent Jobs Photo Gallery"
+  },
+  {
+    "id": "gallery-08",
+    "role": "gallery",
+    "src": "https://lh3.googleusercontent.com/gps-cs-s/APNQkAGcKriyLCMkDicEAxSgTc3nGRmsqPzO_XCDK8iZgiFKF-_4-7TNzvfp3bl9X4iR8AOVbB6i-6QAFXarfeJDdFWfcsIBCqAKfUhLwpU9eQtraeyhB8zXWzRlQrMeqK1Yx0wsl5yprF86pqY=s680-w680-h510-rw",
+    "variants": [],
+    "alt": "Texas Tree Tops tree removal in Fort Worth",
+    "width": "680",
+    "height": "510",
+    "section": "S2 Recent Jobs Photo Gallery"
+  },
+  {
+    "id": "gallery-09",
+    "role": "gallery",
+    "src": "https://lh3.googleusercontent.com/gps-cs-s/APNQkAGYdTvgjCzZI5lEiaubBsWnZ4RBsF1FwqPVn1xZDaG-BNujJpSzvRd3cs0qU5siKuayfp3JFyYQKRAovue5KiOFm8VHgFLPxk2TqMHlze8dgmHbbV4PXtpQmu23eAAKpGCU9BEr=s680-w680-h510-rw",
+    "variants": [],
+    "alt": "Texas Tree Tops tree removal in Fort Worth",
+    "width": "680",
+    "height": "510",
+    "section": "S2 Recent Jobs Photo Gallery"
+  },
+  {
+    "id": "gallery-10",
+    "role": "gallery",
+    "src": "https://lh3.googleusercontent.com/gps-cs-s/APNQkAHrHUebxbb0yeOwicX3i2D9VWj-NPbCyJZS0Qg6wiSMLhxEE7EtIhScIolXEu1ids2Ydd9-f35F2R4z-PH85Gfv7D01jN1Y2Qq0Iqm7rN7E14j_2btesNgt1O1nR-3U2yYUnvq7PzFoEiA=s680-w680-h510-rw",
+    "variants": [],
+    "alt": "Texas Tree Tops tree removal in Fort Worth",
+    "width": "680",
+    "height": "510",
+    "section": "S2 Recent Jobs Photo Gallery"
+  },
+  {
+    "id": "gallery-11",
+    "role": "gallery",
+    "src": "https://lh3.googleusercontent.com/gps-cs-s/APNQkAF4-_w1sSPGC4nso3EOMVrWVFckoXJxSdWY9LViXxxHd43UZ3QfNPQS9tr6DGLxtBaHLyqWNEHRwC50MlHIFnVfOnM4BYIWoPLuj4x46tCGOau5c8OH8P1Gf7yk85wYWyXmGuIMYPfv5uy_=s680-w680-h510-rw",
+    "variants": [],
+    "alt": "Texas Tree Tops tree removal in Fort Worth",
+    "width": "680",
+    "height": "510",
+    "section": "S2 Recent Jobs Photo Gallery"
+  },
+  {
+    "id": "gallery-12",
+    "role": "gallery",
+    "src": "https://lh3.googleusercontent.com/gps-cs-s/APNQkAGSVZpk0ZRzXpesFPSRVp4FJH7Uw1YhVxBqTg0gt5M5_L2lkyzBfpTPyjoXfFA0E_i1oqN4DV7VSg4TAwky11kwfyU_XKwi0kK2TGkXQPMWj2Wsx3krCXdDOOt2crm-e4BnNtKMGw=s680-w680-h510-rw",
+    "variants": [],
+    "alt": "Texas Tree Tops tree removal in Fort Worth",
+    "width": "680",
+    "height": "510",
+    "section": "S2 Recent Jobs Photo Gallery"
+  },
+  {
+    "id": "gallery-13",
+    "role": "gallery",
+    "src": "https://lh3.googleusercontent.com/gps-cs-s/APNQkAG03pVC1g3_r452mKZ-tWf9ihQIyDqdRC0Pu-kZu1Y0pLo15kWVjrHv6AB0D-pxP0NMe0G3BHoVIQ9XNu2UppHwOHFfPr1Qtr7LGTnjxzDdR1g3e4vs7_5A9th9DxAPax6GtkWTjLhq0kc=s680-w680-h510-rw",
+    "variants": [],
+    "alt": "Texas Tree Tops tree removal in Fort Worth",
+    "width": "680",
+    "height": "510",
+    "section": "S2 Recent Jobs Photo Gallery"
+  },
+  {
+    "id": "gallery-14",
+    "role": "gallery",
+    "src": "https://lh3.googleusercontent.com/gps-cs-s/APNQkAEdW3yWQmE2kYryVJxE8ctv-5naeEVUbXuQzb07pIUy0elPK7iHS_Dgqc1TWVhWE3IzSa4gJu-rOGixWKPzJwpambFmbPbW81S-8n4ccYM7zhsZujMvTPSnICIkeVKZf1v9B6j2XreBk0U=s680-w680-h510-rw",
+    "variants": [],
+    "alt": "Texas Tree Tops tree removal in Fort Worth",
+    "width": "680",
+    "height": "510",
+    "section": "S2 Recent Jobs Photo Gallery"
+  },
+  {
+    "id": "gallery-15",
+    "role": "gallery",
+    "src": "https://lh3.googleusercontent.com/gps-cs-s/APNQkAGkx8D5R5PWMUcvlW1VVMxL1Qk65uH5Zin4jhipcKKql8FX7DbunSjZDjEdArjxdBF3nyOa1bOa8d3UYDVRNyRtz8Iwk8zynks2RR8IstBjrs3HU5ZIJjHKmP--GWNhkqVThZI5HkRai_AG=s680-w680-h510-rw",
+    "variants": [],
+    "alt": "Texas Tree Tops tree removal in Fort Worth",
+    "width": "680",
+    "height": "510",
+    "section": "S2 Recent Jobs Photo Gallery"
+  },
+  {
+    "id": "benefit-strip-art",
+    "role": "other",
+    "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a54a922baf5f6da40924903.png",
+    "variants": [
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_900/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a54a922baf5f6da40924903.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_768/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a54a922baf5f6da40924903.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_640/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a54a922baf5f6da40924903.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_320/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a54a922baf5f6da40924903.png"
+    ],
+    "alt": "",
+    "width": null,
+    "height": null,
+    "section": "S3 Benefit Strip + Call CTA"
+  },
+  {
+    "id": "benefit-icon-1",
+    "role": "icon",
+    "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/012f6d7a-b718-440d-947c-b4d8413bdeec.svg+xml",
+    "variants": [
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_900/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/012f6d7a-b718-440d-947c-b4d8413bdeec.svg+xml",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_768/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/012f6d7a-b718-440d-947c-b4d8413bdeec.svg+xml",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_640/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/012f6d7a-b718-440d-947c-b4d8413bdeec.svg+xml",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_320/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/012f6d7a-b718-440d-947c-b4d8413bdeec.svg+xml"
+    ],
+    "alt": "",
+    "width": null,
+    "height": null,
+    "section": "S3 Benefit Strip + Call CTA"
+  },
+  {
+    "id": "benefit-icon-2",
+    "role": "icon",
+    "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/581dce4d-6e7f-4c6a-86bb-15e01bd6677c.svg+xml",
+    "variants": [
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_900/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/581dce4d-6e7f-4c6a-86bb-15e01bd6677c.svg+xml",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_768/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/581dce4d-6e7f-4c6a-86bb-15e01bd6677c.svg+xml",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_640/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/581dce4d-6e7f-4c6a-86bb-15e01bd6677c.svg+xml",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_320/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/581dce4d-6e7f-4c6a-86bb-15e01bd6677c.svg+xml"
+    ],
+    "alt": "",
+    "width": null,
+    "height": null,
+    "section": "S3 Benefit Strip + Call CTA"
+  },
+  {
+    "id": "benefit-icon-3",
+    "role": "icon",
+    "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/64e31ca7-a259-42c9-a18b-52f0a74e3aa6.svg+xml",
+    "variants": [
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_900/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/64e31ca7-a259-42c9-a18b-52f0a74e3aa6.svg+xml",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_768/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/64e31ca7-a259-42c9-a18b-52f0a74e3aa6.svg+xml",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_640/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/64e31ca7-a259-42c9-a18b-52f0a74e3aa6.svg+xml",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_320/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/64e31ca7-a259-42c9-a18b-52f0a74e3aa6.svg+xml"
+    ],
+    "alt": "",
+    "width": null,
+    "height": null,
+    "section": "S3 Benefit Strip + Call CTA"
+  },
+  {
+    "id": "benefit-icon-4",
+    "role": "icon",
+    "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/c6bef16d-f5bb-4595-8f55-3ecaa3fce5a2.svg+xml",
+    "variants": [
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_900/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/c6bef16d-f5bb-4595-8f55-3ecaa3fce5a2.svg+xml",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_768/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/c6bef16d-f5bb-4595-8f55-3ecaa3fce5a2.svg+xml",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_640/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/c6bef16d-f5bb-4595-8f55-3ecaa3fce5a2.svg+xml",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_320/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/c6bef16d-f5bb-4595-8f55-3ecaa3fce5a2.svg+xml"
+    ],
+    "alt": "",
+    "width": null,
+    "height": null,
+    "section": "S3 Benefit Strip + Call CTA"
+  },
+  {
+    "id": "bg-section-evIFlIWTQp",
+    "role": "background",
+    "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a441bc20f3445329fc952f9.png",
+    "variants": [
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_900/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a441bc20f3445329fc952f9.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_768/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a441bc20f3445329fc952f9.png"
+    ],
+    "alt": null,
+    "width": null,
+    "height": null,
+    "section": "S4 Why Choose Us + Google Reviews",
+    "delivery": "css-background",
+    "live": true,
+    "cssSelector": ".bg-section-evIFlIWTQp",
+    "paintedElement": "<div class=\"bg fill-width-height bg-section-evIFlIWTQp\" style=\"border-radius:inherit;position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;\"></div> — first child of div#section-evIFlIWTQp",
+    "cssBreakpoints": {
+      "@media (max-width: 480px)": "r_768 variant",
+      "@media (min-width: 481px) and (max-width: 1024px)": "r_900 variant",
+      "@media (min-width: 1025px)": "r_1200 variant (= src)"
+    },
+    "cssDeclarations": "background: url(<variant for that breakpoint>); opacity: 1",
+    "note": "Full-bleed section background. Emitted as three @media blocks in a dedicated inline <style> (raw/removal.html chars 206914–207786), NOT as an <img>/<picture> and NOT via the literal token `background-image` — GHL writes the `background:` shorthand, which is why a grep for `background-image` misses it. alt is null: a CSS background has no alt attribute (absent, not empty). width/height are null — no intrinsic dimensions for this asset appear anywhere in the source; the painted div is stretched to 100% x 100% by its own inline style. Served from GHL location FaHof000UZrAJUKORVCj, not this page's own location."
+  },
+  {
+    "id": "review-stars",
+    "role": "icon",
+    "src": "https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a441cbcb76c4ad15a9d24df.svg",
+    "variants": [],
+    "alt": "5 stars",
+    "width": null,
+    "height": null,
+    "section": "S4 Why Choose Us + Google Reviews",
+    "renderedInstances": 3,
+    "wrapperIds": [
+      "custom-code-8BO6xwlaH1__custom-code",
+      "custom-code-8BO6xwlaH1__custom-code",
+      "custom-code-8BO6xwlaH1__custom-code"
+    ]
+  },
+  {
+    "id": "review-google-logo",
+    "role": "icon",
+    "src": "https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a441cbc18d22f08d734f9a7.svg",
+    "variants": [],
+    "alt": "Google",
+    "width": null,
+    "height": null,
+    "section": "S4 Why Choose Us + Google Reviews",
+    "renderedInstances": 3,
+    "wrapperIds": [
+      "custom-code-8BO6xwlaH1__custom-code",
+      "custom-code-8BO6xwlaH1__custom-code",
+      "custom-code-8BO6xwlaH1__custom-code"
+    ]
+  },
+  {
+    "id": "restoration-photo-1",
+    "role": "gallery",
+    "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a54a922180dde3f86a7bc49.png",
+    "variants": [
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_900/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a54a922180dde3f86a7bc49.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_768/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a54a922180dde3f86a7bc49.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_640/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a54a922180dde3f86a7bc49.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_320/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a54a922180dde3f86a7bc49.png"
+    ],
+    "alt": "",
+    "width": null,
+    "height": null,
+    "section": "S5 Restoration Results Guaranteed"
+  },
+  {
+    "id": "restoration-photo-2",
+    "role": "gallery",
+    "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a54a921180dde3f86a7bc21.png",
+    "variants": [
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_900/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a54a921180dde3f86a7bc21.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_768/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a54a921180dde3f86a7bc21.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_640/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a54a921180dde3f86a7bc21.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_320/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a54a921180dde3f86a7bc21.png"
+    ],
+    "alt": "",
+    "width": null,
+    "height": null,
+    "section": "S5 Restoration Results Guaranteed"
+  },
+  {
+    "id": "restoration-photo-3",
+    "role": "gallery",
+    "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a54a922baf5f6da4092490e.png",
+    "variants": [
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_900/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a54a922baf5f6da4092490e.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_768/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a54a922baf5f6da4092490e.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_640/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a54a922baf5f6da4092490e.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_320/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a54a922baf5f6da4092490e.png"
+    ],
+    "alt": "",
+    "width": null,
+    "height": null,
+    "section": "S5 Restoration Results Guaranteed"
+  },
+  {
+    "id": "restoration-photo-4",
+    "role": "gallery",
+    "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a54a9219c9b37b5fd0db631.png",
+    "variants": [
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_900/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a54a9219c9b37b5fd0db631.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_768/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a54a9219c9b37b5fd0db631.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_640/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a54a9219c9b37b5fd0db631.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_320/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a54a9219c9b37b5fd0db631.png"
+    ],
+    "alt": "",
+    "width": null,
+    "height": null,
+    "section": "S5 Restoration Results Guaranteed"
+  },
+  {
+    "id": "restoration-photo-5",
+    "role": "gallery",
+    "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a54a922baf5f6da409248fe.png",
+    "variants": [
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_900/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a54a922baf5f6da409248fe.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_768/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a54a922baf5f6da409248fe.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_640/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a54a922baf5f6da409248fe.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_320/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a54a922baf5f6da409248fe.png"
+    ],
+    "alt": "",
+    "width": null,
+    "height": null,
+    "section": "S5 Restoration Results Guaranteed"
+  },
+  {
+    "id": "bg-section-Pt0S1QTMn0",
+    "role": "background",
+    "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a43fb56a7501a002a01a8c1.png",
+    "variants": [
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_900/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a43fb56a7501a002a01a8c1.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_768/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a43fb56a7501a002a01a8c1.png"
+    ],
+    "alt": null,
+    "width": null,
+    "height": null,
+    "section": "S6 Services We Offer",
+    "delivery": "css-background",
+    "live": true,
+    "cssSelector": ".bg-section-Pt0S1QTMn0",
+    "paintedElement": "<div class=\"bg fill-width-height bg-section-Pt0S1QTMn0\" style=\"border-radius:inherit;position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;\"></div> — first child of div#section-Pt0S1QTMn0",
+    "cssBreakpoints": {
+      "@media (max-width: 480px)": "r_768 variant",
+      "@media (min-width: 481px) and (max-width: 1024px)": "r_900 variant",
+      "@media (min-width: 1025px)": "r_1200 variant (= src)"
+    },
+    "cssDeclarations": "background: url(<variant for that breakpoint>); opacity: 1",
+    "note": "Full-bleed section background. Emitted as three @media blocks in a dedicated inline <style> (raw/removal.html chars 207794–208666) using the `background:` shorthand, not `background-image`. alt/width/height are null for the same reasons as bg-section-evIFlIWTQp. Served from GHL location FaHof000UZrAJUKORVCj, not this page's own location."
+  },
+  {
+    "id": "services-photo-1",
+    "role": "gallery",
+    "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/4e80198d-4777-4cb7-9db8-9f377c39591d.png",
+    "variants": [
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_900/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/4e80198d-4777-4cb7-9db8-9f377c39591d.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_768/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/4e80198d-4777-4cb7-9db8-9f377c39591d.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_640/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/4e80198d-4777-4cb7-9db8-9f377c39591d.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_320/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/4e80198d-4777-4cb7-9db8-9f377c39591d.png"
+    ],
+    "alt": "",
+    "width": null,
+    "height": null,
+    "section": "S6 Services We Offer"
+  },
+  {
+    "id": "services-photo-2",
+    "role": "gallery",
+    "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/7519c674-52bb-4e06-977f-b502d5a6bf97.png",
+    "variants": [
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_900/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/7519c674-52bb-4e06-977f-b502d5a6bf97.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_768/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/7519c674-52bb-4e06-977f-b502d5a6bf97.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_640/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/7519c674-52bb-4e06-977f-b502d5a6bf97.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_320/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/7519c674-52bb-4e06-977f-b502d5a6bf97.png"
+    ],
+    "alt": "",
+    "width": null,
+    "height": null,
+    "section": "S6 Services We Offer"
+  },
+  {
+    "id": "services-photo-3",
+    "role": "gallery",
+    "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/f8e25c6a-f601-425c-801b-a45fdc9b1d6c.png",
+    "variants": [
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_900/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/f8e25c6a-f601-425c-801b-a45fdc9b1d6c.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_768/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/f8e25c6a-f601-425c-801b-a45fdc9b1d6c.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_640/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/f8e25c6a-f601-425c-801b-a45fdc9b1d6c.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_320/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/f8e25c6a-f601-425c-801b-a45fdc9b1d6c.png"
+    ],
+    "alt": "",
+    "width": null,
+    "height": null,
+    "section": "S6 Services We Offer"
+  },
+  {
+    "id": "bg-row-sReEX03pnX",
+    "role": "background",
+    "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/762d835c-f3df-42c3-8e90-3cfcaab72998.png",
+    "variants": [
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_900/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/762d835c-f3df-42c3-8e90-3cfcaab72998.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_768/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/762d835c-f3df-42c3-8e90-3cfcaab72998.png"
+    ],
+    "alt": null,
+    "width": null,
+    "height": null,
+    "section": "S7 Areas We Serve",
+    "delivery": "css-background",
+    "live": true,
+    "cssSelector": ".bg-row-sReEX03pnX",
+    "paintedElement": "<div class=\"bg fill-width-height bg-row-sReEX03pnX\" style=\"border-radius:inherit;position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;\"></div> — first child of div#row-sReEX03pnX, the row that holds the city-pill marquee, inside section-o8EAaPwuM8",
+    "cssBreakpoints": {
+      "@media (max-width: 480px)": "r_768 variant",
+      "@media (min-width: 481px) and (max-width: 1024px)": "r_900 variant",
+      "@media (min-width: 1025px)": "r_1200 variant (= src)"
+    },
+    "cssDeclarations": "background: url(<variant for that breakpoint>); opacity: 1",
+    "note": "Row-level background behind the S7 marquee. Emitted as three @media blocks in a dedicated inline <style> (raw/removal.html chars 208674–209570) using the `background:` shorthand. alt/width/height null for the same reasons as the section backgrounds. The CSS proxies the file through images.leadconnectorhq.com from assets.cdn.filesafe.space; the __NUXT_DATA__ payload records the same file at storage.googleapis.com/msgsndr/zfoeYpKrqshgdFr4gG3b/media/762d835c-f3df-42c3-8e90-3cfcaab72998.png. Both origins observed; the CSS one is what actually paints."
+  },
+  {
+    "id": "city-pill-map-pin",
+    "role": "icon",
+    "src": "inline-svg",
+    "variants": [],
+    "alt": null,
+    "width": null,
+    "height": null,
+    "section": "S7 Areas We Serve",
+    "delivery": "inline-svg",
+    "live": true,
+    "renderedInstances": 50,
+    "logicalInstances": 25,
+    "markup": "<svg viewBox=\"0 0 24 24\" fill=\"none\"><path d=\"M12 2C7.9 2 4.5 5.3 4.5 9.4c0 5.4 6.4 11.6 7 12.2.3.3.7.3 1 0 .6-.6 7-6.8 7-12.2C19.5 5.3 16.1 2 12 2Z\" fill=\"#1E8A55\"/><circle cx=\"12\" cy=\"9.4\" r=\"2.7\" fill=\"#fff\"/></svg>",
+    "parent": "<span class=\"ttt-pin\"> inside every <div class=\"ttt-pill\">",
+    "cssSizing": ".ttt-pin{width:15px;height:15px;flex-shrink:0;display:flex;align-items:center;justify-content:center} and .ttt-pin svg{width:15px;height:15px;display:block} — from the S7 custom-code <style>",
+    "boxWidthFromCss": "15px",
+    "boxHeightFromCss": "15px",
+    "note": "ONE logical map-pin glyph, byte-identical in all 50 DOM copies (50 of the 51 inline <svg> elements in the served body). 50 = the 25 unique city pills rendered twice, because each of the three .ttt-track elements holds two identical .ttt-group children for the seamless-loop trick — see structure.md. It carries no title/desc/aria-label, so alt is null (attribute absent, not empty). width/height are null: the <svg> declares only viewBox=\"0 0 24 24\", no width/height attributes; boxWidthFromCss / boxHeightFromCss come from the .ttt-pin rules quoted in cssSizing."
+  },
+  {
+    "id": "seo-photo-trucks",
+    "role": "gallery",
+    "src": "data-uri",
+    "note": "inline base64 image/jpeg, 112015 bytes total data: URI (111992 bytes base64 payload) — payload intentionally not reproduced",
+    "variants": [],
+    "alt": "Texas Tree Tops branded trucks in Fort Worth",
+    "width": null,
+    "height": null,
+    "section": "S8 Long-Form SEO Copy"
+  },
+  {
+    "id": "seo-photo-large-removal",
+    "role": "gallery",
+    "src": "data-uri",
+    "note": "inline base64 image/jpeg, 151079 bytes total data: URI (151056 bytes base64 payload) — payload intentionally not reproduced",
+    "variants": [],
+    "alt": "Large tree removal by Texas Tree Tops",
+    "width": null,
+    "height": null,
+    "section": "S8 Long-Form SEO Copy"
+  },
+  {
+    "id": "bg-row-YIxQrLnVyw",
+    "role": "background",
+    "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/a9b45bf7-c181-430b-b74f-620b38ce8314.png",
+    "variants": [
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_900/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/a9b45bf7-c181-430b-b74f-620b38ce8314.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_768/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/a9b45bf7-c181-430b-b74f-620b38ce8314.png"
+    ],
+    "alt": null,
+    "width": null,
+    "height": null,
+    "section": "S9 Mid-page CTA",
+    "delivery": "css-background",
+    "live": true,
+    "cssSelector": ".bg-row-YIxQrLnVyw",
+    "paintedElement": "<div class=\"bg fill-width-height bg-row-YIxQrLnVyw\" style=\"border-radius:inherit;position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;\"></div> — first child of div#row-YIxQrLnVyw, the \"Ready To Get / That Tree Handled?\" + call-CTA row, inside section-toIz3g1_9P",
+    "cssBreakpoints": {
+      "@media (max-width: 480px)": "r_768 variant",
+      "@media (min-width: 481px) and (max-width: 1024px)": "r_900 variant",
+      "@media (min-width: 1025px)": "r_1200 variant (= src)"
+    },
+    "cssDeclarations": "background: url(<variant for that breakpoint>); opacity: 1",
+    "note": "Row-level background behind the S9 headline + call CTA. Emitted as three @media blocks in a dedicated inline <style> (raw/removal.html chars 209578–210474) using the `background:` shorthand. alt/width/height null for the same reasons as the section backgrounds. The __NUXT_DATA__ payload records the same file at storage.googleapis.com/msgsndr/zfoeYpKrqshgdFr4gG3b/media/a9b45bf7-c181-430b-b74f-620b38ce8314.png; the CSS URL above is what actually paints."
+  },
+  {
+    "id": "process-art",
+    "role": "other",
+    "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/7f278126-6ede-468a-be6a-d08ccc431325.png",
+    "variants": [
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_900/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/7f278126-6ede-468a-be6a-d08ccc431325.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_768/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/7f278126-6ede-468a-be6a-d08ccc431325.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_640/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/7f278126-6ede-468a-be6a-d08ccc431325.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_320/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/7f278126-6ede-468a-be6a-d08ccc431325.png"
+    ],
+    "alt": "",
+    "width": null,
+    "height": null,
+    "section": "S10 How It Works",
+    "renderedInstances": 2,
+    "wrapperIds": [
+      "image-uAaKobxnI8",
+      "image-VSnTZtdVWa"
+    ]
+  },
+  {
+    "id": "faq-accordion-indicator",
+    "role": "icon",
+    "src": "https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a443144c597b88b613bf310.svg",
+    "variants": [],
+    "alt": null,
+    "width": null,
+    "height": null,
+    "section": "S11 FAQ",
+    "delivery": "css-background",
+    "live": true,
+    "renderedInstances": 10,
+    "cssRules": [
+      {
+        "selector": ".hl-faq .hl-faq-child-heading::before",
+        "declarations": "content: \"\"; position: absolute; left: -13px; top: 50%; transform: translateY(-50%); width: 30px; height: 25px; background: url(\"https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a443144c597b88b613bf310.svg\") no-repeat center; background-size: contain; transition: all .35s ease;",
+        "boxWidthFromCss": "30px",
+        "boxHeightFromCss": "25px",
+        "matchingElements": 10,
+        "state": "closed (default)"
+      },
+      {
+        "selector": ".hl-faq .faq-separated-child.active .hl-faq-child-heading::before, .hl-faq .faq-separated-child.open .hl-faq-child-heading::before, .hl-faq .faq-separated-child.expanded .hl-faq-child-heading::before, .hl-faq .hl-faq-child-heading.active::before",
+        "declarations": "top: 22px; transform: translateY(0);",
+        "matchingElements": 0,
+        "state": "open — repositions the same glyph; no second asset involved. Zero elements match in the served (all-closed) markup; the class is added at runtime."
+      }
+    ],
+    "note": "Accordion indicator on all 10 FAQ rows. CSS background on a ::before pseudo-element, never an <img>; drop it and every FAQ row loses its indicator. There are exactly 10 elements carrying class hl-faq-child-heading in the served body (one per FAQ pair) and exactly 1 carrying hl-faq. alt is null (a CSS background has no alt attribute). width/height are null — the SVG has no intrinsic dimensions in the source; the px values under cssRules are the CSS box sizes of the pseudo-element, quoted from the rule named in `selector`. Served from GHL location FaHof000UZrAJUKORVCj, not this page's own location."
+  },
+  {
+    "id": "bg-section-zZW8Wc9Z7T",
+    "role": "background",
+    "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a4407bb21b1234da3d660dd.png",
+    "variants": [
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_900/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a4407bb21b1234da3d660dd.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_768/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a4407bb21b1234da3d660dd.png"
+    ],
+    "alt": null,
+    "width": null,
+    "height": null,
+    "section": "S12 Final CTA",
+    "delivery": "css-background",
+    "live": true,
+    "cssSelector": ".bg-section-zZW8Wc9Z7T",
+    "paintedElement": "<div class=\"bg fill-width-height bg-section-zZW8Wc9Z7T\" style=\"border-radius:inherit;position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;\"></div> — first child of div#section-zZW8Wc9Z7T",
+    "cssBreakpoints": {
+      "@media (max-width: 480px)": "r_768 variant",
+      "@media (min-width: 481px) and (max-width: 1024px)": "r_900 variant",
+      "@media (min-width: 1025px)": "r_1200 variant (= src)"
+    },
+    "cssDeclarations": "background: url(<variant for that breakpoint>); opacity: 1",
+    "note": "Full-bleed section background behind the final CTA. Emitted as three @media blocks in a dedicated inline <style> (raw/removal.html chars 210482–211354) using the `background:` shorthand. alt/width/height null for the same reasons as the other backgrounds. Served from GHL location FaHof000UZrAJUKORVCj, not this page's own location."
+  },
+  {
+    "id": "DEAD-leaf-left-row-hEon8-PXEE",
+    "role": "icon",
+    "src": "https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a44237c21b1234da3de128a.svg",
+    "variants": [],
+    "alt": null,
+    "width": null,
+    "height": null,
+    "section": null,
+    "delivery": "css-background",
+    "live": false,
+    "renderedInstances": 0,
+    "cssRules": [
+      {
+        "selector": "#row-hEon8-PXEE::before",
+        "declarations": "content: \"\"; position: absolute; left: 20px; top: 50%; transform: translateY(-50%); width: 40px; height: 40px; background: url(\"https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a44237c21b1234da3de128a.svg\") no-repeat center; background-size: contain; pointer-events: none; z-index: 10;",
+        "boxWidthFromCss": "40px",
+        "boxHeightFromCss": "40px"
+      }
+    ],
+    "note": "DEAD — DO NOT REINSTATE. The whole rule block sits inside a CSS comment opened by `/* leaf on form` and closed by `*/` immediately before the .btn-arrow rules (raw/removal.html chars 6950–7756, and again in the duplicated copy of the same custom CSS at 196781–197587). The asset therefore never loads and nothing paints. Recorded so a later extraction pass that greps for url( rediscovers it and can see it was already assessed and rejected."
+  },
+  {
+    "id": "DEAD-leaf-right-row-hEon8-PXEE",
+    "role": "icon",
+    "src": "https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a44237c45073744c0091e4a.svg",
+    "variants": [],
+    "alt": null,
+    "width": null,
+    "height": null,
+    "section": null,
+    "delivery": "css-background",
+    "live": false,
+    "renderedInstances": 0,
+    "cssRules": [
+      {
+        "selector": "#row-hEon8-PXEE::after",
+        "declarations": "content: \"\"; position: absolute; right: 20px; top: 50%; transform: translateY(-50%); width: 60px; height: 60px; background: url(\"https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a44237c45073744c0091e4a.svg\") no-repeat center; background-size: contain; pointer-events: none; z-index: 10;",
+        "boxWidthFromCss": "60px",
+        "boxHeightFromCss": "60px"
+      }
+    ],
+    "note": "DEAD — DO NOT REINSTATE. Same commented-out `/* leaf on form ... */` block as DEAD-leaf-left-row-hEon8-PXEE. Never loads, never paints."
+  }
+]

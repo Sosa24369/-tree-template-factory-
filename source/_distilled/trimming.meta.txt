@@ -1,0 +1,32 @@
+== TRACKING IDS ==
+GTM: GTM-PFZPR33H
+GA4: 
+Google Ads: 
+Facebook Pixel: 
+CallRail: 
+
+== TEL LINKS (in document order, with duplicates) ==
++12149857697
++14694021196
++12149857697
++14694021196
++12149857697
++12149857697
++12149857697
++12149857697
++14694021196
++14694021196
++12149857697
++14694021196
+
+== TITLE / META ==
+title: 
+<meta name="viewport" content="minimum-scale=1.0, width=device-width, maximum-scale=1, user-scalable=no">
+<meta property="og:type" content="website">
+<meta property="twitter:type" content="website">
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+== GHL IDS ==
+locationId candidates: 
+formId candidates: 
+contact.* field keys: contact.ad_click_id

@@ -1,0 +1,132 @@
+{
+  "page": "removal",
+  "url": "https://texastreetopsllc.com/landing-page-352422",
+  "capturedFrom": "raw/removal.html (1,295,862 bytes / 1,295,779 UTF-8 characters of served HTML; `wc -c` = 1295862. All character offsets quoted in this file are character offsets, not byte offsets.)",
+  "summary": "Exactly ONE first-party marketing tag is present on this page: Google Tag Manager container GTM-W32M4C6F, carried by the GHL funnel-level globalHeadTrackingCode / globalBodyTrackingCode. Of those two, only the body noscript iframe is server-rendered in the HTML; the head gtm.js loader is a payload string injected client-side at hydration — see containers[0].injectedVia. There is NO directly-embedded GA4 measurement ID, NO Google Ads conversion ID, NO Facebook/Meta pixel ID, and NO CallRail script on the page. Anything beyond GTM is fired from inside the GTM container, which is not visible in the served HTML.",
+  "containers": [
+    {
+      "vendor": "Google Tag Manager",
+      "id": "GTM-W32M4C6F",
+      "type": "gtm-container",
+      "injectedVia": "SPLIT — read this before rebuilding. Only the body <noscript><iframe> is server-rendered as parsed markup. The head gtm.js loader is NOT in <head> in the served HTML: it exists solely as an escaped string under the GHL funnel key globalHeadTrackingCode inside the __NUXT_DATA__ payload, and is written into the document client-side by the Nuxt bundle at hydration. A rebuild that drops the Nuxt bundle keeps the noscript iframe and silently loses GTM itself.",
+      "headSnippet": "<!-- Google Tag Manager -->\n<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':\nnew Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],\nj=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=\n'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);\n})(window,document,'script','dataLayer','GTM-W32M4C6F');</script>\n<!-- End Google Tag Manager -->",
+      "headSnippetProvenance": "NOT SERVED AS MARKUP — injected at hydration. This snippet is the decoded value of the globalHeadTrackingCode string in the __NUXT_DATA__ payload (raw/removal.html around char 1290533, after the payload start at char 788398). </head> is at char 298889, and no <script> containing GTM-W32M4C6F exists before it.",
+      "bodySnippet": "<!-- Google Tag Manager (noscript) -->\n<noscript><iframe src=\"https://www.googletagmanager.com/ns.html?id=GTM-W32M4C6F\"\nheight=\"0\" width=\"0\" style=\"display:none;visibility:hidden\"></iframe></noscript>\n<!-- End Google Tag Manager (noscript) -->",
+      "bodySnippetProvenance": "SERVER-RENDERED, but comment-stripped. As decoded from the globalBodyTrackingCode payload string this snippet includes the two HTML comments; the literal string \"<!-- Google Tag Manager\" appears ZERO times in the whole document. What is actually in the served body (raw/removal.html char 783898) is: <div><noscript><iframe src=\"https://www.googletagmanager.com/ns.html?id=GTM-W32M4C6F\" height=\"0\" width=\"0\" style=\"display:none;visibility:hidden\"></iframe></noscript></div>",
+      "occurrences": 3,
+      "occurrencesBreakdown": "3 occurrences of the literal GTM-W32M4C6F: 1 in server-rendered markup (char 783898, the body noscript iframe) and 2 inside the __NUXT_DATA__ payload (chars 1290533 and 1290746 — the head loader string and an escaped copy of the noscript block). The keys globalHeadTrackingCode and globalBodyTrackingCode each appear exactly once, and only as payload keys."
+    }
+  ],
+  "absent": [
+    { "vendor": "Google Analytics 4", "id": null, "evidence": "Regex /\\bG-[A-Z0-9]{6,12}\\b/ returns zero matches across the whole document. No gtag('config', ...) call and no googletagmanager.com/gtag/js request." },
+    { "vendor": "Google Ads (conversion / remarketing)", "id": null, "evidence": "Regex /\\bAW-\\d{6,}\\b/ returns zero matches. No gtag() call of any kind (\"gtag(\" count = 0). No gclid / wbraid / msclkid capture anywhere." },
+    { "vendor": "Universal Analytics", "id": null, "evidence": "Regex /\\bUA-\\d{4,}-\\d+\\b/ returns zero matches." },
+    { "vendor": "Meta / Facebook Pixel", "id": null, "evidence": "\"fbq(\" count = 0; \"connect.facebook\" count = 0. GHL's Meta-pixel plumbing IS present in the Nuxt state as $smetaPixelOptions = { pixelID: null, disabled: false, isEnabled: true, manualMode: true, track: \"PageView\", pixelLoaded: false, eventsQueue: [] } and the GHL form record carries fbPixelId: \"\" — i.e. the integration is wired but NO pixel ID is configured, so nothing fires." },
+    { "vendor": "CallRail", "id": null, "evidence": "\"callrail\" and \"cdn.callrail\" both count 0. No swap.js / DNI script. Every phone number on the page is hard-coded in the markup — see structure.md PHONE TREATMENT." },
+    { "vendor": "Microsoft Ads / Bing UET", "id": null, "evidence": "No Bing UET tag. The substring \"uetq\" occurs twice case-insensitively (chars 611266, 1119396) but both are coincidental fragments inside base64-like encoded blobs, not a UET snippet; there is no bat.bing.com script and no UET tag object." },
+    { "vendor": "LinkedIn Insight", "id": null, "evidence": "\"_linkedin\" count = 0." },
+    { "vendor": "TikTok Pixel", "id": null, "evidence": "\"tiktok\" count = 0." },
+    { "vendor": "Microsoft Clarity", "id": null, "evidence": "\"clarity\" count = 0." },
+    { "vendor": "Hotjar", "id": null, "evidence": "\"hotjar\" count = 0." },
+    { "vendor": "Segment / Mixpanel / PostHog / Plausible / Matomo / Heap / Snapchat / Pinterest", "id": null, "evidence": "All zero occurrences." }
+  ],
+  "ghlIds": {
+    "locationId": "zfoeYpKrqshgdFr4gG3b",
+    "locationIdSource": "__NUXT_DATA__ pageData.locationId AND $spreviewState.locationId (same value); also the media path segment on every first-party image URL (assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/...)",
+    "companyId": "uZWQSzAbUkONW06eq8ex",
+    "locationCode": "US",
+    "formId": "jEE2tj056VFJ9l6M50lU",
+    "formIdSource": "form element config { value: \"jEE2tj056VFJ9l6M50lU\", text: \"Routine Removal Form\" }; corroborated by the rendered field wrapper ids el_jEE2tj056VFJ9l6M50lU_<field>_<n>",
+    "formName": "Routine Removal Form",
+    "formNodeId": "cform-5gd7-YxgNV",
+    "funnelId": "qbi6awJ3BCcbiBe6OCON",
+    "funnelPageId": "Pq9zlf1JDKlbKWekGLKv",
+    "funnelPageName": "Routine Removal - Landing Page",
+    "stepId": "2a052d9e-5fb0-4085-9679-b9bd3759558f",
+    "funnelNextStep": "/thank-you-page-89169333-2226",
+    "funnelNextPageId": "5e814X0HjLmYPxxeKUbF",
+    "funnelDomain": "texastreetopsllc.com",
+    "pageUrl": "/landing-page-352422",
+    "popupId": "hl_main_popup-eJnCVAV3I5",
+    "agencyCompanyName": "Scale And Automate",
+    "agencyDomain": "login.treeleads.io",
+    "secondLocationIdSeenInAssets": {
+      "id": "FaHof000UZrAJUKORVCj",
+      "where": "NINE assets are served from assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/... — a DIFFERENT GHL location id than the page's own zfoeYpKrqshgdFr4gG3b. SEVEN of the nine are live. This is a materially larger cross-tenant dependency than a couple of badge icons: a template built from this source inherits seven rendering assets from a sub-account that may not be under the client's control.",
+      "assets": [
+        { "file": "6a441bc20f3445329fc952f9.png", "live": true, "used": "S4 section background (.bg-section-evIFlIWTQp)" },
+        { "file": "6a43fb56a7501a002a01a8c1.png", "live": true, "used": "S6 section background (.bg-section-Pt0S1QTMn0)" },
+        { "file": "6a4407bb21b1234da3d660dd.png", "live": true, "used": "S12 section background (.bg-section-zZW8Wc9Z7T)" },
+        { "file": "6a441cbcb76c4ad15a9d24df.svg", "live": true, "used": "S4 review-card \"5 stars\" badge (<img>, ×3)" },
+        { "file": "6a441cbc18d22f08d734f9a7.svg", "live": true, "used": "S4 review-card \"Google\" logo (<img>, ×3)" },
+        { "file": "6a443a9a4c02d14b8db7c6ed.svg", "live": true, "used": "CTA arrow glyph — CSS background on .btn-arrow / .mob-btn-arrow .main-heading-group::after and .left_arrow::before, 10 buttons across S1/S3/S4/S5/S6/S9/S12" },
+        { "file": "6a443144c597b88b613bf310.svg", "live": true, "used": "FAQ accordion indicator — CSS background on .hl-faq .hl-faq-child-heading::before, all 10 S11 rows" },
+        { "file": "6a44237c21b1234da3de128a.svg", "live": false, "used": "DEAD — #row-hEon8-PXEE::before, inside a /* leaf on form … */ CSS comment" },
+        { "file": "6a44237c45073744c0091e4a.svg", "live": false, "used": "DEAD — #row-hEon8-PXEE::after, same CSS comment" }
+      ],
+      "evidence": "grep -oE 'FaHof000UZrAJUKORVCj/media/[^/?\")]+' raw/removal.html | sort -u → exactly these 9 files."
+    },
+    "payloadOnlyForeignAssets": {
+      "note": "Two further foreign-tenant image URLs exist ONLY inside the __NUXT_DATA__ payload and are never referenced by the served DOM or by any CSS rule — nothing requests them. Recorded so they are not mistaken for page assets.",
+      "assets": [
+        "https://msgsndr-private.storage.googleapis.com/companyPhotos/cd31f25c-2dd5-4205-bd6c-74e08898c992.png",
+        "https://storage.googleapis.com/msgsndr/knES3eSWYIsc5YSZ3YLl/media/62beef4f9f43b0c53e585a8f.jpeg — note a THIRD GHL location id, knES3eSWYIsc5YSZ3YLl"
+      ],
+      "evidence": "Each substring occurs exactly once in the whole file and zero times in the pre-__NUXT_DATA__ (served) region."
+    }
+  },
+  "otherThirdPartyRequests": [
+    { "vendor": "LeadConnector CDN (platform)", "url": "https://stcdn.leadconnectorhq.com/libphonenumber/1.12.41/libphonenumber-js.min.js", "purpose": "phone validation" },
+    { "vendor": "LeadConnector CDN (platform)", "url": "https://stcdn.leadconnectorhq.com/intl-tel-input/17.0.12/js/utils.min.js", "purpose": "phone input utils" },
+    { "vendor": "LeadConnector CDN (platform)", "url": "https://stcdn.leadconnectorhq.com/intl-tel-input/intlTelInput.min.js", "purpose": "phone input widget" },
+    { "vendor": "LeadConnector CDN (platform)", "url": "https://stcdn.leadconnectorhq.com/_preview/zC2SjMv-.js", "purpose": "GHL funnel Nuxt bundle (renders + submits the form)" },
+    { "vendor": "cdnjs (Cloudflare)", "url": "https://cdnjs.cloudflare.com/ajax/libs/Swiper/8.0.5/swiper-bundle.min.js", "purpose": "Swiper 8.0.5, loaded TWICE, powers the S2 recent-jobs photo slider (custom-code element)" },
+    { "vendor": "Google user content", "url": "https://lh3.googleusercontent.com/gps-cs-s/...", "purpose": "15 Google Business Profile photos hot-linked into the S2 gallery" },
+    { "vendor": "LeadConnector image proxy", "url": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_<width>/u_<origin>", "purpose": "responsive WebP transform in front of assets.cdn.filesafe.space" },
+    { "vendor": "LeadConnector CDN (platform)", "url": "https://stcdn.leadconnectorhq.com/intl-tel-input/17.0.12/img/flags.png and flags@2x.png", "purpose": "intl-tel-input country-flag sprite. These are the only two CSS backgrounds written with the literal token `background-image:` — they are NOT the page's only CSS background images. enableCountryPicker is false, so no flag renders." },
+    { "vendor": "LeadConnector backend (platform)", "url": "https://backend.leadconnectorhq.com", "purpose": "form submission / REST + stats host used by the Nuxt bundle — the endpoint form.json's submitMethod describes. Nuxt runtime config: REST_API_URLS, STATS_API_URL and paymentsServiceUrl all = \"https://backend.leadconnectorhq.com\", newBaseURL = \"https://backend.leadconnectorhq.com/appengine\", REVIEW_WIDGET_URL = \".../appengine/reviews/get_widget/\". 10 occurrences in the document — the most-referenced non-asset host on the page." }
+  ],
+  "cssBackgroundImageInventory": {
+    "note": "Recorded here because an earlier pass of this file claimed the intl-tel-input flag sprites were the page's ONLY CSS background images. They are not. The correct way to find these is to match `url(` — GHL emits the `background:` shorthand, so grepping `background-image` finds only the platform sprites.",
+    "liveClientBackgrounds": 7,
+    "liveClientBackgroundsBreakdown": "5 responsive section/row photos (.bg-section-evIFlIWTQp, .bg-section-Pt0S1QTMn0, .bg-row-sReEX03pnX, .bg-row-YIxQrLnVyw, .bg-section-zZW8Wc9Z7T) + 2 decorative SVGs (CTA arrow 6a443a9a4c02d14b8db7c6ed.svg, FAQ indicator 6a443144c597b88b613bf310.svg). All 7 are catalogued in images.json with their selectors, breakpoints and variants.",
+    "platformBackgrounds": 2,
+    "platformBackgroundsBreakdown": "intl-tel-input flags.png and flags@2x.png.",
+    "deadBackgrounds": 2,
+    "deadBackgroundsBreakdown": "6a44237c21b1234da3de128a.svg and 6a44237c45073744c0091e4a.svg on #row-hEon8-PXEE::before/::after — both inside a /* leaf on form … */ CSS comment, so neither loads.",
+    "evidence": "$ grep -oE 'background-image[^;\"]{0,120}' raw/removal.html | sort | uniq -c  →  2 'background-image: none !important', 1 flags.png, 1 flags@2x.png, 1 attribute-selector fragment. Matching `url(` over the pre-__NUXT_DATA__ region instead returns all 11 (7 live client + 2 platform + 2 dead), plus web fonts."
+  },
+  "platformConstantsNotClientTags": {
+    "note": "These are GoHighLevel platform-wide public constants baked into every funnel page. They are NOT this client's tags and must not be treated as tracking IDs to port.",
+    "ENTERPRISE_RECAPTCHA_SITE_KEY": "6LeDBFwpAAAAAJe8ux9-imrqZ2ueRsEtdiWoDDpX",
+    "ENTERPRISE_RECAPTCHA_CHECKBOX_SITE_KEY": "6Lfjxx4sAAAAAIsnmlR5mKNS7QwIWqDjABW2SUu7",
+    "RECAPTCHA_SITE_KEY": "6LfcbMseAAAAAI-EJoB-lUh7_TJaYloLbcbmnhEO",
+    "recaptchaActuallyInstantiated": false
+  },
+  "nuxtTrackingState": {
+    "$stracking-providers": [],
+    "$stracking-initialized": false,
+    "$smetaPixelOptions": { "pixelID": null, "disabled": false, "track": "PageView", "isEnabled": true, "pixelLoaded": false, "manualMode": true, "userData": null, "eventsQueue": [] }
+  },
+  "meta": {
+    "title": "Tree Removal Services in West Dallas | Texas Tree Tops",
+    "metaTitle": "Tree Removal Services in West Dallas | Texas Tree Tops",
+    "ogTitle": "Tree Removal Services in West Dallas | Texas Tree Tops",
+    "description": "Texas Tree Tops LLC provides safe tree removal, stump grinding, cleanup, and free estimates.",
+    "ogDescription": "Texas Tree Tops LLC provides safe tree removal, stump grinding, cleanup, and free estimates.",
+    "author": "Texas Tree Tops",
+    "ogAuthor": "Texas Tree Tops",
+    "language": "en",
+    "image": "https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a54a922180dde3f86a7bc49.png",
+    "ogImage": "https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a54a922180dde3f86a7bc49.png",
+    "ogType": "website",
+    "twitterType": "website",
+    "viewport": "minimum-scale=1.0, width=device-width, maximum-scale=1, user-scalable=no",
+    "appleMobileWebAppCapable": "yes",
+    "favicon": "https://stcdn.leadconnectorhq.com/funnel/icon/favicon.ico",
+    "canonicalMeta": [],
+    "customMeta": [],
+    "keywords": "tree removal East Dallas\ntree removal Mesquite TX\ntree removal near me\ntree cutting service\nstump grinding\ntree removal estimate\ntree service East Dallas\ntree service Lake Ray Hubbard\nlicensed insured tree removal\nsame day tree removal",
+    "keywordsNote": "The keyword block is EAST Dallas / Mesquite / Lake Ray Hubbard while the page title, H1 and body copy are WEST Dallas. Preserved verbatim — this is one of the source's geography inconsistencies."
+  }
+}

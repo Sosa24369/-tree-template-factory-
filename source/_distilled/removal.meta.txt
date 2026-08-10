@@ -1,0 +1,59 @@
+== TRACKING IDS ==
+GTM: GTM-W32M4C6F
+GA4: 
+Google Ads: 
+Facebook Pixel: 
+CallRail: 
+
+== TEL LINKS (in document order, with duplicates) ==
++16823657478
++14694021196
++16823657478
+682-452-0735
++16823657478
++16823657478
++16823657478
++16823657478
++16823657478
++14694021196
++16823657478
+
+== TITLE / META ==
+title: Tree Removal Services in West Dallas | Texas Tree Tops
+<meta name="viewport" content="minimum-scale=1.0, width=device-width, maximum-scale=1, user-scalable=no">
+<meta name="title" content="Tree Removal Services in West Dallas | Texas Tree Tops">
+<meta property="og:title" content="Tree Removal Services in West Dallas | Texas Tree Tops">
+<meta name="description" content="Texas Tree Tops LLC provides safe tree removal, stump grinding, cleanup, and free estimates.">
+<meta property="og:description" content="Texas Tree Tops LLC provides safe tree removal, stump grinding, cleanup, and free estimates.">
+<meta name="author" content="Texas Tree Tops">
+<meta property="og:author" content="Texas Tree Tops">
+<meta name="image" content="https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a54a922180dde3f86a7bc49.png">
+<meta property="og:image" content="https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a54a922180dde3f86a7bc49.png">
+<meta name="keywords" content="tree removal East Dallas
+tree removal Mesquite TX
+tree removal near me
+tree cutting service
+stump grinding
+tree removal estimate
+tree service East Dallas
+tree service Lake Ray Hubbard
+licensed insured tree removal
+same day tree removal">
+<meta property="og:keywords" content="tree removal East Dallas
+tree removal Mesquite TX
+tree removal near me
+tree cutting service
+stump grinding
+tree removal estimate
+tree service East Dallas
+tree service Lake Ray Hubbard
+licensed insured tree removal
+same day tree removal">
+<meta property="og:type" content="website">
+<meta property="twitter:type" content="website">
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+== GHL IDS ==
+locationId candidates: 
+formId candidates: 
+contact.* field keys: 

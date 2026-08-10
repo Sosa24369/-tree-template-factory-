@@ -1,0 +1,675 @@
+[
+  {
+    "id": "header-google-rating-badge",
+    "role": "icon",
+    "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a44238a21b1234da3de141c.svg",
+    "variants": [
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_900/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a44238a21b1234da3de141c.svg",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_768/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a44238a21b1234da3de141c.svg",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_640/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a44238a21b1234da3de141c.svg",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_320/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a44238a21b1234da3de141c.svg"
+    ],
+    "alt": "",
+    "width": null,
+    "height": null,
+    "section": "Section 1 - Header (desktop-only bar, left column col-hfQxUUEtwx / element image--OXKJdqjR2). Google wordmark + 5 gold stars badge.",
+    "note": "width/height are NOT present in the snapshot for this asset. The only dimension data in raw/trimming.html is the width=\"1080\" height=\"1080\" attribute pair on the five gallery <img> tags; there is no naturalWidth, and every imageMeta in __NUXT_DATA__ resolves to payload index 42 (empty string). Recorded as null rather than guessed."
+  },
+  {
+    "id": "logo-circle-badge",
+    "role": "logo",
+    "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a4424280f3445329fcb76fc.svg",
+    "variants": [
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_900/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a4424280f3445329fcb76fc.svg",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_768/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a4424280f3445329fcb76fc.svg",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_640/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a4424280f3445329fcb76fc.svg",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_320/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a4424280f3445329fcb76fc.svg"
+    ],
+    "alt": "",
+    "width": null,
+    "height": null,
+    "section": "Section 1 - Header. Used twice: desktop bar (image-Yx59ATBVD_) and mobile bar (image-AsROCxR7PD). Circular J Valdez logo lockup. Raster dimensions of the PNG embedded inside the SVG are not stated anywhere in raw/trimming.html and are NOT recorded.",
+    "note": "width/height are NOT present in the snapshot for this asset. The only dimension data in raw/trimming.html is the width=\"1080\" height=\"1080\" attribute pair on the five gallery <img> tags; there is no naturalWidth, and every imageMeta in __NUXT_DATA__ resolves to payload index 42 (empty string). Recorded as null rather than guessed.",
+    "renderedSizeCSS": [
+      {
+        "appliesTo": "mobile header instance image-AsROCxR7PD only",
+        "width": "600px",
+        "height": null,
+        "rule": ".hl_page-preview--content .image-AsROCxR7PD .image-container img{box-shadow:undefined;width:600px}",
+        "alsoSee": ".image-AsROCxR7PD{width:20%;flex:0 0 auto!important} on the wrapper. The desktop instance image-Yx59ATBVD_ has only .image-Yx59ATBVD_{margin:-22px 0 0;width:auto;height:auto}."
+      }
+    ]
+  },
+  {
+    "id": "hero-photo-1",
+    "role": "hero",
+    "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a45b3c08b4444aad4027412.png",
+    "variants": [
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_900/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a45b3c08b4444aad4027412.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_768/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a45b3c08b4444aad4027412.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_640/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a45b3c08b4444aad4027412.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_320/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a45b3c08b4444aad4027412.png"
+    ],
+    "alt": "",
+    "width": null,
+    "height": null,
+    "section": "Section 2 - Hero right column col-BmNtA1vlYU (image-mTnHI_tKYY)",
+    "note": "width/height are NOT present in the snapshot for this asset. The only dimension data in raw/trimming.html is the width=\"1080\" height=\"1080\" attribute pair on the five gallery <img> tags; there is no naturalWidth, and every imageMeta in __NUXT_DATA__ resolves to payload index 42 (empty string). Recorded as null rather than guessed."
+  },
+  {
+    "id": "hero-photo-2",
+    "role": "hero",
+    "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a45b3c608049c65ab6f1386.png",
+    "variants": [
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_900/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a45b3c608049c65ab6f1386.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_768/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a45b3c608049c65ab6f1386.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_640/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a45b3c608049c65ab6f1386.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_320/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a45b3c608049c65ab6f1386.png"
+    ],
+    "alt": "",
+    "width": null,
+    "height": null,
+    "section": "Section 2 - Hero right column col-BmNtA1vlYU (image-lpHzQD2hL5)",
+    "note": "width/height are NOT present in the snapshot for this asset. The only dimension data in raw/trimming.html is the width=\"1080\" height=\"1080\" attribute pair on the five gallery <img> tags; there is no naturalWidth, and every imageMeta in __NUXT_DATA__ resolves to payload index 42 (empty string). Recorded as null rather than guessed."
+  },
+  {
+    "id": "gallery-slide-1",
+    "role": "gallery",
+    "src": "https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a484688e098dfac374ce1aa.jpg",
+    "variants": [],
+    "alt": "Before and after tree trimming - cleared branches and debris hauled away, East Dallas TX",
+    "width": 1080,
+    "height": 1080,
+    "section": "Section 3 - Before/After Swiper gallery (custom-code-75tiX9YkJq). Served direct from filesafe CDN, no resized variants.",
+    "note": "width/height are the literal DOM attributes on this <img> (width=\"1080\" height=\"1080\"). These are the only attributed dimensions on the page."
+  },
+  {
+    "id": "gallery-slide-2",
+    "role": "gallery",
+    "src": "https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a48468839a69d42f8693c00.jpg",
+    "variants": [],
+    "alt": "Before and after tree trimming - overgrown driveway cleared and canopy raised, East Dallas TX",
+    "width": 1080,
+    "height": 1080,
+    "section": "Section 3 - Before/After Swiper gallery (custom-code-75tiX9YkJq). Served direct from filesafe CDN, no resized variants.",
+    "note": "width/height are the literal DOM attributes on this <img> (width=\"1080\" height=\"1080\"). These are the only attributed dimensions on the page."
+  },
+  {
+    "id": "gallery-slide-3",
+    "role": "gallery",
+    "src": "https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a4846882932b32be73101ee.jpg",
+    "variants": [],
+    "alt": "Professionally trimmed trees with raised canopies along a residential street, East Dallas TX",
+    "width": 1080,
+    "height": 1080,
+    "section": "Section 3 - Before/After Swiper gallery (custom-code-75tiX9YkJq). Served direct from filesafe CDN, no resized variants.",
+    "note": "width/height are the literal DOM attributes on this <img> (width=\"1080\" height=\"1080\"). These are the only attributed dimensions on the page."
+  },
+  {
+    "id": "gallery-slide-4",
+    "role": "gallery",
+    "src": "https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a48468839a69d42f8693bfb.jpg",
+    "variants": [],
+    "alt": "Clean tree trimming result over walkway with lake view, East Dallas TX",
+    "width": 1080,
+    "height": 1080,
+    "section": "Section 3 - Before/After Swiper gallery (custom-code-75tiX9YkJq). Served direct from filesafe CDN, no resized variants.",
+    "note": "width/height are the literal DOM attributes on this <img> (width=\"1080\" height=\"1080\"). These are the only attributed dimensions on the page."
+  },
+  {
+    "id": "gallery-slide-5",
+    "role": "gallery",
+    "src": "https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a484688d0f4875396f26c85.jpg",
+    "variants": [],
+    "alt": "Trimmed mature oak in front yard after professional tree trimming service",
+    "width": 1080,
+    "height": 1080,
+    "section": "Section 3 - Before/After Swiper gallery (custom-code-75tiX9YkJq). Served direct from filesafe CDN, no resized variants.",
+    "note": "width/height are the literal DOM attributes on this <img> (width=\"1080\" height=\"1080\"). These are the only attributed dimensions on the page."
+  },
+  {
+    "id": "benefits-side-photo",
+    "role": "other",
+    "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a45b3c4d422b1806474acdb.png",
+    "variants": [
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_900/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a45b3c4d422b1806474acdb.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_768/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a45b3c4d422b1806474acdb.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_640/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a45b3c4d422b1806474acdb.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_320/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a45b3c4d422b1806474acdb.png"
+    ],
+    "alt": "",
+    "width": null,
+    "height": null,
+    "section": "Section 4 - desktop-only left column col-yXiDXUXTFx (image-N7IfoGIdXY)",
+    "note": "width/height are NOT present in the snapshot for this asset. The only dimension data in raw/trimming.html is the width=\"1080\" height=\"1080\" attribute pair on the five gallery <img> tags; there is no naturalWidth, and every imageMeta in __NUXT_DATA__ resolves to payload index 42 (empty string). Recorded as null rather than guessed."
+  },
+  {
+    "id": "benefit-icon-1",
+    "role": "icon",
+    "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a43ebe918d22f08d729af08.svg",
+    "variants": [
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_900/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a43ebe918d22f08d729af08.svg",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_768/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a43ebe918d22f08d729af08.svg",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_640/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a43ebe918d22f08d729af08.svg",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_320/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a43ebe918d22f08d729af08.svg"
+    ],
+    "alt": "",
+    "width": null,
+    "height": null,
+    "section": "Section 4 - benefit card icon (10% Off / bundle card)",
+    "note": "width/height are NOT present in the snapshot for this asset. The only dimension data in raw/trimming.html is the width=\"1080\" height=\"1080\" attribute pair on the five gallery <img> tags; there is no naturalWidth, and every imageMeta in __NUXT_DATA__ resolves to payload index 42 (empty string). Recorded as null rather than guessed."
+  },
+  {
+    "id": "benefit-icon-2",
+    "role": "icon",
+    "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a43ebe818d22f08d729aefa.svg",
+    "variants": [
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_900/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a43ebe818d22f08d729aefa.svg",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_768/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a43ebe818d22f08d729aefa.svg",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_640/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a43ebe818d22f08d729aefa.svg",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_320/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a43ebe818d22f08d729aefa.svg"
+    ],
+    "alt": "",
+    "width": null,
+    "height": null,
+    "section": "Section 4 - benefit card icon (Same-Week Scheduling card)",
+    "note": "width/height are NOT present in the snapshot for this asset. The only dimension data in raw/trimming.html is the width=\"1080\" height=\"1080\" attribute pair on the five gallery <img> tags; there is no naturalWidth, and every imageMeta in __NUXT_DATA__ resolves to payload index 42 (empty string). Recorded as null rather than guessed."
+  },
+  {
+    "id": "benefit-icon-3",
+    "role": "icon",
+    "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a43ebe84c02d14b8da59e7a.svg",
+    "variants": [
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_900/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a43ebe84c02d14b8da59e7a.svg",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_768/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a43ebe84c02d14b8da59e7a.svg",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_640/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a43ebe84c02d14b8da59e7a.svg",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_320/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a43ebe84c02d14b8da59e7a.svg"
+    ],
+    "alt": "",
+    "width": null,
+    "height": null,
+    "section": "Section 4 - benefit card icon (Licensed & Insured card)",
+    "note": "width/height are NOT present in the snapshot for this asset. The only dimension data in raw/trimming.html is the width=\"1080\" height=\"1080\" attribute pair on the five gallery <img> tags; there is no naturalWidth, and every imageMeta in __NUXT_DATA__ resolves to payload index 42 (empty string). Recorded as null rather than guessed."
+  },
+  {
+    "id": "benefit-icon-4",
+    "role": "icon",
+    "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a43ebe80f3445329fbee764.svg",
+    "variants": [
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_900/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a43ebe80f3445329fbee764.svg",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_768/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a43ebe80f3445329fbee764.svg",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_640/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a43ebe80f3445329fbee764.svg",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_320/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a43ebe80f3445329fbee764.svg"
+    ],
+    "alt": "",
+    "width": null,
+    "height": null,
+    "section": "Section 4 - benefit card icon (Safe Trimming / Cleanup card)",
+    "note": "width/height are NOT present in the snapshot for this asset. The only dimension data in raw/trimming.html is the width=\"1080\" height=\"1080\" attribute pair on the five gallery <img> tags; there is no naturalWidth, and every imageMeta in __NUXT_DATA__ resolves to payload index 42 (empty string). Recorded as null rather than guessed."
+  },
+  {
+    "id": "google-rating-pill",
+    "role": "icon",
+    "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a441b828882e8f6e3776ce1.svg",
+    "variants": [
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_900/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a441b828882e8f6e3776ce1.svg",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_768/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a441b828882e8f6e3776ce1.svg",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_640/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a441b828882e8f6e3776ce1.svg",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_320/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a441b828882e8f6e3776ce1.svg"
+    ],
+    "alt": "",
+    "width": null,
+    "height": null,
+    "section": "Section 5 - above the 'Why East Dallas Homeowners' heading (image-HGUEiGfzxx). White pill with Google wordmark + stars.",
+    "note": "width/height are NOT present in the snapshot for this asset. The only dimension data in raw/trimming.html is the width=\"1080\" height=\"1080\" attribute pair on the five gallery <img> tags; there is no naturalWidth, and every imageMeta in __NUXT_DATA__ resolves to payload index 42 (empty string). Recorded as null rather than guessed."
+  },
+  {
+    "id": "review-stars",
+    "role": "icon",
+    "src": "https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a441cbcb76c4ad15a9d24df.svg",
+    "variants": [],
+    "alt": null,
+    "width": null,
+    "height": null,
+    "section": "Section 5 - review slider (custom-code-8BO6xwlaH1). One 5-star graphic per review card; rendered 5 times. No alt attribute.",
+    "note": "width/height are NOT present in the snapshot for this asset. The only dimension data in raw/trimming.html is the width=\"1080\" height=\"1080\" attribute pair on the five gallery <img> tags; there is no naturalWidth, and every imageMeta in __NUXT_DATA__ resolves to payload index 42 (empty string). Recorded as null rather than guessed.",
+    "renderedSizeCSS": [
+      {
+        "appliesTo": "class .rating on the star strip inside custom-code-8BO6xwlaH1",
+        "width": "82px",
+        "height": null,
+        "rule": ".rating{ display:block; width:82px; margin:8px 0 6px; }"
+      }
+    ]
+  },
+  {
+    "id": "review-google-glyph",
+    "role": "icon",
+    "src": "https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a441cbc18d22f08d734f9a7.svg",
+    "variants": [],
+    "alt": null,
+    "width": null,
+    "height": null,
+    "section": "Section 5 - review slider (custom-code-8BO6xwlaH1). Google 'G' glyph, top-right of each review card; rendered 5 times. No alt attribute.",
+    "note": "width/height are NOT present in the snapshot for this asset. The only dimension data in raw/trimming.html is the width=\"1080\" height=\"1080\" attribute pair on the five gallery <img> tags; there is no naturalWidth, and every imageMeta in __NUXT_DATA__ resolves to payload index 42 (empty string). Recorded as null rather than guessed.",
+    "renderedSizeCSS": [
+      {
+        "appliesTo": "class .google-logo inside custom-code-8BO6xwlaH1",
+        "width": "22px",
+        "height": "auto",
+        "rule": ".google-logo{ width:22px; height:auto; flex-shrink:0; }"
+      }
+    ]
+  },
+  {
+    "id": "work-photo-1",
+    "role": "gallery",
+    "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a45b3c4f5487c97781a77fe.png",
+    "variants": [
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_900/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a45b3c4f5487c97781a77fe.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_768/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a45b3c4f5487c97781a77fe.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_640/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a45b3c4f5487c97781a77fe.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_320/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a45b3c4f5487c97781a77fe.png"
+    ],
+    "alt": "",
+    "width": null,
+    "height": null,
+    "section": "Section 6 - 'Done Clean, Done Right' photo grid (image-eUghBSWQU7)",
+    "note": "width/height are NOT present in the snapshot for this asset. The only dimension data in raw/trimming.html is the width=\"1080\" height=\"1080\" attribute pair on the five gallery <img> tags; there is no naturalWidth, and every imageMeta in __NUXT_DATA__ resolves to payload index 42 (empty string). Recorded as null rather than guessed."
+  },
+  {
+    "id": "work-photo-2",
+    "role": "gallery",
+    "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a45b3c0ff26a38088365493.png",
+    "variants": [
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_900/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a45b3c0ff26a38088365493.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_768/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a45b3c0ff26a38088365493.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_640/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a45b3c0ff26a38088365493.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_320/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a45b3c0ff26a38088365493.png"
+    ],
+    "alt": "",
+    "width": null,
+    "height": null,
+    "section": "Section 6 - 'Done Clean, Done Right' photo grid (image-n65vS9SjMo)",
+    "note": "width/height are NOT present in the snapshot for this asset. The only dimension data in raw/trimming.html is the width=\"1080\" height=\"1080\" attribute pair on the five gallery <img> tags; there is no naturalWidth, and every imageMeta in __NUXT_DATA__ resolves to payload index 42 (empty string). Recorded as null rather than guessed."
+  },
+  {
+    "id": "work-photo-3",
+    "role": "gallery",
+    "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a45b3c6ff26a380883654dd.png",
+    "variants": [
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_900/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a45b3c6ff26a380883654dd.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_768/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a45b3c6ff26a380883654dd.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_640/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a45b3c6ff26a380883654dd.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_320/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a45b3c6ff26a380883654dd.png"
+    ],
+    "alt": "",
+    "width": null,
+    "height": null,
+    "section": "Section 6 - 'Done Clean, Done Right' photo grid (image-Xl6WkeFSn4)",
+    "note": "width/height are NOT present in the snapshot for this asset. The only dimension data in raw/trimming.html is the width=\"1080\" height=\"1080\" attribute pair on the five gallery <img> tags; there is no naturalWidth, and every imageMeta in __NUXT_DATA__ resolves to payload index 42 (empty string). Recorded as null rather than guessed."
+  },
+  {
+    "id": "work-photo-4",
+    "role": "gallery",
+    "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a45b3c4d422b1806474acea.png",
+    "variants": [
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_900/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a45b3c4d422b1806474acea.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_768/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a45b3c4d422b1806474acea.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_640/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a45b3c4d422b1806474acea.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_320/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a45b3c4d422b1806474acea.png"
+    ],
+    "alt": "",
+    "width": null,
+    "height": null,
+    "section": "Section 6 - 'Done Clean, Done Right' photo grid (image-v15-To2N8p)",
+    "note": "width/height are NOT present in the snapshot for this asset. The only dimension data in raw/trimming.html is the width=\"1080\" height=\"1080\" attribute pair on the five gallery <img> tags; there is no naturalWidth, and every imageMeta in __NUXT_DATA__ resolves to payload index 42 (empty string). Recorded as null rather than guessed."
+  },
+  {
+    "id": "work-photo-5",
+    "role": "gallery",
+    "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a45b3c3ff26a380883654ad.png",
+    "variants": [
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_900/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a45b3c3ff26a380883654ad.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_768/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a45b3c3ff26a380883654ad.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_640/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a45b3c3ff26a380883654ad.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_320/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a45b3c3ff26a380883654ad.png"
+    ],
+    "alt": "",
+    "width": null,
+    "height": null,
+    "section": "Section 6 - 'Done Clean, Done Right' photo grid (image-DvUaCtiEkz)",
+    "note": "width/height are NOT present in the snapshot for this asset. The only dimension data in raw/trimming.html is the width=\"1080\" height=\"1080\" attribute pair on the five gallery <img> tags; there is no naturalWidth, and every imageMeta in __NUXT_DATA__ resolves to payload index 42 (empty string). Recorded as null rather than guessed."
+  },
+  {
+    "id": "services-card-photo-1",
+    "role": "other",
+    "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a43f7ebb76c4ad15a9565c7.png",
+    "variants": [
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_900/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a43f7ebb76c4ad15a9565c7.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_768/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a43f7ebb76c4ad15a9565c7.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_640/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a43f7ebb76c4ad15a9565c7.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_320/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a43f7ebb76c4ad15a9565c7.png"
+    ],
+    "alt": "",
+    "width": null,
+    "height": null,
+    "section": "Section 7 - service-card column header photo (image-N_8V3zhF8M / col-4VDpyH4uXR)",
+    "note": "width/height are NOT present in the snapshot for this asset. The only dimension data in raw/trimming.html is the width=\"1080\" height=\"1080\" attribute pair on the five gallery <img> tags; there is no naturalWidth, and every imageMeta in __NUXT_DATA__ resolves to payload index 42 (empty string). Recorded as null rather than guessed."
+  },
+  {
+    "id": "services-card-photo-2",
+    "role": "other",
+    "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a43f7eb4c02d14b8da756b2.png",
+    "variants": [
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_900/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a43f7eb4c02d14b8da756b2.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_768/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a43f7eb4c02d14b8da756b2.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_640/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a43f7eb4c02d14b8da756b2.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_320/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a43f7eb4c02d14b8da756b2.png"
+    ],
+    "alt": "",
+    "width": null,
+    "height": null,
+    "section": "Section 7 - service-card column header photo (image-59wbz-qT4H / col-OE656IgCt6)",
+    "note": "width/height are NOT present in the snapshot for this asset. The only dimension data in raw/trimming.html is the width=\"1080\" height=\"1080\" attribute pair on the five gallery <img> tags; there is no naturalWidth, and every imageMeta in __NUXT_DATA__ resolves to payload index 42 (empty string). Recorded as null rather than guessed."
+  },
+  {
+    "id": "services-card-photo-3",
+    "role": "other",
+    "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a43f7ebb76c4ad15a9565cb.png",
+    "variants": [
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_900/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a43f7ebb76c4ad15a9565cb.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_768/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a43f7ebb76c4ad15a9565cb.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_640/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a43f7ebb76c4ad15a9565cb.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_320/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a43f7ebb76c4ad15a9565cb.png"
+    ],
+    "alt": "",
+    "width": null,
+    "height": null,
+    "section": "Section 7 - service-card column header photo (image-M7UKburXYu / col-SZntXtwarW)",
+    "note": "width/height are NOT present in the snapshot for this asset. The only dimension data in raw/trimming.html is the width=\"1080\" height=\"1080\" attribute pair on the five gallery <img> tags; there is no naturalWidth, and every imageMeta in __NUXT_DATA__ resolves to payload index 42 (empty string). Recorded as null rather than guessed."
+  },
+  {
+    "id": "service-area-check-icon",
+    "role": "icon",
+    "src": "https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a44191a8882e8f6e376e86a.svg",
+    "variants": [],
+    "alt": null,
+    "width": null,
+    "height": null,
+    "section": "Section 8 - check icon inside every service-area pill in the marquee (custom-code-A8otsFIT--); rendered 54 times. No alt attribute.",
+    "note": "width/height are NOT present in the snapshot for this asset. The only dimension data in raw/trimming.html is the width=\"1080\" height=\"1080\" attribute pair on the five gallery <img> tags; there is no naturalWidth, and every imageMeta in __NUXT_DATA__ resolves to payload index 42 (empty string). Recorded as null rather than guessed.",
+    "renderedSizeCSS": [
+      {
+        "appliesTo": "class .service-pill img inside custom-code-A8otsFIT--",
+        "width": "16px",
+        "height": "16px",
+        "rule": ".service-pill img{ width:16px; height:16px; flex-shrink:0; }"
+      }
+    ]
+  },
+  {
+    "id": "process-vertical-graphic",
+    "role": "other",
+    "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a44142745073744c005308b.png",
+    "variants": [
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_900/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a44142745073744c005308b.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_768/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a44142745073744c005308b.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_640/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a44142745073744c005308b.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_320/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a44142745073744c005308b.png"
+    ],
+    "alt": "",
+    "width": null,
+    "height": null,
+    "section": "Section 9 - vertical connector graphic. Present twice in markup: image-uAaKobxnI8 (inside the mobile-only row, in a desktop-only column, so it never renders) and image-VSnTZtdVWa (desktop-only middle column, the one that actually shows).",
+    "note": "width/height are NOT present in the snapshot for this asset. The only dimension data in raw/trimming.html is the width=\"1080\" height=\"1080\" attribute pair on the five gallery <img> tags; there is no naturalWidth, and every imageMeta in __NUXT_DATA__ resolves to payload index 42 (empty string). Recorded as null rather than guessed.",
+    "renderedSizeCSS": [
+      {
+        "appliesTo": "GHL element image-VSnTZtdVWa (the rendered desktop copy)",
+        "width": "auto",
+        "height": "50%",
+        "rule": ".image-VSnTZtdVWa{margin:0;width:auto;height:50%}"
+      }
+    ]
+  },
+  {
+    "id": "longform-side-photo",
+    "role": "other",
+    "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a45b3c6b653a0ddc242431c.png",
+    "variants": [
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_900/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a45b3c6b653a0ddc242431c.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_768/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a45b3c6b653a0ddc242431c.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_640/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a45b3c6b653a0ddc242431c.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_320/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a45b3c6b653a0ddc242431c.png"
+    ],
+    "alt": "",
+    "width": null,
+    "height": null,
+    "section": "Section 10 - right column col-ws431z6Bwq (image-eBxq7e5LJK)",
+    "note": "width/height are NOT present in the snapshot for this asset. The only dimension data in raw/trimming.html is the width=\"1080\" height=\"1080\" attribute pair on the five gallery <img> tags; there is no naturalWidth, and every imageMeta in __NUXT_DATA__ resolves to payload index 42 (empty string). Recorded as null rather than guessed."
+  },
+  {
+    "id": "common-requests-photo-desktop",
+    "role": "other",
+    "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a45b3c080abc5e234517473.png",
+    "variants": [
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_900/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a45b3c080abc5e234517473.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_768/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a45b3c080abc5e234517473.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_640/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a45b3c080abc5e234517473.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_320/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a45b3c080abc5e234517473.png"
+    ],
+    "alt": "",
+    "width": null,
+    "height": null,
+    "section": "Section 10 - 'Common Tree Trimming Requests' row, desktop-only left column col-POFA7zo986 (image-iKayx-SL1U)",
+    "note": "width/height are NOT present in the snapshot for this asset. The only dimension data in raw/trimming.html is the width=\"1080\" height=\"1080\" attribute pair on the five gallery <img> tags; there is no naturalWidth, and every imageMeta in __NUXT_DATA__ resolves to payload index 42 (empty string). Recorded as null rather than guessed."
+  },
+  {
+    "id": "common-requests-photo-mobile",
+    "role": "other",
+    "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a45b3c3f5487c97781a77e8.png",
+    "variants": [
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_900/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a45b3c3f5487c97781a77e8.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_768/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a45b3c3f5487c97781a77e8.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_640/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a45b3c3f5487c97781a77e8.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_320/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a45b3c3f5487c97781a77e8.png"
+    ],
+    "alt": "",
+    "width": null,
+    "height": null,
+    "section": "Section 10 - 'Common Tree Trimming Requests' row, mobile-only column col-RSYR8Gqj-T (image-_ut3oJ_w6f)",
+    "note": "width/height are NOT present in the snapshot for this asset. The only dimension data in raw/trimming.html is the width=\"1080\" height=\"1080\" attribute pair on the five gallery <img> tags; there is no naturalWidth, and every imageMeta in __NUXT_DATA__ resolves to payload index 42 (empty string). Recorded as null rather than guessed."
+  },
+  {
+    "id": "footer-logo",
+    "role": "logo",
+    "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a440bf64c02d14b8dab1b7b.svg",
+    "variants": [
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_900/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a440bf64c02d14b8dab1b7b.svg",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_768/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a440bf64c02d14b8dab1b7b.svg",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_640/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a440bf64c02d14b8dab1b7b.svg",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_320/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a440bf64c02d14b8dab1b7b.svg"
+    ],
+    "alt": "",
+    "width": null,
+    "height": null,
+    "section": "Section 13 - Footer (image-9_ZzhOR81P). SVG with an embedded raster PNG; the raster dimensions are not stated in raw/trimming.html and are NOT recorded.",
+    "note": "width/height are NOT present in the snapshot for this asset. The only dimension data in raw/trimming.html is the width=\"1080\" height=\"1080\" attribute pair on the five gallery <img> tags; there is no naturalWidth, and every imageMeta in __NUXT_DATA__ resolves to payload index 42 (empty string). Recorded as null rather than guessed."
+  },
+  {
+    "id": "footer-location-icon",
+    "role": "icon",
+    "src": "https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a440e4045073744c0037288.svg",
+    "variants": [],
+    "alt": "Location",
+    "width": null,
+    "height": null,
+    "section": "Section 13 - Footer contact box (custom-code-0aE34cxYy4), address row",
+    "note": "width/height are NOT present in the snapshot for this asset. The only dimension data in raw/trimming.html is the width=\"1080\" height=\"1080\" attribute pair on the five gallery <img> tags; there is no naturalWidth, and every imageMeta in __NUXT_DATA__ resolves to payload index 42 (empty string). Recorded as null rather than guessed.",
+    "renderedSizeCSS": [
+      {
+        "appliesTo": "class .contact-item img inside custom-code-0aE34cxYy4",
+        "width": "32px",
+        "height": "32px",
+        "rule": ".contact-item img{ width:32px; height:32px; flex-shrink:0; }"
+      }
+    ]
+  },
+  {
+    "id": "footer-phone-icon",
+    "role": "icon",
+    "src": "https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a440e4018d22f08d73082b6.svg",
+    "variants": [],
+    "alt": "Phone",
+    "width": null,
+    "height": null,
+    "section": "Section 13 - Footer contact box (custom-code-0aE34cxYy4), phone row",
+    "note": "width/height are NOT present in the snapshot for this asset. The only dimension data in raw/trimming.html is the width=\"1080\" height=\"1080\" attribute pair on the five gallery <img> tags; there is no naturalWidth, and every imageMeta in __NUXT_DATA__ resolves to payload index 42 (empty string). Recorded as null rather than guessed.",
+    "renderedSizeCSS": [
+      {
+        "appliesTo": "class .contact-item img inside custom-code-0aE34cxYy4",
+        "width": "32px",
+        "height": "32px",
+        "rule": ".contact-item img{ width:32px; height:32px; flex-shrink:0; }"
+      }
+    ]
+  },
+  {
+    "id": "bg-why-choose-section",
+    "role": "background",
+    "src": "https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a441bc20f3445329fc952f9.png",
+    "variants": [
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_768/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a441bc20f3445329fc952f9.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_900/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a441bc20f3445329fc952f9.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a441bc20f3445329fc952f9.png"
+    ],
+    "alt": null,
+    "width": null,
+    "height": null,
+    "section": "Section 5 background (section-evIFlIWTQp), CSS background-image, options fill-width-height, opacity 1",
+    "note": "width/height are NOT present in the snapshot for this asset. The only dimension data in raw/trimming.html is the width=\"1080\" height=\"1080\" attribute pair on the five gallery <img> tags; there is no naturalWidth, and every imageMeta in __NUXT_DATA__ resolves to payload index 42 (empty string). Recorded as null rather than guessed. | RESPONSIVE VARIANTS: the `src` above is the bare asset URL as it appears in the __NUXT_DATA__ element config ONLY - the browser never requests it. Three transformed URLs are requested by the stylesheet under class .bg-section-evIFlIWTQp, one per breakpoint: @media (max-width: 480px) -> r_768; @media (min-width: 481px) and (max-width: 1024px) -> r_900; @media (min-width: 1025px) -> r_1200. Each rule is `background: url(...); opacity: 1`. variants[] is listed in that order (r_768, r_900, r_1200). NOTE these breakpoints (480/1024) are NOT the <picture> breakpoints used by <img> assets, and the transform set is r_768/r_900/r_1200, not r_900/r_768/r_640/r_320."
+  },
+  {
+    "id": "bg-services-section",
+    "role": "background",
+    "src": "https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a43fb56a7501a002a01a8c1.png",
+    "variants": [
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_768/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a43fb56a7501a002a01a8c1.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_900/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a43fb56a7501a002a01a8c1.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a43fb56a7501a002a01a8c1.png"
+    ],
+    "alt": null,
+    "width": null,
+    "height": null,
+    "section": "Section 7 background (section-Pt0S1QTMn0), CSS background-image, options fill-width-height, opacity 1",
+    "note": "width/height are NOT present in the snapshot for this asset. The only dimension data in raw/trimming.html is the width=\"1080\" height=\"1080\" attribute pair on the five gallery <img> tags; there is no naturalWidth, and every imageMeta in __NUXT_DATA__ resolves to payload index 42 (empty string). Recorded as null rather than guessed. | RESPONSIVE VARIANTS: the `src` above is the bare asset URL as it appears in the __NUXT_DATA__ element config ONLY - the browser never requests it. Three transformed URLs are requested by the stylesheet under class .bg-section-Pt0S1QTMn0, one per breakpoint: @media (max-width: 480px) -> r_768; @media (min-width: 481px) and (max-width: 1024px) -> r_900; @media (min-width: 1025px) -> r_1200. Each rule is `background: url(...); opacity: 1`. variants[] is listed in that order (r_768, r_900, r_1200). NOTE these breakpoints (480/1024) are NOT the <picture> breakpoints used by <img> assets, and the transform set is r_768/r_900/r_1200, not r_900/r_768/r_640/r_320."
+  },
+  {
+    "id": "bg-service-area-marquee-row",
+    "role": "background",
+    "src": "https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a4418924c02d14b8daddd16.png",
+    "variants": [
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_768/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a4418924c02d14b8daddd16.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_900/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a4418924c02d14b8daddd16.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a4418924c02d14b8daddd16.png"
+    ],
+    "alt": null,
+    "width": null,
+    "height": null,
+    "section": "Section 8 background on row-sReEX03pnX (the marquee row), CSS background-image",
+    "note": "width/height are NOT present in the snapshot for this asset. The only dimension data in raw/trimming.html is the width=\"1080\" height=\"1080\" attribute pair on the five gallery <img> tags; there is no naturalWidth, and every imageMeta in __NUXT_DATA__ resolves to payload index 42 (empty string). Recorded as null rather than guessed. | RESPONSIVE VARIANTS: the `src` above is the bare asset URL as it appears in the __NUXT_DATA__ element config ONLY - the browser never requests it. Three transformed URLs are requested by the stylesheet under class .bg-row-sReEX03pnX, one per breakpoint: @media (max-width: 480px) -> r_768; @media (min-width: 481px) and (max-width: 1024px) -> r_900; @media (min-width: 1025px) -> r_1200. Each rule is `background: url(...); opacity: 1`. variants[] is listed in that order (r_768, r_900, r_1200). NOTE these breakpoints (480/1024) are NOT the <picture> breakpoints used by <img> assets, and the transform set is r_768/r_900/r_1200, not r_900/r_768/r_640/r_320."
+  },
+  {
+    "id": "bg-ready-cta-row",
+    "role": "background",
+    "src": "https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a44030cc597b88b61305f29.png",
+    "variants": [
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_768/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a44030cc597b88b61305f29.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_900/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a44030cc597b88b61305f29.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a44030cc597b88b61305f29.png"
+    ],
+    "alt": null,
+    "width": null,
+    "height": null,
+    "section": "Section 10 background on row-YIxQrLnVyw ('Ready To Get Those Trees Trimmed?' band), CSS background-image",
+    "note": "width/height are NOT present in the snapshot for this asset. The only dimension data in raw/trimming.html is the width=\"1080\" height=\"1080\" attribute pair on the five gallery <img> tags; there is no naturalWidth, and every imageMeta in __NUXT_DATA__ resolves to payload index 42 (empty string). Recorded as null rather than guessed. | RESPONSIVE VARIANTS: the `src` above is the bare asset URL as it appears in the __NUXT_DATA__ element config ONLY - the browser never requests it. Three transformed URLs are requested by the stylesheet under class .bg-row-YIxQrLnVyw, one per breakpoint: @media (max-width: 480px) -> r_768; @media (min-width: 481px) and (max-width: 1024px) -> r_900; @media (min-width: 1025px) -> r_1200. Each rule is `background: url(...); opacity: 1`. variants[] is listed in that order (r_768, r_900, r_1200). NOTE these breakpoints (480/1024) are NOT the <picture> breakpoints used by <img> assets, and the transform set is r_768/r_900/r_1200, not r_900/r_768/r_640/r_320."
+  },
+  {
+    "id": "bg-final-cta-section",
+    "role": "background",
+    "src": "https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a4407bb21b1234da3d660dd.png",
+    "variants": [
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_768/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a4407bb21b1234da3d660dd.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_900/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a4407bb21b1234da3d660dd.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a4407bb21b1234da3d660dd.png"
+    ],
+    "alt": null,
+    "width": null,
+    "height": null,
+    "section": "Section 12 background (section-zZW8Wc9Z7T), CSS background-image",
+    "note": "width/height are NOT present in the snapshot for this asset. The only dimension data in raw/trimming.html is the width=\"1080\" height=\"1080\" attribute pair on the five gallery <img> tags; there is no naturalWidth, and every imageMeta in __NUXT_DATA__ resolves to payload index 42 (empty string). Recorded as null rather than guessed. | RESPONSIVE VARIANTS: the `src` above is the bare asset URL as it appears in the __NUXT_DATA__ element config ONLY - the browser never requests it. Three transformed URLs are requested by the stylesheet under class .bg-section-zZW8Wc9Z7T, one per breakpoint: @media (max-width: 480px) -> r_768; @media (min-width: 481px) and (max-width: 1024px) -> r_900; @media (min-width: 1025px) -> r_1200. Each rule is `background: url(...); opacity: 1`. variants[] is listed in that order (r_768, r_900, r_1200). NOTE these breakpoints (480/1024) are NOT the <picture> breakpoints used by <img> assets, and the transform set is r_768/r_900/r_1200, not r_900/r_768/r_640/r_320."
+  },
+  {
+    "id": "cta-button-arrow-glyph",
+    "role": "background",
+    "src": "https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a443a9a4c02d14b8db7c6ed.svg",
+    "variants": [],
+    "alt": null,
+    "width": null,
+    "height": null,
+    "section": "Decorative CSS background on CTA BUTTONS, page-wide. Painted by three rules on generated pseudo-elements, covering 10 buttons in total: (1) .btn-arrow .main-heading-group::after - 1 button, the desktop header 'Call (214) 985-7697' (cbutton-qwl5Ux0JZe); (2) .mob-btn-arrow .main-heading-group::after - 1 button, the mobile header '(469) 402-1196 / Tap To Call' (cbutton-ilOPxA15xd); (3) .left_arrow::before - 8 buttons (cbutton-w6i_nJR0lW, cbutton-Tk8AUj2tvs, cbutton--kIKpIzaUL, cbutton-GecFCrteC2, cbutton-_LS21RqVvN, cbutton-T5sp7p0n-b, cbutton-kwfdGgdu0L, cbutton-gyo6-qwTP1).",
+    "note": "Hand-written client CSS in the page's custom-CSS <style> block, not a GHL image element - it has no <img> tag and therefore no DOM dimensions. 6 url() hits in raw/trimming.html = 3 rules emitted twice (the custom-CSS block is serialised twice, at byte offsets ~6.7k and ~211k, both before __NUXT_DATA__ at 544650). A rebuild that omits this loses the arrow glyph on EVERY CTA button on the page.",
+    "renderedSizeCSS": [
+      {
+        "appliesTo": "::after on .btn-arrow .main-heading-group (desktop header button)",
+        "width": "35px",
+        "height": "35px",
+        "rule": ".btn-arrow .main-heading-group::after { content: \"\" !important; display: inline-block !important; width: 35px !important; height: 35px !important; margin-left: 10px !important; background: url(\"https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a443a9a4c02d14b8db7c6ed.svg\") no-repeat center !important; background-size: contain !important; flex-shrink: 0 !important; }"
+      },
+      {
+        "appliesTo": "::after on .mob-btn-arrow .main-heading-group (mobile header button)",
+        "width": "35px",
+        "height": "35px",
+        "rule": ".mob-btn-arrow .main-heading-group::after { content: \"\" !important; display: inline-block !important; width: 35px !important; height: 35px !important; margin-left: 3px !important; background: url(\"https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a443a9a4c02d14b8db7c6ed.svg\") no-repeat center !important; background-size: contain !important; flex-shrink: 0 !important; }"
+      },
+      {
+        "appliesTo": "::before on .left_arrow (8 CTA buttons)",
+        "width": "36px",
+        "height": "36px",
+        "rule": ".left_arrow::before { content: \"\"; position: absolute; left: 24px; top: 50%; transform: translateY(-50%); width: 36px; height: 36px; background: url(\"https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a443a9a4c02d14b8db7c6ed.svg\") no-repeat center; background-size: contain; pointer-events: none; }"
+      }
+    ]
+  },
+  {
+    "id": "faq-accordion-indicator-glyph",
+    "role": "background",
+    "src": "https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a443144c597b88b613bf310.svg",
+    "variants": [],
+    "alt": null,
+    "width": null,
+    "height": null,
+    "section": "Decorative CSS background on the FAQ accordion (Section 11, section-7oJnz-0VhU). Painted by .hl-faq .hl-faq-child-heading::before on all 10 <div class=\"hl-faq-child-heading\"> rows.",
+    "note": "Hand-written client CSS in the page's custom-CSS <style> block (2 url() hits = 1 rule emitted twice, offsets ~11.2k and ~216.2k). No <img> tag, so no DOM dimensions. There is a companion open-state rule that only moves the glyph, it does not swap the asset: `.hl-faq .faq-separated-child.active .hl-faq-child-heading::before, .hl-faq .faq-separated-child.open .hl-faq-child-heading::before, .hl-faq .faq-separated-child.expanded .hl-faq-child-heading::before, .hl-faq .hl-faq-child-heading.active::before { top: 22px; transform: translateY(0); }` - i.e. the same SVG in both states. A rebuild that omits this loses the indicator on all 10 FAQ rows.",
+    "renderedSizeCSS": [
+      {
+        "appliesTo": "::before on .hl-faq .hl-faq-child-heading (10 FAQ headings), closed state",
+        "width": "30px",
+        "height": "25px",
+        "rule": ".hl-faq .hl-faq-child-heading::before { content: \"\"; position: absolute; left: -13px; top: 50%; transform: translateY(-50%); width: 30px; height: 25px; background: url(\"https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a443144c597b88b613bf310.svg\") no-repeat center; background-size: contain; transition: all .35s ease; }"
+      }
+    ]
+  },
+  {
+    "id": "intl-tel-input-flag-sprite",
+    "role": "icon",
+    "src": "https://stcdn.leadconnectorhq.com/intl-tel-input/17.0.12/img/flags@2x.png",
+    "variants": [
+      "https://stcdn.leadconnectorhq.com/intl-tel-input/17.0.12/img/flags.png"
+    ],
+    "alt": null,
+    "width": null,
+    "height": null,
+    "section": "Section 2 - lead form. GHL platform asset: CSS background sprite for the intl-tel-input country flags on the phone field. Not a client asset.",
+    "note": "Third-party vendor sprite shipped by GHL's intl-tel-input 17.0.12, not client artwork. flags@2x.png listed as src because it is the higher-resolution variant. No dimensions in the snapshot."
+  }
+]

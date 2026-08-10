@@ -1,0 +1,140 @@
+{
+  "page": {
+    "url": "https://jvaldeztreeservices.com/landing-page-997015",
+    "domainName": "jvaldeztreeservices.com",
+    "pageUrl": "/landing-page-997015",
+    "capturedFrom": "saved HTML snapshot, 2026-08-08"
+  },
+  "tags": [
+    {
+      "vendor": "Google Tag Manager",
+      "type": "container",
+      "id": "GTM-PFZPR33H",
+      "injectedVia": "GHL location-level tracking code, stored in the __NUXT_DATA__ page payload as pageData.globalHeadTrackingCode (payload index 5019) and pageData.globalBodyTrackingCode (payload index 5020). See servedVsInjected below for what is actually in the served HTML versus what the Nuxt app writes at hydration.",
+      "scope": "Set at the GHL sub-account level, so it is on every page in this location, not just this landing page.",
+      "notes": "This is the ONLY marketing tag configured for the page. Anything else (GA4, Google Ads conversion, Meta pixel, CallRail) would have to be deployed from inside this GTM container - none of them are visible in the page HTML.",
+      "servedVsInjected": {
+        "serverRendered": "ONLY the body noscript fallback. The served HTML contains exactly one GTM element, in <body> at byte offset ~540083 (the <head> ends at 312946): <noscript><iframe src=\"https://www.googletagmanager.com/ns.html?id=GTM-PFZPR33H\" \\n height=\"0\" width=\"0\" style=\"display:none;visibility:hidden\"></iframe></noscript>. Its wrapping HTML comments are NOT in the served DOM, and its whitespace differs slightly from the payload string (a space after the src quote and before `height`), i.e. it was re-serialised by Vue rather than emitted verbatim.",
+        "notServerRendered": "The gtm.js loader <script> is NOT in the served <head>. Verified: the <head> substring of raw/trimming.html contains neither 'googletagmanager' nor 'GTM-'; its only 4 <script> tags are libphonenumber-js, intl-tel-input utils, intl-tel-input, and the Nuxt module entry https://stcdn.leadconnectorhq.com/_preview/zC2SjMv-.js.",
+        "injectedAtHydration": "The loader exists only as an escaped string inside the __NUXT_DATA__ payload (globalHeadTrackingCode, index 5019): \"<!-- Google Tag Manager -->\\n<script>(function(w,d,s,l,i){...j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl...})(window,document,'script','dataLayer','GTM-PFZPR33H');</script>\\n<!-- End Google Tag Manager -->\". The Nuxt app injects it client-side after hydration; the empty container <div id=\"gb-track-hl-custom-code\"></div> sits next to the noscript in the served body.",
+        "consequence": "In the saved snapshot GTM is CONFIGURED but not yet LOADED. Any tool that reads only the server response (curl, a no-JS crawler, a static rebuild of this template) will see the noscript iframe and no gtm.js. Do not report the head script as present in the served HTML - it is not. A rebuilt control template must reproduce both halves to match behaviour: the noscript in the body, and the loader injected (or, for a static rebuild, placed in the head).",
+        "rawCounts": "In raw/trimming.html: 'GTM-PFZPR33H' x3 (1 served noscript + 2 inside the payload strings), 'googletagmanager' x3 (same distribution), 'globalHeadTrackingCode' x1 and 'globalBodyTrackingCode' x1 (both only as payload keys)."
+      }
+    }
+  ],
+  "notPresent": {
+    "ga4": "NONE. No G-XXXXXXXXXX measurement id, no gtag.js loader, no dataLayer GA4 config anywhere in the HTML.",
+    "googleAds": "NONE. No AW- conversion id, no gtag('config'/'event'), no conversion linker snippet, no gclid-writing script beyond GHL's own hidden-field prefill.",
+    "universalAnalytics": "NONE. No UA- property id.",
+    "facebookPixel": "NONE. No fbq(), no connect.facebook.net script, and the GHL form's fbPixelId is an empty string. The page payload's pixelToInit array is empty ([]).",
+    "callRail": "NONE. No cdn.callrail.com script, no CallRail swap.js, no CallRail account/company id anywhere. Call tracking / DNI is NOT installed on this page today.",
+    "otherAnalytics": "No Microsoft Clarity, Hotjar, TikTok, Snap, LinkedIn Insight, Bing UET, or Segment.",
+    "cookieConsent": "No cookie banner. cookieConsent is unset and disablePageLevelCookieConsent is false; GHL renders nothing."
+  },
+  "ghlIds": {
+    "locationId": "FaHof000UZrAJUKORVCj",
+    "companyId": "uZWQSzAbUkONW06eq8ex",
+    "funnelId": "aWDKXf94ZPEgGj9HkbEn",
+    "funnelName": "Tree Trimming Campaign - Google Ads",
+    "stepId": "460cf2e1-ce8d-4705-a0df-19e99ab7b650",
+    "pageId": "8rOLN04AbtNEocqeoqlW",
+    "pageName": "Tree Trimming - Landing Page",
+    "formId": "o4MpEGeGgVZZIeDKHv2j",
+    "formName": "Tree Trimming Form ",
+    "formElementId": "form-5gd7-YxgNV",
+    "adClickIdCustomFieldId": "DTlYvWAb5Y0M3iXyWfcH",
+    "adClickIdFieldKey": "contact.ad_click_id",
+    "adClickIdParentFolderId": "GJmFr3MgwJUl2H6kx5xc",
+    "thankYouRedirect": "https://jvaldeztreeservices.com/thank-you-page-89169333-5732",
+    "nuxtBuildId": "a2397302-46b4-4407-af76-40d9243e21a6",
+    "note": "locationId candidates and formId candidates were empty in the flat extractor output; these values were resolved from the __NUXT_DATA__ page payload. There is exactly one locationId and one formId on the page - no ambiguity."
+  },
+  "conversionSignals": {
+    "formSubmissionEvent": "SubmitApplication",
+    "pageViewEvent": "PageView",
+    "note": "These are GHL form-level event names intended for a Meta pixel. With fbPixelId empty and pixelToInit empty, nothing consumes them on-page. Any conversion measurement today must be happening inside GTM container GTM-PFZPR33H or server-side in GHL."
+  },
+  "otherThirdParty": [
+    {
+      "vendor": "Google Fonts",
+      "urls": [
+        "https://fonts.googleapis.com/css?family=Inter:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i%7CRoboto:...&display=swap",
+        "https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i&display=swap",
+        "https://fonts.googleapis.com/css?family=Inter:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i",
+        "https://fonts.gstatic.com/"
+      ],
+      "purpose": "webfonts"
+    },
+    {
+      "vendor": "Fontshare",
+      "urls": [
+        "https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&display=swap"
+      ],
+      "purpose": "Satoshi webfont, loaded from inside the review-slider custom-code block"
+    },
+    {
+      "vendor": "CDN Fonts",
+      "urls": [
+        "https://fonts.cdnfonts.com/css/satoshi"
+      ],
+      "purpose": "Satoshi webfont, loaded from inside the footer contact-box custom-code block"
+    },
+    {
+      "vendor": "cdnjs (Cloudflare)",
+      "urls": [
+        "https://cdnjs.cloudflare.com/ajax/libs/Swiper/8.0.5/swiper-bundle.min.css",
+        "https://cdnjs.cloudflare.com/ajax/libs/Swiper/8.0.5/swiper-bundle.min.js"
+      ],
+      "purpose": "Swiper 8.0.5 - powers both the before/after gallery and the Google review slider"
+    },
+    {
+      "vendor": "GoHighLevel / LeadConnector platform",
+      "urls": [
+        "https://stcdn.leadconnectorhq.com/_preview/*.js (Nuxt app bundle, ~35 chunks)",
+        "https://stcdn.leadconnectorhq.com/intl-tel-input/intlTelInput.min.js",
+        "https://stcdn.leadconnectorhq.com/intl-tel-input/17.0.12/js/utils.min.js",
+        "https://stcdn.leadconnectorhq.com/intl-tel-input/17.0.12/css/intlTelInput.min.css",
+        "https://stcdn.leadconnectorhq.com/libphonenumber/1.12.41/libphonenumber-js.min.js",
+        "https://stcdn.leadconnectorhq.com/funnel/icon/favicon.ico",
+        "https://images.leadconnectorhq.com (preconnect)",
+        "https://services.leadconnectorhq.com (preconnect)"
+      ],
+      "purpose": "page runtime, phone input formatting, favicon, image CDN"
+    },
+    {
+      "vendor": "Google reCAPTCHA (GHL platform defaults, no widget rendered)",
+      "siteKeys": {
+        "RECAPTCHA_SITE_KEY": "6LfcbMseAAAAAI-EJoB-lUh7_TJaYloLbcbmnhEO",
+        "ENTERPRISE_RECAPTCHA_SITE_KEY": "6LeDBFwpAAAAAJe8ux9-imrqZ2ueRsEtdiWoDDpX",
+        "ENTERPRISE_RECAPTCHA_CHECKBOX_SITE_KEY": "6Lfjxx4sAAAAAIsnmlR5mKNS7QwIWqDjABW2SUu7"
+      },
+      "purpose": "present in the global Nuxt runtime config on every GHL funnel page; not client-specific and not rendered here"
+    },
+    {
+      "vendor": "TreeLeads (agency) link shortener",
+      "urls": [
+        "https://links.treeleads.io/preview/mKHiwloWMigr9M9z00tv (Privacy Policy)",
+        "https://links.treeleads.io/preview/Q3OqcRO0SoaE5nnwNGcK (Terms of Service)"
+      ],
+      "purpose": "footer legal links (desktop only). These are GHL trigger-link / preview URLs and may log clicks in the agency account."
+    }
+  ],
+  "meta": {
+    "title": "",
+    "titleTagPresent": false,
+    "description": null,
+    "author": "",
+    "ogImage": "",
+    "tagsFound": [
+      "<meta charset=\"utf-8\">",
+      "<meta name=\"viewport\" content=\"minimum-scale=1.0, width=device-width, maximum-scale=1, user-scalable=no\">",
+      "<meta property=\"og:type\" content=\"website\">",
+      "<meta property=\"twitter:type\" content=\"website\">",
+      "<meta name=\"apple-mobile-web-app-capable\" content=\"yes\">"
+    ],
+    "favicon": "https://stcdn.leadconnectorhq.com/funnel/icon/favicon.ico",
+    "schemaMarkup": null,
+    "tagsFoundNote": "All 5 <meta> elements in the served HTML, in document order. Verified by counting '<meta' in raw/trimming.html -> 5. There is NO <meta name=\"description\"> and no og:description element; the payload's meta object (index 4986) has title/description/author/imageUrl all resolving to payload index 42, which is the empty string.",
+    "descriptionNote": "null = element absent, not empty. No <meta name=\"description\"> is rendered (count of 'name=\"description\"' in raw/trimming.html -> 0). The empty string lives only in the Nuxt payload's meta object."
+  }
+}

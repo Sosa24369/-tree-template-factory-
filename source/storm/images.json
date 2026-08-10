@@ -1,0 +1,745 @@
+[
+  {
+    "id": "hero-header-logo-svg-desktop",
+    "role": "logo",
+    "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/30d28dd8-9edb-4699-94f4-1c1cc58b612d.svg+xml",
+    "variants": [
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_900/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/30d28dd8-9edb-4699-94f4-1c1cc58b612d.svg+xml",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_768/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/30d28dd8-9edb-4699-94f4-1c1cc58b612d.svg+xml",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_640/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/30d28dd8-9edb-4699-94f4-1c1cc58b612d.svg+xml",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_320/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/30d28dd8-9edb-4699-94f4-1c1cc58b612d.svg+xml"
+    ],
+    "alt": "",
+    "width": null,
+    "height": null,
+    "section": "Section 1 — header bar, DESKTOP row (row-QUXhAWTlOS > col-hfQxUUEtwx > image--OXKJdqjR2)",
+    "note": "SVG served through the GHL webp resizer, so the URL ends '.svg+xml'. Desktop-only header row. alt is empty in the source. Also listed in the head JSON-LD schema image array (@graph[0] HomeAndConstructionBusiness.image[0]) — see jsonld-schema-image-4. The schema copy uses the OTHER canonical host: https://storage.googleapis.com/msgsndr/zfoeYpKrqshgdFr4gG3b/media/30d28dd8-9edb-4699-94f4-1c1cc58b612d.svg+xml"
+  },
+  {
+    "id": "header-badge-desktop",
+    "role": "other",
+    "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a549b17baf5f6da408e5c4a.jpg",
+    "variants": [
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_900/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a549b17baf5f6da408e5c4a.jpg",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_768/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a549b17baf5f6da408e5c4a.jpg",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_640/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a549b17baf5f6da408e5c4a.jpg",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_320/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a549b17baf5f6da408e5c4a.jpg"
+    ],
+    "alt": "",
+    "width": null,
+    "height": null,
+    "section": "Section 1 — header bar, DESKTOP row (row-QUXhAWTlOS > col-e-04Eh44M- > image-Yx59ATBVD_)",
+    "note": "Second desktop header image, sits between the logo column and the click-to-call column. alt empty. Also listed in the head JSON-LD schema image array (@graph[0] HomeAndConstructionBusiness.image[1]) — see jsonld-schema-image-4."
+  },
+  {
+    "id": "logo-png",
+    "role": "logo",
+    "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a549dd5524a3ec4c60bd331.png",
+    "variants": [
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_900/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a549dd5524a3ec4c60bd331.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_768/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a549dd5524a3ec4c60bd331.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_640/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a549dd5524a3ec4c60bd331.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_320/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a549dd5524a3ec4c60bd331.png"
+    ],
+    "alt": "",
+    "width": null,
+    "height": null,
+    "section": "Section 1 — header bar, MOBILE row (row-XOS6-tOzGd > col-TduIKpEgr0 > image-AsROCxR7PD); AND Section 13 footer (image-9_ZzhOR81P)",
+    "note": "ONE logical asset rendered by TWO <img> elements (mobile header + footer). Its <picture> source set is emitted twice in the HTML. alt empty on both. Also listed in the head JSON-LD schema image array (@graph[0] HomeAndConstructionBusiness.image[2]) — see jsonld-schema-image-4."
+  },
+  {
+    "id": "hero-photo-1",
+    "role": "hero",
+    "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a6a849fcdfcf04956833283.jpg",
+    "variants": [
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_900/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a6a849fcdfcf04956833283.jpg",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_768/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a6a849fcdfcf04956833283.jpg",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_640/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a6a849fcdfcf04956833283.jpg",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_320/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a6a849fcdfcf04956833283.jpg"
+    ],
+    "alt": "",
+    "width": null,
+    "height": null,
+    "section": "Section 1 — hero, below the form (col-BmNtA1vlYU > image-mTnHI_tKYY)"
+  },
+  {
+    "id": "hero-photo-2",
+    "role": "hero",
+    "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a6a849dbaa5a87f99768c00.jpg",
+    "variants": [
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_900/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a6a849dbaa5a87f99768c00.jpg",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_768/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a6a849dbaa5a87f99768c00.jpg",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_640/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a6a849dbaa5a87f99768c00.jpg",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_320/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a6a849dbaa5a87f99768c00.jpg"
+    ],
+    "alt": "",
+    "width": null,
+    "height": null,
+    "section": "Section 1 — hero, below the form (col-BmNtA1vlYU > image-lpHzQD2hL5)"
+  },
+  {
+    "id": "gallery-slide-01",
+    "role": "gallery",
+    "src": "https://lh3.googleusercontent.com/gps-cs-s/APNQkAEfUSfjUuxwgTbHRboIuyF_tA0_YdoMvH690IL0_2nFypdM3MKu0WNcNZiGwrMxbH56UXNkCo9h5KaNIeg4ql8Epkz7gDfKvtCOldTL-P7GKJZVvcmOx_rJEsWyg4X61fEzSus=m18",
+    "variants": [],
+    "alt": "Texas Tree Tops tree removal in Fort Worth",
+    "width": 680,
+    "height": 510,
+    "section": "Section 2 — recent-jobs Swiper slider (custom-code-75tiX9YkJq)",
+    "note": "First slide's URL uses the '=m18' Google size suffix; the other 14 use '=s680-w680-h510-rw'. Not a resizer variant of another asset — 15 distinct Google-hosted photos."
+  },
+  {
+    "id": "gallery-slide-02",
+    "role": "gallery",
+    "src": "https://lh3.googleusercontent.com/gps-cs-s/APNQkAGTSYTHsMC2dE75Lh9J0BLZiWHmzqPw9Fc0RoJAJdYTc91-J8bycbCR13lH-TBLHiJufYAKzGKV3EfxkQ5hUOt8svIPNBblpH3I1dp5cfmLyxXJrlo9Ot8FQxUQHWoVf2funXQf_QN-ai4=s680-w680-h510-rw",
+    "variants": [],
+    "alt": "Texas Tree Tops tree removal in Fort Worth",
+    "width": 680,
+    "height": 510,
+    "section": "Section 2 — recent-jobs Swiper slider (custom-code-75tiX9YkJq)"
+  },
+  {
+    "id": "gallery-slide-03",
+    "role": "gallery",
+    "src": "https://lh3.googleusercontent.com/gps-cs-s/APNQkAGUX-tJVjuwUK3ESpBoxOXKEmkeKpk9QAKP8oikshCFf8bKY9WRvsVQCxIVIAXVLPstO8_LoQ66Hup6tqo7v84wsEz9Uyflg0oc5K-fRhzQW29Ns8tLpvzaVrf7buEtzAvJmCXWD2TvA9c=s680-w680-h510-rw",
+    "variants": [],
+    "alt": "Texas Tree Tops tree removal in Fort Worth",
+    "width": 680,
+    "height": 510,
+    "section": "Section 2 — recent-jobs Swiper slider (custom-code-75tiX9YkJq)"
+  },
+  {
+    "id": "gallery-slide-04",
+    "role": "gallery",
+    "src": "https://lh3.googleusercontent.com/gps-cs-s/APNQkAFsp7kKInJ4dqWgg7p148NIYHM2sgzlyi2whSCe_Kx3aNPyX5Me-DvwaQKZ2TNHUmhxMfHerg4kWhLHrsJAFylMDsVsrHQNrets3vMuvCgTXz5sXnJ_1pWtbU8e09MszJ-yBzQVNrlz6RsE=s680-w680-h510-rw",
+    "variants": [],
+    "alt": "Texas Tree Tops tree removal in Fort Worth",
+    "width": 680,
+    "height": 510,
+    "section": "Section 2 — recent-jobs Swiper slider (custom-code-75tiX9YkJq)"
+  },
+  {
+    "id": "gallery-slide-05",
+    "role": "gallery",
+    "src": "https://lh3.googleusercontent.com/gps-cs-s/APNQkAE_Xpg0QECwM2B6LOTiz0VgmI_NSJdxaTtqx4NgskPCh06yoLuVEBBFphsns_oOL6v6mysqgLL8oofJPTL5e8lQtfZe4iETB_4GoDtIT2bRi7YAs5YU7W-y26bRRt7cSxoFiwGw8rWEDtK1=s680-w680-h510-rw",
+    "variants": [],
+    "alt": "Texas Tree Tops tree removal in Fort Worth",
+    "width": 680,
+    "height": 510,
+    "section": "Section 2 — recent-jobs Swiper slider (custom-code-75tiX9YkJq)"
+  },
+  {
+    "id": "gallery-slide-06",
+    "role": "gallery",
+    "src": "https://lh3.googleusercontent.com/gps-cs-s/APNQkAG8JmEm6YGrjuyzFqrVmfXdWran7TPRgDZO1ilFmqBcbLDswyZaEnMY-4m4zjUCMyXD-EyldLZw75-WhqEnyLUXGHi_kTvNATenctgHXePm7X5gmpXM74JooQwdyNvmSg8oUgL3rLBmpsOC=s680-w680-h510-rw",
+    "variants": [],
+    "alt": "Texas Tree Tops tree removal in Fort Worth",
+    "width": 680,
+    "height": 510,
+    "section": "Section 2 — recent-jobs Swiper slider (custom-code-75tiX9YkJq)"
+  },
+  {
+    "id": "gallery-slide-07",
+    "role": "gallery",
+    "src": "https://lh3.googleusercontent.com/gps-cs-s/APNQkAERnCnOfy8a4EkiABI7P71ZvY1tHMv3BAVzQZnOtCJD4a-5PzPV4M3_NEnv45GRRHhiQzi316-C52kV1TE_fYbf1KfzGd_Ggx4Pi0plr5eiFRXcLpWnXijnv2-v6iSjvlpbi04QNdk9m9yb=s680-w680-h510-rw",
+    "variants": [],
+    "alt": "Texas Tree Tops tree removal in Fort Worth",
+    "width": 680,
+    "height": 510,
+    "section": "Section 2 — recent-jobs Swiper slider (custom-code-75tiX9YkJq)"
+  },
+  {
+    "id": "gallery-slide-08",
+    "role": "gallery",
+    "src": "https://lh3.googleusercontent.com/gps-cs-s/APNQkAGcKriyLCMkDicEAxSgTc3nGRmsqPzO_XCDK8iZgiFKF-_4-7TNzvfp3bl9X4iR8AOVbB6i-6QAFXarfeJDdFWfcsIBCqAKfUhLwpU9eQtraeyhB8zXWzRlQrMeqK1Yx0wsl5yprF86pqY=s680-w680-h510-rw",
+    "variants": [],
+    "alt": "Texas Tree Tops tree removal in Fort Worth",
+    "width": 680,
+    "height": 510,
+    "section": "Section 2 — recent-jobs Swiper slider (custom-code-75tiX9YkJq)"
+  },
+  {
+    "id": "gallery-slide-09",
+    "role": "gallery",
+    "src": "https://lh3.googleusercontent.com/gps-cs-s/APNQkAGYdTvgjCzZI5lEiaubBsWnZ4RBsF1FwqPVn1xZDaG-BNujJpSzvRd3cs0qU5siKuayfp3JFyYQKRAovue5KiOFm8VHgFLPxk2TqMHlze8dgmHbbV4PXtpQmu23eAAKpGCU9BEr=s680-w680-h510-rw",
+    "variants": [],
+    "alt": "Texas Tree Tops tree removal in Fort Worth",
+    "width": 680,
+    "height": 510,
+    "section": "Section 2 — recent-jobs Swiper slider (custom-code-75tiX9YkJq)"
+  },
+  {
+    "id": "gallery-slide-10",
+    "role": "gallery",
+    "src": "https://lh3.googleusercontent.com/gps-cs-s/APNQkAHrHUebxbb0yeOwicX3i2D9VWj-NPbCyJZS0Qg6wiSMLhxEE7EtIhScIolXEu1ids2Ydd9-f35F2R4z-PH85Gfv7D01jN1Y2Qq0Iqm7rN7E14j_2btesNgt1O1nR-3U2yYUnvq7PzFoEiA=s680-w680-h510-rw",
+    "variants": [],
+    "alt": "Texas Tree Tops tree removal in Fort Worth",
+    "width": 680,
+    "height": 510,
+    "section": "Section 2 — recent-jobs Swiper slider (custom-code-75tiX9YkJq)"
+  },
+  {
+    "id": "gallery-slide-11",
+    "role": "gallery",
+    "src": "https://lh3.googleusercontent.com/gps-cs-s/APNQkAF4-_w1sSPGC4nso3EOMVrWVFckoXJxSdWY9LViXxxHd43UZ3QfNPQS9tr6DGLxtBaHLyqWNEHRwC50MlHIFnVfOnM4BYIWoPLuj4x46tCGOau5c8OH8P1Gf7yk85wYWyXmGuIMYPfv5uy_=s680-w680-h510-rw",
+    "variants": [],
+    "alt": "Texas Tree Tops tree removal in Fort Worth",
+    "width": 680,
+    "height": 510,
+    "section": "Section 2 — recent-jobs Swiper slider (custom-code-75tiX9YkJq)"
+  },
+  {
+    "id": "gallery-slide-12",
+    "role": "gallery",
+    "src": "https://lh3.googleusercontent.com/gps-cs-s/APNQkAGSVZpk0ZRzXpesFPSRVp4FJH7Uw1YhVxBqTg0gt5M5_L2lkyzBfpTPyjoXfFA0E_i1oqN4DV7VSg4TAwky11kwfyU_XKwi0kK2TGkXQPMWj2Wsx3krCXdDOOt2crm-e4BnNtKMGw=s680-w680-h510-rw",
+    "variants": [],
+    "alt": "Texas Tree Tops tree removal in Fort Worth",
+    "width": 680,
+    "height": 510,
+    "section": "Section 2 — recent-jobs Swiper slider (custom-code-75tiX9YkJq)"
+  },
+  {
+    "id": "gallery-slide-13",
+    "role": "gallery",
+    "src": "https://lh3.googleusercontent.com/gps-cs-s/APNQkAG03pVC1g3_r452mKZ-tWf9ihQIyDqdRC0Pu-kZu1Y0pLo15kWVjrHv6AB0D-pxP0NMe0G3BHoVIQ9XNu2UppHwOHFfPr1Qtr7LGTnjxzDdR1g3e4vs7_5A9th9DxAPax6GtkWTjLhq0kc=s680-w680-h510-rw",
+    "variants": [],
+    "alt": "Texas Tree Tops tree removal in Fort Worth",
+    "width": 680,
+    "height": 510,
+    "section": "Section 2 — recent-jobs Swiper slider (custom-code-75tiX9YkJq)"
+  },
+  {
+    "id": "gallery-slide-14",
+    "role": "gallery",
+    "src": "https://lh3.googleusercontent.com/gps-cs-s/APNQkAEdW3yWQmE2kYryVJxE8ctv-5naeEVUbXuQzb07pIUy0elPK7iHS_Dgqc1TWVhWE3IzSa4gJu-rOGixWKPzJwpambFmbPbW81S-8n4ccYM7zhsZujMvTPSnICIkeVKZf1v9B6j2XreBk0U=s680-w680-h510-rw",
+    "variants": [],
+    "alt": "Texas Tree Tops tree removal in Fort Worth",
+    "width": 680,
+    "height": 510,
+    "section": "Section 2 — recent-jobs Swiper slider (custom-code-75tiX9YkJq)"
+  },
+  {
+    "id": "gallery-slide-15",
+    "role": "gallery",
+    "src": "https://lh3.googleusercontent.com/gps-cs-s/APNQkAGkx8D5R5PWMUcvlW1VVMxL1Qk65uH5Zin4jhipcKKql8FX7DbunSjZDjEdArjxdBF3nyOa1bOa8d3UYDVRNyRtz8Iwk8zynks2RR8IstBjrs3HU5ZIJjHKmP--GWNhkqVThZI5HkRai_AG=s680-w680-h510-rw",
+    "variants": [],
+    "alt": "Texas Tree Tops tree removal in Fort Worth",
+    "width": 680,
+    "height": 510,
+    "section": "Section 2 — recent-jobs Swiper slider (custom-code-75tiX9YkJq)"
+  },
+  {
+    "id": "valueprops-photo-desktop",
+    "role": "other",
+    "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a6a849f855e619069e416a4.jpg",
+    "variants": [
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_900/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a6a849f855e619069e416a4.jpg",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_768/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a6a849f855e619069e416a4.jpg",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_640/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a6a849f855e619069e416a4.jpg",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_320/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a6a849f855e619069e416a4.jpg"
+    ],
+    "alt": "",
+    "width": null,
+    "height": null,
+    "section": "Section 3 — value props, desktop-only column (col-yXiDXUXTFx > image-N7IfoGIdXY)",
+    "note": "Inside a desktop-only column; not rendered below 768px."
+  },
+  {
+    "id": "valueprop-icon-1",
+    "role": "icon",
+    "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/012f6d7a-b718-440d-947c-b4d8413bdeec.svg+xml",
+    "variants": [
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_900/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/012f6d7a-b718-440d-947c-b4d8413bdeec.svg+xml",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_768/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/012f6d7a-b718-440d-947c-b4d8413bdeec.svg+xml",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_640/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/012f6d7a-b718-440d-947c-b4d8413bdeec.svg+xml",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_320/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/012f6d7a-b718-440d-947c-b4d8413bdeec.svg+xml"
+    ],
+    "alt": "",
+    "width": null,
+    "height": null,
+    "section": "Section 3 — value-prop icon 1, immediately above its paragraph (image-zsJqO7uGeO)"
+  },
+  {
+    "id": "valueprop-icon-2",
+    "role": "icon",
+    "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/581dce4d-6e7f-4c6a-86bb-15e01bd6677c.svg+xml",
+    "variants": [
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_900/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/581dce4d-6e7f-4c6a-86bb-15e01bd6677c.svg+xml",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_768/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/581dce4d-6e7f-4c6a-86bb-15e01bd6677c.svg+xml",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_640/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/581dce4d-6e7f-4c6a-86bb-15e01bd6677c.svg+xml",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_320/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/581dce4d-6e7f-4c6a-86bb-15e01bd6677c.svg+xml"
+    ],
+    "alt": "",
+    "width": null,
+    "height": null,
+    "section": "Section 3 — value-prop icon 2, immediately above its paragraph (image-AhkfLORwAX)"
+  },
+  {
+    "id": "valueprop-icon-3",
+    "role": "icon",
+    "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/64e31ca7-a259-42c9-a18b-52f0a74e3aa6.svg+xml",
+    "variants": [
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_900/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/64e31ca7-a259-42c9-a18b-52f0a74e3aa6.svg+xml",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_768/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/64e31ca7-a259-42c9-a18b-52f0a74e3aa6.svg+xml",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_640/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/64e31ca7-a259-42c9-a18b-52f0a74e3aa6.svg+xml",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_320/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/64e31ca7-a259-42c9-a18b-52f0a74e3aa6.svg+xml"
+    ],
+    "alt": "",
+    "width": null,
+    "height": null,
+    "section": "Section 3 — value-prop icon 3, immediately above its paragraph (image-yy9KdmPBa7)"
+  },
+  {
+    "id": "valueprop-icon-4",
+    "role": "icon",
+    "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/c6bef16d-f5bb-4595-8f55-3ecaa3fce5a2.svg+xml",
+    "variants": [
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_900/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/c6bef16d-f5bb-4595-8f55-3ecaa3fce5a2.svg+xml",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_768/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/c6bef16d-f5bb-4595-8f55-3ecaa3fce5a2.svg+xml",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_640/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/c6bef16d-f5bb-4595-8f55-3ecaa3fce5a2.svg+xml",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_320/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/c6bef16d-f5bb-4595-8f55-3ecaa3fce5a2.svg+xml"
+    ],
+    "alt": "",
+    "width": null,
+    "height": null,
+    "section": "Section 3 — value-prop icon 4, immediately above its paragraph (image-7A3fVX0SuC)"
+  },
+  {
+    "id": "bg-section-evIFlIWTQp",
+    "role": "background",
+    "delivery": "css-background",
+    "cssSelectors": [
+      ".bg-section-evIFlIWTQp"
+    ],
+    "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a441bc20f3445329fc952f9.png",
+    "variants": [
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_900/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a441bc20f3445329fc952f9.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_768/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a441bc20f3445329fc952f9.png"
+    ],
+    "alt": null,
+    "width": null,
+    "height": null,
+    "opacity": "1",
+    "section": "Section 4 (`section-evIFlIWTQp`) — full-section background layer behind \"Why West Dallas Homeowners / Choose Texas Tree Tops\", the service-area paragraph and the Google-reviews slider.",
+    "payloadUrl": "https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a441bc20f3445329fc952f9.png",
+    "note": "Painted by a dedicated absolutely-positioned div rendered as the section/row's first child: <div class=\"bg fill-width-height bg-section-evIFlIWTQp\" style=\"border-radius:inherit;position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;\"></div>. THREE responsive url() rules, one per breakpoint: r_768 under @media (max-width: 480px), r_900 under @media (min-width: 481px) and (max-width: 1024px), r_1200 under @media (min-width: 1025px). src above is the r_1200 (desktop) rule; variants are r_900 then r_768. Sizing comes from the shared class \"fill-width-height\": .fill-width,.fill-width-height{background-repeat:no-repeat!important} and .fill-width-height{background-size:100% 100%!important} — both base rules, not inside a media query. Payload source of truth: extra.bgImage.value = {mediaType:'image', url:'https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a441bc20f3445329fc952f9.png', opacity:'1', options:'fill-width-height'}. Payload host and CSS origin host agree here (assets.cdn.filesafe.space); the CSS additionally routes it through the GHL resizer. FOREIGN TENANT: filesafe tenant FaHof000UZrAJUKORVCj, not the client's zfoeYpKrqshgdFr4gG3b — an agency/template texture, same caveat already recorded for review-stars-icon and review-google-logo-icon. width/height are null because NO intrinsic dimensions exist anywhere in the source: the payload's bgImage.value.imageMeta is an empty string, and the div's width:100%/height:100% are layout values, not image dimensions. Do not invent any."
+  },
+  {
+    "id": "review-stars-icon",
+    "role": "icon",
+    "src": "https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a441cbcb76c4ad15a9d24df.svg",
+    "variants": [],
+    "alt": "5 stars",
+    "width": null,
+    "height": null,
+    "section": "Section 4 — Google reviews slider, once per card (3 <img> elements, one asset)",
+    "note": "Hosted under a DIFFERENT filesafe tenant id (FaHof000UZrAJUKORVCj) than every other page asset (zfoeYpKrqshgdFr4gG3b) — it is an agency/template asset, not a Texas Tree Tops media-library asset. Served raw, not through the GHL resizer. class='rating'."
+  },
+  {
+    "id": "review-google-logo-icon",
+    "role": "icon",
+    "src": "https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a441cbc18d22f08d734f9a7.svg",
+    "variants": [],
+    "alt": "Google",
+    "width": null,
+    "height": null,
+    "section": "Section 4 — Google reviews slider, once per card (3 <img> elements, one asset)",
+    "note": "Same foreign filesafe tenant (FaHof000UZrAJUKORVCj). Served raw, not through the GHL resizer. class='google-logo'."
+  },
+  {
+    "id": "restoration-grid-1",
+    "role": "gallery",
+    "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a6a849ecdfcf04956832e46.jpg",
+    "variants": [
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_900/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a6a849ecdfcf04956832e46.jpg",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_768/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a6a849ecdfcf04956832e46.jpg",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_640/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a6a849ecdfcf04956832e46.jpg",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_320/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a6a849ecdfcf04956832e46.jpg"
+    ],
+    "alt": "",
+    "width": null,
+    "height": null,
+    "section": "Section 5 — 'Restoration Results Guaranteed' photo grid, item 1 (image-eUghBSWQU7)"
+  },
+  {
+    "id": "restoration-grid-2",
+    "role": "gallery",
+    "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a54a921180dde3f86a7bc21.png",
+    "variants": [
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_900/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a54a921180dde3f86a7bc21.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_768/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a54a921180dde3f86a7bc21.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_640/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a54a921180dde3f86a7bc21.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_320/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a54a921180dde3f86a7bc21.png"
+    ],
+    "alt": "",
+    "width": null,
+    "height": null,
+    "section": "Section 5 — 'Restoration Results Guaranteed' photo grid, item 2 (image-n65vS9SjMo)"
+  },
+  {
+    "id": "restoration-grid-3",
+    "role": "gallery",
+    "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a6a849f0aea34991e5fa07f.jpg",
+    "variants": [
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_900/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a6a849f0aea34991e5fa07f.jpg",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_768/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a6a849f0aea34991e5fa07f.jpg",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_640/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a6a849f0aea34991e5fa07f.jpg",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_320/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a6a849f0aea34991e5fa07f.jpg"
+    ],
+    "alt": "",
+    "width": null,
+    "height": null,
+    "section": "Section 5 — 'Restoration Results Guaranteed' photo grid, item 3 (image-Xl6WkeFSn4)"
+  },
+  {
+    "id": "restoration-grid-4",
+    "role": "gallery",
+    "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a6a849eeb781ab262e0c92f.jpg",
+    "variants": [
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_900/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a6a849eeb781ab262e0c92f.jpg",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_768/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a6a849eeb781ab262e0c92f.jpg",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_640/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a6a849eeb781ab262e0c92f.jpg",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_320/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a6a849eeb781ab262e0c92f.jpg"
+    ],
+    "alt": "",
+    "width": null,
+    "height": null,
+    "section": "Section 5 — 'Restoration Results Guaranteed' photo grid, item 4 (image-v15-To2N8p)"
+  },
+  {
+    "id": "restoration-grid-5",
+    "role": "gallery",
+    "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a6a849eeb781ab262e0c92a.jpg",
+    "variants": [
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_900/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a6a849eeb781ab262e0c92a.jpg",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_768/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a6a849eeb781ab262e0c92a.jpg",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_640/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a6a849eeb781ab262e0c92a.jpg",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_320/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a6a849eeb781ab262e0c92a.jpg"
+    ],
+    "alt": "",
+    "width": null,
+    "height": null,
+    "section": "Section 5 — 'Restoration Results Guaranteed' photo grid, item 5 (image-DvUaCtiEkz)"
+  },
+  {
+    "id": "bg-section-Pt0S1QTMn0",
+    "role": "background",
+    "delivery": "css-background",
+    "cssSelectors": [
+      ".bg-section-Pt0S1QTMn0"
+    ],
+    "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a43fb56a7501a002a01a8c1.png",
+    "variants": [
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_900/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a43fb56a7501a002a01a8c1.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_768/u_https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a43fb56a7501a002a01a8c1.png"
+    ],
+    "alt": null,
+    "width": null,
+    "height": null,
+    "opacity": "1",
+    "section": "Section 6 (`section-Pt0S1QTMn0`) — full-section background layer behind \"Tree Removal Services We Offer\" and the three service cards.",
+    "payloadUrl": "https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a43fb56a7501a002a01a8c1.png",
+    "note": "Painted by a dedicated absolutely-positioned div rendered as the section/row's first child: <div class=\"bg fill-width-height bg-section-Pt0S1QTMn0\" style=\"border-radius:inherit;position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;\"></div>. THREE responsive url() rules, one per breakpoint: r_768 under @media (max-width: 480px), r_900 under @media (min-width: 481px) and (max-width: 1024px), r_1200 under @media (min-width: 1025px). src above is the r_1200 (desktop) rule; variants are r_900 then r_768. Sizing comes from the shared class \"fill-width-height\": .fill-width,.fill-width-height{background-repeat:no-repeat!important} and .fill-width-height{background-size:100% 100%!important} — both base rules, not inside a media query. Payload source of truth: extra.bgImage.value = {mediaType:'image', url:'https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a43fb56a7501a002a01a8c1.png', opacity:'1', options:'fill-width-height'}. Payload host and CSS origin host agree here (assets.cdn.filesafe.space); the CSS additionally routes it through the GHL resizer. FOREIGN TENANT: filesafe tenant FaHof000UZrAJUKORVCj, not the client's zfoeYpKrqshgdFr4gG3b — an agency/template texture. width/height are null because NO intrinsic dimensions exist anywhere in the source: the payload's bgImage.value.imageMeta is an empty string, and the div's width:100%/height:100% are layout values, not image dimensions. Do not invent any."
+  },
+  {
+    "id": "service-card-1",
+    "role": "other",
+    "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a6a849d855e619069e40a56.jpg",
+    "variants": [
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_900/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a6a849d855e619069e40a56.jpg",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_768/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a6a849d855e619069e40a56.jpg",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_640/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a6a849d855e619069e40a56.jpg",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_320/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a6a849d855e619069e40a56.jpg"
+    ],
+    "alt": "",
+    "width": null,
+    "height": null,
+    "section": "Section 6 — service card 1 (storm/fallen-tree bullets) header image (image-N_8V3zhF8M)"
+  },
+  {
+    "id": "service-card-2",
+    "role": "other",
+    "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a6a849e855e619069e410ca.jpg",
+    "variants": [
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_900/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a6a849e855e619069e410ca.jpg",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_768/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a6a849e855e619069e410ca.jpg",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_640/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a6a849e855e619069e410ca.jpg",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_320/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a6a849e855e619069e410ca.jpg"
+    ],
+    "alt": "",
+    "width": null,
+    "height": null,
+    "section": "Section 6 — service card 2 (cleanup/stump bullets) header image (image-59wbz-qT4H)"
+  },
+  {
+    "id": "service-card-3",
+    "role": "other",
+    "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a6a84a113ce0fc56345ff3c.jpg",
+    "variants": [
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_900/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a6a84a113ce0fc56345ff3c.jpg",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_768/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a6a84a113ce0fc56345ff3c.jpg",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_640/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a6a84a113ce0fc56345ff3c.jpg",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_320/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a6a84a113ce0fc56345ff3c.jpg"
+    ],
+    "alt": "",
+    "width": null,
+    "height": null,
+    "section": "Section 6 — service card 3 (fence bullets) header image (image-M7UKburXYu)"
+  },
+  {
+    "id": "bg-row-sReEX03pnX",
+    "role": "background",
+    "delivery": "css-background",
+    "cssSelectors": [
+      ".bg-row-sReEX03pnX"
+    ],
+    "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/762d835c-f3df-42c3-8e90-3cfcaab72998.png",
+    "variants": [
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_900/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/762d835c-f3df-42c3-8e90-3cfcaab72998.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_768/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/762d835c-f3df-42c3-8e90-3cfcaab72998.png"
+    ],
+    "alt": null,
+    "width": null,
+    "height": null,
+    "opacity": "1",
+    "section": "Section 7 (`section-o8EAaPwuM8`, \"Areas We Serve\") — ROW-level background layer on `row-sReEX03pnX`, NOT a section background. The row is the direct parent of the three-row city-pill marquee.",
+    "payloadUrl": "https://storage.googleapis.com/msgsndr/zfoeYpKrqshgdFr4gG3b/media/762d835c-f3df-42c3-8e90-3cfcaab72998.png",
+    "note": "Painted by a dedicated absolutely-positioned div rendered as the section/row's first child: <div class=\"bg fill-width-height bg-row-sReEX03pnX\" style=\"border-radius:inherit;position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;\"></div>. THREE responsive url() rules, one per breakpoint: r_768 under @media (max-width: 480px), r_900 under @media (min-width: 481px) and (max-width: 1024px), r_1200 under @media (min-width: 1025px). src above is the r_1200 (desktop) rule; variants are r_900 then r_768. Sizing comes from the shared class \"fill-width-height\": .fill-width,.fill-width-height{background-repeat:no-repeat!important} and .fill-width-height{background-size:100% 100%!important} — both base rules, not inside a media query. Payload source of truth: extra.bgImage.value = {mediaType:'image', url:'https://storage.googleapis.com/msgsndr/zfoeYpKrqshgdFr4gG3b/media/762d835c-f3df-42c3-8e90-3cfcaab72998.png', opacity:'1', options:'fill-width-height'}. The payload stores this under storage.googleapis.com/msgsndr/... while the CSS routes the same media id through the GHL resizer over assets.cdn.filesafe.space — same asset, two canonical hosts. Client-tenant media (zfoeYpKrqshgdFr4gG3b). width/height are null because NO intrinsic dimensions exist anywhere in the source: the payload's bgImage.value.imageMeta is an empty string, and the div's width:100%/height:100% are layout values, not image dimensions. Do not invent any."
+  },
+  {
+    "id": "marquee-map-pin-inline-svg",
+    "role": "icon",
+    "delivery": "inline-svg",
+    "src": "inline-svg",
+    "variants": [],
+    "alt": null,
+    "width": null,
+    "height": null,
+    "elementCount": 50,
+    "section": "Section 7 (`section-o8EAaPwuM8`) — one pin inside every city pill of the Areas-We-Serve marquee, wrapped in `<span class=\"ttt-pin\">`. 50 occurrences = (9 + 8 + 8) pills x 2, because each of the three marquee rows duplicates its `ttt-group` for the seamless loop (see structure.md > RESPONSIVE / DUPLICATION NOTES item 6). ONE logical asset.",
+    "markup": "<svg viewBox=\"0 0 24 24\" fill=\"none\"><path d=\"M12 2C7.9 2 4.5 5.3 4.5 9.4c0 5.4 6.4 11.6 7 12.2.3.3.7.3 1 0 .6-.6 7-6.8 7-12.2C19.5 5.3 16.1 2 12 2Z\" fill=\"#1E8A55\"/><circle cx=\"12\" cy=\"9.4\" r=\"2.7\" fill=\"#fff\"/></svg>",
+    "note": "Authored inline in the Section 7 Custom HTML block, so it has no URL and never appears in any media library. Recorded because it is a logical image a rebuild must reproduce. No width/height attributes and no viewBox-derived intrinsic size claim is made here. CSS RENDER BOX ONLY (recorded as CSS, not as image dimensions): `.ttt-pin{width:15px;height:15px;...}` and `.ttt-pin svg{width:15px;height:15px;display:block}`. The svg's own viewBox is \"0 0 24 24\" — a coordinate system, not a pixel size."
+  },
+  {
+    "id": "feature-block-a-trucks",
+    "role": "other",
+    "src": "data-uri",
+    "variants": [],
+    "alt": "Texas Tree Tops branded trucks in Fort Worth",
+    "width": null,
+    "height": null,
+    "section": "Section 8 — feature block A, right-hand media (custom-code-LtvZmszk9_)",
+    "note": "inline base64, 83993 bytes decoded (112015 chars as a data:image/jpeg;base64 URI). Base64 payload intentionally not reproduced here."
+  },
+  {
+    "id": "feature-block-b-large-removal",
+    "role": "other",
+    "src": "data-uri",
+    "variants": [],
+    "alt": "Large tree removal by Texas Tree Tops",
+    "width": null,
+    "height": null,
+    "section": "Section 8 — feature block B, left-hand media (custom-code-LtvZmszk9_)",
+    "note": "inline base64, 113292 bytes decoded (151079 chars as a data:image/jpeg;base64 URI). Base64 payload intentionally not reproduced here. The custom-code comment says: 'Photos are embedded; to slim it, host them in GHL media and replace the two src=\"data:image/jpeg;base64,...\" values with the URLs.'"
+  },
+  {
+    "id": "bg-row-YIxQrLnVyw",
+    "role": "background",
+    "delivery": "css-background",
+    "cssSelectors": [
+      ".bg-row-YIxQrLnVyw"
+    ],
+    "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/a9b45bf7-c181-430b-b74f-620b38ce8314.png",
+    "variants": [
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_900/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/a9b45bf7-c181-430b-b74f-620b38ce8314.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_768/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/a9b45bf7-c181-430b-b74f-620b38ce8314.png"
+    ],
+    "alt": null,
+    "width": null,
+    "height": null,
+    "opacity": "1",
+    "section": "Section 9 (`section-toIz3g1_9P`, \"Need Storm Damage Handled Fast?\" CTA band) — ROW-level background layer on `row-YIxQrLnVyw`, NOT a section background.",
+    "payloadUrl": "https://storage.googleapis.com/msgsndr/zfoeYpKrqshgdFr4gG3b/media/a9b45bf7-c181-430b-b74f-620b38ce8314.png",
+    "note": "Painted by a dedicated absolutely-positioned div rendered as the section/row's first child: <div class=\"bg fill-width-height bg-row-YIxQrLnVyw\" style=\"border-radius:inherit;position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;\"></div>. THREE responsive url() rules, one per breakpoint: r_768 under @media (max-width: 480px), r_900 under @media (min-width: 481px) and (max-width: 1024px), r_1200 under @media (min-width: 1025px). src above is the r_1200 (desktop) rule; variants are r_900 then r_768. Sizing comes from the shared class \"fill-width-height\": .fill-width,.fill-width-height{background-repeat:no-repeat!important} and .fill-width-height{background-size:100% 100%!important} — both base rules, not inside a media query. Payload source of truth: extra.bgImage.value = {mediaType:'image', url:'https://storage.googleapis.com/msgsndr/zfoeYpKrqshgdFr4gG3b/media/a9b45bf7-c181-430b-b74f-620b38ce8314.png', opacity:'1', options:'fill-width-height'}. The payload stores this under storage.googleapis.com/msgsndr/... while the CSS routes the same media id through the GHL resizer over assets.cdn.filesafe.space — same asset, two canonical hosts. Client-tenant media (zfoeYpKrqshgdFr4gG3b). width/height are null because NO intrinsic dimensions exist anywhere in the source: the payload's bgImage.value.imageMeta is an empty string, and the div's width:100%/height:100% are layout values, not image dimensions. Do not invent any."
+  },
+  {
+    "id": "process-steps-graphic",
+    "role": "other",
+    "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/7f278126-6ede-468a-be6a-d08ccc431325.png",
+    "variants": [
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_900/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/7f278126-6ede-468a-be6a-d08ccc431325.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_768/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/7f278126-6ede-468a-be6a-d08ccc431325.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_640/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/7f278126-6ede-468a-be6a-d08ccc431325.png",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_320/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/7f278126-6ede-468a-be6a-d08ccc431325.png"
+    ],
+    "alt": "",
+    "width": null,
+    "height": null,
+    "section": "Section 10 — process steps; rendered TWICE, image-uAaKobxnI8 inside the mobile-only row and image-VSnTZtdVWa inside the desktop-only row",
+    "note": "ONE logical asset, TWO <img> elements (mobile + desktop responsive copies). Its <picture> source set is emitted twice in the HTML."
+  },
+  {
+    "id": "bg-section-zZW8Wc9Z7T",
+    "role": "background",
+    "delivery": "css-background",
+    "cssSelectors": [
+      ".bg-section-zZW8Wc9Z7T"
+    ],
+    "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a6a8f91e1cc940b5dc10bb4.jpg",
+    "variants": [
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_900/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a6a8f91e1cc940b5dc10bb4.jpg",
+      "https://images.leadconnectorhq.com/image/f_webp/q_80/r_768/u_https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a6a8f91e1cc940b5dc10bb4.jpg"
+    ],
+    "alt": null,
+    "width": null,
+    "height": null,
+    "opacity": ".3",
+    "section": "Section 12 (`section-zZW8Wc9Z7T`) — full-section background layer behind the final CTA \"Storm Damage In Fort Worth? / Get A Free Estimate Now\".",
+    "payloadUrl": "https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a6a8f91e1cc940b5dc10bb4.jpg",
+    "note": "Painted by a dedicated absolutely-positioned div rendered as the section/row's first child: <div class=\"bg fill-width-height bg-section-zZW8Wc9Z7T\" style=\"border-radius:inherit;position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;\"></div>. THREE responsive url() rules, one per breakpoint: r_768 under @media (max-width: 480px), r_900 under @media (min-width: 481px) and (max-width: 1024px), r_1200 under @media (min-width: 1025px). src above is the r_1200 (desktop) rule; variants are r_900 then r_768. Sizing comes from the shared class \"fill-width-height\": .fill-width,.fill-width-height{background-repeat:no-repeat!important} and .fill-width-height{background-size:100% 100%!important} — both base rules, not inside a media query. Payload source of truth: extra.bgImage.value = {mediaType:'image', url:'https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a6a8f91e1cc940b5dc10bb4.jpg', opacity:'.3', options:'fill-width-height'}. Payload host and CSS origin host agree here (assets.cdn.filesafe.space); the CSS additionally routes it through the GHL resizer. REAL CLIENT PHOTO (client tenant zfoeYpKrqshgdFr4gG3b), deliberately dimmed to opacity .3 — the ONLY background layer on the page that is not opacity 1. Rebuilding it at full opacity turns a tinted CTA into a photo hero. width/height are null because NO intrinsic dimensions exist anywhere in the source: the payload's bgImage.value.imageMeta is an empty string, and the div's width:100%/height:100% are layout values, not image dimensions. Do not invent any."
+  },
+  {
+    "id": "cta-arrow-icon",
+    "role": "icon",
+    "delivery": "css-background",
+    "cssSelectors": [
+      ".btn-arrow .main-heading-group::after",
+      ".mob-btn-arrow .main-heading-group::after",
+      ".left_arrow::before"
+    ],
+    "src": "https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a443a9a4c02d14b8db7c6ed.svg",
+    "variants": [],
+    "alt": null,
+    "width": null,
+    "height": null,
+    "elementCount": 10,
+    "section": "Cross-section — the arrow glyph on EVERY call/CTA button on the page. 10 rendered elements: cbutton-qwl5Ux0JZe (Section 1 desktop header call CTA, class `btn-arrow`), cbutton-ilOPxA15xd (Section 1 mobile header call CTA, class `mob-btn-arrow`), and 8 carrying class `left_arrow` — cbutton-w6i_nJR0lW, cbutton-Tk8AUj2tvs (Section 3 desktop/mobile), cbutton--kIKpIzaUL (Section 4), cbutton-GecFCrteC2 (Section 5), cbutton-_LS21RqVvN (Section 6), cbutton-T5sp7p0n-b and cbutton-kwfdGgdu0L (Section 9), cbutton-gyo6-qwTP1 (Section 12).",
+    "note": "LIVE, not commented out — the `*/` that closes the '/* leaf on form */' block sits immediately before `.btn-arrow .main-heading-group`, so all three rules below it are active. Declared as `background: url(\"...\") no-repeat center` + `background-size: contain`; the ::after rules carry !important on every declaration, the .left_arrow::before rule does not. FOREIGN TENANT: filesafe tenant FaHof000UZrAJUKORVCj, not the client's zfoeYpKrqshgdFr4gG3b — an agency/template asset. Served raw, not through the GHL resizer. width/height are null: NO intrinsic dimensions are stated in the source. CSS RENDER BOX ONLY (recorded as CSS, not as image dimensions): 35px x 35px from `.btn-arrow .main-heading-group::after` and `.mob-btn-arrow .main-heading-group::after`; 36px x 36px from `.left_arrow::before`. Omitting this asset leaves every CTA button on the rebuild without its arrow."
+  },
+  {
+    "id": "faq-heading-icon",
+    "role": "icon",
+    "delivery": "css-background",
+    "cssSelectors": [
+      ".hl-faq .hl-faq-child-heading::before",
+      ".hl-faq .faq-separated-child.active .hl-faq-child-heading::before",
+      ".hl-faq .faq-separated-child.open .hl-faq-child-heading::before",
+      ".hl-faq .faq-separated-child.expanded .hl-faq-child-heading::before",
+      ".hl-faq .hl-faq-child-heading.active::before"
+    ],
+    "src": "https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a443144c597b88b613bf310.svg",
+    "variants": [],
+    "alt": null,
+    "width": null,
+    "height": null,
+    "elementCount": 10,
+    "section": "Section 11 (`section-em7O_SRdYL`) — the leading glyph on every FAQ question row. `class=\"hl-faq-child-heading\"` occurs exactly 10 times, one per Q&A pair.",
+    "note": "Declared as `background: url(\"...\") no-repeat center` + `background-size: contain` + `transition: all .35s ease` on the closed/default state, which is vertically centred (top:50%; transform:translateY(-50%); left:-13px). The four open-state selectors listed above reposition the SAME image to top:22px; transform:translateY(0) — they do not swap the URL. This is separate from the +/- expand indicator, which is a FontAwesome glyph on `.hl-faq-child-heading-icon right fa`, not an image asset. FOREIGN TENANT: filesafe tenant FaHof000UZrAJUKORVCj, not the client's zfoeYpKrqshgdFr4gG3b. Served raw, not through the GHL resizer. width/height are null: NO intrinsic dimensions are stated in the source. CSS RENDER BOX ONLY (recorded as CSS, not as image dimensions): 30px wide x 25px tall from `.hl-faq .hl-faq-child-heading::before`."
+  },
+  {
+    "id": "form-email-envelope-inline-svg",
+    "role": "icon",
+    "delivery": "inline-svg",
+    "src": "inline-svg",
+    "variants": [],
+    "alt": null,
+    "width": null,
+    "height": null,
+    "elementCount": 1,
+    "section": "Section 1 — inside the lead form, immediately before the Email (Optional) input (`el_vj6sZGG1Fi4M9PAsIZRx_email_3` > `div.flex.email-input.relative`). This is why form.json records inlineStyle `padding-left:36px !important;` on that field.",
+    "markup": "<svg xmlns=\"http://www.w3.org/2000/svg\" fill=\"none\" viewbox=\"0 0 24 24\" stroke-width=\"2\" stroke=\"currentColor\" aria-hidden=\"true\" class=\"input-icon\" style=\"color:#1C1C1CFF;\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M2 7l8.165 5.715c.661.463.992.695 1.351.784a2 2 0 00.968 0c.36-.09.69-.32 1.351-.784L22 7M6.8 20h10.4c1.68 0 2.52 0 3.162-.327a3 3 0 001.311-1.311C22 17.72 22 16.88 22 15.2V8.8c0-1.68 0-2.52-.327-3.162a3 3 0 00-1.311-1.311C19.72 4 18.88 4 17.2 4H6.8c-1.68 0-2.52 0-3.162.327a3 3 0 00-1.311 1.311C2 6.28 2 7.12 2 8.8v6.4c0 1.68 0 2.52.327 3.162a3 3 0 001.311 1.311C4.28 20 5.12 20 6.8 20z\"></path></svg>",
+    "note": "The ONLY inline SVG on the page other than the marquee map pin, and the only one of the four form fields that gets an icon — First Name, Last Name and Phone have none. Emitted by GHL's form renderer with `aria-hidden=\"true\"`, lowercase `viewbox`, and an inline `style=\"color:#1C1C1CFF;\"` that drives `stroke=\"currentColor\"`. width/height are null: no width/height attributes are present. CSS RENDER BOX ONLY (recorded as CSS, not as image dimensions): `.input-icon{height:16px;left:12px;pointer-events:none;position:absolute;top:50%;transform:translateY(-50%);width:16px;z-index:1}`."
+  },
+  {
+    "id": "intl-tel-input-flags",
+    "role": "background",
+    "src": "https://stcdn.leadconnectorhq.com/intl-tel-input/17.0.12/img/flags@2x.png",
+    "variants": [
+      "https://stcdn.leadconnectorhq.com/intl-tel-input/17.0.12/img/flags.png"
+    ],
+    "alt": null,
+    "width": null,
+    "height": null,
+    "section": "CSS background — intl-tel-input country-flag sprite used by the form's phone field",
+    "note": "Third-party vendor sprite shipped by GHL's intl-tel-input 17.0.12, not client artwork. flags@2x.png listed as src because it is the higher-resolution variant."
+  },
+  {
+    "id": "leaf-on-form-left-DISABLED",
+    "role": "icon",
+    "delivery": "css-background",
+    "cssSelectors": [
+      "#row-hEon8-PXEE::before"
+    ],
+    "src": "https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a44237c21b1234da3de128a.svg",
+    "variants": [],
+    "alt": null,
+    "width": null,
+    "height": null,
+    "disabled": true,
+    "section": "NOT RENDERED — inside a commented-out CSS block `/* leaf on form ... */` that wraps `#row-hEon8-PXEE`, `#row-hEon8-PXEE::before` and `#row-hEon8-PXEE::after`. The comment closes with `*/` immediately before `.btn-arrow .main-heading-group`.",
+    "note": "Inert today. Recorded so a rebuild neither resurrects it nor silently loses it — the same treatment form.json gives the unused 'address' field. Would have sat at left:20px, vertically centred, `background: url(\"...\") no-repeat center` + `background-size: contain`, pointer-events:none, z-index:10. FOREIGN TENANT: FaHof000UZrAJUKORVCj. width/height are null: no intrinsic dimensions in the source. CSS RENDER BOX ONLY, and only inside the disabled block: 40px x 40px."
+  },
+  {
+    "id": "leaf-on-form-right-DISABLED",
+    "role": "icon",
+    "delivery": "css-background",
+    "cssSelectors": [
+      "#row-hEon8-PXEE::after"
+    ],
+    "src": "https://assets.cdn.filesafe.space/FaHof000UZrAJUKORVCj/media/6a44237c45073744c0091e4a.svg",
+    "variants": [],
+    "alt": null,
+    "width": null,
+    "height": null,
+    "disabled": true,
+    "section": "NOT RENDERED — inside a commented-out CSS block `/* leaf on form ... */` that wraps `#row-hEon8-PXEE`, `#row-hEon8-PXEE::before` and `#row-hEon8-PXEE::after`. The comment closes with `*/` immediately before `.btn-arrow .main-heading-group`.",
+    "note": "Inert today. Recorded so a rebuild neither resurrects it nor silently loses it — the same treatment form.json gives the unused 'address' field. Would have sat at right:20px, vertically centred, `background: url(\"...\") no-repeat center` + `background-size: contain`, pointer-events:none, z-index:10. FOREIGN TENANT: FaHof000UZrAJUKORVCj. width/height are null: no intrinsic dimensions in the source. CSS RENDER BOX ONLY, and only inside the disabled block: 60px x 60px."
+  },
+  {
+    "id": "faq-item-inert-image-DISABLED",
+    "role": "other",
+    "delivery": "config-only",
+    "src": "https://storage.googleapis.com/msgsndr/knES3eSWYIsc5YSZ3YLl/media/62beef4f9f43b0c53e585a8f.jpeg",
+    "variants": [],
+    "alt": null,
+    "width": null,
+    "height": null,
+    "disabled": true,
+    "elementCount": 0,
+    "section": "NOT RENDERED — Section 11 (`section-em7O_SRdYL`) FAQ config only. All 10 FAQ items in the Nuxt payload carry this same `image` value with `showImage: false`, e.g. {'id':1,'heading':'<h4>How fast can you get here after a storm?</h4>','showImage':false,'image':'...62beef4f9f43b0c53e585a8f.jpeg'}.",
+    "note": "Leftover template config. The location id in the URL is knES3eSWYIsc5YSZ3YLl — a THIRD tenant, neither the client's zfoeYpKrqshgdFr4gG3b nor the agency's FaHof000UZrAJUKORVCj. Appears once in the served HTML (payload only, never as an <img>). Recorded so a rebuild does not turn showImage on, mirroring form.json's unused-'address'-field treatment. No dimensions exist in the source."
+  },
+  {
+    "id": "og-share-image",
+    "role": "other",
+    "src": "https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a6a849e93f4ab90d4382a5a.jpg",
+    "variants": [],
+    "alt": null,
+    "width": null,
+    "height": null,
+    "section": "<head> — <meta name=\"image\"> and <meta property=\"og:image\">. NOT rendered anywhere in the body.",
+    "note": "This media id appears nowhere else on the page."
+  },
+  {
+    "id": "jsonld-schema-image-4",
+    "role": "other",
+    "src": "https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a54a921d74b27c6af171076.png",
+    "variants": [],
+    "alt": null,
+    "width": null,
+    "height": null,
+    "section": "<head> — server-rendered `<script type=\"application/ld+json\">`, @graph[0] HomeAndConstructionBusiness.image[3]. NOT rendered anywhere in the body.",
+    "note": "ORPHAN: this media id appears in the served HTML twice (the head JSON-LD block and its copy in the Nuxt payload) and nowhere else — no <img>, no CSS background. The full five-element schema image array is: [0] storage.googleapis.com/msgsndr/zfoeYpKrqshgdFr4gG3b/media/30d28dd8-9edb-4699-94f4-1c1cc58b612d.svg+xml (= hero-header-logo-svg-desktop, under the OTHER canonical host), [1] .../6a549b17baf5f6da408e5c4a.jpg (= header-badge-desktop), [2] .../6a549dd5524a3ec4c60bd331.png (= logo-png), [3] this file, [4] .../6a54a922baf5f6da40924908.png (= jsonld-schema-image-5). Head-only asset, recorded on the same footing as og-share-image. No dimensions exist in the source."
+  },
+  {
+    "id": "jsonld-schema-image-5",
+    "role": "other",
+    "src": "https://assets.cdn.filesafe.space/zfoeYpKrqshgdFr4gG3b/media/6a54a922baf5f6da40924908.png",
+    "variants": [],
+    "alt": null,
+    "width": null,
+    "height": null,
+    "section": "<head> — server-rendered `<script type=\"application/ld+json\">`, @graph[0] HomeAndConstructionBusiness.image[4]. NOT rendered anywhere in the body.",
+    "note": "ORPHAN: this media id appears in the served HTML twice (the head JSON-LD block and its copy in the Nuxt payload) and nowhere else — no <img>, no CSS background. The full five-element schema image array is: [0] storage.googleapis.com/msgsndr/zfoeYpKrqshgdFr4gG3b/media/30d28dd8-9edb-4699-94f4-1c1cc58b612d.svg+xml (= hero-header-logo-svg-desktop, under the OTHER canonical host), [1] .../6a549b17baf5f6da408e5c4a.jpg (= header-badge-desktop), [2] .../6a549dd5524a3ec4c60bd331.png (= logo-png), [3] .../6a54a921d74b27c6af171076.png (= jsonld-schema-image-4), [4] this file. Head-only asset, recorded on the same footing as og-share-image. No dimensions exist in the source."
+  }
+]
