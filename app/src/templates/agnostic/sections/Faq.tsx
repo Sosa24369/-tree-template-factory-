@@ -32,17 +32,24 @@ export function Faq({ copy }: { copy: Copy }) {
       <SectionHead eyebrow={copy('faq.eyebrow')} heading={copy('faq.h2')} align="center" />
 
       <div className="ag-faq-list">
-        {pairs.map((pair, i) => (
-          <details className="ag-faq-item" key={i}>
-            <summary className="ag-faq-q">
-              {/* A question that is blank while its answer is filled still needs
-                  a usable target, so the summary always carries a row. */}
-              <span className="ag-faq-q-text">{pair.q}</span>
-              <ChevronIcon />
-            </summary>
-            <SafeText as="p" className="ag-faq-a" value={pair.a} />
-          </details>
-        ))}
+        {pairs.map((pair, i) =>
+          hasText(pair.q) ? (
+            <details className="ag-faq-item" key={i}>
+              <summary className="ag-faq-q">
+                <span className="ag-faq-q-text">{pair.q}</span>
+                <ChevronIcon />
+              </summary>
+              <SafeText as="p" className="ag-faq-a" value={pair.a} />
+            </details>
+          ) : (
+            // R5: a blank question with a surviving answer must NOT become an empty
+            // <summary> (a focusable control with no accessible name). Render the
+            // answer as plain text with no disclosure widget at all.
+            <div className="ag-faq-item ag-faq-item--orphan" key={i}>
+              <SafeText as="p" className="ag-faq-a" value={pair.a} />
+            </div>
+          )
+        )}
       </div>
     </Section>
   );

@@ -26,15 +26,23 @@ export function Faq({ copy }: { copy: Copy }) {
 
       {pairs.length > 0 && (
         <div className="ra-faq-list">
-          {pairs.map((pair, i) => (
-            <details className="ra-faq-item" key={i}>
-              <summary className="ra-faq-q">
-                <span>{pair.q}</span>
-                <ChevronIcon />
-              </summary>
-              <SafeText as="p" className="ra-faq-a" value={pair.a} />
-            </details>
-          ))}
+          {pairs.map((pair, i) =>
+            pair.q.trim() ? (
+              <details className="ra-faq-item" key={i}>
+                <summary className="ra-faq-q">
+                  <span>{pair.q}</span>
+                  <ChevronIcon />
+                </summary>
+                <SafeText as="p" className="ra-faq-a" value={pair.a} />
+              </details>
+            ) : (
+              // R5: a surviving answer with no question renders as plain text, never
+              // as a focusable <summary> with no accessible name.
+              <div className="ra-faq-item ra-faq-item--orphan" key={i}>
+                <SafeText as="p" className="ra-faq-a" value={pair.a} />
+              </div>
+            )
+          )}
         </div>
       )}
     </Section>

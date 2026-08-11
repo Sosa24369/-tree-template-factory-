@@ -797,6 +797,11 @@
   text-wrap: pretty;
 }
 
+/* R5 orphan: answer with no question, no summary above it — restore top padding. */
+.trimming-b .tb-faq-item--orphan .tb-faq-a {
+  padding-top: clamp(16px, 2.2vw, 20px);
+}
+
 @media (min-width: 900px) {
   .trimming-b .tb-faq-grid {
     grid-template-columns: minmax(0, 0.72fr) minmax(0, 1.28fr);

@@ -1185,6 +1185,12 @@
   color: var(--ra-ink-2);
 }
 
+/* R5 orphan: an answer with no question has no summary to sit under, so give it
+   the summary's top padding to line up with the other rows. */
+.removal-a .ra-faq-item--orphan .ra-faq-a {
+  padding-top: clamp(16px, 2.4vw, 22px);
+}
+
 /* ---------------------------------------------------------------- *
  * S12 — final CTA
  * ---------------------------------------------------------------- */

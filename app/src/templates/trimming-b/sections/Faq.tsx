@@ -38,15 +38,23 @@ export function Faq({ copy }: { copy: Copy }) {
 
         {pairs.length > 0 && (
           <div className="tb-faq-list">
-            {pairs.map((pair, i) => (
-              <details className="tb-faq-item" key={i} open={i === 0}>
-                <summary className="tb-faq-q">
-                  <span>{pair.q}</span>
-                  <PlusIcon />
-                </summary>
-                <SafeText as="p" className="tb-faq-a" value={pair.a} />
-              </details>
-            ))}
+            {pairs.map((pair, i) =>
+              pair.q.trim() ? (
+                <details className="tb-faq-item" key={i} open={i === 0}>
+                  <summary className="tb-faq-q">
+                    <span>{pair.q}</span>
+                    <PlusIcon />
+                  </summary>
+                  <SafeText as="p" className="tb-faq-a" value={pair.a} />
+                </details>
+              ) : (
+                // R5: a surviving answer with no question renders as plain text, never
+                // as a focusable <summary> with no accessible name.
+                <div className="tb-faq-item tb-faq-item--orphan" key={i}>
+                  <SafeText as="p" className="tb-faq-a" value={pair.a} />
+                </div>
+              )
+            )}
           </div>
         )}
       </div>

@@ -1730,6 +1730,12 @@
   color: var(--rb-ink-2);
 }
 
+/* R5 orphan: answer with no question — it is a plain card, so it needs the top
+   padding the summary would otherwise provide. */
+.removal-b .rb-faq-item--orphan .rb-faq-a {
+  padding-top: clamp(16px, 2.2vw, 21px);
+}
+
 /* ---------------------------------------------------------------- *
  * S11 — closing band
  * ---------------------------------------------------------------- */

@@ -1292,6 +1292,11 @@
   text-wrap: pretty;
 }
 
+/* R5 orphan: answer with no question, no summary above it — restore top padding. */
+.trimming-a .ta-faq-item--orphan .ta-faq-a {
+  padding-top: clamp(16px, 2.4vw, 22px);
+}
+
 /* ---------------------------------------------------------------- *
  * S12 — final CTA
  * ---------------------------------------------------------------- */

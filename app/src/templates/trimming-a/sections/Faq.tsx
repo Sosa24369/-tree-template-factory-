@@ -32,15 +32,23 @@ export function Faq({ copy }: { copy: Copy }) {
 
       {pairs.length > 0 && (
         <div className="ta-faq-list">
-          {pairs.map((pair, i) => (
-            <details className="ta-faq-item" key={i}>
-              <summary className="ta-faq-q">
-                <span className="ta-faq-q-text">{pair.q}</span>
-                <span className="ta-faq-mark" aria-hidden="true" />
-              </summary>
-              <SafeText as="p" className="ta-faq-a" value={pair.a} />
-            </details>
-          ))}
+          {pairs.map((pair, i) =>
+            pair.q.trim() ? (
+              <details className="ta-faq-item" key={i}>
+                <summary className="ta-faq-q">
+                  <span className="ta-faq-q-text">{pair.q}</span>
+                  <span className="ta-faq-mark" aria-hidden="true" />
+                </summary>
+                <SafeText as="p" className="ta-faq-a" value={pair.a} />
+              </details>
+            ) : (
+              // R5: a surviving answer with no question renders as plain text, never
+              // as a focusable <summary> with no accessible name.
+              <div className="ta-faq-item ta-faq-item--orphan" key={i}>
+                <SafeText as="p" className="ta-faq-a" value={pair.a} />
+              </div>
+            )
+          )}
         </div>
       )}
     </Section>

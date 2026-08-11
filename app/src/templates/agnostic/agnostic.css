@@ -768,6 +768,11 @@
   text-wrap: pretty;
 }
 
+/* R5 orphan: answer with no question, no summary above it — restore top padding. */
+.agnostic .ag-faq-item--orphan .ag-faq-a {
+  padding-top: 18px;
+}
+
 /* ---------------------------------------------------------------- *
  * Closing CTA
  * ---------------------------------------------------------------- */
