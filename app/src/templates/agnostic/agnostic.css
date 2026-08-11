@@ -1,0 +1,883 @@
+/* ====================================================================
+   agnostic — the service-neutral template.
+
+   RULES THIS STYLESHEET IS WRITTEN UNDER
+
+   1. EVERY RULE IS SCOPED UNDER .agnostic. One stylesheet per template, and
+      nothing here can reach another template's markup.
+
+   2. BRAND COLOUR NEVER APPEARS AS A LITERAL. Every branded surface is
+      var(--brand-primary) / var(--brand-accent) / var(--brand-on-primary), set
+      on .agnostic from client.brand by index.tsx, with the fallbacks in
+      styles/base.css catching a half-filled record. The hex values below are
+      NEUTRALS ONLY — ink, paper, hairlines. Tints and shades are derived with
+      color-mix() from the brand properties, so a client with a navy brand gets
+      navy tints without a second field to fill in.
+
+   3. IT HAS TO LOOK INTENTIONAL EMPTY. This template ships with every copy
+      default blank, so the common case is a page where most sections have
+      removed themselves. That ruled out alternating full-bleed colour bands —
+      with content missing they read as holes. The page is instead built on a
+      single paper surface, divided by hairlines, with exactly two brand-colour
+      bands that bookend it: the hero and the closing CTA. Whatever survives in
+      between still has a top and a bottom.
+
+   4. PERFORMANCE IS A DESIGN CONSTRAINT, NOT A CLEANUP PASS.
+      - The hero is flat colour at EVERY width. No photograph, so the LCP
+        element is text and needs no network round trip after the CSS.
+      - No webfont, no icon font, no carousel, no animation library.
+      - The gallery is a plain grid, the FAQ is <details>, the area list wraps,
+        the icons are inline SVG. Total cost of the interactive parts: 0 bytes
+        of JavaScript beyond React itself.
+      - Transitions are limited to colour and a 1px lift, and base.css already
+        disables them under prefers-reduced-motion.
+
+   5. QUIET AND TYPOGRAPHIC. One type scale, generous measure, hairlines instead
+      of boxes, and the brand colour used sparingly enough that it still reads
+      as an accent when it appears.
+   ==================================================================== */
+
+.agnostic {
+  /* ---- neutrals + geometry (never client-specific) ---- */
+  --ag-ink: #14181d;
+  --ag-ink-2: #4b555f;
+  --ag-muted: #6c757e;
+  --ag-paper: #ffffff;
+  --ag-line: #e5e9ed;
+
+  /* ---- brand-derived, no literal ---- */
+  --ag-tint: color-mix(in srgb, var(--brand-primary) 4%, #ffffff);
+  --ag-tint-2: color-mix(in srgb, var(--brand-primary) 9%, #ffffff);
+  --ag-hairline: color-mix(in srgb, var(--brand-primary) 12%, var(--ag-line));
+  --ag-deep: color-mix(in srgb, var(--brand-primary) 94%, #000000);
+  --ag-onDeep-2: color-mix(in srgb, #ffffff 74%, transparent);
+
+  /* Contract variable read by the shared <DeferredImage/> wrapper: the colour
+     an image box holds before its photograph arrives. Kept close to the tint so
+     a gallery that is still loading looks like empty paper, not like a grid of
+     grey plates. */
+  --ra-placeholder: color-mix(in srgb, var(--brand-primary) 6%, #eef1f3);
+
+  --ag-max: 1120px;
+  --ag-gutter: clamp(20px, 5vw, 40px);
+  --ag-pad: clamp(52px, 7vw, 96px);
+  --ag-radius: 14px;
+  --ag-radius-sm: 10px;
+  --ag-shadow: 0 1px 2px rgba(20, 24, 29, 0.04), 0 16px 40px -24px rgba(20, 24, 29, 0.4);
+
+  color: var(--ag-ink);
+  background: var(--ag-paper);
+  font-synthesis-weight: none;
+  overflow-x: hidden;
+}
+
+/* The closing CTA links back up to the request card. */
+@media (prefers-reduced-motion: no-preference) {
+  html:has(.agnostic) {
+    scroll-behavior: smooth;
+  }
+}
+
+/* ---------------------------------------------------------------- *
+ * Layout primitives
+ * ---------------------------------------------------------------- */
+
+.agnostic .ag-container {
+  width: 100%;
+  max-width: var(--ag-max);
+  margin-inline: auto;
+  padding-inline: var(--ag-gutter);
+}
+
+.agnostic .ag-section {
+  padding-block: var(--ag-pad);
+}
+
+/* The hairline that divides one paper section from the next. Only between
+   sections that actually rendered, because a section that removed itself never
+   emits an element for the rule to hang on. */
+.agnostic .ag-section--paper + .ag-section--paper,
+.agnostic .ag-section--paper + .ag-section--tint,
+.agnostic .ag-section--tint + .ag-section--paper {
+  border-top: 1px solid var(--ag-line);
+}
+
+.agnostic .ag-section--tint {
+  background: var(--ag-tint);
+}
+
+.agnostic .ag-section--deep {
+  background: var(--ag-deep);
+  color: #ffffff;
+}
+
+/* ---------------------------------------------------------------- *
+ * Type scale
+ * ---------------------------------------------------------------- */
+
+.agnostic h1,
+.agnostic h2,
+.agnostic h3 {
+  margin: 0;
+  font-weight: 680;
+  letter-spacing: -0.022em;
+  text-wrap: balance;
+}
+
+.agnostic .ag-h1 {
+  font-size: clamp(2rem, 5vw, 3.05rem);
+  line-height: 1.06;
+}
+
+.agnostic .ag-h2 {
+  font-size: clamp(1.55rem, 3.9vw, 2.25rem);
+  line-height: 1.12;
+}
+
+.agnostic .ag-body {
+  margin: 0;
+  color: var(--ag-ink-2);
+  font-size: 1.0625rem;
+  line-height: 1.7;
+  text-wrap: pretty;
+}
+
+.agnostic .ag-eyebrow {
+  margin: 0;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--brand-primary);
+}
+
+/* ---- the shared section heading block ---- */
+
+.agnostic .ag-head {
+  display: grid;
+  gap: clamp(12px, 1.8vw, 18px);
+  max-width: 60ch;
+}
+
+.agnostic .ag-head--center {
+  margin-inline: auto;
+  justify-items: center;
+  text-align: center;
+}
+
+.agnostic .ag-head--onDark .ag-eyebrow {
+  color: color-mix(in srgb, var(--brand-accent) 70%, #ffffff);
+}
+
+/* Space below the heading block only when something follows it. */
+.agnostic .ag-head:not(:last-child) {
+  margin-bottom: clamp(32px, 4.5vw, 52px);
+}
+
+/* ---------------------------------------------------------------- *
+ * Phone CTA
+ *
+ * <PhoneLink/> renders <a class="ag-call …"><span data-dni-text>NUMBER</span>
+ * <span class="phone-sub">sub-label</span></a>. The number stays ONE
+ * uninterrupted text node — CallRail's DOM scan needs that — so the two lines
+ * are stacked with grid rather than by wrapping parts of the string.
+ * ---------------------------------------------------------------- */
+
+.agnostic .ag-call {
+  display: inline-grid;
+  align-content: center;
+  gap: 2px;
+  min-height: var(--tap);
+  padding: 10px 22px;
+  border-radius: 999px;
+  text-align: center;
+  text-decoration: none;
+  transition: background-color 0.18s ease, color 0.18s ease, transform 0.18s ease;
+}
+
+.agnostic .ag-call [data-dni-text] {
+  font-size: 1.125rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.agnostic .ag-call .phone-sub {
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  line-height: 1.3;
+  opacity: 0.8;
+}
+
+.agnostic .ag-call--solid {
+  color: var(--brand-on-primary);
+  background: var(--brand-primary);
+}
+
+.agnostic .ag-call--solid:hover {
+  background: var(--ag-deep);
+  transform: translateY(-1px);
+}
+
+/* On the two brand bands: paper on ink, so contrast never depends on the
+   brand hue a client happens to have chosen. */
+.agnostic .ag-call--onDark {
+  color: var(--ag-ink);
+  background: var(--ag-paper);
+}
+
+.agnostic .ag-call--onDark:hover {
+  transform: translateY(-1px);
+  background: color-mix(in srgb, var(--brand-accent) 14%, #ffffff);
+}
+
+/* Header bar — compact, and the whole control is one tap target. */
+.agnostic .ag-call--bar {
+  min-height: 42px;
+  padding: 6px 16px;
+  color: var(--brand-on-primary);
+  background: var(--brand-primary);
+}
+
+.agnostic .ag-call--bar [data-dni-text] {
+  font-size: clamp(0.9rem, 3.4vw, 1rem);
+}
+
+.agnostic .ag-call--bar .phone-sub {
+  font-size: 0.6875rem;
+  white-space: nowrap;
+}
+
+/* ---------------------------------------------------------------- *
+ * Header
+ * ---------------------------------------------------------------- */
+
+.agnostic .ag-header {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  background: color-mix(in srgb, var(--ag-paper) 90%, transparent);
+  backdrop-filter: saturate(1.3) blur(10px);
+  -webkit-backdrop-filter: saturate(1.3) blur(10px);
+  border-bottom: 1px solid var(--ag-hairline);
+}
+
+.agnostic .ag-header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  min-height: 64px;
+  padding-block: 9px;
+}
+
+/* max-height + overflow so a record pointing at a mark file that no longer
+   exists degrades to a clipped box rather than dropping oversized alt text
+   across the header. */
+.agnostic .ag-mark {
+  height: 38px;
+  width: auto;
+  max-width: 190px;
+  overflow: hidden;
+  object-fit: contain;
+  font-size: 0.8125rem;
+  line-height: 1.2;
+}
+
+/* No image file on the record: the company name as a wordmark. */
+.agnostic span.ag-mark {
+  display: inline-block;
+  height: auto;
+  font-size: 1.0625rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  color: var(--brand-primary);
+}
+
+@media (min-width: 768px) {
+  .agnostic .ag-header-inner {
+    min-height: 78px;
+  }
+
+  .agnostic .ag-mark {
+    height: 48px;
+    max-width: 230px;
+  }
+}
+
+/* ---------------------------------------------------------------- *
+ * Hero
+ *
+ * Flat brand colour at every width. See rule 4 at the top of this file: the
+ * LCP element on this page is deliberately a piece of text.
+ * ---------------------------------------------------------------- */
+
+.agnostic .ag-hero {
+  background: var(--ag-deep);
+  color: #ffffff;
+  padding-block: clamp(40px, 6vw, 88px);
+}
+
+.agnostic .ag-hero-grid {
+  display: grid;
+  gap: clamp(30px, 4.5vw, 56px);
+  align-items: start;
+}
+
+.agnostic .ag-hero-copy {
+  max-width: 38ch;
+}
+
+.agnostic .ag-hero .ag-eyebrow {
+  color: color-mix(in srgb, var(--brand-accent) 70%, #ffffff);
+}
+
+.agnostic .ag-hero .ag-h1 {
+  margin-top: clamp(14px, 2vw, 20px);
+  color: #ffffff;
+}
+
+.agnostic .ag-hero-sub {
+  margin: clamp(14px, 2.2vw, 20px) 0 0;
+  font-size: clamp(1.0625rem, 2.2vw, 1.25rem);
+  font-weight: 500;
+  line-height: 1.5;
+  color: var(--ag-onDeep-2);
+  text-wrap: pretty;
+}
+
+.agnostic .ag-hero-points {
+  list-style: none;
+  margin: clamp(22px, 3vw, 30px) 0 0;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+}
+
+.agnostic .ag-hero-points li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  color: var(--ag-onDeep-2);
+}
+
+.agnostic .ag-hero-points .ag-icon {
+  flex: 0 0 auto;
+  margin-top: 2px;
+  color: color-mix(in srgb, var(--brand-accent) 74%, #ffffff);
+}
+
+/* ---- the request card ---- */
+
+.agnostic .ag-form-card {
+  scroll-margin-top: 88px;
+  padding: clamp(20px, 4vw, 30px);
+  border-radius: var(--ag-radius);
+  background: var(--ag-paper);
+  color: var(--ag-ink);
+  box-shadow: var(--ag-shadow);
+}
+
+/* NOTHING FILLED IN: the copy column is not rendered at all, so the card holds
+   the page on its own, centred and narrow. This is the state most clients are
+   in on day one and it has to read as a considered request page. */
+.agnostic .ag-hero--solo .ag-form-card {
+  max-width: 520px;
+  margin-inline: auto;
+}
+
+.agnostic .ag-form-heading {
+  font-size: clamp(1.25rem, 2.6vw, 1.5rem);
+  line-height: 1.2;
+}
+
+.agnostic .ag-form-subline {
+  margin: 8px 0 0;
+  font-size: 0.9375rem;
+  line-height: 1.55;
+  color: var(--ag-muted);
+}
+
+/* Space above the first field only when a heading or subline came before it. */
+.agnostic .ag-form-heading + .ag-form,
+.agnostic .ag-form-subline + .ag-form {
+  margin-top: clamp(18px, 2.6vw, 24px);
+}
+
+.agnostic .ag-form .field label {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.005em;
+  color: var(--ag-ink-2);
+}
+
+.agnostic .ag-form .field input[type='text'],
+.agnostic .ag-form .field input[type='tel'],
+.agnostic .ag-form .field input[type='email'] {
+  border-radius: var(--ag-radius-sm);
+  border-color: var(--ag-line);
+  background: color-mix(in srgb, var(--brand-primary) 2%, #ffffff);
+}
+
+.agnostic .ag-form .btn-primary {
+  border-radius: 999px;
+  letter-spacing: -0.005em;
+}
+
+.agnostic .ag-form-footnote {
+  margin: var(--space-3) 0 0;
+  font-size: 0.75rem;
+  line-height: 1.5;
+  color: var(--ag-muted);
+}
+
+@media (min-width: 900px) {
+  .agnostic .ag-hero-grid {
+    grid-template-columns: minmax(0, 1fr) minmax(360px, 440px);
+    gap: clamp(40px, 5vw, 72px);
+  }
+
+  /* One column again when there is no copy beside the card. */
+  .agnostic .ag-hero--solo .ag-hero-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* ---------------------------------------------------------------- *
+ * Trust row
+ * ---------------------------------------------------------------- */
+
+.agnostic .ag-trust {
+  background: var(--ag-tint-2);
+  border-bottom: 1px solid var(--ag-hairline);
+  padding-block: clamp(16px, 2.4vw, 22px);
+}
+
+.agnostic .ag-trust-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 10px 28px;
+  justify-content: center;
+}
+
+.agnostic .ag-trust-item {
+  position: relative;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ag-ink-2);
+  text-align: center;
+}
+
+@media (min-width: 640px) {
+  .agnostic .ag-trust-list {
+    grid-auto-flow: column;
+    grid-auto-columns: max-content;
+  }
+
+  /* Hairline separators between items, never a leading one. */
+  .agnostic .ag-trust-item + .ag-trust-item::before {
+    content: '';
+    position: absolute;
+    left: -14px;
+    top: 50%;
+    width: 1px;
+    height: 14px;
+    transform: translateY(-50%);
+    background: color-mix(in srgb, var(--brand-primary) 26%, transparent);
+  }
+}
+
+/* ---------------------------------------------------------------- *
+ * Services grid
+ * ---------------------------------------------------------------- */
+
+.agnostic .ag-service-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.agnostic .ag-service {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding-block: 14px;
+  border-top: 1px solid var(--ag-line);
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.agnostic .ag-service:last-child {
+  border-bottom: 1px solid var(--ag-line);
+}
+
+.agnostic .ag-service-check {
+  flex: 0 0 auto;
+  display: inline-flex;
+  margin-top: 1px;
+  color: var(--brand-primary);
+}
+
+@media (min-width: 640px) {
+  .agnostic .ag-service-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: clamp(24px, 4vw, 56px);
+  }
+
+  /* Every cell carries its own top rule, and the last-child bottom rule is
+     wrong once the items wrap into columns. */
+  .agnostic .ag-service:last-child {
+    border-bottom: 0;
+  }
+}
+
+@media (min-width: 1024px) {
+  .agnostic .ag-service-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* ---------------------------------------------------------------- *
+ * Gallery
+ * ---------------------------------------------------------------- */
+
+.agnostic .ag-shots {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: clamp(8px, 1.4vw, 14px);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+@media (min-width: 640px) {
+  .agnostic .ag-shots {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .agnostic .ag-shots {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.agnostic .ag-shot {
+  overflow: hidden;
+  border-radius: var(--ag-radius-sm);
+  background: var(--ra-placeholder);
+}
+
+/* <DeferredImage/> sets aspect-ratio inline from the MEASURED intrinsic size
+   when the record has one, and that inline value wins. This is the floor for a
+   photo whose dimensions were never measured — null over a guess — so the box
+   is still reserved and CLS stays at 0 either way. */
+.agnostic .ag-shot-box {
+  aspect-ratio: 4 / 3;
+}
+
+.agnostic .ag-shot-img,
+.agnostic .ag-shot-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.agnostic .ag-shot--clip {
+  grid-column: span 2;
+  aspect-ratio: 16 / 9;
+}
+
+/* ---------------------------------------------------------------- *
+ * Reviews
+ * ---------------------------------------------------------------- */
+
+.agnostic .ag-review-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: clamp(16px, 2.4vw, 26px);
+}
+
+@media (min-width: 768px) {
+  .agnostic .ag-review-grid[data-count='2'] {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .agnostic .ag-review-grid:not([data-count='1']):not([data-count='2']) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.agnostic .ag-review {
+  padding: clamp(20px, 2.6vw, 28px);
+  border: 1px solid var(--ag-line);
+  border-radius: var(--ag-radius);
+  background: var(--ag-paper);
+}
+
+/* The opening quotation mark is drawn by CSS, so a review card costs no
+   artwork and no request. */
+.agnostic .ag-review::before {
+  content: '\201C';
+  display: block;
+  margin-bottom: -12px;
+  font-size: 2.75rem;
+  line-height: 1;
+  color: color-mix(in srgb, var(--brand-primary) 26%, #ffffff);
+}
+
+.agnostic .ag-review-body {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.65;
+  color: var(--ag-ink-2);
+  text-wrap: pretty;
+}
+
+.agnostic .ag-review-who {
+  display: grid;
+  gap: 2px;
+  margin-top: clamp(14px, 2vw, 18px);
+  padding-top: clamp(14px, 2vw, 18px);
+  border-top: 1px solid var(--ag-line);
+}
+
+.agnostic .ag-review-author {
+  font-size: 0.9375rem;
+  font-weight: 650;
+}
+
+.agnostic .ag-review-meta {
+  font-size: 0.8125rem;
+  color: var(--ag-muted);
+}
+
+/* ---------------------------------------------------------------- *
+ * Service area
+ * ---------------------------------------------------------------- */
+
+.agnostic .ag-area-line {
+  margin: 0 auto;
+  max-width: 60ch;
+  text-align: center;
+  font-size: clamp(1.0625rem, 2.2vw, 1.25rem);
+  line-height: 1.5;
+  color: var(--ag-ink);
+}
+
+.agnostic .ag-area-line:not(:last-child) {
+  margin-bottom: clamp(24px, 3.4vw, 36px);
+}
+
+.agnostic .ag-area-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
+
+.agnostic .ag-area {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  border: 1px solid var(--ag-hairline);
+  border-radius: 999px;
+  background: var(--ag-paper);
+  font-size: 0.875rem;
+  line-height: 1.3;
+  color: var(--ag-ink-2);
+}
+
+.agnostic .ag-icon--pin {
+  flex: 0 0 auto;
+  color: var(--brand-primary);
+}
+
+/* ---------------------------------------------------------------- *
+ * FAQ
+ * ---------------------------------------------------------------- */
+
+.agnostic .ag-faq-list {
+  max-width: 74ch;
+  margin-inline: auto;
+  border-top: 1px solid var(--ag-line);
+}
+
+.agnostic .ag-faq-item {
+  border-bottom: 1px solid var(--ag-line);
+}
+
+.agnostic .ag-faq-q {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: var(--tap);
+  padding-block: 16px;
+  cursor: pointer;
+  list-style: none;
+  font-size: 1.0625rem;
+  font-weight: 620;
+  line-height: 1.4;
+}
+
+/* Safari draws its own marker unless this is removed. */
+.agnostic .ag-faq-q::-webkit-details-marker {
+  display: none;
+}
+
+.agnostic .ag-faq-q-text {
+  min-width: 0;
+}
+
+.agnostic .ag-icon--chevron {
+  flex: 0 0 auto;
+  color: var(--brand-primary);
+  transition: transform 0.2s ease;
+}
+
+.agnostic .ag-faq-item[open] .ag-icon--chevron {
+  transform: rotate(180deg);
+}
+
+.agnostic .ag-faq-a {
+  margin: 0;
+  padding: 0 0 20px;
+  max-width: 66ch;
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--ag-ink-2);
+  text-wrap: pretty;
+}
+
+/* ---------------------------------------------------------------- *
+ * Closing CTA
+ * ---------------------------------------------------------------- */
+
+.agnostic .ag-final-inner {
+  display: grid;
+  gap: clamp(16px, 2.4vw, 22px);
+  justify-items: center;
+  max-width: 60ch;
+  margin-inline: auto;
+  text-align: center;
+}
+
+.agnostic .ag-h2--onDark {
+  color: #ffffff;
+}
+
+.agnostic .ag-final-body {
+  margin: 0;
+  font-size: clamp(1rem, 2vw, 1.125rem);
+  line-height: 1.65;
+  color: var(--ag-onDeep-2);
+  text-wrap: pretty;
+}
+
+.agnostic .ag-final-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 14px 24px;
+  margin-top: clamp(6px, 1.2vw, 10px);
+}
+
+.agnostic .ag-final-link {
+  min-height: var(--tap);
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: #ffffff;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-decoration-color: color-mix(in srgb, #ffffff 45%, transparent);
+}
+
+.agnostic .ag-final-link:hover {
+  text-decoration-color: #ffffff;
+}
+
+/* ---------------------------------------------------------------- *
+ * Footer
+ * ---------------------------------------------------------------- */
+
+.agnostic .ag-footer {
+  border-top: 1px solid var(--ag-line);
+  padding-block: clamp(32px, 4.5vw, 52px);
+  background: var(--ag-paper);
+}
+
+.agnostic .ag-footer-inner {
+  display: grid;
+  gap: 10px;
+  justify-items: center;
+  text-align: center;
+}
+
+.agnostic .ag-footer-id {
+  display: grid;
+  gap: 2px;
+  justify-items: center;
+}
+
+.agnostic .ag-footer-mark {
+  margin: 0;
+  font-size: 1.0625rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--brand-primary);
+}
+
+.agnostic .ag-footer-legal-name {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--ag-ink-2);
+}
+
+.agnostic .ag-footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px 20px;
+  margin-top: 6px;
+}
+
+.agnostic .ag-footer-links a {
+  min-height: 40px;
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.875rem;
+  color: var(--ag-ink-2);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.agnostic .ag-footer-copyright,
+.agnostic .ag-footer-note {
+  margin: 0;
+  font-size: 0.8125rem;
+  line-height: 1.6;
+  color: var(--ag-muted);
+  max-width: 70ch;
+}

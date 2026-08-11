@@ -23,7 +23,8 @@ import type { ResolvedClient } from '../../../schema/resolve';
 import { DeferredImage } from '../../../components/DeferredImage';
 import { partitionMedia, photosFor } from '../../../lib/photos';
 import { galleryAlt } from '../copy.defaults';
-import { Section, SectionHead, withAlt, type Copy } from './shared';
+import { Section, SectionHead } from './shared';
+import { withAlt, type Copy } from '../text';
 
 const SIZES = '(max-width: 639px) 47vw, (max-width: 1023px) 31vw, 260px';
 

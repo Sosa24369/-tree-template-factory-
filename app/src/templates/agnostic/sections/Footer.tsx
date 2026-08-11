@@ -20,7 +20,7 @@
 import type { ResolvedClient } from '../../../schema/resolve';
 import { SafeText } from '../../../components/Safe';
 import { agnosticChrome } from '../copy.defaults';
-import { hasText, orChrome, type Copy } from './shared';
+import { hasText, orChrome, type Copy } from '../text';
 
 export function Footer({ client, copy }: { client: ResolvedClient; copy: Copy }) {
   const privacyUrl = client.consent?.privacyPolicyUrl ?? '';

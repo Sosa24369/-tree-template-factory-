@@ -11,7 +11,8 @@
  * template can never guess (R4).
  */
 
-import { CheckIcon, SectionHead, Section, hasText, type Copy } from './shared';
+import { CheckIcon, Section, SectionHead } from './shared';
+import { hasText, type Copy } from '../text';
 
 const SLOTS = 12;
 

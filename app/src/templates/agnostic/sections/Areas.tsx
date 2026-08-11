@@ -16,7 +16,8 @@
 
 import type { ResolvedClient } from '../../../schema/resolve';
 import { SafeText } from '../../../components/Safe';
-import { PinIcon, Section, SectionHead, hasText, type Copy } from './shared';
+import { PinIcon, Section, SectionHead } from './shared';
+import { hasText, type Copy } from '../text';
 
 export function Areas({ client, copy }: { client: ResolvedClient; copy: Copy }) {
   const areas = (client.serviceAreaList ?? []).filter(hasText);

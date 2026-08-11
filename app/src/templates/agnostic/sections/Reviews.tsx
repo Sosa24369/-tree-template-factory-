@@ -13,7 +13,8 @@
 
 import type { ResolvedClient } from '../../../schema/resolve';
 import { SafeText } from '../../../components/Safe';
-import { Section, SectionHead, hasText, type Copy } from './shared';
+import { Section, SectionHead } from './shared';
+import { hasText, type Copy } from '../text';
 
 export function Reviews({ client, copy }: { client: ResolvedClient; copy: Copy }) {
   const reviews = (client.reviews ?? []).filter((review) => hasText(review?.body) || hasText(review?.author));

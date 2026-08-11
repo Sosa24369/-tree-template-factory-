@@ -26,7 +26,8 @@ import type { ResolvedClient } from '../../../schema/resolve';
 import { SafeText } from '../../../components/Safe';
 import { LeadForm } from '../../../components/LeadForm';
 import { agnosticChrome } from '../copy.defaults';
-import { CheckIcon, hasText, orChrome, type Copy } from './shared';
+import { CheckIcon } from './shared';
+import { hasText, orChrome, type Copy } from '../text';
 
 /** The in-page target the closing CTA links back to. */
 export const FORM_ANCHOR = 'ag-request';

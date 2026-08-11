@@ -10,7 +10,7 @@
  * when none are — no empty rule across the page (R5).
  */
 
-import { hasText, type Copy } from './shared';
+import { hasText, type Copy } from '../text';
 
 export function Trust({ copy }: { copy: Copy }) {
   const items = [1, 2, 3, 4].map((n) => copy(`trust.item${n}`)).filter(hasText);

@@ -16,7 +16,8 @@
 
 import type { ResolvedClient } from '../../../schema/resolve';
 import { SafeText } from '../../../components/Safe';
-import { CallCta, Section, hasText, type Copy } from './shared';
+import { CallCta, Section } from './shared';
+import { hasText, type Copy } from '../text';
 import { FORM_ANCHOR } from './Hero';
 
 export function FinalCta({ client, copy }: { client: ResolvedClient; copy: Copy }) {

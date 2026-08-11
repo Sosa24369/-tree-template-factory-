@@ -12,7 +12,8 @@
  */
 
 import { SafeText } from '../../../components/Safe';
-import { ChevronIcon, Section, SectionHead, hasText, type Copy } from './shared';
+import { ChevronIcon, Section, SectionHead } from './shared';
+import { hasText, type Copy } from '../text';
 
 const PAIRS = 8;
 
