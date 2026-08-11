@@ -42,9 +42,17 @@ const clients = readdirSync(CLIENTS_DIR)
   .filter((f) => f.endsWith('.json'))
   .map((f) => ({ file: f, data: JSON.parse(readFileSync(join(CLIENTS_DIR, f), 'utf8')) }));
 
-// Source files subject to R1. copy.defaults.ts is exempt: geo-bound marketing copy
-// legitimately lives there as an overridable per-client default.
-const sourceFiles = walk(APP_SRC, (p) => /\.(tsx?|css)$/.test(p) && !/copy\.defaults\.ts$/.test(p));
+// Source files subject to R1. Two exemptions:
+//  - copy.defaults.ts: geo-bound marketing copy legitimately lives there as an
+//    overridable per-client default.
+//  - src/dashboard/*: the LOCAL, DEV-ONLY admin tool. It never ships to a client
+//    page (it is not a template or shared component), and it legitimately holds
+//    client-shaped placeholders and a guard against the leaked redirect domain —
+//    the same way this script and schema/resolve.ts name that domain to guard it.
+const sourceFiles = walk(
+  APP_SRC,
+  (p) => /\.(tsx?|css)$/.test(p) && !/copy\.defaults\.ts$/.test(p) && !/\/dashboard\//.test(p),
+);
 
 /* ---------------- R1: no hardcoded client values ---------------- */
 {

@@ -84,7 +84,7 @@ export const FIELDS: FieldDef[] = [
     group: 'contact',
     type: 'tel',
     required: true,
-    placeholder: '+16824520735',
+    placeholder: '+15551234567',
     help: 'ONE source of truth. Both the display number and the tel: link derive from this. Must be +1XXXXXXXXXX.',
   },
   {
@@ -110,7 +110,7 @@ export const FIELDS: FieldDef[] = [
   { path: 'leadDestination.isExternalAllowed', label: 'Allow off-domain redirect', group: 'contact', type: 'checkbox', help: 'Must be ON before an absolute thank-you URL is honoured. Guards against redirecting leads to the wrong company.' },
 
   // areas
-  { path: 'serviceArea', label: 'Primary service area', group: 'areas', type: 'text', placeholder: 'West Dallas, TX', help: 'The headline city. Composed into the storm hero and the meta description.' },
+  { path: 'serviceArea', label: 'Primary service area', group: 'areas', type: 'text', placeholder: 'Your City, ST', help: 'The headline city. Composed into the storm hero and the meta description.' },
   { path: 'serviceAreaList', label: 'Suburbs served', group: 'areas', type: 'string-list', help: 'One per line. Rendered as the areas grid and marquee. An empty list hides those sections.' },
 
   // offer / copy
