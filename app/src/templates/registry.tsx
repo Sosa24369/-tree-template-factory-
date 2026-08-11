@@ -10,6 +10,10 @@ import type { ReactElement } from 'react';
 import type { TemplateId } from '../schema/client';
 import type { ResolvedClient } from '../schema/resolve';
 import { RemovalA } from './removal-a';
+import { TrimmingA } from './trimming-a';
+import { RemovalB } from './removal-b';
+import { TrimmingB } from './trimming-b';
+import { Agnostic } from './agnostic';
 
 export interface TemplateMeta {
   id: TemplateId;
@@ -21,12 +25,12 @@ export interface TemplateMeta {
 
 export const TEMPLATE_META: TemplateMeta[] = [
   { id: 'removal-a', label: 'Tree Removal — Control', service: 'removal', variant: 'control', built: true },
-  { id: 'removal-b', label: 'Tree Removal — Variant', service: 'removal', variant: 'variant', built: false },
-  { id: 'trimming-a', label: 'Tree Trimming — Control', service: 'trimming', variant: 'control', built: false },
-  { id: 'trimming-b', label: 'Tree Trimming — Variant', service: 'trimming', variant: 'variant', built: false },
+  { id: 'removal-b', label: 'Tree Removal — Variant', service: 'removal', variant: 'variant', built: true },
+  { id: 'trimming-a', label: 'Tree Trimming — Control', service: 'trimming', variant: 'control', built: true },
+  { id: 'trimming-b', label: 'Tree Trimming — Variant', service: 'trimming', variant: 'variant', built: true },
   { id: 'storm-a', label: 'Storm Damage — Control', service: 'storm', variant: 'control', built: false },
   { id: 'storm-b', label: 'Storm Damage — Variant', service: 'storm', variant: 'variant', built: false },
-  { id: 'agnostic', label: 'Service-Agnostic — Blank', service: 'agnostic', variant: 'blank', built: false },
+  { id: 'agnostic', label: 'Service-Agnostic — Blank', service: 'agnostic', variant: 'blank', built: true },
 ];
 
 function NotBuiltYet({ id }: { id: TemplateId }) {
@@ -47,6 +51,14 @@ export function renderTemplate(id: TemplateId, client: ResolvedClient): ReactEle
   switch (id) {
     case 'removal-a':
       return <RemovalA client={client} />;
+    case 'trimming-a':
+      return <TrimmingA client={client} />;
+    case 'removal-b':
+      return <RemovalB client={client} />;
+    case 'trimming-b':
+      return <TrimmingB client={client} />;
+    case 'agnostic':
+      return <Agnostic client={client} />;
     default:
       return <NotBuiltYet id={id} />;
   }
