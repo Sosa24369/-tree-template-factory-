@@ -115,7 +115,7 @@ storm templates, then the dashboard. Started from a clean tree at `319cbef`.
 | 2 | Correct three trimming source defects | **DONE** — `d56a7a3` |
 | 3 | Build storm-a (control) | **DONE** — `d4aaff7` |
 | 4 | Build storm-b (variant) | **DONE** — `d9b1cfc` |
-| 5 | Client content dashboard | _(see the Task 5 section, appended at end of run)_ |
+| 5 | Client content dashboard | **DONE** — `820ce11` (+ `4c5cd52`) |
 
 ## Task 1 — R5 FAQ empty-summary fix
 
@@ -247,3 +247,117 @@ The only shared edit for storm was `app/scripts/prerender.mjs`: storm templates
 byte-identical. All 43 pages build; factory rules pass; FAQ a11y guard passes across
 the whole `dist`. The Task 1 FAQ edits + this prerender edit were re-verified against
 every built template via the full build + both guard scripts.
+
+## Task 5 — client content dashboard (DONE)
+
+A local, schema-driven FORM editor over the client JSON records — not a page builder.
+Runs only under `vite dev`; the public build is untouched.
+
+**Run it:** `cd app && npm run dev`, then open `/dashboard.html`.
+
+### Architecture (matches the stack — no second framework, no database)
+
+- **Backend = a dev-only Vite plugin** (`app/dashboard-server.mjs`, `apply: 'serve'`).
+  It is registered only in `configureServer`, so it exists during `vite dev` and
+  CANNOT be present in a build — the dashboard is local-only by construction (also
+  satisfies the standing "dashboard is never deployed" rule). Endpoints: list clients,
+  read a client, list a client's assets, diff (no write), upload (sharp pipeline),
+  save (write + git commit), new-client.
+- **Every write is confined** to `/clients/<slug>.json` or `app/public/assets/<slug>/`,
+  with `slug` validated against `/^[a-z0-9-]+$/`. One client can NEVER write into
+  another's folder — cross-client leakage (R4) is made structural, not just
+  discouraged.
+- **Frontend** is a separate dev entry (`app/dashboard.html` → `src/dashboard/`),
+  React (the existing stack), never added to the build inputs.
+
+### The field schema (`src/dashboard/schema.ts`)
+
+The form is DERIVED from a schema, not hardcoded. Each entry is
+`{ path, label, group, type, help, validation, required }`, where `path` is a dot-path
+into the record and `group` is a page section. Groups, in order: **identity · contact ·
+areas · offer(copy) · reviews · media(photos) · footer(consent/legal) · tracking**.
+The form renders by walking the schema and grouping. A field present in a client JSON
+with **no schema entry** is collected by a leaf-walker (`lib.ts#unlabelledLeaves`) and
+rendered in a clearly-marked **"Unlabelled fields"** group rather than disappearing —
+so a new template key is editable the moment it appears, and the dashboard does not rot.
+Complex fields delegate to dedicated editors: **reviews** (author/meta/body, add/remove),
+**photos** (per service, below), and **copy overrides** (per-template key→value, add/remove).
+
+### How image optimisation is wired in
+
+Every upload POSTs to `/api/dash/upload`, which runs the **same sharp pipeline as the
+build**: WebP q80, width capped at 1600 (the `optimize-assets` settings), then 400/800/
+1200w variants at q78 (the `generate-srcset` settings), never upscaling. It returns a
+ready `PhotoSet` with a real `srcset`. So an unoptimised drop physically cannot reach a
+template and blow the mobile budget the P2 work bought. A **focal-point + aspect** control
+crops on upload (sharp `extract` centred on the clicked point), baking the fix into the
+file — so a bad crop is corrected with **no template change** (templates are frozen).
+"Pick from existing" and upload both read/write ONLY the selected client's folder.
+
+### Validation before save
+
+phone must be E.164; thank-you must be present and is rejected if it is
+`titantreeservicetx.com` or off-domain without the explicit toggle; consent copy
+required; required fields non-blank. Privacy/Terms blank **warns but does not block**,
+with the `legalUrlsPending` reason stated. The same checks run client-side (live) and
+server-side (belt) — verified: saving an empty duplicate returned HTTP 422.
+
+### Save
+
+Shows a real `git diff --no-index` of proposed-vs-current BEFORE writing. On confirm it
+writes the record, `git add`s the record + any new images, and commits with the entered
+message and the Co-Authored-By trailer. New-client duplicates a record but **never
+deep-copies photos** — it blanks name/logo/photos/reviews, creates a fresh asset folder
+with a `.gitkeep`, and returns the empty photo slots to flag. Saving writes and commits;
+it does not deploy.
+
+### What was verified
+
+In Chrome: client picker, grouped schema form (labels, help, section hints), live
+preview of the REAL template updating as you type (accent colour recoloured the hero,
+CTAs and sticky bar live), dirty tracking, the legalUrlsPending warning, and the
+diff-before-write modal showing the exact unified diff. Via the API: new-client (no
+photos copied, slots flagged), upload (a 4:3 focal-crop produced base + 400w variant with
+a correct srcset), validation rejection (HTTP 422), and a real save→commit (correct
+message + Co-Authored-By). All test artifacts were removed and the test commit reset;
+the tree is clean.
+
+### What's unfinished / notes
+
+- **"Pick from existing"** attaches an existing file by `src` only; it does not
+  reconstruct a `srcset` for an already-optimised asset (the picker shows a "no srcset"
+  badge in that case). Uploads — the recommended path — always get the full srcset.
+  A follow-up could look up existing `-400w/-800w` variant files and rebuild the srcset
+  when picking.
+- **Focal re-crop of an already-attached photo** is done by uploading a fresh file; there
+  is no in-place re-crop of an existing optimised asset (that would re-crop an already-
+  compressed WebP). Acceptable, noted.
+- **copyOverrides** editor edits/removes/adds raw `template → key → value` entries. It
+  does not enumerate a template's available copy keys (that list lives in each template's
+  `copy.defaults.ts`); the editor trusts the key you type. A future nicety is a key
+  autocomplete sourced from the defaults.
+
+---
+
+# START HERE TOMORROW
+
+1. **Run a real applied-throttling Lighthouse pass** on `/p/texas-tree-tops/storm-a/`
+   and `/storm-b/` (and re-confirm the five original templates) once a Chrome/Lighthouse
+   toolchain is available. Target ≥95 / ≤2.0s / CLS 0. Confidence is high from structural
+   parity with the measured removal-b + the DOM/byte evidence, but tonight had no Chrome
+   CLI so the number was not machine-measured. This is the one open gate.
+2. **Supply j-valdez storm photography.** Its storm pages currently render art-free
+   (no storm or removal photos on the record) — correct, but a hero panel + gallery need
+   its own storm images. Drop them in `app/public/assets/j-valdez/`, add them via the
+   dashboard (auto-optimised), and the storm pages fill in with no code change.
+3. **Curate the TTT storm gallery** if desired — the storm set mixes true storm-damage
+   shots with general crew/truck photos (some with the baked-in `(682) 365-7478` number).
+   Use the dashboard to remove the off-message ones; all remaining are TTT's own work.
+4. **Decide the storm A/B palette question:** storm-b's earth-tone palette is a secondary
+   difference alongside the hero-message variable. If you want a pure single-variable
+   test, hold the palette equal to storm-a; if palette is itself worth testing, keep it
+   and treat the pair as a two-factor test. Documented in the storm-b commit + above.
+5. **Still blocked on the same P4 items** (unchanged, not tonight's scope): confirm the
+   two destination phone numbers before any deploy that routes calls; create the TTT
+   `ad_click_id` GHL custom field; supply per-client Privacy/Terms URLs (the dashboard
+   warns on these). None block the templates themselves.
