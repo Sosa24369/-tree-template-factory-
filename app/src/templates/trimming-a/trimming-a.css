@@ -1,0 +1,1461 @@
+/* ====================================================================
+   trimming-a — THE CONTROL, restyled.
+
+   Rules this stylesheet is written under:
+
+   BRAND COLOUR NEVER APPEARS AS A LITERAL. Every brand-coloured surface is
+   var(--brand-primary) / var(--brand-accent) / var(--brand-on-primary), set on
+   .trimming-a from client.brand by index.tsx, with the fallbacks in styles/base.css
+   catching a half-filled record. The hex literals below are NEUTRALS — ink, paper,
+   hairlines — plus Google's own six letter colours in the rating badge, which are
+   Google's brand and not the client's. Tints and shades are derived with color-mix()
+   from the brand properties, so a client with a navy brand gets navy tints without a
+   second variable to fill in.
+
+   NO CLIENT VALUE OF ANY KIND (R1). No client asset paths either: this template
+   paints its section surfaces with brand-derived colour and CSS-drawn texture rather
+   than the source's five hot-linked background photographs, so there is nothing here
+   that belongs to one company.
+
+   MOBILE FIRST. Base rules are the phone; min-width queries add the desktop. Most of
+   this traffic is someone standing in a yard looking at an overgrown tree.
+
+   PERFORMANCE IS PART OF THE DESIGN, not a cleanup pass afterwards.
+     - No webfont, no icon font, no sprite, no carousel, no animation library.
+     - THE MOBILE HERO IS NOT A PHOTOGRAPH. It leads with the brand colour, so the
+       LCP element is the headline: it paints with the first stylesheet and needs no
+       second round trip. Below-the-fold photographs load through <DeferredImage/>.
+     - The slider is CSS scroll-snap, the FAQ is <details>, the marquee is one
+       keyframe, the icons are inline SVG.
+     - Every <img> carries the measured width/height from the client record and the
+       rules below only ever override them proportionally, so CLS stays at zero.
+
+   DESIGN LANGUAGE, and how it differs from removal-a: squared corners and hairline
+   rules instead of soft cards; a short brand rule above each section heading instead
+   of centred headings; a numbered, connected process ladder; tags instead of pills;
+   and a deep brand slab used three times (reviews, ready band, final CTA) to pace
+   the page.
+   ==================================================================== */
+
+.trimming-a {
+  /* ---- neutrals + geometry (never client-specific) ---- */
+  --ta-ink: #0f1712;
+  --ta-ink-2: #414f47;
+  --ta-muted: #66756c;
+  --ta-paper: #ffffff;
+  --ta-line: #e3e8e4;
+
+  /* ---- brand-derived, no literal ---- */
+  --ta-canvas: color-mix(in srgb, var(--brand-primary) 4%, #ffffff);
+  --ta-tint: color-mix(in srgb, var(--brand-primary) 9%, #ffffff);
+  --ta-hairline: color-mix(in srgb, var(--brand-primary) 15%, var(--ta-line));
+  --ta-deep: color-mix(in srgb, var(--brand-primary) 94%, #000000);
+  --ta-deeper: color-mix(in srgb, var(--brand-primary) 66%, #000000);
+  --ta-on-deep-soft: color-mix(in srgb, #ffffff 74%, transparent);
+
+  /* <DeferredImage/> reserves its box with background-color: var(--ra-placeholder).
+     The name is the shared component's contract, not this template's; setting it
+     here is what keeps the reserved box on-brand instead of neutral grey. */
+  --ra-placeholder: color-mix(in srgb, var(--brand-primary) 8%, #eef1ef);
+
+  --ta-max: 1160px;
+  --ta-gutter: clamp(20px, 5vw, 40px);
+  --ta-pad: clamp(54px, 8vw, 108px);
+  --ta-r: 6px;
+  --ta-r-lg: 14px;
+  --ta-shadow: 0 1px 2px rgba(15, 23, 18, 0.06), 0 20px 46px -26px rgba(15, 23, 18, 0.4);
+
+  color: var(--ta-ink);
+  background: var(--ta-paper);
+  font-synthesis-weight: none;
+  overflow-x: hidden;
+}
+
+/* Both scroll-to-form CTAs are in-page links. */
+@media (prefers-reduced-motion: no-preference) {
+  html:has(.trimming-a) {
+    scroll-behavior: smooth;
+  }
+}
+
+/* ---------------------------------------------------------------- *
+ * Layout primitives
+ * ---------------------------------------------------------------- */
+
+.trimming-a .ta-container {
+  width: 100%;
+  max-width: var(--ta-max);
+  margin-inline: auto;
+  padding-inline: var(--ta-gutter);
+}
+
+.trimming-a .ta-section {
+  padding-block: var(--ta-pad);
+}
+
+.trimming-a .ta-section--canvas {
+  background: var(--ta-canvas);
+}
+
+.trimming-a .ta-section--tint {
+  background: var(--ta-tint);
+}
+
+.trimming-a .ta-section--deep {
+  background: var(--ta-deep);
+  color: #ffffff;
+}
+
+.trimming-a .ta-head,
+.trimming-a .ta-why-head {
+  max-width: 60ch;
+}
+
+/* The signature: a short brand rule above a heading. */
+.trimming-a .ta-rule {
+  display: block;
+  width: 44px;
+  height: 3px;
+  margin-bottom: clamp(14px, 2vw, 20px);
+  background: var(--brand-accent);
+  border-radius: 2px;
+}
+
+/* Only the two headings the source authored as separate <h1> elements. */
+.trimming-a .ta-heading--stacked > span {
+  display: block;
+}
+
+/* ---------------------------------------------------------------- *
+ * The two form headings the source ships as DIFFERENT copy per breakpoint
+ * (structure.md §2.2). Everything else responsive is rendered once.
+ * ---------------------------------------------------------------- */
+
+.trimming-a .ta-at-desktop {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .trimming-a .ta-at-mobile {
+    display: none;
+  }
+
+  .trimming-a .ta-at-desktop {
+    display: block;
+  }
+}
+
+/* ---------------------------------------------------------------- *
+ * Type scale
+ * ---------------------------------------------------------------- */
+
+.trimming-a h1,
+.trimming-a h2,
+.trimming-a h3 {
+  margin: 0;
+  font-weight: 750;
+  letter-spacing: -0.025em;
+  text-wrap: balance;
+}
+
+.trimming-a .ta-h1 {
+  font-size: clamp(2.05rem, 5.4vw, 3.35rem);
+  line-height: 1.05;
+}
+
+.trimming-a .ta-h2 {
+  font-size: clamp(1.65rem, 4.4vw, 2.55rem);
+  line-height: 1.09;
+}
+
+.trimming-a .ta-h3 {
+  font-size: clamp(1.05rem, 2.3vw, 1.3rem);
+  line-height: 1.22;
+  letter-spacing: -0.018em;
+}
+
+.trimming-a .ta-accent {
+  color: var(--brand-accent);
+}
+
+.trimming-a .ta-h2--onDeep {
+  color: #ffffff;
+}
+
+.trimming-a .ta-h2--onDeep .ta-accent {
+  color: color-mix(in srgb, var(--brand-accent) 80%, #ffffff);
+}
+
+.trimming-a .ta-body {
+  margin: clamp(14px, 2vw, 18px) 0 0;
+  color: var(--ta-ink-2);
+  font-size: 1.0625rem;
+  line-height: 1.7;
+  text-wrap: pretty;
+}
+
+.trimming-a .ta-lede {
+  margin: clamp(14px, 2.2vw, 20px) 0 0;
+  color: var(--ta-ink-2);
+  font-size: clamp(1rem, 1.9vw, 1.125rem);
+  line-height: 1.62;
+  text-wrap: pretty;
+}
+
+.trimming-a .ta-eyebrow {
+  margin: 0 0 var(--space-3);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--brand-primary);
+}
+
+/* ---------------------------------------------------------------- *
+ * Buttons + the shared call CTA
+ *
+ * <PhoneLink/> renders: <a class="ta-call …"><span data-dni-text>NUMBER</span>
+ * <span class="phone-sub">sub-label</span></a>. The number stays ONE uninterrupted
+ * text node — CallRail's DOM scan needs that at P4 — so the two-line layout is done
+ * with grid areas rather than by wrapping parts of the string.
+ * ---------------------------------------------------------------- */
+
+.trimming-a .ta-btn,
+.trimming-a .ta-call {
+  display: inline-grid;
+  grid-template-columns: 1fr auto;
+  grid-template-areas:
+    'label arrow'
+    'sub   arrow';
+  align-items: center;
+  gap: 0 18px;
+  min-height: var(--tap);
+  padding: 13px 22px;
+  border: 0;
+  border-radius: var(--ta-r);
+  font-weight: 700;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.18s ease, color 0.18s ease, border-color 0.18s ease, transform 0.18s ease;
+}
+
+.trimming-a .ta-btn:hover,
+.trimming-a .ta-call:hover {
+  transform: translateY(-1px);
+}
+
+.trimming-a .ta-btn-label,
+.trimming-a .ta-call > [data-dni-text] {
+  grid-area: label;
+  font-size: 1.0625rem;
+  letter-spacing: -0.01em;
+  line-height: 1.25;
+}
+
+.trimming-a .ta-btn-sub,
+.trimming-a .ta-call .phone-sub {
+  grid-area: sub;
+  font-size: 0.75rem;
+  font-weight: 550;
+  line-height: 1.35;
+  opacity: 0.78;
+}
+
+.trimming-a .ta-icon--arrow {
+  grid-area: arrow;
+  flex: 0 0 auto;
+  transition: transform 0.18s ease;
+}
+
+.trimming-a .ta-btn:hover .ta-icon--arrow {
+  transform: translateX(3px);
+}
+
+/* The call CTA has no <ArrowIcon/> child — PhoneLink owns its markup — so its arrow
+   is drawn as a pseudo-element in the same grid cell. */
+.trimming-a .ta-call::after {
+  content: '';
+  grid-area: arrow;
+  width: 18px;
+  height: 18px;
+  background: currentColor;
+  --ta-arrow: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M4 12h15M13 6l6 6-6 6' fill='none' stroke='%23000' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  -webkit-mask: var(--ta-arrow) center / contain no-repeat;
+  mask: var(--ta-arrow) center / contain no-repeat;
+  transition: transform 0.18s ease;
+}
+
+.trimming-a .ta-call:hover::after {
+  transform: translateX(3px);
+}
+
+.trimming-a .ta-btn--solid,
+.trimming-a .ta-call--solid {
+  color: var(--brand-on-primary);
+  background: var(--brand-primary);
+  box-shadow: var(--ta-shadow);
+}
+
+.trimming-a .ta-btn--solid:hover,
+.trimming-a .ta-call--solid:hover {
+  background: var(--ta-deep);
+}
+
+.trimming-a .ta-call--ghost {
+  color: var(--brand-primary);
+  background: transparent;
+  box-shadow: inset 0 0 0 2px var(--ta-hairline);
+}
+
+.trimming-a .ta-call--ghost:hover {
+  background: var(--ta-tint);
+}
+
+.trimming-a .ta-btn--onDeep,
+.trimming-a .ta-call--onDeep {
+  color: var(--ta-deep);
+  background: #ffffff;
+}
+
+.trimming-a .ta-btn--onDeep:hover,
+.trimming-a .ta-call--onDeep:hover {
+  background: color-mix(in srgb, var(--brand-accent) 22%, #ffffff);
+}
+
+.trimming-a .ta-cta-row {
+  margin-top: clamp(30px, 4.5vw, 48px);
+}
+
+/* ---------------------------------------------------------------- *
+ * Deferred photographs — the one sizing contract for every one of them.
+ *
+ * <DeferredImage/> renders <span class="ta-shot" style="display:block;
+ * aspect-ratio:W/H; background:var(--ra-placeholder)"><img class="ta-shot-img"></span>,
+ * and it reserves that box from the photo's MEASURED dimensions so the swap-in
+ * shifts nothing. Wherever this template fixes the box itself — the rail tiles, the
+ * mosaic, the hero band — that inline ratio has to be neutralised, and an inline
+ * style only yields to !important. Without this the wrapper stays square behind a
+ * shorter image and leaves a band of placeholder colour under every photo.
+ *
+ * CLS is unaffected: the box is still reserved before the image arrives, by the
+ * height rules below instead of by the ratio, and the image can never push it
+ * because it fills the wrapper exactly.
+ * ---------------------------------------------------------------- */
+
+.trimming-a .ta-shot {
+  aspect-ratio: auto !important;
+  display: block;
+  overflow: hidden;
+  border-radius: var(--ta-r);
+}
+
+.trimming-a .ta-shot-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ---------------------------------------------------------------- *
+ * S1 — header bar. Sticky, because the source has no persistent call control at
+ * all and on a phone that is the single most valuable thing on the page.
+ * ---------------------------------------------------------------- */
+
+.trimming-a .ta-header {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  background: color-mix(in srgb, var(--ta-paper) 90%, transparent);
+  backdrop-filter: saturate(1.35) blur(12px);
+  -webkit-backdrop-filter: saturate(1.35) blur(12px);
+  border-bottom: 1px solid var(--ta-hairline);
+}
+
+.trimming-a .ta-header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  min-height: 64px;
+  padding-block: 9px;
+}
+
+/* max-width + overflow so a logo path that no longer resolves degrades to a clipped
+   box instead of dropping oversized alt text through the header. */
+.trimming-a .ta-logo {
+  height: 38px;
+  width: auto;
+  max-width: 170px;
+  overflow: hidden;
+  object-fit: contain;
+  font-size: 0.8125rem;
+  line-height: 1.2;
+}
+
+/* No logo file on the record: the client's name as a wordmark, never a broken image. */
+.trimming-a span.ta-logo {
+  display: inline-block;
+  height: auto;
+  font-size: 1.02rem;
+  font-weight: 760;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  color: var(--brand-primary);
+}
+
+.trimming-a .ta-call--bar {
+  gap: 0 12px;
+  min-height: 44px;
+  padding: 7px 14px;
+  color: var(--brand-on-primary);
+  background: var(--brand-primary);
+}
+
+.trimming-a .ta-call--bar > [data-dni-text] {
+  font-size: 0.9375rem;
+}
+
+.trimming-a .ta-call--bar .phone-sub {
+  font-size: 0.6875rem;
+}
+
+.trimming-a .ta-call--bar::after {
+  width: 15px;
+  height: 15px;
+}
+
+@media (min-width: 768px) {
+  .trimming-a .ta-header-inner {
+    min-height: 82px;
+  }
+
+  .trimming-a .ta-logo {
+    height: 50px;
+    max-width: 230px;
+  }
+
+  .trimming-a .ta-call--bar {
+    padding: 10px 20px;
+  }
+
+  .trimming-a .ta-call--bar > [data-dni-text] {
+    font-size: 1rem;
+  }
+}
+
+/* ---------------------------------------------------------------- *
+ * S2 — hero
+ *
+ * NO PHOTOGRAPH, at any width. The brand colour carries the hero and the headline is
+ * the LCP element. The faint diagonal hatch is a CSS gradient — no request, no
+ * decode, no layout cost.
+ * ---------------------------------------------------------------- */
+
+.trimming-a .ta-hero {
+  position: relative;
+  isolation: isolate;
+  padding-block: clamp(30px, 5vw, 66px) clamp(40px, 6vw, 78px);
+  background: var(--ta-deep);
+  color: #ffffff;
+}
+
+.trimming-a .ta-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(110% 80% at 12% 0%, color-mix(in srgb, var(--brand-primary) 55%, transparent) 0%, transparent 60%),
+    repeating-linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.045) 0 2px,
+      transparent 2px 12px
+    ),
+    linear-gradient(180deg, var(--ta-deep) 0%, var(--ta-deeper) 100%);
+}
+
+.trimming-a .ta-hero-grid {
+  display: grid;
+  gap: clamp(26px, 5vw, 54px);
+}
+
+.trimming-a .ta-hero-copy {
+  max-width: 42ch;
+}
+
+.trimming-a .ta-hero .ta-h1 {
+  margin-top: clamp(16px, 2.4vw, 24px);
+  color: #ffffff;
+}
+
+.trimming-a .ta-hero .ta-h1 .ta-accent {
+  color: color-mix(in srgb, var(--brand-accent) 82%, #ffffff);
+}
+
+.trimming-a .ta-hero-sub {
+  margin: clamp(14px, 2.2vw, 20px) 0 0;
+  padding-left: 14px;
+  border-left: 3px solid var(--brand-accent);
+  font-size: clamp(1.02rem, 2.3vw, 1.22rem);
+  font-weight: 620;
+  line-height: 1.38;
+  color: color-mix(in srgb, var(--brand-accent) 84%, #ffffff);
+  text-wrap: pretty;
+}
+
+.trimming-a .ta-hero-body {
+  margin: clamp(16px, 2.2vw, 22px) 0 0;
+  color: var(--ta-on-deep-soft);
+  font-size: 1rem;
+  line-height: 1.68;
+  text-wrap: pretty;
+}
+
+/* Google rating badge — the six letter colours are Google's own, not the client's. */
+.trimming-a .ta-rating {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 12px;
+  padding: 8px 14px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--ta-r);
+  background: rgba(255, 255, 255, 0.09);
+  font-size: 0.8125rem;
+}
+
+.trimming-a .ta-rating-logo,
+.trimming-a .ta-review-mark {
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.trimming-a .ta-rating-letter:nth-child(6n + 1) { color: #4285f4; }
+.trimming-a .ta-rating-letter:nth-child(6n + 2) { color: #ea4335; }
+.trimming-a .ta-rating-letter:nth-child(6n + 3) { color: #fbbc05; }
+.trimming-a .ta-rating-letter:nth-child(6n + 4) { color: #4285f4; }
+.trimming-a .ta-rating-letter:nth-child(6n + 5) { color: #34a853; }
+.trimming-a .ta-rating-letter:nth-child(6n + 6) { color: #ea4335; }
+
+.trimming-a .ta-rating-score {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.trimming-a .ta-rating-stars {
+  color: var(--brand-accent);
+  letter-spacing: 0.05em;
+}
+
+.trimming-a .ta-rating-number {
+  font-weight: 760;
+}
+
+.trimming-a .ta-rating-caption {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* The form card */
+.trimming-a .ta-form-card {
+  scroll-margin-top: 92px;
+  padding: clamp(20px, 4vw, 30px);
+  border-radius: var(--ta-r-lg);
+  border-top: 4px solid var(--brand-accent);
+  background: var(--ta-paper);
+  color: var(--ta-ink);
+  box-shadow: var(--ta-shadow);
+}
+
+.trimming-a .ta-form-heading {
+  font-size: clamp(1.3rem, 3.2vw, 1.55rem);
+  line-height: 1.16;
+}
+
+.trimming-a .ta-form-subline {
+  margin: 10px 0 0;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  color: var(--ta-muted);
+}
+
+.trimming-a .ta-form {
+  margin-top: clamp(18px, 2.6vw, 24px);
+}
+
+.trimming-a .ta-form .field label {
+  font-size: 0.8125rem;
+  letter-spacing: 0.01em;
+  color: var(--ta-ink-2);
+}
+
+.trimming-a .ta-form .field input[type='text'],
+.trimming-a .ta-form .field input[type='tel'],
+.trimming-a .ta-form .field input[type='email'] {
+  border-color: var(--ta-line);
+  border-radius: var(--ta-r);
+  background: color-mix(in srgb, var(--brand-primary) 3%, #ffffff);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.trimming-a .ta-form .field input:focus {
+  border-color: var(--brand-primary);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--brand-primary) 18%, transparent);
+  outline: none;
+}
+
+.trimming-a .ta-form .btn-primary {
+  min-height: 54px;
+  border-radius: var(--ta-r);
+  font-size: 1rem;
+  letter-spacing: -0.01em;
+  box-shadow: var(--ta-shadow);
+}
+
+.trimming-a .ta-form .btn-primary:hover:not(:disabled) {
+  background: var(--ta-deep);
+}
+
+/* The two hero photographs the source parks beside the form. Below the fold on a
+   phone, so they are deferred. */
+.trimming-a .ta-hero-proof {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: clamp(10px, 2vw, 16px);
+  margin: clamp(26px, 4vw, 42px) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.trimming-a .ta-hero-proof .ta-shot {
+  height: clamp(150px, 34vw, 250px);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+}
+
+@media (min-width: 900px) {
+  .trimming-a .ta-hero-grid {
+    grid-template-columns: minmax(0, 1fr) minmax(360px, 430px);
+    align-items: start;
+  }
+
+  .trimming-a .ta-hero-copy {
+    padding-top: clamp(8px, 2vw, 26px);
+  }
+}
+
+/* ---------------------------------------------------------------- *
+ * S3 — before/after rail (CSS scroll-snap, no carousel library)
+ * ---------------------------------------------------------------- */
+
+.trimming-a .ta-gallery {
+  padding-block: clamp(26px, 4vw, 42px);
+  background: var(--ta-canvas);
+  border-bottom: 1px solid var(--ta-hairline);
+}
+
+.trimming-a .ta-rail {
+  display: flex;
+  gap: clamp(10px, 1.6vw, 16px);
+  margin: 0;
+  padding: 0 var(--ta-gutter);
+  list-style: none;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: thin;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+.trimming-a .ta-rail-item {
+  flex: 0 0 auto;
+  width: min(78vw, 320px);
+  scroll-snap-align: center;
+}
+
+.trimming-a .ta-rail-item .ta-shot,
+.trimming-a .ta-rail-video {
+  height: min(78vw, 320px);
+}
+
+.trimming-a .ta-rail-video {
+  width: 100%;
+  object-fit: cover;
+  border-radius: var(--ta-r);
+  background: var(--ta-deep);
+}
+
+@media (min-width: 1024px) {
+  .trimming-a .ta-rail {
+    justify-content: center;
+  }
+
+  .trimming-a .ta-rail-item {
+    width: 268px;
+  }
+
+  .trimming-a .ta-rail-item .ta-shot,
+  .trimming-a .ta-rail-video {
+    height: 268px;
+  }
+}
+
+/* ---------------------------------------------------------------- *
+ * S4 — benefit cards
+ * ---------------------------------------------------------------- */
+
+.trimming-a .ta-benefit-grid {
+  display: grid;
+  gap: clamp(14px, 2.4vw, 22px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.trimming-a .ta-benefit {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: start;
+  gap: 14px;
+  padding: clamp(18px, 2.6vw, 24px);
+  border: 1px solid var(--ta-hairline);
+  border-radius: var(--ta-r);
+  background: var(--ta-paper);
+}
+
+.trimming-a .ta-benefit-mark {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: var(--ta-r);
+  color: var(--brand-on-primary);
+  background: var(--brand-primary);
+}
+
+.trimming-a .ta-benefit-text {
+  margin: 0;
+  font-size: 1.0625rem;
+  font-weight: 620;
+  line-height: 1.42;
+  color: var(--ta-ink);
+  text-wrap: pretty;
+}
+
+/* The rule doubles as the card's foot marker. */
+.trimming-a .ta-benefit .ta-rule {
+  grid-column: 2;
+  width: 32px;
+  height: 2px;
+  margin: 0;
+}
+
+@media (min-width: 720px) {
+  .trimming-a .ta-benefit-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* ---------------------------------------------------------------- *
+ * S5 — why homeowners choose us + Google reviews, on the deep brand slab
+ * ---------------------------------------------------------------- */
+
+.trimming-a .ta-why-body {
+  margin: clamp(16px, 2.2vw, 22px) 0 0;
+  color: var(--ta-on-deep-soft);
+  font-size: clamp(1rem, 1.9vw, 1.1rem);
+  line-height: 1.66;
+  text-wrap: pretty;
+}
+
+.trimming-a .ta-why .ta-rule {
+  background: var(--brand-accent);
+}
+
+.trimming-a .ta-reviews {
+  display: flex;
+  gap: clamp(12px, 2vw, 18px);
+  margin: clamp(30px, 4.5vw, 48px) 0 0;
+  padding: 0 var(--ta-gutter) 6px;
+  margin-inline: calc(var(--ta-gutter) * -1);
+  list-style: none;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  overscroll-behavior-x: contain;
+}
+
+.trimming-a .ta-review {
+  flex: 0 0 auto;
+  width: min(84vw, 340px);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: clamp(18px, 2.6vw, 24px);
+  border-radius: var(--ta-r);
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  scroll-snap-align: start;
+}
+
+.trimming-a .ta-review-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.trimming-a .ta-review-stars {
+  color: var(--brand-accent);
+  letter-spacing: 0.06em;
+  font-size: 0.9375rem;
+}
+
+.trimming-a .ta-review-body {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.9375rem;
+  line-height: 1.6;
+}
+
+.trimming-a .ta-review-who {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 10px;
+  margin: auto 0 0;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.trimming-a .ta-review-author {
+  font-weight: 700;
+  font-size: 0.9375rem;
+}
+
+.trimming-a .ta-review-meta {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.8125rem;
+}
+
+@media (min-width: 900px) {
+  .trimming-a .ta-reviews {
+    flex-wrap: nowrap;
+  }
+
+  .trimming-a .ta-review {
+    width: 320px;
+  }
+}
+
+/* ---------------------------------------------------------------- *
+ * S6 — "Done Clean, Done Right" work grid
+ * ---------------------------------------------------------------- */
+
+.trimming-a .ta-mosaic {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(8px, 1.6vw, 14px);
+  margin: clamp(30px, 4.5vw, 46px) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.trimming-a .ta-mosaic .ta-shot {
+  height: clamp(130px, 32vw, 230px);
+}
+
+/* The first tile spans both columns on a phone and takes the tall left slot on a
+   desktop — the source's 2 + 3 grouping, expressed as one rule per breakpoint.
+   An odd count would otherwise strand the last photo in a half-width cell. */
+.trimming-a .ta-mosaic > li:first-child {
+  grid-column: span 2;
+}
+
+.trimming-a .ta-mosaic > li:last-child:nth-child(even) {
+  grid-column: span 2;
+}
+
+@media (min-width: 860px) {
+  .trimming-a .ta-mosaic {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .trimming-a .ta-mosaic > li:first-child,
+  .trimming-a .ta-mosaic > li:last-child:nth-child(even) {
+    grid-column: span 2;
+  }
+
+  .trimming-a .ta-mosaic > li:first-child {
+    grid-row: span 2;
+  }
+
+  .trimming-a .ta-mosaic > li:first-child .ta-shot {
+    height: 100%;
+    min-height: 306px;
+  }
+}
+
+/* ---------------------------------------------------------------- *
+ * S7 — services we offer
+ * ---------------------------------------------------------------- */
+
+.trimming-a .ta-service-cols {
+  display: grid;
+  gap: clamp(18px, 3vw, 34px);
+  margin-top: clamp(30px, 4.5vw, 48px);
+}
+
+.trimming-a .ta-service-list {
+  display: grid;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.trimming-a .ta-service-list > li {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: start;
+  gap: 12px;
+  padding: 13px 2px;
+  border-bottom: 1px solid var(--ta-hairline);
+  font-size: 1rem;
+  font-weight: 560;
+  line-height: 1.45;
+}
+
+.trimming-a .ta-service-check,
+.trimming-a .ta-request-check {
+  display: inline-grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  margin-top: 1px;
+  border-radius: 50%;
+  color: var(--brand-primary);
+  background: color-mix(in srgb, var(--brand-accent) 30%, #ffffff);
+}
+
+@media (min-width: 860px) {
+  .trimming-a .ta-service-cols {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* ---------------------------------------------------------------- *
+ * S8 — areas we serve marquee
+ *
+ * Two identical groups per track, translated -50%: the loop is seamless because the
+ * second group takes over exactly where the first began. The clone is aria-hidden,
+ * so a screen reader hears each city once.
+ * ---------------------------------------------------------------- */
+
+.trimming-a .ta-areas-sub {
+  margin: clamp(12px, 2vw, 16px) 0 0;
+  font-size: clamp(1rem, 2vw, 1.1rem);
+  font-weight: 620;
+  color: var(--ta-ink-2);
+}
+
+.trimming-a .ta-marquees {
+  display: grid;
+  gap: clamp(10px, 1.6vw, 14px);
+  margin-top: clamp(30px, 4.5vw, 48px);
+  margin-inline: calc(var(--ta-gutter) * -1);
+}
+
+.trimming-a .ta-marquee {
+  overflow: hidden;
+  padding-block: 4px;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+}
+
+.trimming-a .ta-marquee-track {
+  display: flex;
+  width: max-content;
+  animation: ta-marquee 44s linear infinite;
+}
+
+.trimming-a .ta-marquee-track--reverse {
+  animation-duration: 56s;
+  animation-direction: reverse;
+}
+
+.trimming-a .ta-marquee:hover .ta-marquee-track {
+  animation-play-state: paused;
+}
+
+.trimming-a .ta-marquee-group {
+  display: flex;
+  gap: 10px;
+  padding-right: 10px;
+}
+
+.trimming-a .ta-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 15px;
+  border: 1px solid var(--ta-hairline);
+  border-radius: var(--ta-r);
+  background: var(--ta-paper);
+  color: var(--ta-ink);
+  font-size: 0.875rem;
+  font-weight: 620;
+  white-space: nowrap;
+}
+
+.trimming-a .ta-icon--pin {
+  color: var(--brand-accent);
+  flex: 0 0 auto;
+}
+
+@keyframes ta-marquee {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .trimming-a .ta-marquee {
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+
+  .trimming-a .ta-marquee-track {
+    animation: none;
+    width: 100%;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .trimming-a .ta-marquee-group {
+    flex-wrap: wrap;
+    justify-content: center;
+    padding-right: 0;
+  }
+
+  .trimming-a .ta-marquee-group[data-clone='true'] {
+    display: none;
+  }
+}
+
+/* ---------------------------------------------------------------- *
+ * S9 — how it works: a connected ladder, drawn in CSS. The source shipped a
+ * 312x3832 connector graphic for this; a border does the same job for nothing.
+ * ---------------------------------------------------------------- */
+
+.trimming-a .ta-steps {
+  display: grid;
+  gap: 0;
+  margin: clamp(30px, 4.5vw, 48px) 0 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: ta-step;
+}
+
+.trimming-a .ta-step {
+  position: relative;
+  counter-increment: ta-step;
+  padding: 0 0 clamp(26px, 4vw, 38px) clamp(52px, 7vw, 66px);
+  border-left: 2px solid var(--ta-hairline);
+}
+
+.trimming-a .ta-step:last-child {
+  padding-bottom: 0;
+  border-left-color: transparent;
+}
+
+.trimming-a .ta-step::before {
+  content: counter(ta-step);
+  position: absolute;
+  top: -4px;
+  left: 0;
+  transform: translateX(-50%);
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  color: var(--brand-on-primary);
+  background: var(--brand-primary);
+  font-size: 1.0625rem;
+  font-weight: 760;
+  font-variant-numeric: tabular-nums;
+}
+
+.trimming-a .ta-step-label {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: var(--brand-accent);
+}
+
+.trimming-a .ta-step-h {
+  margin: 6px 0 0;
+  font-size: clamp(1.15rem, 2.6vw, 1.4rem);
+  line-height: 1.2;
+}
+
+.trimming-a .ta-step-body {
+  margin: 10px 0 0;
+  color: var(--ta-ink-2);
+  font-size: 1rem;
+  line-height: 1.62;
+  max-width: 60ch;
+  text-wrap: pretty;
+}
+
+@media (min-width: 980px) {
+  .trimming-a .ta-steps {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: clamp(36px, 5vw, 64px);
+  }
+}
+
+/* ---------------------------------------------------------------- *
+ * S10 — long-form block
+ * ---------------------------------------------------------------- */
+
+.trimming-a .ta-longform-grid {
+  display: grid;
+  gap: clamp(28px, 4vw, 52px);
+  align-items: start;
+}
+
+.trimming-a .ta-longform-main {
+  max-width: 68ch;
+}
+
+.trimming-a .ta-longform-lede {
+  margin: clamp(16px, 2.2vw, 22px) 0 0;
+  font-size: clamp(1.1rem, 2.4vw, 1.32rem);
+  font-weight: 660;
+  line-height: 1.35;
+  color: var(--ta-ink);
+  text-wrap: pretty;
+}
+
+.trimming-a .ta-requests {
+  padding: clamp(20px, 3vw, 30px);
+  border: 1px solid var(--ta-hairline);
+  border-top: 4px solid var(--brand-accent);
+  border-radius: var(--ta-r-lg);
+  background: var(--ta-paper);
+}
+
+.trimming-a .ta-request-list {
+  display: grid;
+  gap: 14px;
+  margin: clamp(16px, 2.2vw, 20px) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.trimming-a .ta-request-list > li {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: start;
+  gap: 12px;
+  font-size: 0.9375rem;
+  line-height: 1.55;
+  color: var(--ta-ink-2);
+}
+
+@media (min-width: 980px) {
+  .trimming-a .ta-longform-grid {
+    grid-template-columns: minmax(0, 1.35fr) minmax(320px, 1fr);
+  }
+}
+
+/* ---------------------------------------------------------------- *
+ * S10 — mid-page CTA + the "Ready To Get Those / Trees Trimmed?" band
+ * ---------------------------------------------------------------- */
+
+.trimming-a .ta-midcta-inner {
+  max-width: 62ch;
+}
+
+.trimming-a .ta-midcta-offer {
+  margin: clamp(14px, 2vw, 18px) 0 0;
+  font-size: clamp(1.05rem, 2.2vw, 1.2rem);
+  font-weight: 660;
+  line-height: 1.45;
+  color: var(--brand-primary);
+  text-underline-offset: 4px;
+  text-decoration-thickness: 2px;
+}
+
+.trimming-a .ta-midcta .ta-btn {
+  margin-top: clamp(24px, 3.4vw, 34px);
+}
+
+.trimming-a .ta-ready {
+  padding-block: clamp(44px, 6vw, 78px);
+  background: var(--ta-deeper);
+  color: #ffffff;
+}
+
+.trimming-a .ta-ready-inner {
+  display: grid;
+  gap: clamp(22px, 3.4vw, 34px);
+  align-items: center;
+}
+
+@media (min-width: 860px) {
+  .trimming-a .ta-ready-inner {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+}
+
+/* ---------------------------------------------------------------- *
+ * S11 — FAQ (native <details>, zero JS)
+ *
+ * The indicator is two CSS bars that cross into a minus when the row opens; the
+ * source hot-linked a 30x25 SVG and repeated it on all ten rows.
+ * ---------------------------------------------------------------- */
+
+.trimming-a .ta-faq-list {
+  margin-top: clamp(28px, 4vw, 44px);
+  border-top: 1px solid var(--ta-hairline);
+}
+
+.trimming-a .ta-faq-item {
+  border-bottom: 1px solid var(--ta-hairline);
+}
+
+.trimming-a .ta-faq-q {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: clamp(16px, 2.4vw, 22px) 2px;
+  min-height: var(--tap);
+  cursor: pointer;
+  list-style: none;
+  font-size: clamp(1rem, 2.1vw, 1.1rem);
+  font-weight: 660;
+  line-height: 1.35;
+  color: var(--ta-ink);
+}
+
+.trimming-a .ta-faq-q::-webkit-details-marker {
+  display: none;
+}
+
+.trimming-a .ta-faq-q:hover {
+  color: var(--brand-primary);
+}
+
+.trimming-a .ta-faq-mark {
+  position: relative;
+  flex: 0 0 auto;
+  width: 20px;
+  height: 20px;
+  color: var(--brand-primary);
+}
+
+.trimming-a .ta-faq-mark::before,
+.trimming-a .ta-faq-mark::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  border-radius: 2px;
+  background: currentColor;
+  transform: translateY(-50%);
+}
+
+.trimming-a .ta-faq-mark::after {
+  transform: translateY(-50%) rotate(90deg);
+  transition: transform 0.2s ease;
+}
+
+.trimming-a .ta-faq-item[open] .ta-faq-mark::after {
+  transform: translateY(-50%) rotate(0deg);
+}
+
+.trimming-a .ta-faq-a {
+  margin: 0;
+  padding: 0 clamp(28px, 5vw, 44px) clamp(20px, 2.8vw, 26px) 2px;
+  color: var(--ta-ink-2);
+  font-size: 1rem;
+  line-height: 1.66;
+  max-width: 74ch;
+  text-wrap: pretty;
+}
+
+/* ---------------------------------------------------------------- *
+ * S12 — final CTA
+ * ---------------------------------------------------------------- */
+
+.trimming-a .ta-final {
+  padding-block: clamp(56px, 8vw, 104px);
+  background: var(--ta-deep);
+  color: #ffffff;
+}
+
+.trimming-a .ta-final-inner {
+  max-width: 62ch;
+}
+
+.trimming-a .ta-final-body {
+  margin: clamp(16px, 2.4vw, 22px) 0 clamp(26px, 3.6vw, 34px);
+  color: var(--ta-on-deep-soft);
+  font-size: 1.0625rem;
+  line-height: 1.66;
+  text-wrap: pretty;
+}
+
+/* ---------------------------------------------------------------- *
+ * S13 — footer
+ * ---------------------------------------------------------------- */
+
+.trimming-a .ta-footer {
+  padding-block: clamp(40px, 6vw, 68px) clamp(24px, 3vw, 34px);
+  background: var(--ta-canvas);
+  border-top: 1px solid var(--ta-hairline);
+}
+
+.trimming-a .ta-footer-inner {
+  display: grid;
+  gap: clamp(22px, 3.4vw, 40px);
+  align-items: start;
+}
+
+.trimming-a .ta-footer-brand {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.trimming-a .ta-footer-logo {
+  height: 52px;
+  width: auto;
+  max-width: 210px;
+  object-fit: contain;
+}
+
+.trimming-a span.ta-footer-logo {
+  height: auto;
+  font-size: 1.1rem;
+  font-weight: 760;
+  letter-spacing: -0.02em;
+  color: var(--brand-primary);
+}
+
+.trimming-a .ta-footer-name {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--ta-ink);
+}
+
+.trimming-a .ta-contact {
+  display: grid;
+  gap: 12px;
+}
+
+.trimming-a .ta-contact-item {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 12px;
+  margin: 0;
+  font-size: 0.9375rem;
+  color: var(--ta-ink-2);
+}
+
+.trimming-a .ta-contact-icon {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--ta-r);
+  color: var(--brand-primary);
+  background: var(--ta-tint);
+}
+
+.trimming-a .ta-contact-phone {
+  color: var(--brand-primary);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.trimming-a .ta-contact-phone:hover {
+  text-decoration: underline;
+}
+
+.trimming-a .ta-footer-legal {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px 20px;
+  margin-top: clamp(26px, 3.4vw, 38px);
+  padding-top: clamp(16px, 2.2vw, 22px);
+  border-top: 1px solid var(--ta-hairline);
+}
+
+.trimming-a .ta-footer-copy {
+  margin: 0;
+  font-size: 0.8125rem;
+  color: var(--ta-muted);
+}
+
+.trimming-a .ta-footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  font-size: 0.8125rem;
+}
+
+.trimming-a .ta-footer-links a {
+  color: var(--brand-primary);
+  text-decoration: none;
+}
+
+.trimming-a .ta-footer-links a:hover {
+  text-decoration: underline;
+}
+
+@media (min-width: 760px) {
+  .trimming-a .ta-footer-inner {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+}
+
+/* ---------------------------------------------------------------- *
+ * Focus + motion
+ * ---------------------------------------------------------------- */
+
+.trimming-a a:focus-visible,
+.trimming-a button:focus-visible,
+.trimming-a summary:focus-visible,
+.trimming-a input:focus-visible {
+  outline: 3px solid var(--brand-accent);
+  outline-offset: 3px;
+  border-radius: var(--ta-r);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .trimming-a .ta-btn,
+  .trimming-a .ta-call,
+  .trimming-a .ta-icon--arrow,
+  .trimming-a .ta-faq-mark::after {
+    transition: none;
+  }
+
+  .trimming-a .ta-btn:hover,
+  .trimming-a .ta-call:hover {
+    transform: none;
+  }
+}
