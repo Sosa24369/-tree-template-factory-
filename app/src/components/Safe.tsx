@@ -39,17 +39,21 @@ export function SafeImage({
   loading = 'lazy',
   fetchPriority,
   style,
+  sizes = '(max-width: 767px) 45vw, 22vw',
 }: {
   photo: PhotoSet | null | undefined;
   className?: string;
   loading?: 'lazy' | 'eager';
   fetchPriority?: 'high' | 'low' | 'auto';
   style?: CSSProperties;
+  /** Tell the browser how wide this renders, or it will download the largest candidate. */
+  sizes?: string;
 }) {
   if (!photo?.src) return null;
   return (
     <img
       src={photo.src}
+      {...(photo.srcset ? { srcSet: photo.srcset, sizes } : {})}
       alt={photo.alt ?? ''}
       className={className}
       style={style}

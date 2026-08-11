@@ -7,12 +7,13 @@
  * the rail never reflows as images arrive.
  *
  * One manifest entry (gallery-01) is an .mp4, not a photo, so it renders as <video>
- * — muted, playsInline, looping, preload="metadata" so it costs a few KB until
+ * — muted, playsInline, looping, preload="none" so it costs a few KB until
  * someone actually presses play. No poster frame was captured, so none is set.
  */
 
 import type { ResolvedClient } from '../../../schema/resolve';
-import { SafeImage, SafeSection } from '../../../components/Safe';
+import { SafeSection } from '../../../components/Safe';
+import { DeferredImage } from '../../../components/DeferredImage';
 import { altFor, withAlt } from '../assets';
 import { partitionMedia, photosFor } from '../../../lib/photos';
 
@@ -33,7 +34,7 @@ export function Gallery({ client }: { client: ResolvedClient }) {
               <video
                 className="ra-rail-video"
                 // #t=0.1 is a media fragment, not a different file: with
-                // preload="metadata" and no captured poster frame, it is what makes
+                // preload="none" and no captured poster frame, it is what makes
                 // the browser paint the first frame instead of an empty box.
                 src={`${clientVideo.src}#t=0.1`}
                 {...(clientVideo.width != null ? { width: clientVideo.width } : {})}
@@ -42,14 +43,14 @@ export function Gallery({ client }: { client: ResolvedClient }) {
                 muted
                 loop
                 playsInline
-                preload="metadata"
+                preload="none"
               />
             </li>
           )}
 
           {stills.map((shot, i) => (
             <li className="ra-rail-item" key={shot?.src ?? i}>
-              <SafeImage
+              <DeferredImage
                 photo={shot?.alt ? shot : withAlt(shot, altFor(client.name, i + 1))}
                 className="ra-rail-img"
               />

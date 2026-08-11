@@ -54,73 +54,85 @@
         "src": "/assets/j-valdez/hero-photo-1-223e4399.webp",
         "alt": "",
         "width": 1080,
-        "height": 1080
+        "height": 1080,
+        "srcset": "/assets/j-valdez/hero-photo-1-223e4399-400w.webp 400w, /assets/j-valdez/hero-photo-1-223e4399-800w.webp 800w, /assets/j-valdez/hero-photo-1-223e4399.webp 1000w"
       },
       {
         "src": "/assets/j-valdez/hero-photo-2-c029d1c8.webp",
         "alt": "",
         "width": 1080,
-        "height": 1080
+        "height": 1080,
+        "srcset": "/assets/j-valdez/hero-photo-2-c029d1c8-400w.webp 400w, /assets/j-valdez/hero-photo-2-c029d1c8-800w.webp 800w, /assets/j-valdez/hero-photo-2-c029d1c8.webp 1000w"
       },
       {
         "src": "/assets/j-valdez/gallery-slide-1-aebe3c9c.webp",
         "alt": "Before and after tree trimming - cleared branches and debris hauled away, East Dallas TX",
         "width": 1080,
-        "height": 1080
+        "height": 1080,
+        "srcset": "/assets/j-valdez/gallery-slide-1-aebe3c9c-400w.webp 400w, /assets/j-valdez/gallery-slide-1-aebe3c9c-800w.webp 800w, /assets/j-valdez/gallery-slide-1-aebe3c9c.webp 1000w"
       },
       {
         "src": "/assets/j-valdez/gallery-slide-2-b339d5fe.webp",
         "alt": "Before and after tree trimming - overgrown driveway cleared and canopy raised, East Dallas TX",
         "width": 1080,
-        "height": 1080
+        "height": 1080,
+        "srcset": "/assets/j-valdez/gallery-slide-2-b339d5fe-400w.webp 400w, /assets/j-valdez/gallery-slide-2-b339d5fe-800w.webp 800w, /assets/j-valdez/gallery-slide-2-b339d5fe.webp 1000w"
       },
       {
         "src": "/assets/j-valdez/gallery-slide-3-650f67b6.webp",
         "alt": "Professionally trimmed trees with raised canopies along a residential street, East Dallas TX",
         "width": 1080,
-        "height": 1080
+        "height": 1080,
+        "srcset": "/assets/j-valdez/gallery-slide-3-650f67b6-400w.webp 400w, /assets/j-valdez/gallery-slide-3-650f67b6-800w.webp 800w, /assets/j-valdez/gallery-slide-3-650f67b6.webp 1000w"
       },
       {
         "src": "/assets/j-valdez/gallery-slide-4-07c07931.webp",
         "alt": "Clean tree trimming result over walkway with lake view, East Dallas TX",
         "width": 1080,
-        "height": 1080
+        "height": 1080,
+        "srcset": "/assets/j-valdez/gallery-slide-4-07c07931-400w.webp 400w, /assets/j-valdez/gallery-slide-4-07c07931-800w.webp 800w, /assets/j-valdez/gallery-slide-4-07c07931.webp 1000w"
       },
       {
         "src": "/assets/j-valdez/gallery-slide-5-10241b58.webp",
         "alt": "Trimmed mature oak in front yard after professional tree trimming service",
         "width": 1080,
-        "height": 1080
+        "height": 1080,
+        "srcset": "/assets/j-valdez/gallery-slide-5-10241b58-400w.webp 400w, /assets/j-valdez/gallery-slide-5-10241b58-800w.webp 800w, /assets/j-valdez/gallery-slide-5-10241b58.webp 1000w"
       },
       {
         "src": "/assets/j-valdez/work-photo-1-1f1fbae2.webp",
         "alt": "",
         "width": 1080,
-        "height": 1080
+        "height": 1080,
+        "srcset": "/assets/j-valdez/work-photo-1-1f1fbae2-400w.webp 400w, /assets/j-valdez/work-photo-1-1f1fbae2-800w.webp 800w, /assets/j-valdez/work-photo-1-1f1fbae2.webp 1000w"
       },
       {
         "src": "/assets/j-valdez/work-photo-2-a945a9cf.webp",
         "alt": "",
         "width": 1080,
-        "height": 1080
+        "height": 1080,
+        "srcset": "/assets/j-valdez/work-photo-2-a945a9cf-400w.webp 400w, /assets/j-valdez/work-photo-2-a945a9cf-800w.webp 800w, /assets/j-valdez/work-photo-2-a945a9cf.webp 1000w"
       },
       {
         "src": "/assets/j-valdez/work-photo-3-1e169c6d.webp",
         "alt": "",
         "width": 1080,
-        "height": 1080
+        "height": 1080,
+        "srcset": "/assets/j-valdez/work-photo-3-1e169c6d-400w.webp 400w, /assets/j-valdez/work-photo-3-1e169c6d-800w.webp 800w, /assets/j-valdez/work-photo-3-1e169c6d.webp 1000w"
       },
       {
         "src": "/assets/j-valdez/work-photo-4-8f836a7b.webp",
         "alt": "",
         "width": 1080,
-        "height": 1080
+        "height": 1080,
+        "srcset": "/assets/j-valdez/work-photo-4-8f836a7b-400w.webp 400w, /assets/j-valdez/work-photo-4-8f836a7b-800w.webp 800w, /assets/j-valdez/work-photo-4-8f836a7b.webp 1000w"
       },
       {
         "src": "/assets/j-valdez/work-photo-5-50729f8b.webp",
         "alt": "",
         "width": 1080,
-        "height": 1080
+        "height": 1080,
+        "srcset": "/assets/j-valdez/work-photo-5-50729f8b-400w.webp 400w, /assets/j-valdez/work-photo-5-50729f8b-800w.webp 800w, /assets/j-valdez/work-photo-5-50729f8b.webp 1000w"
       }
     ]
   },

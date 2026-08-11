@@ -76,7 +76,8 @@
         "src": "/assets/texas-tree-tops/gallery-02-bbfa6cba.webp",
         "alt": "Texas Tree Tops tree removal in Fort Worth",
         "width": 680,
-        "height": 510
+        "height": 510,
+        "srcset": "/assets/texas-tree-tops/gallery-02-bbfa6cba-400w.webp 400w, /assets/texas-tree-tops/gallery-02-bbfa6cba-600w.webp 600w, /assets/texas-tree-tops/gallery-02-bbfa6cba.webp 900w"
       },
       {
         "src": "/assets/texas-tree-tops/gallery-03-d51219d3.webp",
@@ -88,7 +89,8 @@
         "src": "/assets/texas-tree-tops/gallery-04-1f2fc961.webp",
         "alt": "Texas Tree Tops tree removal in Fort Worth",
         "width": 680,
-        "height": 510
+        "height": 510,
+        "srcset": "/assets/texas-tree-tops/gallery-04-1f2fc961-400w.webp 400w, /assets/texas-tree-tops/gallery-04-1f2fc961.webp 680w"
       },
       {
         "src": "/assets/texas-tree-tops/gallery-05-9d8b0283.webp",
@@ -118,7 +120,8 @@
         "src": "/assets/texas-tree-tops/gallery-10-78d34cc1.webp",
         "alt": "Texas Tree Tops tree removal in Fort Worth",
         "width": 680,
-        "height": 510
+        "height": 510,
+        "srcset": "/assets/texas-tree-tops/gallery-10-78d34cc1-400w.webp 400w, /assets/texas-tree-tops/gallery-10-78d34cc1.webp 680w"
       },
       {
         "src": "/assets/texas-tree-tops/gallery-11-16f8deda.webp",
@@ -154,49 +157,57 @@
         "src": "/assets/texas-tree-tops/restoration-photo-1-64e65fab.webp",
         "alt": "",
         "width": 1200,
-        "height": 1200
+        "height": 1200,
+        "srcset": "/assets/texas-tree-tops/restoration-photo-1-64e65fab-400w.webp 400w, /assets/texas-tree-tops/restoration-photo-1-64e65fab-800w.webp 800w, /assets/texas-tree-tops/restoration-photo-1-64e65fab.webp 1000w"
       },
       {
         "src": "/assets/texas-tree-tops/restoration-grid-2-5247928c.webp",
         "alt": "",
         "width": 1200,
-        "height": 1200
+        "height": 1200,
+        "srcset": "/assets/texas-tree-tops/restoration-grid-2-5247928c-400w.webp 400w, /assets/texas-tree-tops/restoration-grid-2-5247928c-800w.webp 800w, /assets/texas-tree-tops/restoration-grid-2-5247928c.webp 1000w"
       },
       {
         "src": "/assets/texas-tree-tops/restoration-photo-3-2f02713f.webp",
         "alt": "",
         "width": 1200,
-        "height": 1200
+        "height": 1200,
+        "srcset": "/assets/texas-tree-tops/restoration-photo-3-2f02713f-400w.webp 400w, /assets/texas-tree-tops/restoration-photo-3-2f02713f-800w.webp 800w, /assets/texas-tree-tops/restoration-photo-3-2f02713f.webp 1000w"
       },
       {
         "src": "/assets/texas-tree-tops/restoration-photo-4-874dca20.webp",
         "alt": "",
         "width": 1200,
-        "height": 1200
+        "height": 1200,
+        "srcset": "/assets/texas-tree-tops/restoration-photo-4-874dca20-400w.webp 400w, /assets/texas-tree-tops/restoration-photo-4-874dca20-800w.webp 800w, /assets/texas-tree-tops/restoration-photo-4-874dca20.webp 1000w"
       },
       {
         "src": "/assets/texas-tree-tops/restoration-photo-5-d8516a62.webp",
         "alt": "",
         "width": 1200,
-        "height": 1200
+        "height": 1200,
+        "srcset": "/assets/texas-tree-tops/restoration-photo-5-d8516a62-400w.webp 400w, /assets/texas-tree-tops/restoration-photo-5-d8516a62-800w.webp 800w, /assets/texas-tree-tops/restoration-photo-5-d8516a62.webp 1000w"
       },
       {
         "src": "/assets/_shared/services-card-photo-1-ecd55f38.webp",
         "alt": "",
         "width": 1080,
-        "height": 618
+        "height": 618,
+        "srcset": "/assets/_shared/services-card-photo-1-ecd55f38-400w.webp 400w, /assets/_shared/services-card-photo-1-ecd55f38-800w.webp 800w, /assets/_shared/services-card-photo-1-ecd55f38.webp 1000w"
       },
       {
         "src": "/assets/_shared/services-card-photo-2-a6cb4660.webp",
         "alt": "",
         "width": 1080,
-        "height": 618
+        "height": 618,
+        "srcset": "/assets/_shared/services-card-photo-2-a6cb4660-400w.webp 400w, /assets/_shared/services-card-photo-2-a6cb4660-800w.webp 800w, /assets/_shared/services-card-photo-2-a6cb4660.webp 1000w"
       },
       {
         "src": "/assets/_shared/services-card-photo-3-1290bfcd.webp",
         "alt": "",
         "width": 1080,
-        "height": 618
+        "height": 618,
+        "srcset": "/assets/_shared/services-card-photo-3-1290bfcd-400w.webp 400w, /assets/_shared/services-card-photo-3-1290bfcd-800w.webp 800w, /assets/_shared/services-card-photo-3-1290bfcd.webp 1000w"
       }
     ],
     "storm": [
@@ -204,13 +215,15 @@
         "src": "/assets/texas-tree-tops/hero-photo-1-eca8bf99.webp",
         "alt": "",
         "width": 800,
-        "height": 600
+        "height": 600,
+        "srcset": "/assets/texas-tree-tops/hero-photo-1-eca8bf99-400w.webp 400w, /assets/texas-tree-tops/hero-photo-1-eca8bf99.webp 800w"
       },
       {
         "src": "/assets/texas-tree-tops/hero-photo-2-ae43518a.webp",
         "alt": "",
         "width": 800,
-        "height": 600
+        "height": 600,
+        "srcset": "/assets/texas-tree-tops/hero-photo-2-ae43518a-400w.webp 400w, /assets/texas-tree-tops/hero-photo-2-ae43518a.webp 800w"
       },
       {
         "src": "/assets/texas-tree-tops/gallery-01-16d71434.mp4",
@@ -223,7 +236,8 @@
         "src": "/assets/texas-tree-tops/gallery-02-bbfa6cba.webp",
         "alt": "Texas Tree Tops tree removal in Fort Worth",
         "width": 680,
-        "height": 510
+        "height": 510,
+        "srcset": "/assets/texas-tree-tops/gallery-02-bbfa6cba-400w.webp 400w, /assets/texas-tree-tops/gallery-02-bbfa6cba-600w.webp 600w, /assets/texas-tree-tops/gallery-02-bbfa6cba.webp 900w"
       },
       {
         "src": "/assets/texas-tree-tops/gallery-03-d51219d3.webp",
@@ -235,7 +249,8 @@
         "src": "/assets/texas-tree-tops/gallery-04-1f2fc961.webp",
         "alt": "Texas Tree Tops tree removal in Fort Worth",
         "width": 680,
-        "height": 510
+        "height": 510,
+        "srcset": "/assets/texas-tree-tops/gallery-04-1f2fc961-400w.webp 400w, /assets/texas-tree-tops/gallery-04-1f2fc961.webp 680w"
       },
       {
         "src": "/assets/texas-tree-tops/gallery-05-9d8b0283.webp",
@@ -265,7 +280,8 @@
         "src": "/assets/texas-tree-tops/gallery-10-78d34cc1.webp",
         "alt": "Texas Tree Tops tree removal in Fort Worth",
         "width": 680,
-        "height": 510
+        "height": 510,
+        "srcset": "/assets/texas-tree-tops/gallery-10-78d34cc1-400w.webp 400w, /assets/texas-tree-tops/gallery-10-78d34cc1.webp 680w"
       },
       {
         "src": "/assets/texas-tree-tops/gallery-11-16f8deda.webp",
@@ -301,31 +317,36 @@
         "src": "/assets/texas-tree-tops/restoration-grid-1-35883848.webp",
         "alt": "",
         "width": 800,
-        "height": 600
+        "height": 600,
+        "srcset": "/assets/texas-tree-tops/restoration-grid-1-35883848-400w.webp 400w, /assets/texas-tree-tops/restoration-grid-1-35883848.webp 800w"
       },
       {
         "src": "/assets/texas-tree-tops/restoration-grid-2-5247928c.webp",
         "alt": "",
         "width": 1200,
-        "height": 1200
+        "height": 1200,
+        "srcset": "/assets/texas-tree-tops/restoration-grid-2-5247928c-400w.webp 400w, /assets/texas-tree-tops/restoration-grid-2-5247928c-800w.webp 800w, /assets/texas-tree-tops/restoration-grid-2-5247928c.webp 1000w"
       },
       {
         "src": "/assets/texas-tree-tops/restoration-grid-3-9ff2b2b0.webp",
         "alt": "",
         "width": 800,
-        "height": 600
+        "height": 600,
+        "srcset": "/assets/texas-tree-tops/restoration-grid-3-9ff2b2b0-400w.webp 400w, /assets/texas-tree-tops/restoration-grid-3-9ff2b2b0.webp 800w"
       },
       {
         "src": "/assets/texas-tree-tops/restoration-grid-4-4756a237.webp",
         "alt": "",
         "width": 800,
-        "height": 600
+        "height": 600,
+        "srcset": "/assets/texas-tree-tops/restoration-grid-4-4756a237-400w.webp 400w, /assets/texas-tree-tops/restoration-grid-4-4756a237.webp 800w"
       },
       {
         "src": "/assets/texas-tree-tops/restoration-grid-5-03d8d07f.webp",
         "alt": "",
         "width": 800,
-        "height": 600
+        "height": 600,
+        "srcset": "/assets/texas-tree-tops/restoration-grid-5-03d8d07f-400w.webp 400w, /assets/texas-tree-tops/restoration-grid-5-03d8d07f.webp 800w"
       }
     ]
   },

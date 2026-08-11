@@ -91,14 +91,20 @@ function Index() {
   );
 }
 
-export default function App() {
+/**
+ * Routes without a Router around them, so the browser entry can wrap them in
+ * BrowserRouter and the prerender entry in StaticRouter. Same tree both times,
+ * which is what keeps hydration from mismatching.
+ */
+export function AppRoutes() {
   // FIX 2 — capture click ids on first paint, before any navigation can drop them.
+  // main.tsx also calls this before render; this covers a client-side navigation
+  // that arrives with a new click id.
   useEffect(() => {
     captureAttribution();
   }, []);
 
   return (
-    <BrowserRouter>
       <Routes>
         <Route path="/" element={<Index />} />
         <Route path="/p/:clientSlug/:templateId" element={<TemplateRoute />} />
@@ -106,6 +112,13 @@ export default function App() {
         <Route path="/thank-you" element={<ThankYou />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
+  );
+}
+
+export default function App() {
+  return (
+    <BrowserRouter>
+      <AppRoutes />
     </BrowserRouter>
   );
 }

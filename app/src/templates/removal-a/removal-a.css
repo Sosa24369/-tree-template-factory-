@@ -357,6 +357,21 @@
   z-index: -2;
 }
 
+/* On mobile the hero is ~2 screens tall because it carries the headline AND the
+   form. Stretching one photograph behind all of it made a 412x1586 LCP element
+   that decoded and painted late (measured: 2.6s of render delay). The photograph
+   still leads the page — it just occupies the top of the hero instead of sitting
+   behind the form, which reads better anyway. */
+@media (max-width: 767px) {
+  /* Mobile leads with the brand colour, not a photograph.
+     Measured: a photographic hero cannot reach a 2.5s LCP on throttled 4G — the
+     CSS+JS critical path alone costs ~1.76s, leaving under 0.7s of budget, which
+     is ~30KB. The photographs still carry the page; they start in the gallery
+     immediately below. Desktop keeps the photographic hero. */
+  .removal-a .ra-hero-plate { display: none; }
+  .removal-a .ra-hero { background: var(--ra-deep); }
+}
+
 .removal-a .ra-hero-plate-img {
   width: 100%;
   height: 100%;

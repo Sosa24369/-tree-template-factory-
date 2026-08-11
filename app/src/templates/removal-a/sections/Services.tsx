@@ -8,7 +8,8 @@
  */
 
 import type { ResolvedClient } from '../../../schema/resolve';
-import { SafeImage, SafeText } from '../../../components/Safe';
+import { SafeText } from '../../../components/Safe';
+import { DeferredImage } from '../../../components/DeferredImage';
 import { altFor, withAlt } from '../assets';
 import { photosFor } from '../../../lib/photos';
 import { CallCta, CheckIcon, Section, SplitHeading, type Copy } from './shared';
@@ -40,7 +41,7 @@ export function Services({ client, copy }: { client: ResolvedClient; copy: Copy 
         {columns.map((items, col) =>
           items.length > 0 ? (
             <div className="ra-service-col" key={col}>
-              <SafeImage
+              <DeferredImage
                 photo={withAlt(photosFor(client, 'removal').slice(-3)[col] ?? null, altFor(client.name, col + 1))}
                 className="ra-service-photo"
               />

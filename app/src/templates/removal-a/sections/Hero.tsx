@@ -34,7 +34,7 @@ export function Hero({ client, copy }: { client: ResolvedClient; copy: Copy }) {
       {/* LCP element: eager + fetchPriority high, with its measured dimensions on
           the tag. It is absolutely positioned, so it can never shift the layout. */}
       <div className="ra-hero-plate" aria-hidden="true">
-        <SafeImage photo={heroStills[0] ?? null} className="ra-hero-plate-img" loading="eager" fetchPriority="high" />
+        <SafeImage photo={heroStills[0] ?? null} className="ra-hero-plate-img" loading="eager" fetchPriority="high" sizes="(max-width: 767px) 100vw, 55vw" />
       </div>
 
       <div className="ra-container ra-hero-grid">

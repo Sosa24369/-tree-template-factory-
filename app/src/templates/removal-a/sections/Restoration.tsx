@@ -7,7 +7,8 @@
  */
 
 import type { ResolvedClient } from '../../../schema/resolve';
-import { SafeImage, SafeSection, SafeText } from '../../../components/Safe';
+import { SafeSection, SafeText } from '../../../components/Safe';
+import { DeferredImage } from '../../../components/DeferredImage';
 import { altFor, withAlt } from '../assets';
 import { photosFor } from '../../../lib/photos';
 import { CallCta, Section, SplitHeading, type Copy } from './shared';
@@ -29,7 +30,7 @@ export function Restoration({ client, copy }: { client: ResolvedClient; copy: Co
         <ul className="ra-grid-mosaic">
           {shots.map((shot, i) => (
             <li key={shot?.src ?? i}>
-              <SafeImage
+              <DeferredImage
                 photo={shot?.alt ? shot : withAlt(shot, altFor(client.name, i + 1))}
                 className="ra-mosaic-img"
               />
