@@ -10,16 +10,23 @@
  * re-styled and re-typed however we like — but if a single character of this file
  * changes, the control has been altered and the test is invalid.
  *
+ * P3-T2 APPROVED EXCEPTIONS — three source defects corrected on the same basis as
+ * the four P0 fixes (a defect is not a copy choice). Applied to trimming-a AND
+ * trimming-b so the A/B comparison stays valid:
+ *   - "dicousnt" -> "discount"                       (hero.body)
+ *   - "Mutli-Tree Pricing" -> "Multi-Tree Pricing"   (services.item10)
+ *   - form.subline "tree removal quote" -> "tree trimming quote"
+ * These three, and ONLY these three, are corrected. Everything else stays locked.
+ *
  * Consequences, spelled out because they look like bugs:
- *   - Typos are DELIBERATE. "10% dicousnt", "Mutli-Tree Pricing", the never-closed
+ *   - Typos are DELIBERATE (except the two corrected above). The never-closed
  *     "(Multi-Tree Bundle Pricing", "no wild surprises", "start to finish..",
  *     "Frequently Asked Question" (singular), the duplicated "patio work",
  *     "©Copyright" with no space. Do not fix them. See the FIDELITY NOTES at the
  *     bottom for the complete list and where each one sits.
- *   - "tree removal" appears FOUR times on a tree TRIMMING page (form.subline,
- *     why.body, faq.a7, faq.a10). That is what the live page says. It is the single
- *     most tempting "fix" in this file and it is the one that would most obviously
- *     invalidate the control.
+ *   - "tree removal" STILL appears three times on a tree TRIMMING page (why.body,
+ *     faq.a7, faq.a10). Those are outside the T2 mandate — only form.subline was
+ *     corrected — so they stay exactly as the live page says.
  *   - Leading and trailing spaces are LOAD-BEARING. The source splits most headings
  *     across two or three nodes and puts the word gap inside one of them. Each is
  *     flagged inline. A "helpful" trim fuses two words in the rendered heading.
@@ -78,9 +85,11 @@ export const trimmingACopy: Record<string, string> = {
   'hero.h2': 'Same-Week Appointments Available— Get Your Trees Trimmed Today! Summer Special Ends Soon. ',
   // ↑ TRAILING SPACE, and the em dash is welded to "Available" with no space before it.
   'hero.body':
-    "Need a tree trimming service near you? Our East Dallas crew includes  roof and gutter branch clearance with every trim, — plus a 10% dicousnt and multi-tree bundle pricing when more than one tree needs work. Whether it's a curb-appeal shape-up, full tree pruning, or overgrown limbs hanging over your roofline, we inspect every branch, walk you through your options upfront, and handle the trim and cleanup start to finish. No surprises on price. No debris left behind.",
-  // ↑ THREE deliberate defects: the DOUBLED SPACE in "includes  roof", the
-  //   misspelling "dicousnt" (discount), and the stray ", —" after "with every trim".
+    "Need a tree trimming service near you? Our East Dallas crew includes  roof and gutter branch clearance with every trim, — plus a 10% discount and multi-tree bundle pricing when more than one tree needs work. Whether it's a curb-appeal shape-up, full tree pruning, or overgrown limbs hanging over your roofline, we inspect every branch, walk you through your options upfront, and handle the trim and cleanup start to finish. No surprises on price. No debris left behind.",
+  // ↑ P3-T2 APPROVED EXCEPTION: "dicousnt" -> "discount". A misspelling is a defect,
+  //   not a copy choice, on the same basis as the four P0 fixes. The other two source
+  //   defects here — the DOUBLED SPACE in "includes  roof" and the stray ", —" after
+  //   "with every trim" — are NOT in the mandate and stay as faithful control copy.
 
   /* ---------------------------------------------------------------- *
    * SECTION 2 — Lead form heading + fields
@@ -100,8 +109,10 @@ export const trimmingACopy: Record<string, string> = {
   // byte-identical, and both carry hideDesktop AND hideMobile — so the control
   // renders this sentence zero times at every width. It is real source copy, so it
   // is kept; showing it once is a DESIGN decision, which this template may make.
-  // It also says "tree removal quote" on a trimming page. PRESERVED.
-  'form.subline': 'Enter your info and we’ll call you with the next steps for your tree removal quote',
+  // The source said "tree removal quote" on a trimming page. P3-T2 APPROVED
+  // EXCEPTION: corrected to "tree trimming quote" to match the surrounding voice —
+  // a wrong service name is a defect, not a copy choice.
+  'form.subline': 'Enter your info and we’ll call you with the next steps for your tree trimming quote',
 
   'form.label.firstName': 'First Name',
   'form.label.lastName': 'Last Name',
@@ -197,7 +208,7 @@ export const trimmingACopy: Record<string, string> = {
   'services.item7': 'Roof & Gutter Branch Clearance',
   'services.item8': 'Driveway & Fence Line Trimming',
   'services.item9': 'Debris Cleanup & Haul Away',
-  'services.item10': 'Mutli-Tree Pricing', // ← TRANSPOSITION: "Mutli-Tree", not "Multi-Tree". PRESERVED.
+  'services.item10': 'Multi-Tree Pricing', // ← P3-T2 APPROVED EXCEPTION: source transposed "Mutli-Tree"; a typo is a defect, corrected.
   'services.item11': 'Final Walkthrough Included',
   'services.item12': 'East Dallas Tree Trim Service ', // ← TRAILING SPACE. GEO-BOUND.
 
@@ -425,17 +436,19 @@ export default trimmingACopy;
  *        form.label.requiredGap    ' '   (the gap between "Phone" and its "*" span)
  *
  * 3. DELIBERATE DEFECTS, in document order. Every one of these is in the live page
- *    and every one of them is the control. Fixing any of them invalidates the test.
+ *    and every one of them is the control. Fixing any of them invalidates the test —
+ *    EXCEPT the three marked [T2-CORRECTED], approved exceptions applied to both
+ *    trimming templates (see the P3-T2 note at the top of this file).
  *
  *      hero.body            doubled space in "includes  roof"
- *      hero.body            "dicousnt" (discount)
+ *      hero.body            "dicousnt" (discount)                 [T2-CORRECTED -> "discount"]
  *      hero.body            stray ", —" after "with every trim"
  *      hero.h2              "Available—" with no space before the em dash
  *      form.headingMobileA  doubled space before "East Dallas & Nearby"
- *      form.subline         "tree removal quote" on a TRIMMING page
+ *      form.subline         "tree removal quote" on a TRIMMING page [T2-CORRECTED -> "tree trimming quote"]
  *      benefits.item1       "(Multi-Tree Bundle Pricing" — parenthesis never closed
  *      why.body             "tree removal service" on a TRIMMING page
- *      services.item10      "Mutli-Tree Pricing" — transposed letters
+ *      services.item10      "Mutli-Tree Pricing" — transposed letters [T2-CORRECTED -> "Multi-Tree Pricing"]
  *      longform.p2          "start to finish.." — double full stop
  *      longform.request4    "patio work" duplicated, line ends ", Etc"
  *      process.step2.body   "no wild surprises"

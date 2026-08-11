@@ -4,8 +4,9 @@
  *
  * The COLUMN COUNT is a design choice and collapses on a phone; the ITEM ORDER and
  * the grouping are not, so the ranges below reproduce the source's three bullet
- * lists exactly — 6 items, 6 items, 5 items. Column 3 really is one shorter, and
- * item 10 really does read "Mutli-Tree Pricing".
+ * lists exactly — 6 items, 6 items, 5 items. Column 3 really is one shorter. Item 10
+ * read "Mutli-Tree Pricing" in the source; P3-T2 corrected the transposition to
+ * "Multi-Tree Pricing" (an approved exception — a typo is a defect, not copy).
  */
 
 import type { ResolvedClient } from '../../../schema/resolve';
