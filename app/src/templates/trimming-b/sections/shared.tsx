@@ -21,8 +21,9 @@ export const FORM_ANCHOR = 'tb-walkthrough';
 
 /**
  * Section shell. One vertical rhythm for the whole page and one place to change the
- * ground colour. `tone` is deliberately a small closed set — the calm of this design
- * comes from there being three surfaces, not nine.
+ * ground colour. `tone` is deliberately a two-value set — the calm of this design
+ * comes from the page having three surfaces in total (paper, tint, and the single
+ * ink ground the closing form sits on), not nine.
  */
 export function Section({
   id,
@@ -31,7 +32,7 @@ export function Section({
   children,
 }: {
   id?: string;
-  tone?: 'paper' | 'tint' | 'ink';
+  tone?: 'paper' | 'tint';
   className?: string;
   children: ReactNode;
 }) {

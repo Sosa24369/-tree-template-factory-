@@ -1,0 +1,1030 @@
+/* ====================================================================
+   trimming-b — THE QUIET VARIANT.
+
+   Design brief: restrained, generous whitespace, few elements, calm, confident,
+   typographic — and still unmistakably modern and premium. Everything below is in
+   service of that. Hairlines instead of cards. Three surfaces instead of nine. One
+   serif display face against the system sans. No shadows except a single soft lift
+   under the closing form. No animation beyond hover and the FAQ marker.
+
+   RULES THIS STYLESHEET IS WRITTEN UNDER
+   --------------------------------------
+   1. EVERY RULE IS SCOPED UNDER .trimming-b. Nothing here can reach another
+      template, and nothing here depends on another template's stylesheet loading.
+
+   2. BRAND COLOUR NEVER APPEARS AS A LITERAL (R1). Every brand-coloured surface,
+      rule and accent is var(--brand-primary) / var(--brand-accent) /
+      var(--brand-on-primary), set on .trimming-b from client.brand by index.tsx,
+      with the fallbacks in styles/base.css catching a half-filled record. Tints,
+      inks and hairlines are derived from those with color-mix(), so a client with a
+      navy brand gets navy hairlines with no second variable to fill in. The hex
+      literals below are NEUTRALS ONLY — paper, ink, greys.
+
+   3. NO CLIENT-SPECIFIC VALUE OF ANY KIND (R1). No background photographs, no
+      client asset paths, no city names in generated content. This template paints no
+      image it did not receive from the client record, which is also why it has no
+      /assets/<client>/ url anywhere — compare removal-a, which carries five.
+
+   4. PERFORMANCE IS PART OF THE DESIGN, NOT A CLEANUP PASS.
+        - No webfont. The display face is a system serif stack, so the headline —
+          which is the LCP element on every viewport — paints on the first frame
+          after CSS with zero network requests. This is the single biggest reason
+          this variant can hold LCP well under 2.5s on throttled mobile where
+          removal-a had to fight for it.
+        - No hero photograph at any width. removal-a measured that a photographic
+          mobile hero cannot reach 2.5s LCP on throttled 4G and answered it by
+          leading with the brand colour on mobile; this template takes the same
+          decision at every width, and leads with a flat brand-tinted ground.
+        - No carousel, no icon font, no animation library. The gallery is CSS
+          multi-column, the FAQ is native <details>, the two icons are inline SVG.
+        - No marquee. trimming-a's city pills scroll forever; here they sit still,
+          which costs no main thread and no compositor layer.
+        - Below-the-fold images are <DeferredImage>, which keeps them out of the
+          markup until they are approached and reserves their measured box, so CLS
+          stays at zero.
+
+   5. MOBILE FIRST. Base rules are the phone; min-width queries add the desktop.
+   ==================================================================== */
+
+.trimming-b {
+  /* ---- neutrals + geometry (never client-specific) ---- */
+  --tb-ink: #14171a;
+  --tb-ink-2: #4a5158;
+  --tb-muted: #767d84;
+  --tb-paper: #fcfbf9;
+  --tb-paper-2: #ffffff;
+
+  /* ---- brand-derived, no literal ---- */
+  --tb-tint: color-mix(in srgb, var(--brand-primary) 5%, var(--tb-paper));
+  --tb-rule: color-mix(in srgb, var(--brand-primary) 16%, #dfdcd6);
+  --tb-rule-soft: color-mix(in srgb, var(--brand-primary) 9%, #e8e5df);
+  --tb-deep: color-mix(in srgb, var(--brand-primary) 88%, #000000);
+  --tb-deeper: color-mix(in srgb, var(--brand-primary) 66%, #000000);
+
+  /* The box <DeferredImage> paints while an image is still out of view. The
+     component reads --ra-placeholder (with a hardcoded grey fallback); naming it
+     here keeps the reserved box on-palette instead of factory grey. */
+  --ra-placeholder: color-mix(in srgb, var(--brand-primary) 7%, #ecebe7);
+
+  /* A system serif stack. No webfont request, and every one of these is already
+     resident on the platform it names. */
+  --tb-display-face: ui-serif, "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, "Times New Roman", Times, serif;
+
+  --tb-max: 1080px;
+  --tb-gutter: clamp(22px, 6vw, 56px);
+  --tb-pad: clamp(72px, 11vw, 152px);
+  --tb-radius: 4px;
+
+  color: var(--tb-ink);
+  background: var(--tb-paper);
+  font-synthesis-weight: none;
+  overflow-x: hidden;
+}
+
+/* The hero's link down to the form. */
+@media (prefers-reduced-motion: no-preference) {
+  html:has(.trimming-b) {
+    scroll-behavior: smooth;
+  }
+}
+
+/* ---------------------------------------------------------------- *
+ * Layout primitives
+ * ---------------------------------------------------------------- */
+
+.trimming-b .tb-container {
+  width: 100%;
+  max-width: var(--tb-max);
+  margin-inline: auto;
+  padding-inline: var(--tb-gutter);
+}
+
+.trimming-b .tb-section {
+  padding-block: var(--tb-pad);
+}
+
+.trimming-b .tb-section--tint {
+  background: var(--tb-tint);
+}
+
+/* Hairline between two consecutive paper sections: the sections are separated by
+   space, and the rule only appears where two identical grounds meet and the eye
+   needs a seam. Adjacent-sibling only, so a tinted section never gets a double edge. */
+.trimming-b .tb-section--paper + .tb-section--paper {
+  border-top: 1px solid var(--tb-rule-soft);
+}
+
+.trimming-b .tb-measure {
+  max-width: 58ch;
+}
+
+/* The block above a section's content. --flush drops its bottom margin for the
+   two-column layouts, where the gap does the spacing instead. */
+.trimming-b .tb-head {
+  margin-bottom: clamp(40px, 6vw, 76px);
+}
+
+.trimming-b .tb-head--flush {
+  margin-bottom: 0;
+}
+
+/* ---------------------------------------------------------------- *
+ * Type
+ *
+ * The whole personality of this variant lives in this block: a serif display at
+ * generous size and tight leading, a small letter-spaced eyebrow, and body text set
+ * at a comfortable measure. Nothing is bold — weight is not how this page signals
+ * importance; size, space and colour are.
+ * ---------------------------------------------------------------- */
+
+.trimming-b h1,
+.trimming-b h2,
+.trimming-b h3 {
+  margin: 0;
+  font-weight: 400;
+}
+
+.trimming-b .tb-eyebrow {
+  margin: 0 0 clamp(18px, 2.6vw, 26px);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--brand-primary);
+}
+
+.trimming-b .tb-display {
+  font-family: var(--tb-display-face);
+  font-size: clamp(2rem, 5.4vw, 3.15rem);
+  font-weight: 400;
+  line-height: 1.08;
+  letter-spacing: -0.018em;
+  text-wrap: balance;
+}
+
+.trimming-b .tb-display-line {
+  display: block;
+}
+
+/* The second line of a two-line display heading carries the brand. One accent per
+   heading, and it is always the same one — that repetition is what makes the page
+   feel composed rather than decorated. */
+.trimming-b .tb-display-line--accent {
+  color: var(--brand-primary);
+}
+
+/* The lower bound is set from the longest line in the default headline at 360px:
+   at the obvious clamp(2.5rem, …) the third line ran to within 2px of the gutter on
+   a small phone, which reads as an accident rather than as a decision. */
+.trimming-b .tb-display--hero {
+  font-size: clamp(2.2rem, 7.2vw, 4.35rem);
+  letter-spacing: -0.026em;
+}
+
+.trimming-b .tb-display--sm {
+  font-size: clamp(1.6rem, 3.6vw, 2.1rem);
+}
+
+.trimming-b .tb-lede {
+  max-width: 52ch;
+  margin: clamp(24px, 3.4vw, 36px) 0 0;
+  font-size: clamp(1.0625rem, 2vw, 1.25rem);
+  line-height: 1.62;
+  color: var(--tb-ink-2);
+  text-wrap: pretty;
+}
+
+.trimming-b .tb-body {
+  margin: clamp(18px, 2.4vw, 24px) 0 0;
+  font-size: 1.0625rem;
+  line-height: 1.7;
+  color: var(--tb-ink-2);
+  text-wrap: pretty;
+}
+
+/* The closing footnote of a section. It carries NO rule of its own: both places it
+   is used sit under a block that already ends in a hairline (the ledger's last item,
+   the last term), and a second rule below that one rendered as an empty table row. */
+.trimming-b .tb-note {
+  margin: clamp(28px, 3.6vw, 44px) 0 0;
+  font-size: 0.9375rem;
+  line-height: 1.65;
+  color: var(--tb-muted);
+  text-wrap: pretty;
+}
+
+/* ---------------------------------------------------------------- *
+ * The phone treatment
+ *
+ * <PhoneLink/> renders: <a class="tb-call …"><span data-dni-text>NUMBER</span>
+ * <span class="phone-sub">sub-label</span></a>. The number must stay ONE
+ * uninterrupted text node for CallRail's DOM scan (P4), so the two lines are laid
+ * out as a grid rather than by wrapping parts of the string.
+ *
+ * There is no button anywhere on this page. On this side of the test the call CTA
+ * is a piece of typography — the number set in the display face, underlined on the
+ * rule beneath it — which is the loudest thing the quiet variant permits itself.
+ * ---------------------------------------------------------------- */
+
+.trimming-b .tb-call {
+  display: inline-grid;
+  gap: 4px;
+  min-height: var(--tap);
+  align-content: center;
+  padding-block: 4px;
+  text-decoration: none;
+  color: inherit;
+}
+
+.trimming-b .tb-call [data-dni-text] {
+  font-family: var(--tb-display-face);
+  font-size: 1.375rem;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  white-space: nowrap; /* the number never wraps; it shrinks */
+}
+
+.trimming-b .tb-call .phone-sub {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--tb-muted);
+}
+
+/* Header instance — compact. */
+.trimming-b .tb-call--bar {
+  justify-items: end;
+  text-align: right;
+}
+
+.trimming-b .tb-call--bar [data-dni-text] {
+  font-size: clamp(1.0625rem, 4vw, 1.25rem);
+}
+
+/* Hero instance — the largest non-heading element on the page. */
+.trimming-b .tb-call--lead [data-dni-text] {
+  font-size: clamp(1.75rem, 6vw, 2.5rem);
+  padding-bottom: 6px;
+  border-bottom: 2px solid var(--brand-primary);
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+
+.trimming-b .tb-call--lead:hover [data-dni-text] {
+  color: var(--brand-primary);
+  border-color: var(--brand-accent);
+}
+
+/* The one in-page link, down to the form. */
+.trimming-b .tb-textlink {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  min-height: var(--tap);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: var(--tb-ink-2);
+  text-decoration: none;
+  border-bottom: 1px solid var(--tb-rule);
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.trimming-b .tb-textlink:hover {
+  color: var(--brand-primary);
+  border-color: var(--brand-primary);
+}
+
+.trimming-b .tb-icon--arrow {
+  flex: 0 0 auto;
+  transition: transform 0.2s ease;
+}
+
+.trimming-b .tb-textlink:hover .tb-icon--arrow {
+  transform: translateY(2px);
+}
+
+/* ---------------------------------------------------------------- *
+ * Header — sticky, hairline, no bar colour.
+ * ---------------------------------------------------------------- */
+
+.trimming-b .tb-header {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  background: color-mix(in srgb, var(--tb-paper) 90%, transparent);
+  backdrop-filter: saturate(1.2) blur(10px);
+  -webkit-backdrop-filter: saturate(1.2) blur(10px);
+  border-bottom: 1px solid var(--tb-rule-soft);
+}
+
+.trimming-b .tb-header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  min-height: 66px;
+  padding-block: 8px;
+}
+
+/* max-height + overflow so a logo path that no longer resolves degrades to a
+   clipped box instead of dropping oversized alt text through the header. */
+.trimming-b .tb-logo {
+  height: 38px;
+  width: auto;
+  max-width: 180px;
+  overflow: hidden;
+  object-fit: contain;
+  font-size: 0.8125rem;
+  line-height: 1.2;
+}
+
+/* No logo file on the record: the client's name as a wordmark, never a broken
+   image. Set in the display face, which makes the fallback look deliberate. */
+.trimming-b span.tb-logo {
+  display: inline-block;
+  height: auto;
+  max-width: none;
+  font-family: var(--tb-display-face);
+  font-size: clamp(1.0625rem, 4vw, 1.25rem);
+  font-weight: 400;
+  letter-spacing: -0.015em;
+  line-height: 1.15;
+  color: var(--tb-ink);
+}
+
+/* Below this width the header is logo + number and nothing else. */
+@media (max-width: 559px) {
+  .trimming-b .tb-call--bar .phone-sub {
+    display: none;
+  }
+}
+
+@media (min-width: 768px) {
+  .trimming-b .tb-header-inner {
+    min-height: 82px;
+  }
+
+  .trimming-b .tb-logo {
+    height: 46px;
+    max-width: 220px;
+  }
+}
+
+/* ---------------------------------------------------------------- *
+ * Hero — type on a flat brand-tinted ground. No photograph at any width.
+ * ---------------------------------------------------------------- */
+
+.trimming-b .tb-hero {
+  padding-block: clamp(64px, 12vw, 148px) clamp(56px, 10vw, 128px);
+  background: linear-gradient(180deg, var(--tb-tint) 0%, var(--tb-paper) 100%);
+  border-bottom: 1px solid var(--tb-rule-soft);
+}
+
+/* The measure is deliberately narrow for the headline and wider for the paragraph:
+   a display line that runs the full container is what makes a hero look like a
+   press release, and a paragraph forced to the headline's measure turns into a
+   column of eight short lines on a phone. */
+.trimming-b .tb-hero .tb-lede {
+  max-width: 46ch;
+}
+
+.trimming-b .tb-hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: clamp(24px, 4vw, 48px);
+  margin-top: clamp(40px, 6vw, 68px);
+}
+
+@media (min-width: 768px) {
+  .trimming-b .tb-hero .tb-display--hero {
+    max-width: 15ch;
+  }
+}
+
+/* ---------------------------------------------------------------- *
+ * The standard — three numbered clearances.
+ * ---------------------------------------------------------------- */
+
+.trimming-b .tb-ledger {
+  display: grid;
+  gap: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--tb-rule);
+}
+
+.trimming-b .tb-ledger-item {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: clamp(18px, 4vw, 48px);
+  padding-block: clamp(28px, 4vw, 44px);
+  border-bottom: 1px solid var(--tb-rule);
+}
+
+.trimming-b .tb-ledger-num {
+  font-family: var(--tb-display-face);
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: var(--brand-accent);
+  font-variant-numeric: tabular-nums;
+}
+
+.trimming-b .tb-ledger-h {
+  font-family: var(--tb-display-face);
+  font-size: clamp(1.3rem, 3vw, 1.65rem);
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+}
+
+.trimming-b .tb-ledger-text .tb-body {
+  max-width: 56ch;
+  margin-top: clamp(10px, 1.6vw, 14px);
+}
+
+@media (min-width: 900px) {
+  .trimming-b .tb-ledger-item {
+    grid-template-columns: 3.5rem minmax(0, 15ch) minmax(0, 1fr);
+    align-items: baseline;
+  }
+
+  .trimming-b .tb-ledger-text {
+    display: contents;
+  }
+
+  .trimming-b .tb-ledger-text .tb-body {
+    margin-top: 0;
+  }
+}
+
+/* ---------------------------------------------------------------- *
+ * Testimony — one review, full width.
+ * ---------------------------------------------------------------- */
+
+.trimming-b .tb-quote {
+  max-width: 22ch;
+  margin: 0;
+}
+
+.trimming-b .tb-quote-body {
+  margin: 0;
+}
+
+/* The opening quotation mark is hung in the margin at desktop widths, which is the
+   detail that makes a pull quote read as typeset rather than as a big paragraph. */
+.trimming-b .tb-quote-body p {
+  position: relative;
+  margin: 0;
+  font-family: var(--tb-display-face);
+  font-size: clamp(1.5rem, 4.4vw, 2.35rem);
+  line-height: 1.28;
+  letter-spacing: -0.018em;
+  text-wrap: pretty;
+}
+
+.trimming-b .tb-quote-body p::before {
+  content: '\201C';
+  color: var(--brand-accent);
+}
+
+.trimming-b .tb-quote-body p::after {
+  content: '\201D';
+  color: var(--brand-accent);
+}
+
+.trimming-b .tb-quote-who {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px 14px;
+  margin-top: clamp(28px, 4vw, 40px);
+  padding-top: clamp(16px, 2vw, 20px);
+  border-top: 1px solid var(--tb-rule);
+}
+
+.trimming-b .tb-quote-author {
+  font-size: 0.9375rem;
+  font-weight: 650;
+  letter-spacing: 0.01em;
+}
+
+.trimming-b .tb-quote-meta {
+  font-size: 0.8125rem;
+  color: var(--tb-muted);
+}
+
+@media (min-width: 768px) {
+  .trimming-b .tb-quote {
+    max-width: 26ch;
+  }
+
+  .trimming-b .tb-quote-body p::before {
+    position: absolute;
+    right: 100%;
+    padding-right: 0.12em;
+  }
+}
+
+/* ---------------------------------------------------------------- *
+ * Restraint — the four refusals.
+ * ---------------------------------------------------------------- */
+
+.trimming-b .tb-refusals {
+  display: grid;
+  gap: clamp(36px, 5vw, 60px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.trimming-b .tb-refusal {
+  padding-top: clamp(20px, 2.6vw, 28px);
+  border-top: 1px solid var(--tb-rule);
+}
+
+.trimming-b .tb-refusal-h {
+  font-family: var(--tb-display-face);
+  font-size: clamp(1.25rem, 2.8vw, 1.5rem);
+  line-height: 1.25;
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+}
+
+.trimming-b .tb-refusal .tb-body {
+  max-width: 52ch;
+}
+
+@media (min-width: 860px) {
+  .trimming-b .tb-refusals {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(40px, 5vw, 72px) clamp(36px, 5vw, 64px);
+  }
+}
+
+/* ---------------------------------------------------------------- *
+ * Work — the client's photographs, CSS multi-column.
+ *
+ * Columns rather than a fixed-height grid so every photograph keeps its own
+ * proportions: <DeferredImage> reserves the box from the MEASURED intrinsic
+ * dimensions, so nothing shifts when the image arrives, and nothing is cropped on
+ * the client's behalf.
+ * ---------------------------------------------------------------- */
+
+.trimming-b .tb-work-grid {
+  column-count: 1;
+  column-gap: clamp(14px, 2.4vw, 28px);
+}
+
+.trimming-b .tb-work-fig {
+  break-inside: avoid;
+  margin: 0 0 clamp(14px, 2.4vw, 28px);
+}
+
+/* The reserved box. min-height covers the case where the client record measured no
+   dimensions for a photo: with no aspect-ratio the wrapper would otherwise be zero
+   pixels tall and could never come into view. */
+.trimming-b .tb-work-box {
+  display: block;
+  min-height: 120px;
+  overflow: hidden;
+  border-radius: var(--tb-radius);
+  background: var(--ra-placeholder);
+}
+
+.trimming-b .tb-work-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+@media (min-width: 640px) {
+  .trimming-b .tb-work-grid {
+    column-count: 2;
+  }
+}
+
+@media (min-width: 1000px) {
+  .trimming-b .tb-work-grid {
+    column-count: 3;
+  }
+}
+
+/* ---------------------------------------------------------------- *
+ * The offer — three terms, no countdown, no banner.
+ * ---------------------------------------------------------------- */
+
+.trimming-b .tb-offer-grid {
+  display: grid;
+  gap: clamp(40px, 6vw, 80px);
+  align-items: start;
+}
+
+.trimming-b .tb-offer .tb-display {
+  font-size: clamp(2.1rem, 5.6vw, 3.25rem);
+}
+
+.trimming-b .tb-terms {
+  margin: 0;
+  border-top: 1px solid var(--tb-rule);
+}
+
+.trimming-b .tb-term {
+  padding-block: clamp(20px, 2.8vw, 28px);
+  border-bottom: 1px solid var(--tb-rule);
+}
+
+.trimming-b .tb-term-h {
+  font-family: var(--tb-display-face);
+  font-size: clamp(1.1rem, 2.4vw, 1.3rem);
+  line-height: 1.25;
+  letter-spacing: -0.012em;
+}
+
+.trimming-b .tb-term-body {
+  margin: 8px 0 0;
+  max-width: 46ch;
+  font-size: 0.9875rem;
+  line-height: 1.62;
+  color: var(--tb-ink-2);
+}
+
+@media (min-width: 900px) {
+  .trimming-b .tb-offer-grid {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+}
+
+/* ---------------------------------------------------------------- *
+ * Reviews — the ledger. No cards, no shadows, no star graphics.
+ * ---------------------------------------------------------------- */
+
+.trimming-b .tb-review-list {
+  display: grid;
+  gap: clamp(32px, 4vw, 52px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.trimming-b .tb-review {
+  padding-top: clamp(18px, 2.4vw, 24px);
+  border-top: 1px solid var(--tb-rule);
+}
+
+.trimming-b .tb-review-body {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.68;
+  color: var(--tb-ink-2);
+  text-wrap: pretty;
+}
+
+.trimming-b .tb-review-who {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 12px;
+  margin: clamp(14px, 1.8vw, 18px) 0 0;
+}
+
+.trimming-b .tb-review-author {
+  font-size: 0.875rem;
+  font-weight: 650;
+}
+
+.trimming-b .tb-review-meta {
+  font-size: 0.8125rem;
+  color: var(--tb-muted);
+}
+
+@media (min-width: 860px) {
+  .trimming-b .tb-review-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(32px, 4vw, 48px) clamp(36px, 5vw, 64px);
+  }
+}
+
+/* ---------------------------------------------------------------- *
+ * Areas — running text. The separator is a pseudo-element, so no punctuation is
+ * baked into a text node and the last city never trails a stray dot.
+ * ---------------------------------------------------------------- */
+
+.trimming-b .tb-areas-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.trimming-b .tb-area {
+  font-family: var(--tb-display-face);
+  font-size: clamp(1.0625rem, 2.4vw, 1.35rem);
+  line-height: 1.5;
+  letter-spacing: -0.01em;
+}
+
+.trimming-b .tb-area:not(:last-child)::after {
+  content: '\00B7';
+  margin-inline: 0.6em;
+  color: var(--brand-accent);
+}
+
+/* ---------------------------------------------------------------- *
+ * FAQ — native <details>, zero JS.
+ * ---------------------------------------------------------------- */
+
+.trimming-b .tb-faq-grid {
+  display: grid;
+  gap: clamp(36px, 5vw, 72px);
+  align-items: start;
+}
+
+.trimming-b .tb-faq-list {
+  border-top: 1px solid var(--tb-rule);
+}
+
+.trimming-b .tb-faq-item {
+  border-bottom: 1px solid var(--tb-rule);
+}
+
+.trimming-b .tb-faq-q {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 20px;
+  padding-block: clamp(18px, 2.4vw, 24px);
+  cursor: pointer;
+  font-size: clamp(1.0625rem, 2.2vw, 1.1875rem);
+  font-weight: 600;
+  letter-spacing: -0.012em;
+  line-height: 1.4;
+  list-style: none;
+}
+
+.trimming-b .tb-faq-q::-webkit-details-marker {
+  display: none;
+}
+
+.trimming-b .tb-faq-q:hover {
+  color: var(--brand-primary);
+}
+
+.trimming-b .tb-icon--plus {
+  flex: 0 0 auto;
+  align-self: center;
+  color: var(--brand-accent);
+  transition: transform 0.2s ease;
+}
+
+/* Rotating the plus 45° turns it into a cross; the open state reads as "close"
+   without a second glyph, a second file or a second request. */
+.trimming-b .tb-faq-item[open] .tb-icon--plus {
+  transform: rotate(45deg);
+}
+
+.trimming-b .tb-faq-a {
+  max-width: 62ch;
+  margin: 0;
+  padding: 0 40px clamp(22px, 2.8vw, 28px) 0;
+  font-size: 1rem;
+  line-height: 1.72;
+  color: var(--tb-ink-2);
+  text-wrap: pretty;
+}
+
+@media (min-width: 900px) {
+  .trimming-b .tb-faq-grid {
+    grid-template-columns: minmax(0, 0.72fr) minmax(0, 1.28fr);
+  }
+}
+
+/* ---------------------------------------------------------------- *
+ * Estimate — the form, last, on the one ink ground of the page.
+ * ---------------------------------------------------------------- */
+
+.trimming-b .tb-estimate {
+  scroll-margin-top: 78px;
+  padding-block: var(--tb-pad);
+  background: linear-gradient(160deg, var(--tb-deep) 0%, var(--tb-deeper) 100%);
+  color: #ffffff;
+}
+
+.trimming-b .tb-estimate-grid {
+  display: grid;
+  gap: clamp(40px, 6vw, 76px);
+  align-items: start;
+}
+
+.trimming-b .tb-estimate .tb-eyebrow {
+  color: color-mix(in srgb, var(--brand-accent) 72%, #ffffff);
+}
+
+.trimming-b .tb-estimate .tb-display {
+  color: #ffffff;
+}
+
+.trimming-b .tb-estimate .tb-display-line--accent {
+  color: color-mix(in srgb, var(--brand-accent) 70%, #ffffff);
+}
+
+.trimming-b .tb-lede--onInk {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.trimming-b .tb-estimate-call {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0 8px;
+  margin: clamp(28px, 4vw, 40px) 0 0;
+  font-size: 0.9375rem;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+/* The number keeps its own element and its own single text node — the prefix beside
+   it is a separate node, so a CallRail text-match rule still finds the number. */
+/* inline-block + padding rather than a bare inline anchor: as plain inline text this
+   was a 32px-tall tap target on a phone, which is under the 44px minimum for the one
+   alternative to the form on the page. */
+.trimming-b .tb-estimate-phone {
+  display: inline-block;
+  min-height: 44px;
+  padding-block: 7px;
+  color: #ffffff;
+  text-decoration: none;
+  font-family: var(--tb-display-face);
+  font-size: 1.25rem;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  border-bottom: 1px solid color-mix(in srgb, var(--brand-accent) 60%, transparent);
+  transition: border-color 0.2s ease;
+}
+
+.trimming-b .tb-estimate-phone:hover {
+  border-color: #ffffff;
+}
+
+.trimming-b .tb-form-card {
+  padding: clamp(24px, 4vw, 40px);
+  border-radius: var(--tb-radius);
+  background: var(--tb-paper-2);
+  color: var(--tb-ink);
+  box-shadow: 0 24px 60px -30px rgba(0, 0, 0, 0.55);
+}
+
+.trimming-b .tb-form .field label {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--tb-muted);
+}
+
+/* Underlined fields rather than boxes: fewer borders on screen, and it matches the
+   hairline language the rest of the page is built from. */
+.trimming-b .tb-form .field input[type='text'],
+.trimming-b .tb-form .field input[type='tel'],
+.trimming-b .tb-form .field input[type='email'] {
+  padding-inline: 0;
+  border: 0;
+  border-bottom: 1px solid var(--tb-rule);
+  border-radius: 0;
+  background: transparent;
+  font-size: 1.0625rem;
+  transition: border-color 0.18s ease;
+}
+
+.trimming-b .tb-form .field input:focus {
+  border-bottom-color: var(--brand-primary);
+  box-shadow: none;
+  outline: none;
+}
+
+.trimming-b .tb-form .field input[aria-invalid='true'] {
+  border-bottom-color: #b4232a;
+}
+
+.trimming-b .tb-form .consent-copy {
+  font-size: 0.75rem;
+  line-height: 1.55;
+}
+
+.trimming-b .tb-form .btn-primary {
+  min-height: 56px;
+  margin-top: clamp(8px, 1.4vw, 14px);
+  border-radius: var(--tb-radius);
+  font-size: 0.9375rem;
+  font-weight: 650;
+  letter-spacing: 0.02em;
+  transition: background-color 0.18s ease;
+}
+
+.trimming-b .tb-form .btn-primary:hover:not(:disabled) {
+  background: var(--tb-deep);
+}
+
+@media (min-width: 900px) {
+  .trimming-b .tb-estimate-grid {
+    grid-template-columns: minmax(0, 1fr) minmax(360px, 0.9fr);
+  }
+
+  .trimming-b .tb-estimate {
+    scroll-margin-top: 94px;
+  }
+}
+
+/* ---------------------------------------------------------------- *
+ * Footer
+ * ---------------------------------------------------------------- */
+
+.trimming-b .tb-footer {
+  padding-block: clamp(36px, 5vw, 56px);
+  background: var(--tb-paper);
+  border-top: 1px solid var(--tb-rule-soft);
+  font-size: 0.875rem;
+  color: var(--tb-muted);
+}
+
+.trimming-b .tb-footer-inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px 32px;
+}
+
+.trimming-b .tb-footer-logo {
+  height: 34px;
+  width: auto;
+  max-width: 170px;
+  overflow: hidden;
+  object-fit: contain;
+  font-size: 0.8125rem;
+}
+
+.trimming-b span.tb-footer-logo {
+  display: inline-block;
+  height: auto;
+  max-width: none;
+  font-family: var(--tb-display-face);
+  font-size: 1rem;
+  letter-spacing: -0.015em;
+  color: var(--tb-ink);
+}
+
+.trimming-b .tb-footer-line {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  margin: 0;
+}
+
+.trimming-b .tb-footer-legal {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 24px;
+}
+
+.trimming-b .tb-footer-legal a {
+  color: var(--tb-ink-2);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+}
+
+.trimming-b .tb-footer-legal a:hover {
+  color: var(--brand-primary);
+}
+
+/* ---------------------------------------------------------------- *
+ * Focus + motion
+ * ---------------------------------------------------------------- */
+
+.trimming-b a:focus-visible,
+.trimming-b summary:focus-visible,
+.trimming-b button:focus-visible {
+  outline: 2px solid var(--brand-accent);
+  outline-offset: 4px;
+  border-radius: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .trimming-b .tb-call--lead [data-dni-text],
+  .trimming-b .tb-textlink,
+  .trimming-b .tb-icon--arrow,
+  .trimming-b .tb-icon--plus,
+  .trimming-b .tb-estimate-phone,
+  .trimming-b .tb-form .field input,
+  .trimming-b .tb-form .btn-primary {
+    transition: none;
+  }
+
+  .trimming-b .tb-textlink:hover .tb-icon--arrow {
+    transform: none;
+  }
+}
