@@ -1,0 +1,1967 @@
+/* ====================================================================
+   removal-b — THE VARIANT, and the RICH half of the pair.
+
+   removal-a is the quiet one: flat sections, one accent, no texture. This one is
+   allowed more light, more depth and more movement. It is not allowed to be
+   slower, and it is not allowed to be cluttered — richness here means layered
+   surfaces and considered motion, not more things on the screen.
+
+   RULES THIS STYLESHEET IS WRITTEN UNDER
+   --------------------------------------
+   1. EVERY RULE IS SCOPED UNDER .removal-b. Nothing leaks into base.css or the
+      other templates.
+
+   2. BRAND COLOUR NEVER APPEARS AS A LITERAL (R1). Every brand-coloured surface
+      resolves from var(--brand-primary) / var(--brand-accent) /
+      var(--brand-on-primary), set on .removal-b from client.brand by index.tsx,
+      with the fallbacks in styles/base.css catching a half-filled record. The hex
+      literals below are NEUTRALS only — ink, paper, hairlines, shadow. Tints,
+      shades and glows are derived with color-mix() from the brand properties, so a
+      navy client gets navy texture with no second variable to fill in.
+
+   3. NO CLIENT ASSET PATHS. removal-a paints five background photographs from one
+      client's asset folder. There is not a single url() to a photograph in this
+      file: every texture is a gradient, a mask or an inline SVG data URI, so this
+      template renders identically for a client who has supplied nothing but a
+      colour. The one photograph in the hero arrives as the custom property
+      --rb-art, set from the client record in Hero.tsx, and is consumed only inside
+      a desktop media query.
+
+   4. PERFORMANCE IS PART OF THE DESIGN, not a cleanup pass.
+        · No webfont, no icon font, no carousel, no animation library.
+        · The mobile hero is colour and type — no photograph, so the LCP element is
+          the H1 and paints with the stylesheet.
+        · Every animation is transform/opacity only, so it runs on the compositor.
+          No filter animation, no box-shadow animation, no layout animation.
+        · The scroll entrance is a scroll-linked CSS animation behind
+          @supports (animation-timeline: view()). Elements are visible by default;
+          the animation only ever ADDS to a working page, and browsers without the
+          feature (and users with reduced motion) simply see the finished state.
+        · Backdrop-filter is used on exactly three small surfaces — header, hero
+          badge, mobile bar — never on a full-viewport element.
+   ==================================================================== */
+
+.removal-b {
+  /* ---- neutrals + geometry (never client-specific) ---- */
+  --rb-ink: #0c1319;
+  --rb-ink-2: #46535f;
+  --rb-muted: #66727e;
+  --rb-paper: #ffffff;
+  --rb-line: #e5eaef;
+
+  /* ---- brand-derived, no literal ---- */
+  --rb-tint: color-mix(in srgb, var(--brand-primary) 5%, #ffffff);
+  --rb-tint-2: color-mix(in srgb, var(--brand-primary) 11%, #ffffff);
+  --rb-hairline: color-mix(in srgb, var(--brand-primary) 15%, var(--rb-line));
+  --rb-deep: color-mix(in srgb, var(--brand-primary) 82%, #000000);
+  --rb-deeper: color-mix(in srgb, var(--brand-primary) 40%, #000000);
+  --rb-accent-soft: color-mix(in srgb, var(--brand-accent) 14%, transparent);
+  --rb-accent-lift: color-mix(in srgb, var(--brand-accent) 78%, #ffffff);
+  --rb-accent-ink: color-mix(in srgb, var(--brand-accent) 70%, #000000);
+  /* A brand accent is usually a mid-tone gold or orange, which fails contrast as
+     small text on white. Anywhere the accent has to carry MEANING on a light
+     surface — a step label, the offer ribbon, the FAQ indicator — it is darkened to
+     this token instead. Purely decorative accent marks keep the brand value. */
+  --rb-accent-on-light: color-mix(in srgb, var(--brand-accent) 60%, #000000);
+
+  /* DeferredImage reserves its box with this colour while a photo is in flight. */
+  --ra-placeholder: color-mix(in srgb, var(--brand-primary) 9%, #eef1f3);
+
+  --rb-max: 1200px;
+  --rb-gutter: clamp(20px, 5vw, 48px);
+  --rb-pad: clamp(60px, 8.5vw, 128px);
+  --rb-radius: 20px;
+  --rb-radius-sm: 13px;
+  --rb-shadow: 0 1px 2px rgba(12, 19, 25, 0.05), 0 20px 48px -24px rgba(12, 19, 25, 0.38);
+  --rb-shadow-lift: 0 2px 6px rgba(12, 19, 25, 0.07), 0 34px 70px -28px rgba(12, 19, 25, 0.5);
+
+  position: relative;
+  color: var(--rb-ink);
+  background: var(--rb-paper);
+  font-synthesis-weight: none;
+  overflow-x: hidden;
+  /* Room for the fixed mobile action bar, so it never covers the footer's legal
+     links — A2P registration requires those to be reachable. */
+  padding-bottom: 78px;
+}
+
+@media (min-width: 768px) {
+  .removal-b {
+    padding-bottom: 0;
+  }
+}
+
+/* The hero's secondary CTA, the mobile bar and the final CTA are all in-page
+   anchors to the estimate form. */
+@media (prefers-reduced-motion: no-preference) {
+  html:has(.removal-b) {
+    scroll-behavior: smooth;
+  }
+}
+
+/* ---------------------------------------------------------------- *
+ * Layout primitives
+ * ---------------------------------------------------------------- */
+
+.removal-b .rb-container {
+  width: 100%;
+  max-width: var(--rb-max);
+  margin-inline: auto;
+  padding-inline: var(--rb-gutter);
+}
+
+.removal-b .rb-section {
+  position: relative;
+  padding-block: var(--rb-pad);
+  /* Clears the sticky header when an in-page anchor lands here. */
+  scroll-margin-top: 84px;
+}
+
+/* Paper — plain, so the textured surfaces around it read as textured. */
+.removal-b .rb-section--paper {
+  background: var(--rb-paper);
+}
+
+/* Tint — a fine brand-tinted dot field. Two gradients, no image, no request. */
+.removal-b .rb-section--tint {
+  background-color: var(--rb-tint);
+  background-image: radial-gradient(color-mix(in srgb, var(--brand-primary) 13%, transparent) 1px, transparent 1.1px);
+  background-size: 24px 24px;
+  background-position: -6px -6px;
+}
+
+/* Ink — the deep plate. Layered radial light instead of a photograph. */
+.removal-b .rb-section--ink {
+  color: #ffffff;
+  background-color: var(--rb-deeper);
+  background-image:
+    radial-gradient(80% 70% at 8% 0%, color-mix(in srgb, var(--brand-primary) 62%, transparent) 0%, transparent 62%),
+    radial-gradient(70% 60% at 96% 12%, color-mix(in srgb, var(--brand-accent) 20%, transparent) 0%, transparent 60%),
+    linear-gradient(168deg, var(--rb-deep) 0%, #05090c 100%);
+}
+
+/* Hairline light along the top and bottom edge of every ink plate. */
+.removal-b .rb-section--ink::before,
+.removal-b .rb-section--ink::after {
+  content: '';
+  position: absolute;
+  inset-inline: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--brand-accent) 55%, transparent), transparent);
+}
+
+.removal-b .rb-section--ink::before {
+  top: 0;
+}
+
+.removal-b .rb-section--ink::after {
+  bottom: 0;
+}
+
+/* Section heading block. */
+.removal-b .rb-head {
+  max-width: 44ch;
+}
+
+.removal-b .rb-work .rb-head,
+.removal-b .rb-scope .rb-head,
+.removal-b .rb-areas .rb-head,
+.removal-b .rb-process .rb-head,
+.removal-b .rb-faq .rb-head {
+  max-width: 46ch;
+}
+
+/* ---------------------------------------------------------------- *
+ * Type
+ * ---------------------------------------------------------------- */
+
+.removal-b h1,
+.removal-b h2,
+.removal-b h3 {
+  margin: 0;
+  font-weight: 780;
+  letter-spacing: -0.033em;
+  text-wrap: balance;
+}
+
+.removal-b .rb-h1 {
+  font-size: clamp(2.3rem, 7vw, 3.85rem);
+  line-height: 1;
+}
+
+.removal-b .rb-h2 {
+  font-size: clamp(1.8rem, 4.9vw, 2.85rem);
+  line-height: 1.05;
+}
+
+/* The accent half of every split heading. */
+.removal-b .rb-accent {
+  color: var(--brand-accent);
+}
+
+.removal-b .rb-section--ink .rb-accent,
+.removal-b .rb-hero .rb-accent,
+.removal-b .rb-final .rb-accent,
+.removal-b .rb-h2--onInk .rb-accent {
+  color: var(--rb-accent-lift);
+}
+
+/* A brush of accent under the H1's second half. Painted as a background gradient
+   on the inline span, so it wraps with the text and costs nothing. */
+.removal-b .rb-h1 .rb-accent {
+  background-image: linear-gradient(
+    transparent 84%,
+    color-mix(in srgb, var(--brand-accent) 62%, transparent) 84%,
+    color-mix(in srgb, var(--brand-accent) 62%, transparent) 95%,
+    transparent 95%
+  );
+}
+
+.removal-b .rb-lede {
+  margin: clamp(16px, 2.4vw, 22px) 0 0;
+  font-size: clamp(1rem, 2vw, 1.15rem);
+  line-height: 1.62;
+  color: var(--rb-ink-2);
+  text-wrap: pretty;
+}
+
+.removal-b .rb-section--ink .rb-lede {
+  color: rgba(255, 255, 255, 0.76);
+}
+
+.removal-b .rb-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  margin: 0 0 clamp(14px, 2vw, 18px);
+  font-size: 0.7rem;
+  font-weight: 750;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--brand-primary);
+}
+
+.removal-b .rb-section--ink .rb-eyebrow,
+.removal-b .rb-hero .rb-eyebrow {
+  color: var(--rb-accent-lift);
+}
+
+.removal-b .rb-eyebrow-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: var(--brand-accent);
+  box-shadow: 0 0 0 4px var(--rb-accent-soft);
+}
+
+/* ---------------------------------------------------------------- *
+ * Scroll entrance
+ *
+ * Progressive enhancement, three ways at once: the finished state is the DEFAULT,
+ * the animation only exists inside @supports, and it is skipped entirely under
+ * prefers-reduced-motion. A browser without view() timelines renders the page
+ * exactly as it would have anyway. Transform + opacity only — compositor work, no
+ * layout, no paint.
+ * ---------------------------------------------------------------- */
+
+@keyframes rb-rise {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 26px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .removal-b .rb-rise {
+      animation: rb-rise linear both;
+      animation-timeline: view();
+      /* `cover` rather than `entry`: the cover range is well defined for a subject
+         of ANY height, including one taller than the viewport (the mosaic, the FAQ
+         list). An `entry` range on an over-tall subject is the one way this could
+         strand a block at partial opacity, and content that never finishes fading
+         in is worse than no animation at all. */
+      animation-range: cover 3% cover 24%;
+    }
+  }
+}
+
+/* ---------------------------------------------------------------- *
+ * Call CTA + buttons
+ *
+ * <PhoneLink/> renders: <a class="rb-call …"><span data-dni-text>NUMBER</span>
+ * <span class="phone-sub">sub-label</span></a>. The number must stay ONE
+ * uninterrupted text node for CallRail's DOM scan, so the layout is grid areas
+ * rather than extra wrapping elements.
+ * ---------------------------------------------------------------- */
+
+.removal-b .rb-call {
+  --rb-phone-glyph: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6.6 3h3l1.5 3.8-2 1.4a12 12 0 006.7 6.7l1.4-2 3.8 1.5v3a2 2 0 01-2.2 2A17.5 17.5 0 014.6 5.2 2 2 0 016.6 3z' fill='none' stroke='%23000' stroke-width='1.8' stroke-linejoin='round'/%3E%3C/svg%3E");
+  position: relative;
+  display: inline-grid;
+  grid-template-columns: auto 1fr;
+  grid-template-areas:
+    'glyph label'
+    'glyph sub';
+  align-items: center;
+  gap: 0 14px;
+  min-height: var(--tap);
+  padding: 13px 26px 13px 22px;
+  border: 0;
+  border-radius: 999px;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+  isolation: isolate;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.removal-b .rb-call::before {
+  content: '';
+  grid-area: glyph;
+  width: 22px;
+  height: 22px;
+  background: currentColor;
+  -webkit-mask: var(--rb-phone-glyph) center / contain no-repeat;
+  mask: var(--rb-phone-glyph) center / contain no-repeat;
+}
+
+.removal-b .rb-call [data-dni-text] {
+  grid-area: label;
+  font-size: 1.15rem;
+  font-weight: 780;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.removal-b .rb-call .phone-sub {
+  grid-area: sub;
+  font-size: 0.775rem;
+  font-weight: 600;
+  letter-spacing: 0.015em;
+  line-height: 1.4;
+  opacity: 0.8;
+}
+
+.removal-b .rb-call--sm {
+  padding: 10px 20px 10px 17px;
+}
+
+.removal-b .rb-call--sm [data-dni-text] {
+  font-size: 1.02rem;
+}
+
+/* Accent — the primary ask on this page. A sheen sweeps across it once every few
+   seconds so the eye finds it without an outline or a bounce. */
+.removal-b .rb-call--accent {
+  color: color-mix(in srgb, var(--brand-accent) 22%, #000000);
+  background: linear-gradient(135deg, var(--rb-accent-lift), var(--brand-accent) 55%, var(--rb-accent-ink));
+  box-shadow: 0 16px 34px -16px color-mix(in srgb, var(--brand-accent) 70%, transparent), var(--rb-shadow);
+  overflow: hidden;
+}
+
+.removal-b .rb-call--accent::after {
+  content: '';
+  position: absolute;
+  inset: 0 auto 0 -60%;
+  z-index: -1;
+  width: 45%;
+  background: linear-gradient(100deg, transparent, rgba(255, 255, 255, 0.55), transparent);
+  transform: translate3d(0, 0, 0);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .removal-b .rb-call--accent::after {
+    animation: rb-sheen 5.2s ease-in-out infinite;
+  }
+}
+
+@keyframes rb-sheen {
+  0%,
+  62% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(420%, 0, 0);
+  }
+}
+
+.removal-b .rb-call--accent:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 22px 44px -18px color-mix(in srgb, var(--brand-accent) 78%, transparent), var(--rb-shadow-lift);
+}
+
+/* Paper — for the ink plates, so contrast never depends on the brand hue. */
+.removal-b .rb-call--paper {
+  color: var(--rb-ink);
+  background: var(--rb-paper);
+  box-shadow: 0 22px 46px -20px rgba(0, 0, 0, 0.65);
+}
+
+.removal-b .rb-call--paper:hover {
+  transform: translateY(-2px);
+  background: color-mix(in srgb, var(--brand-accent) 15%, #ffffff);
+}
+
+/* Outline — the secondary call, beside the form. */
+.removal-b .rb-call--outline {
+  color: var(--brand-primary);
+  background: var(--rb-paper);
+  box-shadow: inset 0 0 0 1.5px color-mix(in srgb, var(--brand-primary) 32%, transparent);
+}
+
+.removal-b .rb-call--outline:hover {
+  background: var(--rb-tint);
+  box-shadow: inset 0 0 0 1.5px var(--brand-primary);
+}
+
+/* Header bar variant — compact, the whole thing is a tap target. */
+.removal-b .rb-call--bar {
+  gap: 0 9px;
+  padding: 8px 17px 8px 14px;
+  color: var(--brand-on-primary);
+  background: var(--brand-primary);
+  box-shadow: 0 10px 24px -14px color-mix(in srgb, var(--brand-primary) 90%, transparent);
+}
+
+.removal-b .rb-call--bar::before {
+  width: 17px;
+  height: 17px;
+}
+
+/* One text node, and it is the point of the bar: it shrinks rather than wraps. */
+.removal-b .rb-call--bar [data-dni-text] {
+  font-size: clamp(0.9rem, 3.3vw, 1.05rem);
+  white-space: nowrap;
+}
+
+.removal-b .rb-call--bar .phone-sub {
+  font-size: 0.69rem;
+  white-space: nowrap;
+}
+
+/* Ghost link — the hero's secondary path to the form. */
+.removal-b .rb-ghost {
+  --rb-arrow: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 4v15M6 13l6 6 6-6' fill='none' stroke='%23000' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: var(--tap);
+  padding: 10px 20px;
+  border-radius: 999px;
+  font-size: 0.95rem;
+  font-weight: 650;
+  color: rgba(255, 255, 255, 0.9);
+  text-decoration: none;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.26);
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.removal-b .rb-ghost::after {
+  content: '';
+  width: 16px;
+  height: 16px;
+  background: currentColor;
+  -webkit-mask: var(--rb-arrow) center / contain no-repeat;
+  mask: var(--rb-arrow) center / contain no-repeat;
+  transition: transform 0.2s ease;
+}
+
+.removal-b .rb-ghost:hover {
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.45);
+}
+
+.removal-b .rb-ghost:hover::after {
+  transform: translateY(2px);
+}
+
+/* ---------------------------------------------------------------- *
+ * Header
+ * ---------------------------------------------------------------- */
+
+.removal-b .rb-header {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  background: color-mix(in srgb, var(--rb-paper) 86%, transparent);
+  backdrop-filter: saturate(1.5) blur(14px);
+  -webkit-backdrop-filter: saturate(1.5) blur(14px);
+  border-bottom: 1px solid var(--rb-hairline);
+}
+
+.removal-b .rb-header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  min-height: 66px;
+  padding-block: 9px;
+}
+
+.removal-b .rb-header-right {
+  display: flex;
+  align-items: center;
+  gap: clamp(10px, 1.6vw, 18px);
+}
+
+/* max-height + overflow so a record pointing at a logo file that no longer exists
+   degrades to a clipped box instead of dropping oversized alt text through the bar. */
+.removal-b .rb-logo {
+  height: 40px;
+  width: auto;
+  max-width: 180px;
+  overflow: hidden;
+  object-fit: contain;
+  font-size: 0.8125rem;
+  line-height: 1.2;
+}
+
+/* No logo file: the client's name as a wordmark, never a broken image (R5). */
+.removal-b span.rb-logo {
+  display: inline-block;
+  height: auto;
+  font-size: 1.05rem;
+  font-weight: 780;
+  letter-spacing: -0.025em;
+  line-height: 1.15;
+  color: var(--brand-primary);
+}
+
+.removal-b .rb-header-badge {
+  display: none;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 14px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 650;
+  color: var(--brand-primary);
+  background: var(--rb-tint);
+  box-shadow: inset 0 0 0 1px var(--rb-hairline);
+}
+
+.removal-b .rb-header-badge .rb-icon {
+  width: 16px;
+  height: 16px;
+}
+
+@media (min-width: 900px) {
+  .removal-b .rb-header-inner {
+    min-height: 82px;
+  }
+
+  .removal-b .rb-logo {
+    height: 52px;
+    max-width: 230px;
+  }
+
+  .removal-b .rb-header-badge {
+    display: inline-flex;
+  }
+}
+
+/* ---------------------------------------------------------------- *
+ * S1 — hero
+ *
+ * Mobile: no photograph at all. The LCP element is the H1 and it paints with the
+ * stylesheet. The depth comes from three stacked gradients, a hairline grid and one
+ * slowly orbiting glow — all of it free, none of it a request.
+ * ---------------------------------------------------------------- */
+
+.removal-b .rb-hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding-block: clamp(42px, 7vw, 96px) clamp(48px, 7vw, 104px);
+  color: #ffffff;
+  background-color: var(--rb-deeper);
+  background-image:
+    radial-gradient(86% 74% at 10% -6%, color-mix(in srgb, var(--brand-primary) 72%, transparent) 0%, transparent 58%),
+    radial-gradient(60% 52% at 92% 4%, color-mix(in srgb, var(--brand-accent) 26%, transparent) 0%, transparent 62%),
+    linear-gradient(165deg, var(--rb-deep) 0%, #05090c 96%);
+}
+
+/* Hairline grid, faded out towards the edges with a mask so it never draws a hard
+   boundary. Two repeating gradients, no image. */
+.removal-b .rb-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image:
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.05) 0 1px, transparent 1px 84px),
+    repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.04) 0 1px, transparent 1px 84px);
+  -webkit-mask-image: radial-gradient(110% 90% at 22% 8%, #000 0%, transparent 72%);
+  mask-image: radial-gradient(110% 90% at 22% 8%, #000 0%, transparent 72%);
+}
+
+/* One soft accent glow drifting behind the type. Rotation of a pre-soft radial
+   gradient — transform only, no filter, so it stays on the compositor. */
+.removal-b .rb-hero::after {
+  content: '';
+  position: absolute;
+  top: -42%;
+  left: 8%;
+  z-index: -1;
+  width: 62vmax;
+  height: 62vmax;
+  border-radius: 50%;
+  transform-origin: 32% 68%;
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--brand-accent) 34%, transparent), transparent 72%);
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .removal-b .rb-hero::after {
+    animation: rb-orbit 42s linear infinite;
+  }
+}
+
+@keyframes rb-orbit {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.removal-b .rb-hero-inner {
+  position: relative;
+  display: grid;
+  gap: clamp(32px, 5vw, 64px);
+  align-items: center;
+}
+
+.removal-b .rb-hero-copy {
+  max-width: 40ch;
+}
+
+/* 768-979px: wide enough that a 40ch column leaves an obviously empty right half,
+   but not wide enough for the art panel. The copy takes the width instead. */
+@media (min-width: 700px) and (max-width: 979px) {
+  .removal-b .rb-hero-copy {
+    max-width: 640px;
+  }
+}
+
+.removal-b .rb-hero .rb-h1 {
+  color: #ffffff;
+}
+
+.removal-b .rb-hero-sub {
+  margin: clamp(18px, 2.6vw, 26px) 0 0;
+  max-width: 46ch;
+  font-size: clamp(1.02rem, 2.1vw, 1.2rem);
+  line-height: 1.58;
+  color: rgba(255, 255, 255, 0.8);
+  text-wrap: pretty;
+}
+
+.removal-b .rb-hero-area {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: clamp(16px, 2.2vw, 20px) 0 0;
+  padding: 7px 15px 7px 12px;
+  border-radius: 999px;
+  font-size: 0.83rem;
+  font-weight: 620;
+  color: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.07);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.16);
+}
+
+.removal-b .rb-hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: clamp(12px, 1.8vw, 18px);
+  margin-top: clamp(26px, 3.4vw, 38px);
+}
+
+/* Credential chips */
+.removal-b .rb-chips {
+  display: grid;
+  gap: 10px;
+  margin: clamp(28px, 4vw, 44px) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.removal-b .rb-chip {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 16px;
+  border-radius: 14px;
+  font-size: 0.9rem;
+  font-weight: 620;
+  line-height: 1.35;
+  color: rgba(255, 255, 255, 0.92);
+  background: linear-gradient(120deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.03));
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.13);
+}
+
+.removal-b .rb-chip-icon {
+  display: inline-flex;
+  color: var(--rb-accent-lift);
+}
+
+@media (min-width: 560px) {
+  .removal-b .rb-chips {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* The desktop-only photograph.
+   Display:none here is not a hiding trick — the background-image rule that
+   references --rb-art lives inside the min-width query below, and a non-matching
+   media query never fetches its backgrounds. On a phone this file is not
+   downloaded at all. */
+.removal-b .rb-hero-art {
+  display: none;
+}
+
+@media (min-width: 980px) {
+  .removal-b .rb-hero-inner {
+    grid-template-columns: minmax(0, 1.06fr) minmax(320px, 0.94fr);
+  }
+
+  .removal-b .rb-hero-art {
+    position: relative;
+    display: block;
+    padding: 0 18px 34px 0;
+  }
+
+  /* The accent plate offset behind the photograph. */
+  .removal-b .rb-hero-art::before {
+    content: '';
+    position: absolute;
+    inset: 26px -6px -8px 34px;
+    border-radius: 26px;
+    background: linear-gradient(150deg, color-mix(in srgb, var(--brand-accent) 62%, transparent), transparent 72%);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+  }
+
+  .removal-b .rb-hero-frame {
+    position: relative;
+    aspect-ratio: 4 / 5;
+    border-radius: 24px;
+    background-image: var(--rb-art);
+    background-size: cover;
+    background-position: center 38%;
+    background-repeat: no-repeat;
+    background-color: color-mix(in srgb, var(--brand-primary) 30%, #000000);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.18), 0 40px 80px -34px rgba(0, 0, 0, 0.85);
+  }
+
+  .removal-b .rb-hero-badge {
+    position: absolute;
+    left: -14px;
+    bottom: 12px;
+    display: grid;
+    grid-template-columns: auto auto;
+    grid-template-areas:
+      'stars stars'
+      'value label';
+    align-items: center;
+    gap: 2px 10px;
+    padding: 12px 18px;
+    border-radius: 16px;
+    background: color-mix(in srgb, #ffffff 90%, transparent);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: var(--rb-shadow-lift);
+    color: var(--rb-ink);
+  }
+
+  .removal-b .rb-hero-badge-stars {
+    grid-area: stars;
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    color: var(--brand-accent);
+  }
+
+  .removal-b .rb-hero-badge-value {
+    grid-area: value;
+    font-size: 1.35rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+  }
+
+  .removal-b .rb-hero-badge-label {
+    grid-area: label;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--rb-muted);
+  }
+}
+
+/* A client with no photographs has no art panel, so the hero stops pretending
+   there is a second column and simply lets the copy breathe (R5). */
+@media (min-width: 980px) {
+  .removal-b .rb-hero--noart .rb-hero-inner {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .removal-b .rb-hero--noart .rb-hero-copy {
+    max-width: 46ch;
+  }
+
+  .removal-b .rb-hero--noart .rb-chips {
+    max-width: 720px;
+  }
+}
+
+/* ---------------------------------------------------------------- *
+ * S2 — credential ticker
+ *
+ * Two identical groups translated -50%: the second takes over exactly where the
+ * first began, so the loop has no seam. The clone is aria-hidden, so a screen
+ * reader hears each claim once.
+ * ---------------------------------------------------------------- */
+
+.removal-b .rb-ticker {
+  overflow: hidden;
+  padding-block: 15px;
+  background: var(--rb-deep);
+  color: rgba(255, 255, 255, 0.9);
+  border-bottom: 1px solid color-mix(in srgb, var(--brand-accent) 30%, transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+}
+
+.removal-b .rb-ticker-track {
+  display: flex;
+  width: max-content;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .removal-b .rb-ticker-track {
+    animation: rb-ticker 44s linear infinite;
+  }
+
+  .removal-b .rb-ticker:hover .rb-ticker-track {
+    animation-play-state: paused;
+  }
+}
+
+@keyframes rb-ticker {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.removal-b .rb-ticker-group {
+  display: flex;
+  align-items: center;
+  gap: clamp(22px, 3.4vw, 44px);
+  padding-right: clamp(22px, 3.4vw, 44px);
+}
+
+.removal-b .rb-ticker-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 0.85rem;
+  font-weight: 620;
+  letter-spacing: 0.005em;
+  white-space: nowrap;
+}
+
+.removal-b .rb-ticker-check {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 19px;
+  height: 19px;
+  border-radius: 999px;
+  color: var(--rb-deep);
+  background: var(--rb-accent-lift);
+}
+
+.removal-b .rb-ticker-check .rb-icon {
+  width: 12px;
+  height: 12px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .removal-b .rb-ticker {
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+
+  .removal-b .rb-ticker-track {
+    width: 100%;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .removal-b .rb-ticker-group {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px 26px;
+    padding-right: 0;
+  }
+
+  .removal-b .rb-ticker-group[data-clone='true'] {
+    display: none;
+  }
+
+  .removal-b .rb-ticker-item {
+    white-space: normal;
+  }
+}
+
+/* ---------------------------------------------------------------- *
+ * S3 — the diagnostic
+ * ---------------------------------------------------------------- */
+
+.removal-b .rb-signal-grid {
+  display: grid;
+  gap: clamp(14px, 2vw, 20px);
+  margin: clamp(34px, 4.6vw, 60px) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.removal-b .rb-signal {
+  position: relative;
+  overflow: hidden;
+  padding: clamp(22px, 3vw, 30px);
+  border-radius: var(--rb-radius);
+  background: var(--rb-paper);
+  box-shadow: inset 0 0 0 1px var(--rb-hairline), var(--rb-shadow);
+  transition: transform 0.22s ease, box-shadow 0.22s ease;
+}
+
+/* Gradient edge along the top of each card. */
+.removal-b .rb-signal::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--brand-accent), color-mix(in srgb, var(--brand-primary) 70%, transparent));
+}
+
+.removal-b .rb-signal:hover {
+  transform: translateY(-3px);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--brand-primary) 26%, var(--rb-line)), var(--rb-shadow-lift);
+}
+
+/* The ghost numeral. Decorative, aria-hidden in the markup. */
+.removal-b .rb-signal-num {
+  position: absolute;
+  right: 14px;
+  bottom: -18px;
+  font-size: 5.6rem;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.06em;
+  color: color-mix(in srgb, var(--brand-primary) 7%, transparent);
+  pointer-events: none;
+}
+
+.removal-b .rb-signal-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  margin-bottom: 16px;
+  border-radius: 12px;
+  color: var(--rb-accent-ink);
+  background: var(--rb-accent-soft);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--brand-accent) 34%, transparent);
+}
+
+.removal-b .rb-signal-h {
+  position: relative;
+  margin: 0 0 9px;
+  font-size: clamp(1.06rem, 2.2vw, 1.2rem);
+  line-height: 1.25;
+}
+
+.removal-b .rb-signal-body {
+  position: relative;
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.62;
+  color: var(--rb-ink-2);
+}
+
+.removal-b .rb-signal-foot {
+  margin: clamp(26px, 3.4vw, 38px) 0 0;
+  font-size: 0.95rem;
+  font-weight: 620;
+  color: var(--brand-primary);
+}
+
+@media (min-width: 900px) {
+  .removal-b .rb-signal-grid {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+
+  /* 2 wide + 3 narrow. The asymmetry is the point: five equal boxes read as a
+     checklist, this reads as a hierarchy. */
+  .removal-b .rb-signal-grid > li:nth-child(1),
+  .removal-b .rb-signal-grid > li:nth-child(2) {
+    grid-column: span 3;
+  }
+
+  .removal-b .rb-signal-grid > li:nth-child(n + 3) {
+    grid-column: span 2;
+  }
+}
+
+/* ---------------------------------------------------------------- *
+ * S4 — proof
+ * ---------------------------------------------------------------- */
+
+.removal-b .rb-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: clamp(12px, 2vw, 20px);
+  margin: clamp(34px, 4.6vw, 56px) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.removal-b .rb-stat {
+  display: grid;
+  gap: 4px;
+  padding: clamp(18px, 2.6vw, 26px);
+  border-radius: var(--rb-radius-sm);
+  background: linear-gradient(140deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.035));
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.14);
+}
+
+.removal-b .rb-stat-value {
+  font-size: clamp(1.7rem, 4vw, 2.3rem);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  color: var(--rb-accent-lift);
+}
+
+.removal-b .rb-stat-label {
+  font-size: 0.83rem;
+  font-weight: 600;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.removal-b .rb-reviews {
+  display: grid;
+  gap: clamp(14px, 2vw, 20px);
+  margin: clamp(16px, 2.4vw, 22px) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.removal-b .rb-review {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+  overflow: hidden;
+  padding: clamp(22px, 3vw, 30px);
+  border-radius: var(--rb-radius);
+  background: rgba(255, 255, 255, 0.055);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.13);
+}
+
+.removal-b .rb-review-quote {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  color: rgba(255, 255, 255, 0.09);
+  pointer-events: none;
+}
+
+.removal-b .rb-quote-mark {
+  width: 48px;
+  height: 36px;
+}
+
+.removal-b .rb-review-stars {
+  display: inline-flex;
+  gap: 3px;
+  color: var(--rb-accent-lift);
+}
+
+.removal-b .rb-review-stars .rb-icon {
+  width: 17px;
+  height: 17px;
+}
+
+/* The shared StarIcon is an outline glyph. A rating row of OUTLINE stars reads as
+   an EMPTY rating, which is the opposite of what this section is for, so here the
+   same path is filled. */
+.removal-b .rb-review-stars .rb-icon path {
+  fill: currentColor;
+}
+
+.removal-b .rb-review-body {
+  position: relative;
+  margin: 0;
+  font-size: 0.975rem;
+  line-height: 1.66;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.removal-b .rb-review-who {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-top: auto;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.removal-b .rb-review-author {
+  font-size: 0.93rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.removal-b .rb-review-meta {
+  font-size: 0.79rem;
+  color: rgba(255, 255, 255, 0.62);
+}
+
+@media (min-width: 880px) {
+  .removal-b .rb-reviews {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  /* More than three reviews: the extras keep the same track and simply wrap. */
+  .removal-b .rb-proof .rb-head {
+    max-width: 40ch;
+  }
+}
+
+/* ---------------------------------------------------------------- *
+ * S5 — recent removals mosaic
+ *
+ * Explicit row height + row spans, so the bento is deterministic whatever mix of
+ * photo shapes a client supplies. The DeferredImage wrapper carries an INLINE
+ * aspect-ratio (measured, for CLS), and an inline style can only be beaten by
+ * !important — which is why the two declarations below carry it. Nothing shifts:
+ * the tile itself owns the reserved box now.
+ * ---------------------------------------------------------------- */
+
+.removal-b .rb-mosaic {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-auto-rows: clamp(84px, 21vw, 120px);
+  gap: clamp(9px, 1.5vw, 14px);
+  margin: clamp(34px, 4.6vw, 56px) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.removal-b .rb-tile {
+  position: relative;
+  overflow: hidden;
+  grid-row: span 2;
+  border-radius: var(--rb-radius-sm);
+  background: var(--ra-placeholder);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--brand-primary) 12%, transparent);
+}
+
+.removal-b .rb-tile:first-child {
+  grid-column: span 2;
+  grid-row: span 3;
+}
+
+.removal-b .rb-tile-box {
+  height: 100% !important;
+  aspect-ratio: auto !important;
+}
+
+.removal-b .rb-tile-img,
+.removal-b .rb-tile-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* A clip with preload="none" has no frame until the browser fetches one, and a
+   flat dark fill would read as a broken tile in that window. The tile paints a
+   branded panel with a play mark UNDERNEATH the video instead, so the pre-frame
+   state looks deliberate and the frame simply covers it when it arrives. */
+.removal-b .rb-tile--clip {
+  background-image: linear-gradient(150deg, var(--rb-deep), #05090c);
+}
+
+.removal-b .rb-tile--clip::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 54px;
+  height: 54px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--brand-accent) 88%, #ffffff);
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M9 6.4l9 5.6-9 5.6z' fill='%23000'/%3E%3C/svg%3E") center / 60% no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M9 6.4l9 5.6-9 5.6z' fill='%23000'/%3E%3C/svg%3E") center / 60% no-repeat;
+  opacity: 0.75;
+  pointer-events: none;
+}
+
+.removal-b .rb-tile-video {
+  position: relative;
+  z-index: 1;
+  background: transparent;
+}
+
+.removal-b .rb-tile-img {
+  transition: transform 0.5s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+.removal-b .rb-tile:hover .rb-tile-img {
+  transform: scale(1.045);
+}
+
+@media (min-width: 860px) {
+  .removal-b .rb-mosaic {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    grid-auto-rows: clamp(96px, 9vw, 132px);
+  }
+
+  .removal-b .rb-tile {
+    grid-column: span 2;
+    grid-row: span 2;
+  }
+
+  .removal-b .rb-tile:first-child {
+    grid-column: span 4;
+    grid-row: span 3;
+  }
+
+  .removal-b .rb-tile:nth-child(2) {
+    grid-row: span 3;
+  }
+
+  .removal-b .rb-tile:nth-child(3) {
+    grid-column: span 3;
+  }
+
+  .removal-b .rb-tile:nth-child(4) {
+    grid-column: span 3;
+  }
+}
+
+/* ---------------------------------------------------------------- *
+ * S6 — the offer + the form
+ * ---------------------------------------------------------------- */
+
+.removal-b .rb-estimate-grid {
+  display: grid;
+  gap: clamp(28px, 4vw, 52px);
+  align-items: start;
+}
+
+.removal-b .rb-ribbon {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  margin: 0 0 clamp(14px, 2vw, 18px);
+  padding: 8px 16px 8px 13px;
+  border-radius: 999px;
+  font-size: 0.76rem;
+  font-weight: 750;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--rb-accent-on-light);
+  background: linear-gradient(120deg, var(--rb-accent-soft), color-mix(in srgb, var(--brand-accent) 26%, transparent));
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--brand-accent) 40%, transparent);
+}
+
+.removal-b .rb-ribbon-spark {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--brand-accent);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .removal-b .rb-ribbon-spark {
+    animation: rb-pulse 2.6s ease-in-out infinite;
+  }
+}
+
+@keyframes rb-pulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.45;
+    transform: scale(0.72);
+  }
+}
+
+.removal-b .rb-reassure {
+  display: grid;
+  gap: 12px;
+  margin: clamp(24px, 3vw, 32px) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.removal-b .rb-reassure li,
+.removal-b .rb-scope-list li {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: start;
+  gap: 12px;
+  font-size: 0.97rem;
+  line-height: 1.5;
+  color: var(--rb-ink-2);
+}
+
+.removal-b .rb-reassure-check,
+.removal-b .rb-scope-check {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  margin-top: 1px;
+  border-radius: 999px;
+  color: var(--brand-on-primary);
+  background: var(--brand-primary);
+}
+
+.removal-b .rb-reassure-check .rb-icon,
+.removal-b .rb-scope-check .rb-icon {
+  width: 13px;
+  height: 13px;
+}
+
+.removal-b .rb-offer-call {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px;
+  margin-top: clamp(26px, 3.4vw, 36px);
+  padding-top: clamp(22px, 3vw, 28px);
+  border-top: 1px solid var(--rb-hairline);
+}
+
+.removal-b .rb-offer-call-label {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 650;
+  color: var(--rb-ink);
+}
+
+/* The form card. A gradient hairline rather than a flat border — the one place on
+   the page where the brand and the accent meet on a light surface. */
+.removal-b .rb-form-card {
+  position: relative;
+  padding: clamp(22px, 3.4vw, 34px);
+  border-radius: var(--rb-radius);
+  background: var(--rb-paper);
+  box-shadow: var(--rb-shadow-lift);
+  scroll-margin-top: 96px;
+}
+
+.removal-b .rb-form-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1.5px;
+  background: linear-gradient(155deg, color-mix(in srgb, var(--brand-accent) 70%, transparent), color-mix(in srgb, var(--brand-primary) 45%, transparent) 55%, transparent);
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+.removal-b .rb-form-h {
+  font-size: clamp(1.3rem, 3vw, 1.6rem);
+  line-height: 1.15;
+}
+
+.removal-b .rb-form-sub {
+  margin: 10px 0 0;
+  font-size: 0.93rem;
+  line-height: 1.55;
+  color: var(--rb-muted);
+}
+
+.removal-b .rb-form {
+  margin-top: clamp(20px, 2.8vw, 26px);
+}
+
+/* base.css sets `.field label { display: block }` (0,1,1) and
+   `.consent-label { display: flex }` (0,1,0), so the block rule wins and the
+   consent copy wraps back underneath its own checkbox on EVERY template. Corrected
+   here at template scope rather than by editing the shared stylesheet mid-phase —
+   flagged for a base.css fix so the other templates get it too. */
+.removal-b .rb-form .consent-label {
+  display: flex;
+}
+
+.removal-b .rb-form .field label {
+  font-size: 0.8rem;
+  font-weight: 650;
+  letter-spacing: 0.012em;
+  color: var(--rb-ink-2);
+}
+
+.removal-b .rb-form .field input[type='text'],
+.removal-b .rb-form .field input[type='tel'],
+.removal-b .rb-form .field input[type='email'] {
+  border-color: var(--rb-line);
+  border-radius: var(--rb-radius-sm);
+  background: color-mix(in srgb, var(--brand-primary) 3%, #ffffff);
+  transition: border-color 0.16s ease, box-shadow 0.16s ease;
+}
+
+.removal-b .rb-form .field input:focus {
+  border-color: var(--brand-primary);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--brand-primary) 17%, transparent);
+  outline: none;
+}
+
+.removal-b .rb-form .btn-primary {
+  min-height: 56px;
+  border-radius: 999px;
+  font-size: 1.02rem;
+  font-weight: 750;
+  letter-spacing: -0.012em;
+  color: color-mix(in srgb, var(--brand-accent) 22%, #000000);
+  background: linear-gradient(135deg, var(--rb-accent-lift), var(--brand-accent) 58%, var(--rb-accent-ink));
+  box-shadow: 0 16px 32px -16px color-mix(in srgb, var(--brand-accent) 72%, transparent);
+}
+
+.removal-b .rb-form .btn-primary:hover:not(:disabled) {
+  filter: saturate(1.08);
+}
+
+.removal-b .rb-form-foot {
+  margin: clamp(14px, 2vw, 18px) 0 0;
+  font-size: 0.75rem;
+  line-height: 1.5;
+  color: var(--rb-muted);
+}
+
+@media (min-width: 940px) {
+  .removal-b .rb-estimate-grid {
+    grid-template-columns: minmax(0, 1fr) minmax(380px, 0.86fr);
+  }
+}
+
+/* ---------------------------------------------------------------- *
+ * S7 — the process timeline
+ * ---------------------------------------------------------------- */
+
+.removal-b .rb-steps {
+  position: relative;
+  display: grid;
+  gap: clamp(24px, 3vw, 34px);
+  margin: clamp(36px, 4.6vw, 60px) 0 0;
+  padding: 0 0 0 42px;
+  list-style: none;
+}
+
+/* The spine. One gradient, no markup, no image. */
+.removal-b .rb-steps::before {
+  content: '';
+  position: absolute;
+  top: 8px;
+  bottom: 8px;
+  left: 15px;
+  width: 2px;
+  background: linear-gradient(
+    180deg,
+    var(--brand-accent),
+    color-mix(in srgb, var(--brand-primary) 55%, transparent) 55%,
+    transparent
+  );
+}
+
+.removal-b .rb-step {
+  position: relative;
+}
+
+.removal-b .rb-step-dot {
+  position: absolute;
+  top: 0;
+  left: -42px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: var(--brand-on-primary);
+  background: var(--brand-primary);
+  box-shadow: 0 0 0 5px var(--rb-paper), 0 0 0 6px var(--rb-hairline);
+}
+
+.removal-b .rb-step-label {
+  display: inline-block;
+  margin-bottom: 7px;
+  font-size: 0.68rem;
+  font-weight: 780;
+  letter-spacing: 0.17em;
+  text-transform: uppercase;
+  color: var(--rb-accent-on-light);
+}
+
+.removal-b .rb-step-h {
+  margin: 0 0 8px;
+  font-size: clamp(1.08rem, 2.2vw, 1.28rem);
+  line-height: 1.22;
+}
+
+.removal-b .rb-step-body {
+  margin: 0;
+  max-width: 54ch;
+  font-size: 0.95rem;
+  line-height: 1.62;
+  color: var(--rb-ink-2);
+}
+
+@media (min-width: 940px) {
+  /* Horizontal rail: same line, read left to right. */
+  .removal-b .rb-steps {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: clamp(20px, 2.6vw, 30px);
+    padding: 46px 0 0;
+  }
+
+  .removal-b .rb-steps::before {
+    top: 15px;
+    bottom: auto;
+    left: 0;
+    right: 0;
+    width: auto;
+    height: 2px;
+    background: linear-gradient(
+      90deg,
+      var(--brand-accent),
+      color-mix(in srgb, var(--brand-primary) 55%, transparent) 62%,
+      transparent
+    );
+  }
+
+  .removal-b .rb-step-dot {
+    top: -46px;
+    left: 0;
+  }
+}
+
+/* ---------------------------------------------------------------- *
+ * S8 — scope
+ * ---------------------------------------------------------------- */
+
+.removal-b .rb-scope-grid {
+  display: grid;
+  gap: clamp(16px, 2.4vw, 24px);
+  margin-top: clamp(34px, 4.6vw, 56px);
+}
+
+.removal-b .rb-scope-panel {
+  position: relative;
+  overflow: hidden;
+  padding: clamp(24px, 3.2vw, 34px);
+  border-radius: var(--rb-radius);
+  background: var(--rb-paper);
+  box-shadow: inset 0 0 0 1px var(--rb-hairline), var(--rb-shadow);
+}
+
+.removal-b .rb-scope-panel::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--brand-primary), var(--brand-accent));
+}
+
+.removal-b .rb-scope-h {
+  margin: 0 0 clamp(16px, 2.2vw, 22px);
+  padding-bottom: clamp(12px, 1.8vw, 16px);
+  border-bottom: 1px solid var(--rb-hairline);
+  font-size: clamp(1.1rem, 2.3vw, 1.3rem);
+  line-height: 1.2;
+}
+
+.removal-b .rb-scope-list {
+  display: grid;
+  gap: 13px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+@media (min-width: 860px) {
+  .removal-b .rb-scope-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* ---------------------------------------------------------------- *
+ * S9 — service-area grid
+ * ---------------------------------------------------------------- */
+
+.removal-b .rb-area-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 10px;
+  margin: clamp(32px, 4.4vw, 52px) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.removal-b .rb-area {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 12px 16px;
+  border-radius: var(--rb-radius-sm);
+  font-size: 0.9rem;
+  font-weight: 620;
+  color: var(--rb-ink);
+  background: var(--rb-tint);
+  box-shadow: inset 0 0 0 1px var(--rb-hairline);
+  transition: background-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.removal-b .rb-area:hover {
+  background: var(--rb-tint-2);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--brand-primary) 30%, transparent);
+}
+
+.removal-b .rb-icon--pin {
+  flex: 0 0 auto;
+  color: var(--brand-accent);
+}
+
+/* ---------------------------------------------------------------- *
+ * S10 — FAQ
+ * ---------------------------------------------------------------- */
+
+.removal-b .rb-faq-list {
+  display: grid;
+  gap: 12px;
+  margin: clamp(32px, 4.4vw, 52px) 0 0;
+  max-width: 880px;
+}
+
+.removal-b .rb-faq-item {
+  overflow: hidden;
+  border-radius: var(--rb-radius-sm);
+  background: var(--rb-paper);
+  box-shadow: inset 0 0 0 1px var(--rb-hairline);
+  transition: box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.removal-b .rb-faq-item[open] {
+  background: var(--rb-tint);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--brand-primary) 28%, transparent), var(--rb-shadow);
+}
+
+.removal-b .rb-faq-q {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: clamp(16px, 2.2vw, 21px) clamp(18px, 2.4vw, 24px);
+  cursor: pointer;
+  font-size: clamp(1rem, 2vw, 1.1rem);
+  font-weight: 680;
+  letter-spacing: -0.017em;
+  line-height: 1.32;
+  list-style: none;
+}
+
+.removal-b .rb-faq-q::-webkit-details-marker {
+  display: none;
+}
+
+.removal-b .rb-faq-q:hover {
+  color: var(--brand-primary);
+}
+
+.removal-b .rb-icon--plus {
+  flex: 0 0 auto;
+  color: var(--rb-accent-on-light);
+}
+
+/* Plus becomes minus: the vertical bar collapses. Transform only. */
+.removal-b .rb-plus-bar--v {
+  transform-origin: 12px 12px;
+  transition: transform 0.22s ease;
+}
+
+.removal-b .rb-faq-item[open] .rb-plus-bar--v {
+  transform: scaleY(0) rotate(90deg);
+}
+
+.removal-b .rb-faq-a {
+  margin: 0;
+  padding: 0 clamp(18px, 2.4vw, 24px) clamp(20px, 2.6vw, 25px);
+  max-width: 68ch;
+  font-size: 0.965rem;
+  line-height: 1.68;
+  color: var(--rb-ink-2);
+}
+
+/* ---------------------------------------------------------------- *
+ * S11 — closing band
+ * ---------------------------------------------------------------- */
+
+.removal-b .rb-final {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding-block: clamp(58px, 8.5vw, 122px);
+  color: #ffffff;
+  background-color: var(--rb-deeper);
+  background-image:
+    radial-gradient(70% 90% at 50% 0%, color-mix(in srgb, var(--brand-primary) 68%, transparent) 0%, transparent 66%),
+    radial-gradient(50% 60% at 88% 96%, color-mix(in srgb, var(--brand-accent) 24%, transparent) 0%, transparent 62%),
+    linear-gradient(174deg, var(--rb-deep), #05090c);
+}
+
+.removal-b .rb-final::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image: repeating-linear-gradient(115deg, rgba(255, 255, 255, 0.045) 0 1px, transparent 1px 26px);
+  -webkit-mask-image: radial-gradient(80% 80% at 50% 40%, #000, transparent 76%);
+  mask-image: radial-gradient(80% 80% at 50% 40%, #000, transparent 76%);
+}
+
+.removal-b .rb-final-inner {
+  display: grid;
+  justify-items: center;
+  gap: clamp(18px, 2.6vw, 26px);
+  max-width: 780px;
+  margin-inline: auto;
+  text-align: center;
+}
+
+.removal-b .rb-h2--onInk {
+  color: #ffffff;
+}
+
+.removal-b .rb-final-body {
+  margin: 0;
+  font-size: clamp(1rem, 2vw, 1.12rem);
+  line-height: 1.62;
+  color: rgba(255, 255, 255, 0.82);
+  text-wrap: pretty;
+}
+
+.removal-b .rb-final-alt {
+  font-size: 0.9rem;
+  font-weight: 620;
+  color: rgba(255, 255, 255, 0.74);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-decoration-thickness: 1px;
+}
+
+.removal-b .rb-final-alt:hover {
+  color: #ffffff;
+}
+
+/* ---------------------------------------------------------------- *
+ * S12 — footer
+ * ---------------------------------------------------------------- */
+
+.removal-b .rb-footer {
+  padding-block: clamp(38px, 5vw, 64px);
+  background: #070b0e;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.86rem;
+}
+
+.removal-b .rb-footer-inner {
+  display: grid;
+  justify-items: center;
+  gap: 14px;
+  text-align: center;
+}
+
+.removal-b .rb-footer-top {
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+}
+
+.removal-b .rb-footer-logo {
+  height: 50px;
+  width: auto;
+  max-width: 210px;
+  object-fit: contain;
+}
+
+.removal-b span.rb-footer-logo {
+  height: auto;
+  font-size: 1.1rem;
+  font-weight: 780;
+  letter-spacing: -0.025em;
+  color: #ffffff;
+}
+
+.removal-b .rb-footer-tagline {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.removal-b .rb-footer-legal {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px 22px;
+}
+
+.removal-b .rb-footer-legal a {
+  color: #ffffff;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+}
+
+.removal-b .rb-footer-disclaimer,
+.removal-b .rb-footer-copy {
+  margin: 0;
+  max-width: 62ch;
+  font-size: 0.75rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* ---------------------------------------------------------------- *
+ * Mobile action bar
+ * ---------------------------------------------------------------- */
+
+.removal-b .rb-sticky {
+  position: fixed;
+  inset: auto 0 0 0;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 14px calc(9px + env(safe-area-inset-bottom, 0px));
+  background: color-mix(in srgb, #070b0e 90%, transparent);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-top: 1px solid color-mix(in srgb, var(--brand-accent) 34%, transparent);
+}
+
+.removal-b .rb-sticky-call {
+  display: grid;
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: var(--tap);
+  align-content: center;
+  padding: 6px 14px;
+  border-radius: 999px;
+  color: var(--brand-on-primary);
+  background: var(--brand-primary);
+  text-decoration: none;
+}
+
+.removal-b .rb-sticky-call [data-dni-text] {
+  display: block;
+  overflow: hidden;
+  font-size: 1.02rem;
+  font-weight: 780;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.removal-b .rb-sticky-call .phone-sub {
+  display: block;
+  font-size: 0.68rem;
+  font-weight: 600;
+  opacity: 0.8;
+}
+
+.removal-b .rb-sticky-form {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tap);
+  padding: 0 20px;
+  border-radius: 999px;
+  font-size: 0.92rem;
+  font-weight: 750;
+  color: color-mix(in srgb, var(--brand-accent) 22%, #000000);
+  background: linear-gradient(135deg, var(--rb-accent-lift), var(--brand-accent));
+  text-decoration: none;
+}
+
+@media (min-width: 768px) {
+  .removal-b .rb-sticky {
+    display: none;
+  }
+}
+
+/* ---------------------------------------------------------------- *
+ * Focus + motion
+ * ---------------------------------------------------------------- */
+
+.removal-b a:focus-visible,
+.removal-b summary:focus-visible,
+.removal-b button:focus-visible {
+  outline: 3px solid var(--brand-accent);
+  outline-offset: 3px;
+  border-radius: 8px;
+}
+
+.removal-b .rb-section--ink a:focus-visible,
+.removal-b .rb-hero a:focus-visible,
+.removal-b .rb-final a:focus-visible,
+.removal-b .rb-sticky a:focus-visible {
+  outline-color: #ffffff;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .removal-b .rb-call,
+  .removal-b .rb-ghost,
+  .removal-b .rb-ghost::after,
+  .removal-b .rb-signal,
+  .removal-b .rb-tile-img,
+  .removal-b .rb-area,
+  .removal-b .rb-faq-item,
+  .removal-b .rb-plus-bar--v {
+    transition: none;
+  }
+
+  .removal-b .rb-call:hover,
+  .removal-b .rb-signal:hover,
+  .removal-b .rb-tile:hover .rb-tile-img,
+  .removal-b .rb-ghost:hover::after {
+    transform: none;
+  }
+}
