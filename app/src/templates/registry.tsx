@@ -14,6 +14,7 @@ import { TrimmingA } from './trimming-a';
 import { RemovalB } from './removal-b';
 import { TrimmingB } from './trimming-b';
 import { StormA } from './storm-a';
+import { StormB } from './storm-b';
 import { Agnostic } from './agnostic';
 
 export interface TemplateMeta {
@@ -30,7 +31,7 @@ export const TEMPLATE_META: TemplateMeta[] = [
   { id: 'trimming-a', label: 'Tree Trimming — Control', service: 'trimming', variant: 'control', built: true },
   { id: 'trimming-b', label: 'Tree Trimming — Variant', service: 'trimming', variant: 'variant', built: true },
   { id: 'storm-a', label: 'Storm Damage — Control', service: 'storm', variant: 'control', built: true },
-  { id: 'storm-b', label: 'Storm Damage — Variant', service: 'storm', variant: 'variant', built: false },
+  { id: 'storm-b', label: 'Storm Damage — Variant', service: 'storm', variant: 'variant', built: true },
   { id: 'agnostic', label: 'Service-Agnostic — Blank', service: 'agnostic', variant: 'blank', built: true },
 ];
 
@@ -60,6 +61,8 @@ export function renderTemplate(id: TemplateId, client: ResolvedClient): ReactEle
       return <TrimmingB client={client} />;
     case 'storm-a':
       return <StormA client={client} />;
+    case 'storm-b':
+      return <StormB client={client} />;
     case 'agnostic':
       return <Agnostic client={client} />;
     default:
