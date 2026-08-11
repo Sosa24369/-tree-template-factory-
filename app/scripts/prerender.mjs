@@ -42,6 +42,19 @@ function lcpImage(client) {
   return null;
 }
 
+/**
+ * Storm templates have a TEXT mobile LCP: the hero is a brand-colour gradient and the
+ * H1 paints from CSS, while the only photograph is a desktop-only CSS background
+ * (consumed inside a min-width query, so a phone never fetches it). Preloading a hero
+ * image here would do two wrong things at once — pull bytes onto the mobile critical
+ * path for an element that is never shown, and preload a DIFFERENT file than the
+ * desktop background (a double-download the brief explicitly forbids). So storm gets
+ * no image preload; every other template keeps its existing behaviour byte-for-byte.
+ */
+function templateHasTextLcp(template) {
+  return template.service === 'storm';
+}
+
 function pageHead(client, template) {
   const title = `${template.label} — ${client.name}`;
   const bits = [
@@ -49,7 +62,7 @@ function pageHead(client, template) {
     `<meta name="description" content="${escapeHtml(`${template.label} in ${client.serviceArea || 'your area'} from ${client.name}.`)}">`,
     `<meta name="robots" content="noindex">`,
   ];
-  const lcp = lcpImage(client);
+  const lcp = templateHasTextLcp(template) ? null : lcpImage(client);
   if (lcp) {
     // The preload MUST advertise the same candidate set as the <img>, otherwise the
     // browser preloads the full-size file and then downloads a smaller one anyway.
