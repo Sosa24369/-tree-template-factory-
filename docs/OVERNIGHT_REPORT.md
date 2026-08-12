@@ -64,4 +64,38 @@ names, phones, GTM container ids) with a 200 via the SPA fallback.
   wrangler-dev dry-run POST produced the `[GHL_DRY_RUN]` record with
   submissionId + attribution. Nothing was sent to GHL.
 
+## Task 3 — adversarial review of the lead path · ✅ done · commit after T2
+
+Ran an independent attack pass alongside my own. **No cross-client write is
+reachable** — both the GHL location id and the token env-key are derived from
+the same request slug, never from the body — and the GHL payload is
+`JSON.stringify`'d, so there is no value-injection sink. Real issues found and
+**fixed** (all low-risk, committed):
+
+- **templateId tag injection.** It was validated only against the exclusion
+  list, so any `templateId` was reflected into a GHL tag `lp-<anything>`. Now
+  validated against the canonical template set (unknown → `lp-unknown`;
+  non-string → 400, which also closes an array-coercion bypass of the
+  exclusion check).
+- **Prototype-key slugs.** `clientSlug:"__proto__"` (or `constructor`,
+  `toString`) resolved to `Object.prototype` and slipped past the "unknown
+  client" guard (dead-ended at the token step, but the invariant was false).
+  Now an `Object.hasOwn` lookup → 400.
+- **Unbounded fields.** firstName/lastName/email were forwarded to GHL
+  verbatim with no cap; now length-capped with control chars collapsed.
+- **envKey collision.** Registry generation now asserts no two slugs collapse
+  to the same `GHL_PIT_*` secret — a future client file cannot silently pair
+  one client's location with another's token.
+- **Client double-submit race.** The `status`-state guard let two rapid
+  clicks both POST; added a `useRef` latch (released on error, held through
+  success navigation).
+
+Registry reshaped to `{ knownTemplates, clients }`. Tests: `test-lead-
+function.mjs` 34/34 (10 new adversarial cases), `verify-tracking` 82, tsc
+clean. **Two judgment calls sent to OVERNIGHT_QUESTIONS.md** rather than
+guessed: (Q1) `/api/lead` is an open unauthenticated endpoint — bot/abuse
+control is a design+cost decision; (Q2) server-side replay enforcement vs.
+relying on GHL's phone-upsert. Lower-severity items left as-is with reasons:
+client enumeration via error differential (slugs are already public in URLs).
+
 *(Report continues below as tasks complete.)*
