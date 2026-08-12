@@ -88,20 +88,23 @@ export interface TemplateVideo {
 
 export const benefitArt = photo('/assets/_template/removal-a/benefit-strip-art-0ec53c98.webp', 1200, 1200);
 
-/** SVGs — the manifest measured no intrinsic size, so the CSS fixes the box. */
+/** SVGs — the manifest measured no intrinsic size, so the CSS fixes the box.
+ *  These are brand-neutral template glyphs and live in the shared template-assets
+ *  folder, NOT in any client's folder — so removal-a does not depend on a particular
+ *  client's directory and no client's page references another client's path (R4). */
 export const benefitIcons: PhotoSet[] = [
-  photo('/assets/j-valdez/benefit-icon-1-dbb86f4d.svg', null, null),
-  photo('/assets/j-valdez/benefit-icon-2-6710e15b.svg', null, null),
-  photo('/assets/j-valdez/benefit-icon-3-8423c543.svg', null, null),
-  photo('/assets/j-valdez/benefit-icon-4-2b31db6c.svg', null, null),
+  photo('/assets/_shared/benefit-icon-1-dbb86f4d.svg', null, null),
+  photo('/assets/_shared/benefit-icon-2-6710e15b.svg', null, null),
+  photo('/assets/_shared/benefit-icon-3-8423c543.svg', null, null),
+  photo('/assets/_shared/benefit-icon-4-2b31db6c.svg', null, null),
 ];
 
 /* ------------------------------------------------------------------ *
  * S4 — Why choose us + reviews
  * ------------------------------------------------------------------ */
 
-export const reviewStars = photo('/assets/j-valdez/review-stars-d682e417.svg', null, null);
-export const reviewGoogle = photo('/assets/j-valdez/review-google-glyph-9b63bd0b.svg', null, null);
+export const reviewStars = photo('/assets/_shared/review-stars-d682e417.svg', null, null);
+export const reviewGoogle = photo('/assets/_shared/review-google-glyph-9b63bd0b.svg', null, null);
 
 /* ------------------------------------------------------------------ *
  * S5 — Restoration results
