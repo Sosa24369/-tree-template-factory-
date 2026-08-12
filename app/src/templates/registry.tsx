@@ -73,3 +73,17 @@ export function renderTemplate(id: TemplateId, client: ResolvedClient): ReactEle
 export function isTemplateId(value: string | undefined): value is TemplateId {
   return Boolean(value) && TEMPLATE_META.some((t) => t.id === value);
 }
+
+/**
+ * Whether a template applies to a given client. A client opts out of templates for
+ * services it does not sell via `excludedTemplates`, so those pages are never
+ * generated. Everything applies by default. This is the per-client half of the
+ * registry: TEMPLATE_META says which templates are BUILT; this says which are
+ * RELEVANT to a particular client.
+ */
+export function isTemplateApplicable(
+  client: Pick<ResolvedClient, 'excludedTemplates'>,
+  id: TemplateId,
+): boolean {
+  return !(client.excludedTemplates ?? []).includes(id);
+}

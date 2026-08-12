@@ -78,6 +78,9 @@ const routes = [];
 for (const { client } of listClients()) {
   for (const template of TEMPLATE_META) {
     if (!template.built) continue;
+    // A client opts out of templates for services it does not sell — never generate
+    // a page that implies a service the client does not offer (would also be photo-less).
+    if ((client.excludedTemplates ?? []).includes(template.id)) continue;
     routes.push({ url: `/p/${client.slug}/${template.id}`, client, template });
     routes.push({ url: `/p/${client.slug}/${template.id}/thank-you`, client, template, isThankYou: true });
   }

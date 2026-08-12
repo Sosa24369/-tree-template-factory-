@@ -186,6 +186,18 @@ export interface ClientRecord {
    * Shape: copyOverrides['removal-a']['hero.h1'] = "..."
    */
   copyOverrides: Partial<Record<TemplateId, Record<string, string>>>;
+
+  /**
+   * Templates that do NOT apply to this client — a service they do not sell.
+   *
+   * The factory generates every template for every client by default; this opts a
+   * client OUT of specific ones so a page is never shipped that implies a service the
+   * client does not offer (e.g. a storm page for a trimming-only account, which would
+   * also be photo-less). Omitted or empty means every template applies. It is an
+   * applicability switch, NOT a photo gap: a template the client DOES sell but has no
+   * photos for stays applicable and is handled by the R5 degradation rules.
+   */
+  excludedTemplates?: TemplateId[];
 }
 
 /* ------------------------------------------------------------------ *

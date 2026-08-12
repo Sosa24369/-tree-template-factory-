@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate, useParams, Link } from 'react-router-dom';
 import { captureAttribution } from './lib/attribution';
 import { getClient, listClients } from './lib/clientRegistry';
-import { TEMPLATE_META, isTemplateId, renderTemplate } from './templates/registry';
+import { TEMPLATE_META, isTemplateApplicable, isTemplateId, renderTemplate } from './templates/registry';
 import { ThankYou } from './routes/ThankYou';
 import './styles/base.css';
 
@@ -19,6 +19,9 @@ function TemplateRoute() {
   if (!isTemplateId(templateId)) return <Missing what={`template "${templateId}"`} />;
 
   const { client, issues } = entry;
+  // A template this client has opted out of (a service they do not sell) is never a
+  // real page — treat a direct hit as not-found rather than render a photo-less page.
+  if (!isTemplateApplicable(client, templateId)) return <Missing what={`template "${templateId}" for ${client.name}`} />;
   const errors = issues.filter((i) => i.level === 'error');
 
   return (
@@ -76,14 +79,23 @@ function Index() {
             {issues.length > 0 && <> · <strong>{issues.length} config issue{issues.length === 1 ? '' : 's'}</strong></>}
           </p>
           <ul className="index-templates">
-            {TEMPLATE_META.map((t) => (
-              <li key={t.id}>
-                <Link to={`/p/${client.slug}/${t.id}`} className={t.built ? 'built' : 'unbuilt'}>
-                  {t.label}
-                </Link>
-                {!t.built && <span className="badge">P2</span>}
-              </li>
-            ))}
+            {TEMPLATE_META.map((t) => {
+              const applicable = isTemplateApplicable(client, t.id);
+              return (
+                <li key={t.id}>
+                  {applicable ? (
+                    <Link to={`/p/${client.slug}/${t.id}`} className={t.built ? 'built' : 'unbuilt'}>
+                      {t.label}
+                    </Link>
+                  ) : (
+                    // A service this client does not sell — not generated, not linked.
+                    <span className="unbuilt" title="Not applicable to this client">{t.label}</span>
+                  )}
+                  {!t.built && <span className="badge">P2</span>}
+                  {!applicable && <span className="badge">n/a</span>}
+                </li>
+              );
+            })}
           </ul>
         </section>
       ))}
