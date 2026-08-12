@@ -375,16 +375,18 @@
   align-items: center;
   justify-content: space-between;
   gap: var(--space-3);
-  min-height: 64px;
-  padding-block: 9px;
+  min-height: 84px;
+  padding-block: 12px;
 }
 
 /* max-width + overflow so a logo path that no longer resolves degrades to a clipped
    box instead of dropping oversized alt text through the header. */
 .trimming-a .ta-logo {
-  height: 38px;
+  height: 60px;
   width: auto;
-  max-width: 170px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  max-width: 200px;
   overflow: hidden;
   object-fit: contain;
   font-size: 0.8125rem;
@@ -425,12 +427,12 @@
 
 @media (min-width: 768px) {
   .trimming-a .ta-header-inner {
-    min-height: 82px;
+    min-height: 120px;
   }
 
   .trimming-a .ta-logo {
-    height: 50px;
-    max-width: 230px;
+    height: 88px;
+    max-width: 280px;
   }
 
   .trimming-a .ta-call--bar {

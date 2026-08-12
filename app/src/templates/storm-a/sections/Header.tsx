@@ -16,7 +16,16 @@ export function Header({ client, copy }: { client: ResolvedClient; copy: Copy })
     <header className="st-header">
       <div className="st-container st-header-inner">
         {/* No logo file renders the client's name as a wordmark, never a broken image (R5). */}
-        <SafeLogo logoUrl={client.brand?.logoUrl} clientName={client.name} className="st-logo" />
+        <SafeLogo
+          logoUrl={client.brand?.logoUrl}
+          clientName={client.name}
+          className="st-logo"
+          srcset={client.brand?.logoSrcset}
+          width={client.brand?.logoWidth}
+          height={client.brand?.logoHeight}
+          sizes="(min-width: 768px) 88px, 60px"
+          priority
+        />
 
         <div className="st-header-right">
           {badge.trim() && (

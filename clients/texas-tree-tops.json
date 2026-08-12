@@ -30,10 +30,12 @@
     "West Dallas"
   ],
   "brand": {
-    "logoUrl": "/assets/texas-tree-tops/logo-mobile-and-footer-28a2c9eb.webp",
+    "logoUrl": "/assets/texas-tree-tops/logo-header-e9743261.webp",
     "primaryColor": "#1f3d2b",
     "accentColor": "#c8952b",
-    "onPrimaryColor": "#ffffff"
+    "onPrimaryColor": "#ffffff",
+    "logoWidth": 192,
+    "logoHeight": 192
   },
   "phone": {
     "e164": "+16824520735",

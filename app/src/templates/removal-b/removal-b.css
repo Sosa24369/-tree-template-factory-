@@ -499,8 +499,8 @@
   align-items: center;
   justify-content: space-between;
   gap: var(--space-3);
-  min-height: 66px;
-  padding-block: 9px;
+  min-height: 84px;
+  padding-block: 12px;
 }
 
 .removal-b .rb-header-right {
@@ -512,9 +512,11 @@
 /* max-height + overflow so a record pointing at a logo file that no longer exists
    degrades to a clipped box instead of dropping oversized alt text through the bar. */
 .removal-b .rb-logo {
-  height: 40px;
+  height: 60px;
   width: auto;
-  max-width: 180px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  max-width: 200px;
   overflow: hidden;
   object-fit: contain;
   font-size: 0.8125rem;
@@ -552,12 +554,12 @@
 
 @media (min-width: 900px) {
   .removal-b .rb-header-inner {
-    min-height: 82px;
+    min-height: 120px;
   }
 
   .removal-b .rb-logo {
-    height: 52px;
-    max-width: 230px;
+    height: 88px;
+    max-width: 280px;
   }
 
   .removal-b .rb-header-badge {

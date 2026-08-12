@@ -68,20 +68,54 @@ export function SafeImage({
 /**
  * Logo with a real fallback: if a client has no logo file, show their name as
  * text rather than a broken image icon.
+ *
+ * The header now renders the logo large (owner call), which makes it the mobile LCP on
+ * text-hero templates. When the caller passes the generated srcset + intrinsic
+ * width/height, the logo becomes a responsive image whose box is reserved before load
+ * (CLS 0) and — with `priority` — is fetched eagerly at high priority. Passing none of
+ * the optional props preserves the original plain-img behaviour, so footers are
+ * unaffected.
  */
 export function SafeLogo({
   logoUrl,
   clientName,
   className,
+  srcset,
+  sizes,
+  width,
+  height,
 }: {
   logoUrl: string | null | undefined;
   clientName: string;
   className?: string;
+  srcset?: string;
+  sizes?: string;
+  width?: number;
+  height?: number;
+  /** Accepted for call-site clarity but consumed by the prerender, which owns the
+   *  single in-sync logo preload; setting it here would trip React's SSR float. */
+  priority?: boolean;
 }) {
   if (!logoUrl) {
     return <span className={className} data-fallback="logo-text">{clientName || ''}</span>;
   }
-  return <img src={logoUrl} alt={clientName ? `${clientName} logo` : ''} className={className} />;
+  return (
+    <img
+      src={logoUrl}
+      alt={clientName ? `${clientName} logo` : ''}
+      className={className}
+      {...(srcset ? { srcSet: srcset, sizes } : {})}
+      {...(width != null ? { width } : {})}
+      {...(height != null ? { height } : {})}
+      // NO loading/fetchPriority hints on the element. Under renderToString those make
+      // React's float runtime hoist extra <link rel=preload> tags — a malformed
+      // camelCase one AND a plain-href one for the fallback src — and the plain-href
+      // pulls the 256px base while the srcset <img> uses a 128px variant, a wasted
+      // double-download on the LCP path. The img is eager anyway (eager is the default
+      // for a non-lazy image), and the ONE correct, in-sync preload is emitted by the
+      // prerender for the templates whose LCP is the logo. `priority` is consumed there.
+    />
+  );
 }
 
 /**

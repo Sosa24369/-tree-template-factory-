@@ -269,17 +269,19 @@
   align-items: center;
   justify-content: space-between;
   gap: var(--space-3);
-  min-height: 64px;
-  padding-block: 9px;
+  min-height: 84px;
+  padding-block: 12px;
 }
 
 /* max-height + overflow so a record pointing at a mark file that no longer
    exists degrades to a clipped box rather than dropping oversized alt text
    across the header. */
 .agnostic .ag-mark {
-  height: 38px;
+  height: 60px;
   width: auto;
-  max-width: 190px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  max-width: 200px;
   overflow: hidden;
   object-fit: contain;
   font-size: 0.8125rem;
@@ -299,12 +301,12 @@
 
 @media (min-width: 768px) {
   .agnostic .ag-header-inner {
-    min-height: 78px;
+    min-height: 120px;
   }
 
   .agnostic .ag-mark {
-    height: 48px;
-    max-width: 230px;
+    height: 88px;
+    max-width: 280px;
   }
 }
 

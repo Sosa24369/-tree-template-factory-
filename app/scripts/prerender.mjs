@@ -43,16 +43,30 @@ function lcpImage(client) {
 }
 
 /**
- * Storm templates have a TEXT mobile LCP: the hero is a brand-colour gradient and the
- * H1 paints from CSS, while the only photograph is a desktop-only CSS background
- * (consumed inside a min-width query, so a phone never fetches it). Preloading a hero
- * image here would do two wrong things at once — pull bytes onto the mobile critical
- * path for an element that is never shown, and preload a DIFFERENT file than the
- * desktop background (a double-download the brief explicitly forbids). So storm gets
- * no image preload; every other template keeps its existing behaviour byte-for-byte.
+ * Which element is the MOBILE LCP, per template — so exactly one correct preload ships.
+ *
+ * The owner enlarged the header logo across every template. On templates that render a
+ * real above-the-fold photograph on a phone the photo is still the LCP (removal-a's
+ * hero plate, trimming-a's hero still); on the text-hero templates (storm's gradient
+ * hero, removal-b/trimming-b/agnostic) there is no mobile photo, so the enlarged LOGO
+ * is the LCP. Storm additionally has only a desktop-only CSS-background photo, so
+ * preloading a photo there would double-download a file the phone never shows.
+ *
+ * The logo preload is emitted here (lowercase imagesrcset) rather than left to React's
+ * SSR float, which serialises a malformed camelCase link under renderToString. It
+ * advertises the SAME srcset the <img> carries (client.brand.logoSrcset) so the two
+ * stay in exact sync and the browser fetches one small variant.
  */
-function templateHasTextLcp(template) {
-  return template.service === 'storm';
+const PHOTO_LCP_TEMPLATES = new Set(['removal-a', 'trimming-a']);
+const LOGO_SIZES = '(min-width: 768px) 88px, 60px';
+
+function logoPreload(client) {
+  const b = client?.brand;
+  if (!b?.logoUrl) return ''; // no logo (e.g. blank-co) → the name wordmark is the LCP
+  const responsive = b.logoSrcset
+    ? ` imagesrcset="${escapeHtml(b.logoSrcset)}" imagesizes="${LOGO_SIZES}"`
+    : '';
+  return `<link rel="preload" as="image" href="${escapeHtml(b.logoUrl)}"${responsive} fetchpriority="high">`;
 }
 
 /**
@@ -100,14 +114,20 @@ function pageHead(client, template) {
     `<meta name="description" content="${escapeHtml(`${template.label} in ${client.serviceArea || 'your area'} from ${client.name}.`)}">`,
     `<meta name="robots" content="noindex">`,
   ];
-  const lcp = templateHasTextLcp(template) ? null : lcpImage(client);
-  if (lcp) {
-    // The preload MUST advertise the same candidate set as the <img>, otherwise the
-    // browser preloads the full-size file and then downloads a smaller one anyway.
-    const responsive = lcp.srcset
-      ? ` imagesrcset="${escapeHtml(lcp.srcset)}" imagesizes="(max-width: 767px) 100vw, 55vw"`
-      : '';
-    bits.push(`<link rel="preload" as="image" href="${escapeHtml(lcp.src)}"${responsive} fetchpriority="high">`);
+  if (PHOTO_LCP_TEMPLATES.has(template.id)) {
+    const lcp = lcpImage(client);
+    if (lcp) {
+      // The preload MUST advertise the same candidate set as the <img>, otherwise the
+      // browser preloads the full-size file and then downloads a smaller one anyway.
+      const responsive = lcp.srcset
+        ? ` imagesrcset="${escapeHtml(lcp.srcset)}" imagesizes="(max-width: 767px) 100vw, 55vw"`
+        : '';
+      bits.push(`<link rel="preload" as="image" href="${escapeHtml(lcp.src)}"${responsive} fetchpriority="high">`);
+    }
+  } else {
+    // Text-hero template: the enlarged logo is the LCP.
+    const lp = logoPreload(client);
+    if (lp) bits.push(lp);
   }
   return bits.join('\n    ');
 }

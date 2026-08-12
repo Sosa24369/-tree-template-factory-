@@ -29,7 +29,16 @@ export function Header({ client, copy }: { client: ResolvedClient; copy: Copy })
   return (
     <header className="ag-header">
       <div className="ag-container ag-header-inner">
-        <SafeLogo logoUrl={client.brand?.logoUrl} clientName={client.name} className="ag-mark" />
+        <SafeLogo
+          logoUrl={client.brand?.logoUrl}
+          clientName={client.name}
+          className="ag-mark"
+          srcset={client.brand?.logoSrcset}
+          width={client.brand?.logoWidth}
+          height={client.brand?.logoHeight}
+          sizes="(min-width: 768px) 88px, 60px"
+          priority
+        />
 
         {/* Never a hand-built tel: href. One number, one format, one swap target. */}
         <PhoneLink

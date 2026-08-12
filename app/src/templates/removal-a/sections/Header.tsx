@@ -22,7 +22,16 @@ export function Header({ client, copy }: { client: ResolvedClient; copy: Copy })
       <div className="ra-container ra-header-inner">
         {/* No logo file on the record renders the client's name as a wordmark,
             never a broken image (R5). */}
-        <SafeLogo logoUrl={client.brand?.logoUrl} clientName={client.name} className="ra-logo" />
+        <SafeLogo
+          logoUrl={client.brand?.logoUrl}
+          clientName={client.name}
+          className="ra-logo"
+          srcset={client.brand?.logoSrcset}
+          width={client.brand?.logoWidth}
+          height={client.brand?.logoHeight}
+          sizes="(min-width: 768px) 88px, 60px"
+          priority
+        />
 
         <PhoneLink
           client={client}

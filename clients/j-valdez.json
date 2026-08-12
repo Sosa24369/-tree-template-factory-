@@ -15,10 +15,12 @@
     "East Dallas"
   ],
   "brand": {
-    "logoUrl": "/assets/j-valdez/logo-circle-badge-cea46949.svg",
+    "logoUrl": "/assets/j-valdez/logo-header-2ea7dab6.webp",
     "primaryColor": "#14342b",
     "accentColor": "#e0913a",
-    "onPrimaryColor": "#ffffff"
+    "onPrimaryColor": "#ffffff",
+    "logoWidth": 192,
+    "logoHeight": 192
   },
   "phone": {
     "e164": "+14694021196",

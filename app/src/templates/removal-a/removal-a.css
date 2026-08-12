@@ -299,17 +299,19 @@
   align-items: center;
   justify-content: space-between;
   gap: var(--space-3);
-  min-height: 68px;
-  padding-block: 10px;
+  min-height: 84px;
+  padding-block: 12px;
 }
 
 /* max-height + overflow so a wrong or missing logo FILE (a client record can point
    at a path that no longer exists) degrades to a clipped box instead of dropping
    oversized alt text through the header. */
 .removal-a .ra-logo {
-  height: 40px;
+  height: 60px;
   width: auto;
-  max-width: 190px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  max-width: 200px;
   overflow: hidden;
   object-fit: contain;
   font-size: 0.8125rem;
@@ -329,12 +331,12 @@
 
 @media (min-width: 768px) {
   .removal-a .ra-header-inner {
-    min-height: 84px;
+    min-height: 120px;
   }
 
   .removal-a .ra-logo {
-    height: 52px;
-    max-width: 240px;
+    height: 88px;
+    max-width: 280px;
   }
 }
 

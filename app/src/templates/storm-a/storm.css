@@ -178,9 +178,13 @@
   align-items: center;
   justify-content: space-between;
   gap: 14px;
-  min-height: 62px;
+  min-height: 84px;
+  padding-block: 12px;
 }
-.st-logo { height: 34px; width: auto; }
+/* border-radius clips the logo's opaque white corners into the circular badge, so it
+   sits cleanly on the dark storm header. aspect-ratio + the intrinsic width/height on
+   the <img> reserve the box before load (CLS 0). */
+.st-logo { height: 60px; width: auto; aspect-ratio: 1; border-radius: 50%; }
 .st-header-right { display: flex; align-items: center; gap: 14px; }
 
 .st-header-badge {
@@ -206,6 +210,8 @@
 
 @media (min-width: 720px) {
   .st-header-badge { display: inline-flex; }
+  .st-header-inner { min-height: 120px; }
+  .st-logo { height: 88px; }
   .st-call--bar .phone-sub {
     display: block;
     margin: 0 0 0 4px;
