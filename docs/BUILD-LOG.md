@@ -791,16 +791,18 @@ deploy-stopping defect — stop and raise it.
 
 ## Flags / not-blocking-but-clean-up
 
-- **The public root `/` and any unmatched route serve the internal dev index** (the
-  "Template factory" client roster) with HTTP 200 — Cloudflare's default SPA fallback,
-  because `index.html` is that dev index. Campaign URLs (`/p/<client>/<template>/`) all
-  work correctly, but the roster page should be gated/replaced before real traffic (a
-  small app change — out of this session's frozen scope). Unmatched/excluded routes 200
-  into the SPA which then shows "Not found" client-side.
-- **`generate_lead` fires but has nowhere to go yet:** no GTM is injected in production
-  (window.dataLayer is undefined, so the guarded push no-ops in a real session — proven
-  by pre-seeding dataLayer in the smoke test). Kevin's GTM + CallRail DNI is the P4
-  on-page-tracking step that turns the event into an ad conversion.
+> **Both flags below were RESOLVED in the overnight run of 2026-08-12 — see the
+> "OVERNIGHT RUN" section at the end of this log. Kept here for history.**
+
+- ~~**The public root `/` and any unmatched route serve the internal dev
+  index**~~ — CLOSED (overnight T1). Prod `/` is a neutral placeholder,
+  `dist/404.html` now forces real 404s for unmatched paths. Campaign URLs
+  unchanged.
+- ~~**`generate_lead` fires but has nowhere to go yet** (no GTM in
+  production)~~ — WIRED (overnight T2). Per-client GTM injects at prerender
+  from the client record; the event now carries a `transaction_id` for dedupe.
+  What still needs a human is publishing each GTM container's Ads conversion
+  tag and pasting the CallRail swap URL — see `docs/TRACKING_MANUAL_LIST.md`.
 
 ## Launchpad
 
@@ -812,20 +814,74 @@ is a different session.
 
 # START HERE NEXT
 
+> Updated after the overnight run of 2026-08-12. Items the run closed in code
+> are struck through; what remains is human/console work.
+
 1. **Human: verify + delete the two test contacts** in GHL. TTT's `TEST DELETE ME` in
    sub-account `zfoeYpKrqshgdFr4gG3b` only; J Valdez's in `FaHof000UZrAJUKORVCj` only. A
-   contact in the wrong place = stop-everything defect.
-2. **Kevin's on-page tracking:** inject per-client GTM (the `generate_lead` event already
-   fires on success) so it becomes the ad conversion; add CallRail DNI. Pages are live, so
-   this can proceed now.
-3. **Gate/replace the public dev index at `/`** before real traffic (exposes the client
-   roster). Small app change; needs the template/app unfreeze.
+   contact in the wrong place = stop-everything defect. *(Still open — pre-dates the
+   overnight run.)*
+2. **On-page tracking — now a console task, not a code task.** Per-client GTM is
+   injected and `generate_lead` carries `transaction_id`. Remaining human steps
+   (publish each container's Ads conversion tag, paste CallRail swap URLs) are written
+   out click-by-click in **`docs/TRACKING_MANUAL_LIST.md`**.
+3. ~~**Gate/replace the public dev index at `/`**~~ — DONE (overnight T1).
 4. **Custom domains** per client when ready (Cloudflare Pages → Custom domains).
 5. **TTT `ad_click_id` GHL field** — create it so click ids map onto a contact field
-   (they are captured and submitted regardless; currently dropped-and-logged).
-6. **Per-client Privacy/Terms URLs** before any SMS/A2P workflow runs.
+   (captured and submitted regardless; currently dropped-and-logged). Now covered in
+   `TRACKING_MANUAL_LIST.md` §4, which also adds optional custom fields for the full
+   UTM/click-id set.
+6. **Per-client Privacy/Terms URLs** before any SMS/A2P workflow runs. **Drafts now
+   exist** in `docs/legal-drafts/` — they need your review, placeholder fill, and
+   hosting, then paste the URLs into each client record. See `OVERNIGHT_QUESTIONS.md`
+   Q4.
 7. **J Valdez removal photos** to unblock its removal pages (or exclude removal too).
 8. **Add the live URL to the Launchpad row** (Library repo, separate session).
+9. **Two lead-endpoint security decisions** surfaced by the overnight adversarial
+   review — `OVERNIGHT_QUESTIONS.md` Q1 (open/unauthenticated `/api/lead`) and Q2
+   (server-side replay). Neither blocks; both want your call.
 
-**Not declared "ready for ads."** That is the human's call after Kevin's tracking is live
-and the test contacts are verified and deleted.
+**Not declared "ready for ads."** That is the human's call after the tracking containers
+are published, the test contacts are verified and deleted, and Q1/Q4 are resolved.
+
+---
+
+# OVERNIGHT RUN — 2026-08-12 (unattended, per `~/factory-overnight.md`)
+
+Five tasks, each its own commit. **No deploy, no secrets touched, no lead sent
+to GHL (dry-run only), no storm-a/storm-b built, no per-client record values
+changed.** Full detail in `docs/OVERNIGHT_REPORT.md`; open decisions in
+`docs/OVERNIGHT_QUESTIONS.md`.
+
+- **T1 — public roster hole closed.** Prod `/` prerenders a neutral placeholder
+  (no client names/roster/links); `dist/404.html` now exists, which flips
+  Cloudflare Pages from SPA-fallback-200 to a real 404 for any path without a
+  static file. Every campaign page and thank-you was already a static file, so
+  nothing a campaign links to depended on the fallback. Verified under
+  `wrangler pages dev`.
+- **T2 — conversion tracking wired (build only).** `generate_lead` fires only
+  on `/api/lead` success and now carries a non-PII `transaction_id`
+  (StrictMode/refresh/retry/back-nav all dedupe to one conversion). Per-client
+  GTM injected at prerender from the client record — never hardcoded, absent
+  from the neutral pages. CallRail DNI loads once + re-swaps on route change
+  (swap URL is a console task). Full click-id/UTM set flows to GHL where a
+  field id is mapped, else reported as dropped. Console-only IDs →
+  `TRACKING_MANUAL_LIST.md`.
+- **T3 — adversarial review of the lead path.** Confirmed no cross-client write
+  is reachable. Fixed: arbitrary-`templateId` tag injection, prototype-key
+  slugs, unbounded field lengths, an envKey-collision assertion, and a
+  client-side double-submit race. `test-lead-function.mjs` 34/34,
+  `verify-tracking.mjs` 82, tsc clean. Two judgment calls → `OVERNIGHT_QUESTIONS`
+  Q1/Q2.
+- **T4 — legal drafts (drafts only).** Per-client Privacy Policy + ToS for
+  J Valdez and Texas Tree Tops in `docs/legal-drafts/`, with A2P SMS language.
+  Not wired into any page; `legalUrl` fields left blank. Placeholders + review
+  steps in that folder's README. Open A2P gap tracked in `OVERNIGHT_QUESTIONS`
+  Q4.
+- **T5 — this reconciliation** + the three storm-copy questions restated in
+  `OVERNIGHT_QUESTIONS.md` Q3.
+
+**Function state after the run:** `/api/lead` unchanged in contract (slug →
+location → `GHL_PIT_<SLUG>` token; dry-run honored), now hardened per T3, and
+its bundled registry reshaped to `{ knownTemplates, clients }`. Deploy state
+unchanged — the live site is exactly as it was before the run.

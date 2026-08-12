@@ -54,22 +54,27 @@ timestamps each time; replayed with a mutated phone, it creates N contacts.
 
 **My recommendation:** (1) now, reconsider alongside Q1 if you add KV anyway.
 
-## Q3 — Storm-copy decisions (blocking storm-a / storm-b, restated from BACKLOG)
+## Q3 — Storm-copy decisions (blocking storm-a / storm-b)
 
-Storm templates are not built and I was told not to build them. Three wording
-decisions are yours and block the copy:
+Storm templates are not built and I was told not to build them. These are the
+three decisions `docs/storm-copy-draft.md` is explicitly waiting on — restated
+here so every open decision lives in one file. Each shows the draft's current
+hedged default and the choice you'd be making.
 
-1. **Response-time promise.** What do we commit to on a storm lead — "we call
-   within 30 minutes", "same day", or no time promise? (Legal/ops exposure if
-   we name a number we can't hit at 2am.)
-2. **After-hours calls: yes or no?** Do storm pages invite a phone call 24/7,
-   or push to the form outside business hours? Affects the hero CTA and the
-   phone-link visibility.
-3. **The offer.** Is there a storm-specific offer (free assessment / emergency
-   dispatch / priority scheduling), and if so exact wording? Or the same
-   estimate CTA as the other templates?
+1. **Response-time promise.** Draft currently says **"same-day assessment in
+   most cases"** (mirrors the source's hedged wording). A hard promise ("we
+   answer within 60 minutes") converts better on emergency intent — but only
+   you can commit the crew to it, and it's the one with real ops/legal
+   exposure at 2am. Keep the hedge, or give me a hard number?
+2. **After-hours calls.** The draft's FAQ 8 implies you take night and weekend
+   calls. **Is that true?** If yes, the storm hero can push the phone 24/7; if
+   no, I cut that FAQ and route after-hours to the form.
+3. **The offer.** Draft uses **"free on-site storm assessment with written
+   damage documentation"** — deliberately not a discount, because discounting
+   reads wrong when someone's roof is open. Keep that, or use a storm-specific
+   discount instead (give me the number)?
 
-Once you answer, storm-a/storm-b copy can be drafted (still no deploy).
+Once you answer, storm-a/storm-b copy can be finalized (still no deploy).
 
 ## Q4 — Legal drafts need your review before they can close the A2P gap (from T4)
 

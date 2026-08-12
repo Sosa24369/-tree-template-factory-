@@ -98,4 +98,69 @@ control is a design+cost decision; (Q2) server-side replay enforcement vs.
 relying on GHL's phone-upsert. Lower-severity items left as-is with reasons:
 client enumeration via error differential (slugs are already public in URLs).
 
-*(Report continues below as tasks complete.)*
+## Task 5 — docs reconciliation + storm questions · ✅ done
+
+- **BUILD-LOG.md** reconciled with what shipped tonight: the two stale "Flags"
+  (public roster hole; GTM-not-wired) are marked resolved with pointers, the
+  "START HERE NEXT" list is updated (roster item struck, tracking item
+  redirected to the manual list, legal drafts + security decisions added), and
+  a dated **"OVERNIGHT RUN"** section summarizes all five tasks and the
+  post-run Function/deploy state.
+- **Storm questions** restated in `OVERNIGHT_QUESTIONS.md` **Q3**, carrying the
+  exact defaults from `storm-copy-draft.md` (same-day-assessment hedge, the
+  after-hours FAQ, free-assessment-not-discount offer) so every open decision
+  lives in one file.
+
+---
+
+# MORNING SUMMARY
+
+**All five tasks complete.** Each is its own commit; nothing was deployed and
+the live site is byte-for-byte what it was last night.
+
+| Task | Commit | Result |
+|------|--------|--------|
+| T1 public roster hole | `dae9d2d` | Neutral prod `/`, real 404s, campaign URLs intact |
+| T2 conversion tracking | `6338173` | Server-confirmed `generate_lead` + transaction_id dedupe; per-client GTM; CallRail DNI; full attribution passthrough |
+| T3 lead-path hardening | `de2058c` | 5 fixes; no cross-client write reachable; 2 decisions deferred |
+| T4 legal drafts | `d05f776` | Privacy + ToS drafts for both real clients, not wired |
+| T5 docs reconciliation | *(this commit)* | BUILD-LOG current, storm Qs restated |
+
+**Suite / typecheck (final run):** `scripts/test-lead-function.mjs` 34/34 ·
+`scripts/verify-tracking.mjs` 82/82 · `tsc -b` clean · production build +
+prerender of 40 pages succeeds. The lead Function was exercised in dry-run only
+(`GHL_DRY_RUN`) — nothing was sent to a real GHL location.
+
+**Prohibitions:** all honored — no deploy, no secret read/set/logged
+(`.dev.vars` untouched), no lead sent to GHL, no storm-a/storm-b built, no
+per-client record value changed, no `git push`.
+
+## Waiting for you in `docs/OVERNIGHT_QUESTIONS.md`
+
+- **Q1 (med):** `/api/lead` is an open, unauthenticated endpoint — any script
+  can inject leads into a client's GHL. Bot/abuse control is a design+cost
+  call. I recommend Cloudflare Turnstile; I can wire it on your say-so.
+- **Q2 (low-med):** server-side replay enforcement vs. relying on GHL's
+  phone-upsert. I recommend leaving it for now.
+- **Q3:** the three storm-copy decisions (response-time promise, after-hours
+  calls, offer) — storm templates stay unbuilt until you answer.
+- **Q4:** the legal drafts need your review + placeholder fill + hosting before
+  the SMS consent checkboxes have policy links. **Until then the consent
+  checkbox links to nothing, which is an open A2P/10DLC gap.**
+
+## Things I was unsure about (flagging honestly)
+
+- **T3 lower-severity items I chose NOT to fix:** the error-response
+  differential lets someone tell a registered slug from an unregistered one.
+  Slugs are already visible in public campaign URLs, so I judged this not worth
+  changing — but if you'd rather every failure return an identical generic
+  error, say so.
+- **The one thing no agent can verify:** the pre-existing "verify + delete the
+  two live test contacts in GHL" item (from the deploy session, item 1 in
+  START HERE NEXT) still needs a human in the GHL UI. I did not send any new
+  test lead, so I added nothing to that cleanup — but I also could not confirm
+  the earlier ones are gone.
+- **CallRail wiring is inert until a swap URL exists.** The code loads and
+  re-swaps correctly, but every client's `callRailSwapScriptUrl` is still
+  `null`, so nothing swaps yet. That's a console task (manual list §3), not a
+  code gap — calling it "done" would overstate it.
