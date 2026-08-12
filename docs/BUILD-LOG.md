@@ -361,3 +361,50 @@ the tree is clean.
    two destination phone numbers before any deploy that routes calls; create the TTT
    `ad_click_id` GHL custom field; supply per-client Privacy/Terms URLs (the dashboard
    warns on these). None block the templates themselves.
+
+---
+
+# P4 SESSION — close verification gaps, prep deploy
+
+Run of 2026-08-11 (follow-up). Started clean at `bfa6a45`, local == origin. Tasks in
+order; no template or dashboard rebuild/refactor — this closes gaps and preps deploy.
+
+## Task 1 — storm performance, MEASURED under applied throttling (gate CLOSED)
+
+Lighthouse 13.4.1 installed and run against the built `dist` served locally, driving
+the installed Google Chrome. **Applied** throttling, not simulated:
+`--throttling-method=devtools` (CDP), mobile form factor, standard mobile profile
+(RTT 150 ms, ~1.6 Mbps down, CPU 4× slowdown), `--only-categories=performance`.
+
+| Page | Perf | LCP | CLS |
+|------|-----:|----:|----:|
+| texas-tree-tops / storm-a | 99 | 1.7 s | 0 |
+| texas-tree-tops / storm-b | 99 | 1.7 s | 0 |
+| j-valdez / storm-a | 99 | 1.6 s | 0 |
+| j-valdez / storm-b | 99 | 1.6 s | 0 |
+| blank-co / storm-a | 99 | 1.6 s | 0 |
+| blank-co / storm-b | 100 | 1.5 s | 0 |
+
+**All pass the gate (Perf ≥ 95, LCP ≤ 2.0 s, CLS 0).** These are measured, not inferred;
+they confirm (and slightly beat) the overnight run's parity estimate. Corroboration: on
+mobile the ONLY image request is the small header logo (webp for TTT, svg for j-valdez) —
+no hero photograph and no gallery image on the critical path, so the LCP is the H1 text as
+designed. Reports saved under `/tmp/lh-*.json`.
+
+## Task 2 — FAQ R5, independently re-verified across ALL SEVEN templates
+
+`blank-co` alone cannot exercise the defect (it falls back to default copy, so every
+question is present). Re-verified with a temporary answer-only fixture that blanks
+`faq.q1` on all seven templates (agnostic, which ships blank FAQ defaults, also got a
+filled `faq.a1`), built, and checked two independent ways:
+
+- the permanent guard `scripts/verify-faq-a11y.mjs`: 57 pages, 186 `<summary>` scanned,
+  **0 empty-name summaries**, 7 orphan-answer blocks;
+- an inline per-template grep (not the guard): each of removal-a, removal-b, trimming-a,
+  trimming-b, **storm-a, storm-b**, agnostic produced exactly **1 orphan block and 0
+  empty-name `<summary>`**.
+
+So on every template — including storm-a/storm-b, which were built after the fix — a
+blanked question with a surviving answer renders a plain `<div>`/`<p>`, never a
+`<summary>`, and produces no focusable element without an accessible name. Fixture removed,
+clean rebuild (43 pages) green.
