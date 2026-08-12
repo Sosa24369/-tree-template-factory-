@@ -85,7 +85,22 @@ for (const { client } of listClients()) {
     routes.push({ url: `/p/${client.slug}/${template.id}/thank-you`, client, template, isThankYou: true });
   }
 }
-routes.push({ url: '/', client: null, template: null });
+// The bare root prerenders PublicRoot (the roster is dev-only — see App.tsx):
+// a neutral placeholder with no client names, no roster, no /p/ links.
+routes.push({ url: '/', client: null, template: null, title: 'Landing pages' });
+
+// A real 404 page. Its PRESENCE is the mechanism: Cloudflare Pages serves
+// 404.html with an actual 404 status for any path with no static file, INSTEAD
+// of falling back to index.html with a 200. Without this file, every
+// unmatched route served the roster. The URL below matches no route, so the
+// render produces the NotFound tree; if a visitor lands on 404.html the
+// hydrating router renders the same thing for whatever bad URL they hit.
+//
+// Prerendering survives this because every real page — including every
+// /p/<client>/<template>/thank-you — is written as a static file above, so
+// nothing a campaign links to depends on the SPA fallback. The lead Function
+// at /api/lead runs before static-asset lookup and is unaffected.
+routes.push({ url: '/__no_such_page__', out: '404.html', client: null, template: null, title: 'Page not found' });
 
 let written = 0;
 const failures = [];
@@ -100,9 +115,19 @@ for (const route of routes) {
       // Drop the shell's placeholder <title> so the page has exactly one.
       page = page.replace(/<title>[\s\S]*?<\/title>\s*/i, '');
       page = page.replace('</head>', `  ${head}\n  </head>`);
+    } else if (route.title) {
+      // Root and 404 carry a neutral title and stay out of search indexes.
+      page = page.replace(/<title>[\s\S]*?<\/title>\s*/i, '');
+      page = page.replace(
+        '</head>',
+        `  <title>${escapeHtml(route.title)}</title>\n    <meta name="robots" content="noindex">\n  </head>`
+      );
     }
 
-    const out = join(DIST, route.url === '/' ? 'index.html' : `${route.url.replace(/^\//, '')}/index.html`);
+    const out = join(
+      DIST,
+      route.out ?? (route.url === '/' ? 'index.html' : `${route.url.replace(/^\//, '')}/index.html`)
+    );
     mkdirSync(dirname(out), { recursive: true });
     writeFileSync(out, page, 'utf8');
     written++;

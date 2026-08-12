@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { BrowserRouter, Routes, Route, Navigate, useParams, Link } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useParams, Link } from 'react-router-dom';
 import { captureAttribution } from './lib/attribution';
 import { getClient, listClients } from './lib/clientRegistry';
 import { TEMPLATE_META, isTemplateApplicable, isTemplateId, renderTemplate } from './templates/registry';
@@ -52,12 +52,37 @@ function Missing({ what }: { what: string }) {
     <main className="index">
       <h1>Not found</h1>
       <p>No such {what}.</p>
-      <p><Link to="/">Back to the index</Link></p>
+      {/* The index is dev-only now; in prod this links to the neutral root. */}
+      {import.meta.env.DEV ? <p><Link to="/">Back to the index</Link></p> : null}
     </main>
   );
 }
 
-/** Dev index — every client × every template. P3 replaces this with the real dashboard. */
+/**
+ * The public face of `/` and of any unmatched route. Deliberately says nothing:
+ * no client names, no roster, no links into /p/ pages. The roster below is a
+ * dev tool, and before ad traffic exists the public root must not enumerate
+ * clients, phone numbers or GTM ids to anyone who types the bare domain.
+ */
+function PublicRoot() {
+  return (
+    <main className="index">
+      <h1>Nothing to see here</h1>
+      <p>This site hosts advertising landing pages. There is no page at this address.</p>
+    </main>
+  );
+}
+
+function NotFound() {
+  return (
+    <main className="index">
+      <h1>Page not found</h1>
+      <p>There is no page at this address.</p>
+    </main>
+  );
+}
+
+/** Dev index — every client × every template. Dev-only: the prod `/` is PublicRoot. */
 function Index() {
   const clients = listClients();
   return (
@@ -118,11 +143,15 @@ export function AppRoutes() {
 
   return (
       <Routes>
-        <Route path="/" element={<Index />} />
+        {/* The roster is a dev tool. In prod the bare root is a neutral
+            placeholder, and unmatched routes render NotFound instead of
+            redirecting — the server side pairs this with a real 404.html so
+            the status code is honest too (see scripts/prerender.mjs). */}
+        <Route path="/" element={import.meta.env.DEV ? <Index /> : <PublicRoot />} />
         <Route path="/p/:clientSlug/:templateId" element={<TemplateRoute />} />
         <Route path="/p/:clientSlug/:templateId/thank-you" element={<ThankYou />} />
         <Route path="/thank-you" element={<ThankYou />} />
-        <Route path="*" element={<Navigate to="/" replace />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
   );
 }
