@@ -408,3 +408,141 @@ So on every template — including storm-a/storm-b, which were built after the f
 blanked question with a surviving answer renders a plain `<div>`/`<p>`, never a
 `<summary>`, and produces no focusable element without an accessible name. Fixture removed,
 clean rebuild (43 pages) green.
+
+## Task 3 (summary) — TTT storm gallery curated
+
+photos.storm went from a 21-item general tree-service set to six storm-damage /
+response images (tree-on-roof leads; branded-truck and property/trimming shots removed
+to the removal slot where they already live; two storm-only off-message shots reassigned
+into removal). Nothing deleted. Detail in commit `6cc05ef`. Storm perf re-measured after
+the change: unchanged (Perf 99, LCP 1.7 s, CLS 0).
+
+## Task 4 (summary) — J Valdez storm marked not-applicable
+
+Added a per-client applicability switch (`ClientRecord.excludedTemplates`,
+`registry.isTemplateApplicable`, honoured by the prerender and the app index/route).
+`j-valdez.excludedTemplates = ["storm-a","storm-b"]`. Build now emits **39 pages** (was
+43). Removal stays applicable for J Valdez (it is their service) but its removal photos
+are missing — see the blocker list below. Detail in commit `ec9fc5f`.
+
+## Task 5 — PRE-DEPLOY READINESS (nothing deployed)
+
+### The four P0 fixes — present on EVERY built page (19 main pages, verified by grep)
+
+| Fix | Check | Result |
+|-----|-------|--------|
+| Per-client on-site thank-you, never titan | no `titantreeservicetx.com` in any markup; both live records `thankYouUrl:"/thank-you"`, `isExternalAllowed:false` | ✅ all pages |
+| Click-ID capture (gclid/gbraid/wbraid/fbclid) | all four hidden inputs present | ✅ all pages |
+| One E.164 phone → display + `tel:` | `tel:+…` derived href present | ✅ all pages |
+| A2P consent checkbox | `name="sms_consent"` present | ✅ all pages |
+
+### R4 — cross-client leakage across the full built output
+
+- **6 of 7 templates clean:** removal-b, trimming-a, trimming-b, storm-a, storm-b,
+  agnostic — no other client's slug/asset/filename in any page.
+- **removal-a — one pre-existing coupling:** it hosts its brand-neutral TEMPLATE SVGs
+  (4 benefit icons, review star glyph, Google "G" glyph) under `/assets/j-valdez/`, so
+  every removal-a page (all clients) references that path. These are UI glyphs, NOT job
+  photographs, so it is not the "someone else's job photos" defect R4 targets — but it is
+  a cross-folder coupling that should be cleaned up before deploy (relocate the 6 SVGs to
+  `/assets/_template/removal-a/` and update `removal-a/assets.ts`). Not fixed here:
+  templates are frozen this session, and this predates it (P1). **Flagged for a decision.**
+
+### Deploy-readiness matrix
+
+| Client | Template | State | Reason |
+|--------|----------|-------|--------|
+| Texas Tree Tops | storm-a, storm-b | Ready* | Perf 99 / LCP 1.7 s / CLS 0 measured; gallery curated |
+| Texas Tree Tops | trimming-a, trimming-b, agnostic | Ready* | renders, P0 present |
+| Texas Tree Tops | removal-a | Ready* w/ caveat | works, but relocate the j-valdez template SVGs first (R4 tidy) |
+| Texas Tree Tops | removal-b | Ready* | renders, P0 present |
+| J Valdez | trimming-a, trimming-b, agnostic | Ready* | its real service; 12 trimming photos |
+| J Valdez | removal-a, removal-b | **BLOCKED** | no removal photos; cascade fills removal slots with TRIMMING work — must not ship |
+| J Valdez | storm-a, storm-b | **N/A** | not their service — excluded, not generated |
+| Blank Co | (all) | Not a target | R5 fixture only, never deployed |
+
+\* "Ready" means the page itself is correct; ALL pages are still gated by the
+cross-cutting blockers below.
+
+### Cross-cutting blockers (gate EVERY page — none is a page defect)
+
+1. **Lead submission is a P4 stub.** `lib/leads.ts#submitLead` does not POST to GHL yet;
+   it is the single seam awaiting a Cloudflare Pages Function that holds the GHL token
+   server-side. **No page should go live as a real lead-capture until this is wired** —
+   otherwise forms validate and "succeed" in the browser but no lead reaches the CRM.
+   This is the #1 blocker.
+2. **Phone numbers unconfirmed (both clients).** HOLD on any deploy that routes calls,
+   per the standing note. There is documented cross-client phone leakage in the live
+   source; do not reconcile them — the human confirms each against its GHL sub-account.
+3. **Legal URLs blank (A2P gap).** Privacy/Terms are empty on both records
+   (`legalUrlsPending`). Pages can render, but SMS/texting workflows cannot start until
+   each client's own policies exist and are linked.
+4. **Analytics not wired.** No GTM/gtag script is injected into the markup yet
+   (`gtmContainerId` is stored but not emitted); conversions will not fire until P4 adds
+   it. CallRail DNI is likewise P4.
+5. **J Valdez removal photos missing** (see matrix) — supply real tree-REMOVAL job photos
+   before enabling removal-a/removal-b for J Valdez.
+
+### Exactly which photo slots J Valdez needs (to unblock removal)
+
+`clients/j-valdez.json → photos.removal` is empty. It needs real **tree-removal** job
+photos (never trimming, never another client's):
+- **removal-a** draws from `photos.removal` for: the hero LCP plate + two hero proof
+  shots, the recent-jobs gallery, and the restoration grid — supply ~8–12 images.
+- **removal-b** draws from it for: the desktop hero art + the work mosaic.
+Add them via the dashboard (auto-optimised + srcset) or drop files in
+`app/public/assets/j-valdez/` and run `node scripts/generate-srcset.mjs`. Until then
+removal-a/removal-b stay blocked (they currently cascade to trimming, which must not ship).
+
+### Cloudflare Pages deploy steps (write-only — DO NOT run this session)
+
+Preconditions: blockers 1–4 cleared for the client/templates being launched; the
+dashboard is confirmed absent from `app/dist` (verified this session — it is a dev-only
+Vite plugin + non-build HTML entries, so `npm run build` never emits it).
+
+1. **Build the static site:** `cd app && npm run build` → output is `app/dist/` (39
+   prerendered pages + assets; fully self-hosted, no external hosts).
+2. **Add the lead Pages Function** (unblocks #1): create `app/functions/api/lead.ts`
+   that receives the LeadPayload and POSTs GHL's Upsert Contact, reading the GHL token
+   from a Pages **secret** env var (never in the bundle). Point `submitLead` at it.
+3. **Create the Pages project** (one-time), either:
+   - Dashboard → Workers & Pages → Create → Pages → Connect to Git → repo
+     `Sosa24369/-tree-template-factory-`, **build command** `cd app && npm run build`,
+     **build output directory** `app/dist`, framework preset "None"; or
+   - Direct upload: `npx wrangler pages project create tree-landing` then
+     `npx wrangler pages deploy app/dist --project-name=tree-landing --branch=main`.
+4. **Set env/secrets** on the project: the GHL API token (secret), plus any per-client
+   ids the Function needs. Do NOT commit secrets (R3).
+5. **Do NOT add a catch-all `/* -> /index.html 200` redirect** — every real landing URL
+   is prerendered, and a catch-all would render the dev index for unknown/excluded URLs
+   instead of 404ing. Leave default static 404 behaviour.
+6. **Map campaign URLs** to `/p/<slug>/<template>/` per client. Confirm a **test lead
+   reaches GHL** and the `tel:` dials the **confirmed** number before spending on ads.
+
+---
+
+# START HERE NEXT
+
+1. **Wire lead submission (blocker #1).** Build the Cloudflare Pages Function for
+   `submitLead` (GHL Upsert Contact, token as a Pages secret). Nothing on the pages
+   changes — `submitLead` is the only seam. This is the single biggest thing between
+   here and a working deploy.
+2. **Confirm both phone numbers** against their GHL sub-accounts (human), then update the
+   records. Until then, HOLD on call-routing deploys.
+3. **Relocate removal-a's 6 template SVGs** out of `/assets/j-valdez/` into
+   `/assets/_template/removal-a/` and update `removal-a/assets.ts` (R4 tidy; needs the
+   template unfreeze). Re-run the full R4 grep after.
+4. **Supply J Valdez removal photos** (slots listed above) to unblock its removal pages,
+   or confirm removal is out of scope for J Valdez and exclude it too.
+5. **Per-client Privacy/Terms URLs** + GTM injection + CallRail DNI — the remaining P4
+   wiring before SMS and conversion tracking are live.
+6. **TTT `ad_click_id` GHL custom field** still to be created (click ids are captured and
+   submitted regardless; they map once the field exists).
+
+### Verification tooling note
+
+Lighthouse 13.4.1 was installed globally this session and used with
+`--throttling-method=devtools` (applied throttling) driving the installed Google Chrome.
+It is available for future perf checks: serve `app/dist` (e.g. `npx vite preview`) and run
+`lighthouse <url> --only-categories=performance --throttling-method=devtools
+--form-factor=mobile --chrome-flags="--headless=new"`.
