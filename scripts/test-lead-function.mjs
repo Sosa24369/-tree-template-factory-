@@ -7,7 +7,7 @@
  *
  * Usage: node scripts/test-lead-function.mjs   (exit 1 on any failed assertion)
  */
-import { handleLead, buildLead, toE164, envKeyForSlug } from '../app/functions/api/_core.mjs';
+import { handleLead, buildLead, toE164, envKeyForSlug, verifyTurnstile } from '../app/functions/api/_core.mjs';
 
 let pass = 0;
 const fails = [];
@@ -135,6 +135,67 @@ console.log('\nadversarial hardening (T3)');
   // A known templateId that IS applicable still tags correctly.
   const built = buildLead({ ...base, clientSlug: 'j-valdez', templateId: 'trimming-a' });
   ok('known applicable templateId tags lp-trimming-a', built.ghlBody.tags.includes('lp-trimming-a'), JSON.stringify(built.ghlBody.tags));
+}
+
+console.log('\nturnstile — verifyTurnstile (mocked network)');
+{
+  // Fail-OPEN when unconfigured: no secret => passes, and never calls fetch.
+  let called = false;
+  const r = await verifyTurnstile('any', undefined, undefined, async () => { called = true; return { json: async () => ({}) }; });
+  ok('no secret configured -> ok, network untouched', r.ok === true && called === false);
+}
+{
+  // Configured but no token => fail-closed, no network call.
+  let called = false;
+  const r = await verifyTurnstile('', 'secret', undefined, async () => { called = true; return { json: async () => ({}) }; });
+  ok('secret set + missing token -> fail, no network', r.ok === false && called === false);
+}
+{
+  const r = await verifyTurnstile('tok', 'secret', '1.2.3.4', async () => ({ json: async () => ({ success: true }) }));
+  ok('secret set + token + success -> ok', r.ok === true);
+}
+{
+  const r = await verifyTurnstile('tok', 'secret', undefined, async () => ({ json: async () => ({ success: false, 'error-codes': ['invalid-input-response'] }) }));
+  ok('secret set + token + rejection -> fail', r.ok === false && r.codes.includes('invalid-input-response'));
+}
+{
+  const r = await verifyTurnstile('tok', 'secret', undefined, async () => { throw new Error('network down'); });
+  ok('siteverify unreachable -> fail CLOSED', r.ok === false);
+}
+
+console.log('\nturnstile — handleLead gate (mocked network)');
+{
+  // Enforcing env (secret set), missing token in body -> 403 before any GHL work.
+  const orig = globalThis.fetch;
+  globalThis.fetch = async () => ({ json: async () => ({ success: false }) });
+  try {
+    const req = new Request('http://x/api/lead', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ ...base, clientSlug: 'j-valdez', templateId: 'trimming-a' }) });
+    const res = await handleLead(req, { GHL_DRY_RUN: '1', TURNSTILE_SECRET_KEY: 'x' });
+    ok('enforced + no token -> 403', res.status === 403);
+  } finally {
+    globalThis.fetch = orig;
+  }
+}
+{
+  // Enforcing env, valid token (siteverify mocked success) -> proceeds to dry-run 200.
+  const orig = globalThis.fetch;
+  globalThis.fetch = async (url) => {
+    if (String(url).includes('siteverify')) return { json: async () => ({ success: true }) };
+    throw new Error('no other fetch expected in dry-run');
+  };
+  try {
+    const req = new Request('http://x/api/lead', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ ...base, clientSlug: 'j-valdez', templateId: 'trimming-a', turnstileToken: 'good' }) });
+    const res = await handleLead(req, { GHL_DRY_RUN: '1', TURNSTILE_SECRET_KEY: 'x' });
+    const j = await res.json();
+    ok('enforced + valid token -> 200 dryRun', res.status === 200 && j.dryRun === true);
+  } finally {
+    globalThis.fetch = orig;
+  }
+}
+{
+  // No secret in env: existing behavior is preserved (fail-open) — no token needed.
+  const r = await call({ ...base, clientSlug: 'j-valdez', templateId: 'trimming-a' });
+  ok('unconfigured env still accepts a tokenless lead (fail-open)', r.status === 200 && r.json.dryRun === true);
 }
 
 console.log(`\n${pass} passed, ${fails.length} failed`);

@@ -48,6 +48,45 @@ export function envKeyForSlug(slug) {
   return 'GHL_PIT_' + String(slug).toUpperCase().replace(/[^A-Z0-9]+/g, '_');
 }
 
+const TURNSTILE_VERIFY_URL = 'https://challenges.cloudflare.com/turnstile/v0/siteverify';
+
+/**
+ * Verify a Cloudflare Turnstile token server-side (Q1 — bot/abuse control on
+ * the open lead endpoint).
+ *
+ * Fail-OPEN when unconfigured, fail-CLOSED once configured:
+ *   - no secret in env        -> { ok: true, skipped } — the endpoint behaves
+ *     exactly as it did before Turnstile existed, so the code can ship before
+ *     the keys are set without breaking the live form.
+ *   - secret set, no token     -> { ok: false } — someone is posting around the
+ *     widget.
+ *   - secret set, token present -> ask Cloudflare; success gates the lead.
+ *
+ * The secret is read from env and passed straight to Cloudflare; it is never
+ * logged or returned.
+ */
+export async function verifyTurnstile(token, secret, remoteip, fetchImpl = fetch) {
+  if (!secret) return { ok: true, skipped: 'turnstile not configured' };
+  if (!token || typeof token !== 'string') return { ok: false, reason: 'missing turnstile token' };
+
+  const form = new URLSearchParams();
+  form.set('secret', secret);
+  form.set('response', token);
+  if (remoteip) form.set('remoteip', remoteip);
+
+  let res;
+  try {
+    res = await fetchImpl(TURNSTILE_VERIFY_URL, { method: 'POST', body: form });
+  } catch {
+    // If we cannot reach Cloudflare we fail CLOSED: an unverifiable token on a
+    // configured endpoint is treated as a failure, not waved through.
+    return { ok: false, reason: 'turnstile verify unreachable' };
+  }
+  const data = await res.json().catch(() => ({}));
+  if (data && data.success) return { ok: true };
+  return { ok: false, reason: 'turnstile rejected', codes: data?.['error-codes'] ?? [] };
+}
+
 /** Normalize a North-American phone to E.164, or null if it cannot be. */
 export function toE164(raw) {
   const s = String(raw ?? '').trim();
@@ -177,6 +216,19 @@ export async function handleLead(request, env) {
     body = await request.json();
   } catch {
     return json(400, { error: 'invalid JSON body' });
+  }
+
+  // Bot gate (Q1). Runs before any GHL work. Fail-open while unconfigured, so
+  // this can ship before the keys are set; fail-closed once TURNSTILE_SECRET_KEY
+  // exists. The remote IP helps Cloudflare's scoring but is optional.
+  const turnstile = await verifyTurnstile(
+    body.turnstileToken,
+    env.TURNSTILE_SECRET_KEY,
+    request.headers.get('CF-Connecting-IP') || undefined
+  );
+  if (!turnstile.ok) {
+    // Generic 403 — do not tell a bot which check it failed.
+    return json(403, { error: 'verification failed' });
   }
 
   const built = buildLead(body);

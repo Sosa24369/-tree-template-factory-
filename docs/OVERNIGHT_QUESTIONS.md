@@ -37,6 +37,11 @@ vendor), and it touches the live lead path. Not mine to pick.
 that actually addresses bots rather than volume. I can wire it behind a
 `TURNSTILE_SITE_KEY`/`TURNSTILE_SECRET` pair on your say-so.
 
+**DECISION (2026-08-12): wire Turnstile.** Being implemented now, fail-open
+until both keys exist (so the deploy is safe before you set them), fail-closed
+once configured. Verified in dry-run with Cloudflare's public TEST keys; the
+exact keys you must create are handed back separately before any redeploy.
+
 ## Q2 — Server-side replay/idempotency: enforce, or lean on GHL? (from T3)
 
 **What.** The `submissionId` the form mints is logged by the Function but never
@@ -53,6 +58,17 @@ timestamps each time; replayed with a mutated phone, it creates N contacts.
    protection; adds a KV binding and a small per-request read.
 
 **My recommendation:** (1) now, reconsider alongside Q1 if you add KV anyway.
+
+**DECISION (2026-08-12): option 1 — leave replay to GHL's phone-upsert.** No
+server-side idempotency store. Closed.
+
+---
+
+## Q2b — Slug-enumeration error differential (from T3)
+
+**DECISION (2026-08-12): leave it.** Client slugs are already public in the
+campaign URLs, so a differentiated error response reveals nothing that isn't
+visible in the address bar. No change.
 
 ## Q3 — Storm-copy decisions (blocking storm-a / storm-b)
 

@@ -34,6 +34,9 @@ export interface LeadPayload {
    *  the same submission; rides the dataLayer event as transaction_id and
    *  gives the server a replay handle. */
   submissionId: string;
+  /** Cloudflare Turnstile token (Q1 bot gate). Empty string when Turnstile is
+   *  not configured; the Function is fail-open in that state. */
+  turnstileToken: string;
 }
 
 export interface LeadResult {

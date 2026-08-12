@@ -17,6 +17,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import type { ResolvedClient } from '../schema/resolve';
 import { getAttribution } from '../lib/attribution';
 import { getSubmissionId } from '../lib/submissionId';
+import { fetchSiteKey, loadTurnstile } from '../lib/turnstile';
 import { submitLead, type LeadPayload } from '../lib/leads';
 import { PhoneLink } from './PhoneLink';
 
@@ -51,6 +52,42 @@ export function LeadForm({ client, labels, className }: Props) {
   const navigate = useNavigate();
   const { clientSlug, templateId } = useParams();
 
+  // Turnstile (Q1 bot gate). The widget renders only if the site key is
+  // configured; until then `turnstileActive` stays false and the form submits
+  // with an empty token, which the fail-open Function accepts. The token is a
+  // single-use credential, so it is reset on a failed submit for a clean retry.
+  const turnstileRef = useRef<HTMLDivElement | null>(null);
+  const widgetId = useRef<string | null>(null);
+  const [turnstileActive, setTurnstileActive] = useState(false);
+  const [turnstileToken, setTurnstileToken] = useState('');
+
+  useEffect(() => {
+    let cancelled = false;
+    void (async () => {
+      const siteKey = await fetchSiteKey();
+      if (cancelled || !siteKey || !turnstileRef.current) return;
+      const api = await loadTurnstile();
+      if (cancelled || !api || !turnstileRef.current) return;
+      setTurnstileActive(true);
+      widgetId.current = api.render(turnstileRef.current, {
+        sitekey: siteKey,
+        callback: (token) => setTurnstileToken(token),
+        'expired-callback': () => setTurnstileToken(''),
+        'error-callback': () => setTurnstileToken(''),
+      });
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  function resetTurnstile() {
+    setTurnstileToken('');
+    if (turnstileActive && widgetId.current && window.turnstile) {
+      window.turnstile.reset(widgetId.current);
+    }
+  }
+
   /**
    * A relative thankYouUrl stays inside the current client+template so the
    * confirmation page knows whose brand and phone number to render. An absolute
@@ -79,6 +116,12 @@ export function LeadForm({ client, labels, className }: Props) {
     if (inFlight.current || status === 'submitting') return; // double-submit guard
 
     const found = validate(values);
+    // When the widget is active, a token is required before we submit — this is
+    // the whole point of the gate. When it is inactive (unconfigured), the
+    // token stays empty and the fail-open Function accepts it.
+    if (turnstileActive && !turnstileToken) {
+      found.turnstile = 'Please complete the verification below.';
+    }
     setErrors(found);
     if (Object.keys(found).length) {
       document.querySelector<HTMLElement>('[aria-invalid="true"]')?.focus();
@@ -108,6 +151,7 @@ export function LeadForm({ client, labels, className }: Props) {
       clientSlug: client.slug,
       templateId: templateId ?? '',
       submissionId,
+      turnstileToken,
     };
 
     try {
@@ -134,6 +178,9 @@ export function LeadForm({ client, labels, className }: Props) {
       // Release the latch so a genuine retry is possible; a retry reuses the
       // same submissionId, so it still counts as one conversion.
       inFlight.current = false;
+      // The Turnstile token is single-use — a retry with the spent token would
+      // 403. Reset the widget so the next attempt gets a fresh one.
+      resetTurnstile();
       setStatus('error');
     }
     // On success the latch stays closed: navigation is imminent and no second
@@ -239,6 +286,13 @@ export function LeadForm({ client, labels, className }: Props) {
           </span>
         </label>
         {errors.consent && <p id="ttf-consent-err" className="field-error" role="alert">{errors.consent}</p>}
+      </div>
+
+      {/* Turnstile widget mounts here only when a site key is configured
+          (lib/turnstile renders into this node). Empty and invisible until then. */}
+      <div className="field turnstile-field">
+        <div ref={turnstileRef} className="cf-turnstile-container" />
+        {errors.turnstile && <p id="ttf-turnstile-err" className="field-error" role="alert">{errors.turnstile}</p>}
       </div>
 
       <button type="submit" className="btn btn-primary" disabled={status === 'submitting'}>
