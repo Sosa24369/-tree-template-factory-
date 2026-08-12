@@ -1,38 +1,49 @@
 {
-  "blank-co": {
-    "name": "Blank Co",
-    "ghlLocationId": "",
-    "adClickIdFieldId": null,
-    "attributionFieldIds": {},
-    "leadTags": [],
-    "leadSource": "",
-    "excludedTemplates": []
-  },
-  "j-valdez": {
-    "name": "J Valdez Tree Services",
-    "ghlLocationId": "FaHof000UZrAJUKORVCj",
-    "adClickIdFieldId": "DTlYvWAb5Y0M3iXyWfcH",
-    "attributionFieldIds": {},
-    "leadTags": [
-      "google-ads",
-      "landing-page"
-    ],
-    "leadSource": "Google Ads — Landing Page",
-    "excludedTemplates": [
-      "storm-a",
-      "storm-b"
-    ]
-  },
-  "texas-tree-tops": {
-    "name": "Texas Tree Tops",
-    "ghlLocationId": "zfoeYpKrqshgdFr4gG3b",
-    "adClickIdFieldId": null,
-    "attributionFieldIds": {},
-    "leadTags": [
-      "google-ads",
-      "landing-page"
-    ],
-    "leadSource": "Google Ads — Landing Page",
-    "excludedTemplates": []
+  "knownTemplates": [
+    "removal-a",
+    "removal-b",
+    "trimming-a",
+    "trimming-b",
+    "storm-a",
+    "storm-b",
+    "agnostic"
+  ],
+  "clients": {
+    "blank-co": {
+      "name": "Blank Co",
+      "ghlLocationId": "",
+      "adClickIdFieldId": null,
+      "attributionFieldIds": {},
+      "leadTags": [],
+      "leadSource": "",
+      "excludedTemplates": []
+    },
+    "j-valdez": {
+      "name": "J Valdez Tree Services",
+      "ghlLocationId": "FaHof000UZrAJUKORVCj",
+      "adClickIdFieldId": "DTlYvWAb5Y0M3iXyWfcH",
+      "attributionFieldIds": {},
+      "leadTags": [
+        "google-ads",
+        "landing-page"
+      ],
+      "leadSource": "Google Ads — Landing Page",
+      "excludedTemplates": [
+        "storm-a",
+        "storm-b"
+      ]
+    },
+    "texas-tree-tops": {
+      "name": "Texas Tree Tops",
+      "ghlLocationId": "zfoeYpKrqshgdFr4gG3b",
+      "adClickIdFieldId": null,
+      "attributionFieldIds": {},
+      "leadTags": [
+        "google-ads",
+        "landing-page"
+      ],
+      "leadSource": "Google Ads — Landing Page",
+      "excludedTemplates": []
+    }
   }
 }

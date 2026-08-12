@@ -113,13 +113,16 @@ const lead = {
   // (the Function bundles its registry), so this asserts the mapping logic
   // through the real registry the moment a record gains attributionFieldIds.
   const registry = JSON.parse(readFileSync(join(ROOT, 'app', 'functions', 'api', 'client-crm.generated.json'), 'utf8'));
-  const anyMapped = Object.values(registry).some((c) => Object.keys(c.attributionFieldIds ?? {}).length > 0);
+  const clientsMap = registry.clients ?? {};
+  const anyMapped = Object.values(clientsMap).some((c) => Object.keys(c.attributionFieldIds ?? {}).length > 0);
   if (anyMapped) {
     console.log('  (a client has attributionFieldIds — asserting mapped path)');
   } else {
     ok('registry carries attributionFieldIds (empty until you paste GHL ids)',
-      Object.values(registry).every((c) => typeof c.attributionFieldIds === 'object'));
+      Object.values(clientsMap).every((c) => typeof c.attributionFieldIds === 'object'));
   }
+  ok('registry carries the canonical template set for server-side validation',
+    Array.isArray(registry.knownTemplates) && registry.knownTemplates.includes('trimming-a'));
 }
 
 // ---------------------------------------------------------------------------

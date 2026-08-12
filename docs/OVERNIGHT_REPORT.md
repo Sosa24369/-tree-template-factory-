@@ -33,4 +33,35 @@ names, phones, GTM container ids) with a 200 via the SPA fallback.
   200, `/no-such-page` 404 with neutral body, `/p/j-valdez/storm-a/`
   (excluded template) 404.
 
+## Task 2 — conversion tracking · ✅ done · commit follows T1's
+
+- **Lead conversion**: the existing `generate_lead` push (fires only on
+  `/api/lead` success — never click, never request-start, no thank-you-URL
+  trigger anywhere) now carries `transaction_id`: a non-PII submission id
+  minted inside the submit handler (StrictMode cannot double-mint) and kept in
+  sessionStorage per (client, template, session), so refresh / retry /
+  back-nav / remount all reuse it and Ads counts one conversion. Deliberate
+  consequence written into the code: a second genuine lead from the same
+  visitor+template+session shares the id — one conversion, honestly counted.
+- **GTM**: injected at prerender from `tracking.gtmContainerId` per client —
+  never hardcoded in components (a verify check greps for that), shape-checked
+  before injection, absent from the neutral root/404. A `page_context` push
+  precedes gtm.js so tags can key on client/template.
+- **CallRail**: primary for calls; loads once per document from per-client
+  `callRailSwapScriptUrl` (currently null for every client — a console task),
+  re-swaps on every route change including thank-you. Phone clicks remain
+  `click_to_call` engagement events; nothing wires them to a conversion.
+- **Attribution end-to-end**: all four click ids + five UTMs now flow into
+  the GHL payload wherever `crm.attributionFieldIds` maps a real field id,
+  and into `droppedFields` (value preserved, reason stated) where it doesn't.
+  No invented IDs anywhere: every console-minted value is an exact click-path
+  instruction in `docs/TRACKING_MANUAL_LIST.md` (Ads conversion action + GTM
+  tag/trigger/variables + Conversion Linker per container, CallRail swap URL,
+  optional GHL custom fields).
+- **Verified**: `scripts/verify-tracking.mjs` — 81 checks (per-page GTM
+  isolation incl. no-cross-client-container, dropped-field preservation,
+  source rules); `test-lead-function.mjs` still 24/24; `tsc` clean; a
+  wrangler-dev dry-run POST produced the `[GHL_DRY_RUN]` record with
+  submissionId + attribution. Nothing was sent to GHL.
+
 *(Report continues below as tasks complete.)*

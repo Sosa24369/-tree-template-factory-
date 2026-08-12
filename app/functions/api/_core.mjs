@@ -13,10 +13,32 @@
  *   too, so a form can't post from a page that client does not run.
  */
 
-import registry from './client-crm.generated.json' with { type: 'json' };
+import registryData from './client-crm.generated.json' with { type: 'json' };
 
 const GHL_API = 'https://services.leadconnectorhq.com';
 const GHL_VERSION = '2021-07-28';
+
+// The generated file is { knownTemplates, clients }. Pull the pieces out so a
+// lookup can never address metadata as a client.
+const CLIENTS = registryData.clients ?? {};
+const KNOWN_TEMPLATES = new Set(registryData.knownTemplates ?? []);
+
+// Upper bounds on free-text values before they reach GHL. These are landing-
+// page contact fields, not essays; the cap stops an oversized body from being
+// forwarded verbatim and keeps control characters from riding through.
+const MAX_LEN = { name: 100, email: 254, phone: 20 };
+const clean = (value, max) =>
+  String(value ?? '')
+    // Collapse control chars (newlines, tabs, NULs) to spaces — they cannot
+    // ride through into a downstream tag or log.
+    .replace(/[\u0000-\u001F\u007F]/g, ' ')
+    .trim()
+    .slice(0, max);
+
+/** Prototype-safe registry lookup: "__proto__"/"constructor" resolve to nothing. */
+function lookupClient(slug) {
+  return Object.hasOwn(CLIENTS, slug) ? CLIENTS[slug] : undefined;
+}
 
 const json = (status, body) =>
   new Response(JSON.stringify(body), { status, headers: { 'content-type': 'application/json' } });
@@ -45,15 +67,28 @@ export function buildLead(body) {
   if (body.company_website) return { drop: 'honeypot' };
 
   const slug = String(body.clientSlug ?? '');
-  const client = registry[slug];
+  const client = lookupClient(slug);
   if (!client) return { error: 'unknown client', status: 400 };
 
-  const templateId = String(body.templateId ?? '');
-  if (templateId && (client.excludedTemplates ?? []).includes(templateId)) {
+  // A non-string templateId (array, object, number) is malformed input, not a
+  // page. Reject it rather than String()-coercing — an array like
+  // ["storm-a","x"] would stringify to "storm-a,x" and slip past the exclusion
+  // check while still not matching a known template.
+  if (body.templateId != null && typeof body.templateId !== 'string') {
+    return { error: 'invalid templateId', status: 400 };
+  }
+  const rawTemplate = String(body.templateId ?? '');
+  if (rawTemplate && (client.excludedTemplates ?? []).includes(rawTemplate)) {
     return { error: 'template not offered by this client', status: 400 };
   }
+  // Only a KNOWN template id may be reflected into a tag. An unrecognised value
+  // (a new template mid-deploy, or an attacker probing) is tagged 'unknown'
+  // rather than echoed verbatim — otherwise `lp-${templateId}` is an arbitrary
+  // tag-injection sink. Not a hard reject: a legit new template must not 400
+  // before the registry regenerates.
+  const templateId = KNOWN_TEMPLATES.has(rawTemplate) ? rawTemplate : '';
 
-  const firstName = String(body.firstName ?? '').trim();
+  const firstName = clean(body.firstName, MAX_LEN.name);
   if (!firstName) return { error: 'first name is required', status: 400 };
 
   const phone = toE164(body.phone);
@@ -63,7 +98,7 @@ export function buildLead(body) {
   // silently assume opt-in.
   if (typeof body.consentGiven !== 'boolean') return { error: 'consent state is required', status: 400 };
 
-  const email = String(body.email ?? '').trim();
+  const email = clean(body.email, MAX_LEN.email);
 
   // Tags: the client's own tags + where the lead came from (client already in the
   // location, so template is the useful discriminator) + the consent state.
@@ -113,7 +148,7 @@ export function buildLead(body) {
   const ghlBody = {
     locationId: client.ghlLocationId,
     firstName,
-    lastName: String(body.lastName ?? '').trim(),
+    lastName: clean(body.lastName, MAX_LEN.name),
     phone,
     ...(email ? { email } : {}),
     tags,

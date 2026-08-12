@@ -12,7 +12,7 @@
  * Submission itself is P4. `submitLead` is the single seam; nothing else changes.
  */
 
-import { useEffect, useState, type FormEvent } from 'react';
+import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import type { ResolvedClient } from '../schema/resolve';
 import { getAttribution } from '../lib/attribution';
@@ -42,6 +42,12 @@ export function LeadForm({ client, labels, className }: Props) {
   const [values, setValues] = useState(EMPTY);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [status, setStatus] = useState<Status>('idle');
+  // A ref, not the status state, is the real double-submit guard: two rapid
+  // clicks (or a click + Enter) both run onSubmit before React re-renders, so
+  // both would read status==='idle'. A ref updates synchronously and closes
+  // that race. The submissionId dedupe and GHL's phone-upsert are backstops;
+  // this stops the second POST from ever leaving.
+  const inFlight = useRef(false);
   const navigate = useNavigate();
   const { clientSlug, templateId } = useParams();
 
@@ -70,7 +76,7 @@ export function LeadForm({ client, labels, className }: Props) {
 
   async function onSubmit(event: FormEvent) {
     event.preventDefault();
-    if (status === 'submitting') return; // double-submit guard
+    if (inFlight.current || status === 'submitting') return; // double-submit guard
 
     const found = validate(values);
     setErrors(found);
@@ -79,6 +85,7 @@ export function LeadForm({ client, labels, className }: Props) {
       return;
     }
 
+    inFlight.current = true;
     setStatus('submitting');
     const attribution = getAttribution();
     // Minted in the submit handler (never in render/effects, so StrictMode
@@ -124,8 +131,13 @@ export function LeadForm({ client, labels, className }: Props) {
     } catch {
       // A failed submit must not look like a success. The error state renders the
       // client's phone number as a "call us" fallback, so the lead is not lost.
+      // Release the latch so a genuine retry is possible; a retry reuses the
+      // same submissionId, so it still counts as one conversion.
+      inFlight.current = false;
       setStatus('error');
     }
+    // On success the latch stays closed: navigation is imminent and no second
+    // submit from this mounted form should ever fire.
   }
 
   const set = (patch: Partial<typeof EMPTY>) => setValues((v) => ({ ...v, ...patch }));

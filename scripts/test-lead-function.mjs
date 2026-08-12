@@ -98,6 +98,45 @@ console.log('\ndry-run payload mapping');
   ok('JV dry-run -> 200, no dropped fields', r.status === 200 && (r.json.droppedFields?.length ?? 0) === 0, JSON.stringify(r.json));
 }
 
+console.log('\nadversarial hardening (T3)');
+{
+  // Prototype-key slugs must be rejected as unknown clients, not resolve to a
+  // truthy Object.prototype.
+  for (const slug of ['__proto__', 'constructor', 'toString']) {
+    const r = await call({ ...base, clientSlug: slug, templateId: 'trimming-a' });
+    ok(`slug "${slug}" -> 400 unknown client`, r.status === 400 && r.json.error === 'unknown client', JSON.stringify(r.json));
+  }
+}
+{
+  // Arbitrary templateId must NOT be reflected into a tag; unknown -> lp-unknown.
+  const built = buildLead({ ...base, clientSlug: 'j-valdez', templateId: 'evil-tag\ninjected' });
+  ok('unknown templateId is not echoed into a tag', built.ghlBody.tags.includes('lp-unknown') && !built.ghlBody.tags.some((t) => t.includes('evil-tag')), JSON.stringify(built.ghlBody.tags));
+}
+{
+  // Non-string templateId is malformed input, rejected (closes the array-coercion
+  // exclusion bypass).
+  const r = await call({ ...base, clientSlug: 'j-valdez', templateId: ['storm-a', 'x'] });
+  ok('array templateId -> 400 invalid', r.status === 400 && r.json.error === 'invalid templateId', JSON.stringify(r.json));
+}
+{
+  // Excluded template still rejected for the real client.
+  const r = await call({ ...base, clientSlug: 'j-valdez', templateId: 'storm-a' });
+  ok('excluded storm-a for j-valdez still -> 400', r.status === 400);
+}
+{
+  // Oversized name/email are capped, not forwarded verbatim, and control chars
+  // are collapsed.
+  const built = buildLead({ ...base, clientSlug: 'j-valdez', templateId: 'trimming-a', firstName: 'A'.repeat(5000), lastName: 'B\n\r\tC', email: 'x'.repeat(5000) + '@e.com' });
+  ok('firstName capped at 100', built.ghlBody.firstName.length === 100);
+  ok('control chars in lastName collapsed to spaces', built.ghlBody.lastName === 'B   C');
+  ok('email capped at 254', built.ghlBody.email.length <= 254);
+}
+{
+  // A known templateId that IS applicable still tags correctly.
+  const built = buildLead({ ...base, clientSlug: 'j-valdez', templateId: 'trimming-a' });
+  ok('known applicable templateId tags lp-trimming-a', built.ghlBody.tags.includes('lp-trimming-a'), JSON.stringify(built.ghlBody.tags));
+}
+
 console.log(`\n${pass} passed, ${fails.length} failed`);
 if (fails.length) {
   for (const f of fails) console.log(`  FAIL  ${f}`);
