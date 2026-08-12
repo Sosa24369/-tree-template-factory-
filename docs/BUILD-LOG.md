@@ -546,3 +546,165 @@ Lighthouse 13.4.1 was installed globally this session and used with
 It is available for future perf checks: serve `app/dist` (e.g. `npx vite preview`) and run
 `lighthouse <url> --only-categories=performance --throttling-method=devtools
 --form-factor=mobile --chrome-flags="--headless=new"`.
+
+---
+
+# P4 SESSION 2 — wire the form (lead submit to GHL)
+
+Run of 2026-08-11 (follow-up). Started clean at `f60d2b7`, local == origin. Replaced the
+`submitLead` P1 stub with the real path: browser → same-origin Cloudflare Pages Function
+→ GHL Upsert Contact. Nothing deployed; all proof is local (dry-run + Wrangler).
+
+## The Function's contract (`app/functions/api/lead.ts` + `_core.mjs`)
+
+`POST /api/lead`, JSON body. GET → 405.
+
+- **Validates:** known client slug only (checked against the generated registry —
+  unknown → 400); phone normalized to E.164 (bad → 400); consent STATE present as a
+  boolean (missing → 400); first name present (missing → 400); honeypot
+  `company_website` filled → 200 "dropped", nothing forwarded; a template the client
+  has opted out of (`excludedTemplates`) → 400.
+- **Routes by slug ONLY:** slug → registry → `ghlLocationId` + the env secret
+  `GHL_PIT_<SLUG>`. The location id and token NEVER come from the request body, so one
+  client's form structurally cannot write into another client's GHL. Unknown or
+  unconfigured (no token) is refused (503) before any token is read.
+- **Maps:** click id → the client's ad-click custom field **iff it exists** (TTT's is
+  null → dropped-and-logged, lead still submits — never fail a lead over a missing
+  field; J Valdez has the field → click id mapped in, passed through intact). Tags =
+  client tags + `lp-<template>` + `sms-consent-yes|no`. `source` = client's leadSource.
+  Consent text + timestamp recorded.
+- **`GHL_DRY_RUN`** logs the exact upsert payload and posts nothing.
+
+The routing map is generated from `/clients/*.json` by
+`scripts/generate-lead-registry.mjs` (first build step) into
+`app/functions/api/client-crm.generated.json` — NON-SECRET (location ids, field ids,
+tags, source; already committed in the records). Tokens are env-only. Factory property
+intact: adding a client is still just a JSON file.
+
+## Validation matrix — `node scripts/test-lead-function.mjs` (24/24 pass)
+
+Imports the real handler and runs it with a mock Request + env (GHL_DRY_RUN). unknown
+slug 400 · bad phone 400 · missing consent 400 · missing name 400 · honeypot dropped
+(nothing forwarded) · excluded template 400 · valid-but-no-token 503 (no POST) · TTT
+maps location+phone+tags and DROPS the click id (no field) without failing · JV MAPS the
+click id into its custom field, value intact · dry-run log names the env secret.
+
+## Dry-run evidence (the exact payloads the Function WOULD send)
+
+Via `wrangler pages dev` (dev-only) — compiled the Function, loaded `.dev.vars`
+(GHL_DRY_RUN), and both curl and a real browser form-submit produced:
+
+```
+TTT  storm-a: envKey GHL_PIT_TEXAS_TREE_TOPS
+     locationId zfoeYpKrqshgdFr4gG3b · phone +16824520735 (from "(682) 452-0735")
+     tags [google-ads, landing-page, lp-storm-a, sms-consent-yes] · source set
+     droppedFields [ad_click_id: "no GHL custom field configured for this client"]
+     consent {given:true, text:"…full A2P copy…", timestamp:…}
+
+JV   trimming-a: envKey GHL_PIT_J_VALDEZ
+     locationId FaHof000UZrAJUKORVCj · phone +14694021196 (from "4694021196")
+     tags [google-ads, landing-page, lp-trimming-a, sms-consent-yes]
+     customFields [{id: DTlYvWAb5Y0M3iXyWfcH, value: "fb-xyz"}] · droppedFields []
+```
+
+Browser end-to-end: filled the TTT storm-a form → routed through the live Function →
+`generate_lead` dataLayer event fired ONCE (`{client:texas-tree-tops, template:storm-a,
+placement:lead-form}`) → landed on the client's own thank-you page. With the server
+killed, the form showed **"Something went wrong sending your request. Please call
+(682) 452-0735…"** (a live phone link) and did NOT navigate or fire the conversion —
+the lead is never silently lost. **No POST to any real client GHL location; no sandbox
+token was available, so dry-run evidence stands as the proof.**
+
+## SVG tidy + R4
+
+`removal-a` referenced its brand-neutral glyphs (4 benefit icons + review star/Google
+glyphs) at `/assets/j-valdez/…`, where the files DID NOT EXIST — so they 404'd on every
+removal-a page AND leaked the j-valdez path. Repointed the six refs to `/assets/_shared/`
+(where the files already are). **Full R4 grep is now clean across all seven templates for
+all three clients.** (commit `8843a68`)
+
+## Secrets — the per-client table and how to set them
+
+The Function reads one Private Integration Token per client from an env secret named
+`GHL_PIT_<SLUG>` (slug uppercased, non-alphanumerics → `_`):
+
+| Client | slug | env secret name | GHL location id (routing target) |
+|--------|------|-----------------|----------------------------------|
+| Texas Tree Tops | texas-tree-tops | `GHL_PIT_TEXAS_TREE_TOPS` | zfoeYpKrqshgdFr4gG3b |
+| J Valdez Tree Services | j-valdez | `GHL_PIT_J_VALDEZ` | FaHof000UZrAJUKORVCj |
+
+Local dev: copy `app/.dev.vars.example` → `app/.dev.vars` (gitignored), set
+`GHL_DRY_RUN=1` for safe testing, add real tokens only to make live calls. Never commit
+`.dev.vars`.
+
+### Setting a secret in the Cloudflare Pages dashboard (exact click-path)
+
+1. Cloudflare dashboard → **Workers & Pages** → your Pages project.
+2. **Settings** → **Variables and secrets** (a.k.a. Environment variables) →
+   **Production** (repeat for **Preview** if you preview-deploy).
+3. **Add variable** → Type **Secret** → Name `GHL_PIT_<SLUG>` → Value = the client's
+   Private Integration Token → **Encrypt** / **Save**.
+4. **Redeploy** the project so the new secret is bound (secrets bind at deploy time).
+
+### The human's ONE manual step per new client
+
+> In that client's own GHL sub-account: **Settings → Private Integrations → Create** a
+> token with the Contacts write scope. Copy it. In Cloudflare Pages add a secret named
+> `GHL_PIT_<SLUG>` with that value (steps above). Redeploy. That is the whole per-client
+> setup — everything else (location id, tags, field mapping) is already in the client
+> record and regenerated into the routing map at build.
+
+## Revised pre-deploy checklist (supersedes the previous Cloudflare section)
+
+1. **Build:** `cd app && npm run build` → `app/dist` (39 pages; the build regenerates the
+   lead registry first). Dashboard is dev-only and never in `dist` (verified).
+2. **Ship the Function:** it lives in `app/functions/` and deploys automatically with
+   Pages when the project's root/output is `app` / `app/dist`. Confirm `GET /api/lead`
+   returns 405 on the deployed URL.
+3. **Set secrets:** `GHL_PIT_<SLUG>` per launching client (table + click-path above). Do
+   NOT set `GHL_DRY_RUN` in production (leave it unset so real calls happen).
+4. **Still-open cross-cutting gates** (unchanged, human/P4): confirm both phone numbers;
+   supply per-client Privacy/Terms URLs (A2P); inject GTM so the `generate_lead` event
+   becomes an ad conversion; create TTT's `ad_click_id` GHL field; supply J Valdez
+   removal photos (removal-a/b stay blocked until then); storm is N/A for J Valdez.
+5. **No catch-all redirect** — every landing URL is prerendered; a `/* → /index.html`
+   rule would mask 404s. Leave default.
+
+### Post-deploy smoke test (per client, once)
+
+1. On the LIVE site, open that client's page and submit ONE real form (real name +
+   phone, consent checked).
+2. In that client's GHL sub-account, confirm the contact appears in the **correct
+   location**, with the `lp-<template>` and `sms-consent-yes` tags and the source set;
+   if the client has the ad-click field, confirm the click id landed.
+3. In GTM Preview / the ad platform, confirm the `generate_lead` event fired **once** for
+   that submit (not zero, not twice).
+4. Only after a clean smoke test per client, point ad spend at the URLs.
+
+---
+
+# START HERE NEXT
+
+1. **Human: create the GHL Private Integration Tokens** (one per launching client) and
+   add them as Cloudflare secrets `GHL_PIT_<SLUG>` (table + click-path above). This is
+   the last thing gating a working live form. Until then the Function correctly refuses
+   (503) rather than mis-routing.
+2. **Confirm both phone numbers** against their GHL sub-accounts, then update the records.
+   HOLD on call-routing deploys until done.
+3. **Inject GTM** (per-client `gtmContainerId` is stored but not emitted) so the
+   `generate_lead` dataLayer event — already firing on success — becomes the ad
+   conversion. Add CallRail DNI at the same time if wanted.
+4. **Per-client Privacy/Terms URLs** before any SMS/A2P workflow runs (records warn while
+   blank).
+5. **Supply J Valdez removal photos** to unblock removal-a/removal-b (slots listed in the
+   prior report); create TTT's `ad_click_id` GHL field so click ids map (they're captured
+   and submitted regardless).
+6. **First live smoke test** per client (steps above) before ad spend.
+
+### Verification tooling available in-repo now
+
+- `node scripts/test-lead-function.mjs` — lead validation/mapping matrix (no network).
+- `wrangler pages dev dist` (from `app/`, reads `app/.dev.vars`) — full local Function.
+- `lighthouse <url> --throttling-method=devtools --form-factor=mobile` — applied-throttle perf.
+- `node scripts/verify-factory-rules.mjs` (R1/R3/R5/FIX1, now scans `app/functions`) and
+  `node scripts/verify-faq-a11y.mjs`.
