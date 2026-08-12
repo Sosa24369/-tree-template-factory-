@@ -708,3 +708,124 @@ Local dev: copy `app/.dev.vars.example` → `app/.dev.vars` (gitignored), set
 - `lighthouse <url> --throttling-method=devtools --form-factor=mobile` — applied-throttle perf.
 - `node scripts/verify-factory-rules.mjs` (R1/R3/R5/FIX1, now scans `app/functions`) and
   `node scripts/verify-faq-a11y.mjs`.
+
+---
+
+# P4 SESSION 3 — DEPLOY DAY (live)
+
+Run of 2026-08-11. Deploying was explicitly authorised for this session only. Started
+clean at `c537af0`, local == origin. Live at **https://tree-template-factory.pages.dev**
+(Cloudflare Pages project `tree-template-factory`, account `ef07a2f57e930a4d6499a45560b78d9f`).
+
+## Phones reconciled (Task 1)
+
+Human confirmation matched the existing records exactly, so **no record change was
+needed** — the confirmation lifts the hold on the numbers already in place.
+
+| Client | Confirmed | Record (unchanged) | Verified by |
+|--------|-----------|--------------------|-------------|
+| Texas Tree Tops | 682-452-0735 | +16824520735 | "they have been getting calls" |
+| J Valdez | 469-402-1196 | +14694021196 | "they have been getting calls" |
+
+Verified in the built output: every `tel:` on TTT pages is `+16824520735` (41), every
+`tel:` on JV pages is `+14694021196` (29), and neither number appears on the other
+client's pages. The call-routing HOLD is lifted only for these two confirmed numbers.
+
+## Secrets set (Task 2) — names only
+
+Set by the human (tokens never handled by the agent, never in the repo/transcript):
+
+| Secret name | Bound to | Status |
+|-------------|----------|--------|
+| `GHL_PIT_TEXAS_TREE_TOPS` | project `tree-template-factory`, production | Value Encrypted ✓ |
+| `GHL_PIT_J_VALDEZ` | project `tree-template-factory`, production | Value Encrypted ✓ |
+
+`GHL_DRY_RUN` is NOT set in production (real calls). Redeployed after setting secrets so
+they bind.
+
+## Deploy + live verification (Task 3)
+
+Direct-upload deploy (`wrangler pages deploy dist` from `app/`, Functions bundled from
+`app/functions`). Verified on the live `*.pages.dev`:
+
+- **All 19 built main pages return 200** (both clients + the blank-co fixture).
+- **Prerendered content served** (view-source shows real markup, e.g. TTT storm-a's
+  "Storm Damage in West Dallas…"), not an empty shell.
+- **All assets 200** — shared CSS + JS bundle, per-client photos, logos, `_shared` SVGs.
+- **`GET /api/lead` → 405** (the Function is live).
+
+## Live URL table (client × template)
+
+Base: `https://tree-template-factory.pages.dev/p/<client>/<template>/`
+
+| | removal-a | removal-b | trimming-a | trimming-b | storm-a | storm-b | agnostic |
+|---|---|---|---|---|---|---|---|
+| **texas-tree-tops** | live | live | live | live | live | live | live |
+| **j-valdez** | live¹ | live¹ | live | live | n/a² | n/a² | live |
+
+¹ J Valdez removal pages render but its `photos.removal` is empty (cascades to trimming);
+treat as **not for ad traffic** until real removal photos are supplied. ² storm excluded
+for J Valdez (not their service) — not generated.
+
+`blank-co` is the R5 fixture; its pages deploy but are not a client and get no traffic.
+
+## Live smoke test (Task 4) — one lead per client, both PASS
+
+Real submits to the live site (`TEST` / `DELETE ME`, consent checked, test phones
+682-555-0100 and 469-555-0100):
+
+| Client | Result | Landed on | generate_lead |
+|--------|--------|-----------|---------------|
+| Texas Tree Tops (storm-a) | ✅ success | its own thank-you (West Dallas / (682) 452-0735) | fired **once** `{texas-tree-tops, storm-a}` |
+| J Valdez (trimming-a) | ✅ success | its own thank-you (East Dallas / (469) 402-1196) | fired **once** `{j-valdez, trimming-a}` |
+
+Both Function calls returned success, i.e. GHL accepted the upsert with **that client's
+own token to that client's own location**. Routing is slug → location id → `GHL_PIT_<SLUG>`
+token, so a contact cannot be written to the other sub-account.
+
+**UNVERIFIED BY THE AGENT (human step):** the agent cannot open the GHL UI. The human must
+confirm each test contact appears in **its own** sub-account only — TTT's test in
+`zfoeYpKrqshgdFr4gG3b`, J Valdez's in `FaHof000UZrAJUKORVCj` — and then **delete both test
+contacts**. If a test contact shows up in the wrong sub-account, that is a
+deploy-stopping defect — stop and raise it.
+
+## Flags / not-blocking-but-clean-up
+
+- **The public root `/` and any unmatched route serve the internal dev index** (the
+  "Template factory" client roster) with HTTP 200 — Cloudflare's default SPA fallback,
+  because `index.html` is that dev index. Campaign URLs (`/p/<client>/<template>/`) all
+  work correctly, but the roster page should be gated/replaced before real traffic (a
+  small app change — out of this session's frozen scope). Unmatched/excluded routes 200
+  into the SPA which then shows "Not found" client-side.
+- **`generate_lead` fires but has nowhere to go yet:** no GTM is injected in production
+  (window.dataLayer is undefined, so the guarded push no-ops in a real session — proven
+  by pre-seeding dataLayer in the smoke test). Kevin's GTM + CallRail DNI is the P4
+  on-page-tracking step that turns the event into an ad conversion.
+
+## Launchpad
+
+The **Launchpad row for this app needs its live URL added**
+(`https://tree-template-factory.pages.dev`) — that lives in the separate Library repo and
+is a different session.
+
+---
+
+# START HERE NEXT
+
+1. **Human: verify + delete the two test contacts** in GHL. TTT's `TEST DELETE ME` in
+   sub-account `zfoeYpKrqshgdFr4gG3b` only; J Valdez's in `FaHof000UZrAJUKORVCj` only. A
+   contact in the wrong place = stop-everything defect.
+2. **Kevin's on-page tracking:** inject per-client GTM (the `generate_lead` event already
+   fires on success) so it becomes the ad conversion; add CallRail DNI. Pages are live, so
+   this can proceed now.
+3. **Gate/replace the public dev index at `/`** before real traffic (exposes the client
+   roster). Small app change; needs the template/app unfreeze.
+4. **Custom domains** per client when ready (Cloudflare Pages → Custom domains).
+5. **TTT `ad_click_id` GHL field** — create it so click ids map onto a contact field
+   (they are captured and submitted regardless; currently dropped-and-logged).
+6. **Per-client Privacy/Terms URLs** before any SMS/A2P workflow runs.
+7. **J Valdez removal photos** to unblock its removal pages (or exclude removal too).
+8. **Add the live URL to the Launchpad row** (Library repo, separate session).
+
+**Not declared "ready for ads."** That is the human's call after Kevin's tracking is live
+and the test contacts are verified and deleted.
