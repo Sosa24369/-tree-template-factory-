@@ -55,6 +55,44 @@ function templateHasTextLcp(template) {
   return template.service === 'storm';
 }
 
+/**
+ * Per-client GTM, injected at prerender time — components never carry a
+ * container id (factory rule: per-client values live in client records).
+ * The id is shape-checked before it is ever written into HTML: a malformed
+ * value in a client record becomes a build warning, not an injected string.
+ * The neutral root and 404 get no GTM at all — there is nothing to measure
+ * on a page that names nobody.
+ */
+const GTM_ID_SHAPE = /^GTM-[A-Z0-9]{4,10}$/;
+
+function gtmHead(client, template) {
+  const id = client?.tracking?.gtmContainerId;
+  if (!id) return '';
+  if (!GTM_ID_SHAPE.test(id)) {
+    console.warn(`  ! ${client.slug}: gtmContainerId ${JSON.stringify(id)} is not GTM-shaped — skipping injection`);
+    return '';
+  }
+  // page_context is pushed BEFORE gtm.js starts, so tags can read client and
+  // template as dataLayer variables from the very first event.
+  return (
+    `<script>window.dataLayer=window.dataLayer||[];` +
+    `window.dataLayer.push({event:'page_context',client:'${escapeHtml(client.slug)}',template:'${escapeHtml(template?.id ?? '')}'});` +
+    `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});` +
+    `var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;` +
+    `j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})` +
+    `(window,document,'script','dataLayer','${id}');</script>`
+  );
+}
+
+function gtmNoscript(client) {
+  const id = client?.tracking?.gtmContainerId;
+  if (!id || !GTM_ID_SHAPE.test(id)) return '';
+  return (
+    `<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=${id}" ` +
+    `height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>`
+  );
+}
+
 function pageHead(client, template) {
   const title = `${template.label} — ${client.name}`;
   const bits = [
@@ -115,6 +153,11 @@ for (const route of routes) {
       // Drop the shell's placeholder <title> so the page has exactly one.
       page = page.replace(/<title>[\s\S]*?<\/title>\s*/i, '');
       page = page.replace('</head>', `  ${head}\n  </head>`);
+      const gtm = gtmHead(route.client, route.template);
+      if (gtm) {
+        page = page.replace('</head>', `  ${gtm}\n  </head>`);
+        page = page.replace(/<body([^>]*)>/i, (m) => `${m}\n    ${gtmNoscript(route.client)}`);
+      }
     } else if (route.title) {
       // Root and 404 carry a neutral title and stay out of search indexes.
       page = page.replace(/<title>[\s\S]*?<\/title>\s*/i, '');

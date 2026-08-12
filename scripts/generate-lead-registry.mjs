@@ -27,6 +27,12 @@ for (const file of readdirSync(CLIENTS).filter((f) => f.endsWith('.json'))) {
     name: d.name ?? '',
     ghlLocationId: d.crm?.ghlLocationId ?? '',
     adClickIdFieldId: d.crm?.adClickIdFieldId ?? null,
+    // Optional map of attribution key -> GHL custom field id, e.g.
+    // {"gclid": "<fieldId>", "utm_campaign": "<fieldId>"}. Field ids are
+    // created in GHL by hand (docs/TRACKING_MANUAL_LIST.md) and pasted into
+    // the client record — NEVER invented here. Until then this is empty and
+    // the Function reports those values as droppedFields instead.
+    attributionFieldIds: d.crm?.attributionFieldIds ?? {},
     leadTags: d.crm?.leadTags ?? [],
     leadSource: d.crm?.leadSource ?? '',
     // Templates this client does NOT sell — the Function refuses a lead for one, so a

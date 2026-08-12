@@ -84,6 +84,32 @@ export function buildLead(body) {
     else droppedFields.push({ field: 'ad_click_id', value: clickId, reason: 'no GHL custom field configured for this client' });
   }
 
+  // Full attribution set — every click id and every UTM the page captured is
+  // preserved end-to-end. Each lands in the GHL payload when the client record
+  // maps it to a real custom field id; otherwise it is reported as dropped so
+  // the gap is visible, never silent. Field ids are created by hand in GHL
+  // (docs/TRACKING_MANUAL_LIST.md) — this code never invents one.
+  const ATTRIBUTION_KEYS = [
+    'gclid', 'gbraid', 'wbraid', 'fbclid',
+    'utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content',
+  ];
+  const fieldMap = client.attributionFieldIds ?? {};
+  const attribution = { ...(body.clickIds ?? {}), ...(body.utm ?? {}) };
+  const adClickIdSource = String(body.adClickIdSource ?? '');
+  for (const key of ATTRIBUTION_KEYS) {
+    const value = String(attribution[key] ?? '').trim();
+    if (!value) continue;
+    const fieldId = fieldMap[key];
+    if (fieldId) {
+      customFields.push({ id: fieldId, value: value.slice(0, 255) });
+    } else if (key === adClickIdSource && value === clickId) {
+      // Already delivered (or already reported dropped) as ad_click_id above —
+      // repeating it here would double-report the same value.
+    } else {
+      droppedFields.push({ field: key, value: value.slice(0, 255), reason: 'no GHL custom field configured for this client' });
+    }
+  }
+
   const ghlBody = {
     locationId: client.ghlLocationId,
     firstName,
@@ -102,6 +128,10 @@ export function buildLead(body) {
       envKey: envKeyForSlug(slug),
       droppedFields,
       consent: { given: body.consentGiven, text: body.consentText ?? '', timestamp: body.consentTimestamp ?? '' },
+      // Non-PII dedupe key minted by the form (lib/submissionId.ts). Logged so a
+      // replayed submission is traceable server-side; GHL upsert is already
+      // idempotent on phone, so a replay updates rather than duplicates.
+      submissionId: String(body.submissionId ?? '').slice(0, 64),
     },
   };
 }
@@ -124,7 +154,7 @@ export async function handleLead(request, env) {
   // Dry run: log exactly what WOULD be sent (incl. which env secret and consent), post
   // nothing. This is how the wiring is proven without touching a real GHL location.
   if (env.GHL_DRY_RUN) {
-    console.log('[GHL_DRY_RUN] POST /contacts/upsert ' + JSON.stringify({ envKey: meta.envKey, body: ghlBody, droppedFields: meta.droppedFields, consent: meta.consent }));
+    console.log('[GHL_DRY_RUN] POST /contacts/upsert ' + JSON.stringify({ envKey: meta.envKey, body: ghlBody, droppedFields: meta.droppedFields, consent: meta.consent, submissionId: meta.submissionId }));
     return json(200, { ok: true, contactId: null, dryRun: true, droppedFields: meta.droppedFields });
   }
 

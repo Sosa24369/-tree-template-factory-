@@ -10,7 +10,9 @@
  * cannot double-count.
  */
 
+import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import { ensureCallRail } from '../lib/callrail';
 import { getClient } from '../lib/clientRegistry';
 import { PhoneLink } from '../components/PhoneLink';
 import { SafeLogo, SafeText } from '../components/Safe';
@@ -18,6 +20,13 @@ import { SafeLogo, SafeText } from '../components/Safe';
 export function ThankYou() {
   const { clientSlug } = useParams();
   const entry = getClient(clientSlug);
+
+  // This page can be a direct landing (ad destination / refresh), so it must
+  // be able to load the per-client swap script itself — the phone number here
+  // needs DNI as much as the landing page's.
+  useEffect(() => {
+    if (entry) ensureCallRail(entry.client.tracking.callRailSwapScriptUrl);
+  }, [entry]);
 
   if (!entry) {
     return (

@@ -30,6 +30,10 @@ export interface LeadPayload {
   /** Which template the lead came from — the Function tags with it and rejects a
    *  submit from a template the client has opted out of. */
   templateId: string;
+  /** Non-PII dedupe key (see lib/submissionId.ts). Same id on every retry of
+   *  the same submission; rides the dataLayer event as transaction_id and
+   *  gives the server a replay handle. */
+  submissionId: string;
 }
 
 export interface LeadResult {

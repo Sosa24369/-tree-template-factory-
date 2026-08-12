@@ -16,6 +16,7 @@ import { useEffect, useState, type FormEvent } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import type { ResolvedClient } from '../schema/resolve';
 import { getAttribution } from '../lib/attribution';
+import { getSubmissionId } from '../lib/submissionId';
 import { submitLead, type LeadPayload } from '../lib/leads';
 import { PhoneLink } from './PhoneLink';
 
@@ -80,6 +81,10 @@ export function LeadForm({ client, labels, className }: Props) {
 
     setStatus('submitting');
     const attribution = getAttribution();
+    // Minted in the submit handler (never in render/effects, so StrictMode
+    // cannot double-mint) and stable across retry, refresh and back-nav — the
+    // key Google Ads dedupes the conversion on.
+    const submissionId = getSubmissionId(client.slug, templateId ?? '');
     const payload: LeadPayload = {
       firstName: values.firstName.trim(),
       lastName: values.lastName.trim(),
@@ -95,6 +100,7 @@ export function LeadForm({ client, labels, className }: Props) {
       company_website: values.company_website, // honeypot
       clientSlug: client.slug,
       templateId: templateId ?? '',
+      submissionId,
     };
 
     try {
@@ -107,6 +113,10 @@ export function LeadForm({ client, labels, className }: Props) {
         client: client.slug,
         template: templateId ?? 'unknown',
         placement: 'lead-form',
+        // Ads dedupes on transaction_id: a retried/refreshed/back-navved
+        // resubmission carries the same id and counts once.
+        transaction_id: submissionId,
+        submission_id: submissionId,
       });
       const to = destination();
       if (/^[a-z][a-z0-9+.-]*:\/\//i.test(to)) window.location.assign(to);

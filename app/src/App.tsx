@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
-import { BrowserRouter, Routes, Route, useParams, Link } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useLocation, useParams, Link } from 'react-router-dom';
 import { captureAttribution } from './lib/attribution';
+import { ensureCallRail, swapCallRail } from './lib/callrail';
 import { getClient, listClients } from './lib/clientRegistry';
 import { TEMPLATE_META, isTemplateApplicable, isTemplateId, renderTemplate } from './templates/registry';
 import { ThankYou } from './routes/ThankYou';
@@ -14,6 +15,13 @@ import './styles/base.css';
 function TemplateRoute() {
   const { clientSlug, templateId } = useParams();
   const entry = getClient(clientSlug);
+
+  // CallRail DNI: the swap script loads once per document, from per-client
+  // data. Route-change re-swaps live in AppRoutes, so they also fire when the
+  // visitor moves to the thank-you page.
+  useEffect(() => {
+    if (entry) ensureCallRail(entry.client.tracking.callRailSwapScriptUrl);
+  }, [entry]);
 
   if (!entry) return <Missing what={`client "${clientSlug}"`} />;
   if (!isTemplateId(templateId)) return <Missing what={`template "${templateId}"`} />;
@@ -140,6 +148,14 @@ export function AppRoutes() {
   useEffect(() => {
     captureAttribution();
   }, []);
+
+  // CallRail scans the DOM only on script load; an SPA navigation renders
+  // phone numbers it has never seen. Re-swap on every route change (a no-op
+  // until a template mounts and loads the per-client script).
+  const location = useLocation();
+  useEffect(() => {
+    swapCallRail();
+  }, [location.pathname]);
 
   return (
       <Routes>
