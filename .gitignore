@@ -7,6 +7,13 @@ dist/
 .env.local
 .env.*.local
 
+# Cloudflare Pages local secrets for `wrangler pages dev` — NEVER committed (R3).
+# The committed .dev.vars.example carries placeholder names only.
+.dev.vars
+app/.dev.vars
+.wrangler/
+app/.wrangler/
+
 # Raw fetched HTML of the source pages (large, regenerable via scripts/fetch-source.sh).
 # The distilled source of truth in source/ IS committed.
 source/_raw/

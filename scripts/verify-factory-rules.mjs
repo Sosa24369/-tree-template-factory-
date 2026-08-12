@@ -126,7 +126,8 @@ const sourceFiles = walk(
   const secretRe = /(pit-[a-z0-9-]{20,}|Bearer\s+ey[A-Za-z0-9._-]{20,}|["'](?:sk|api|token)[_-]?(?:key|secret)?["']\s*[:=]\s*["'][A-Za-z0-9_-]{24,}["'])/i;
   const scan = walk(join(ROOT, 'app', 'src'))
     .concat(walk(CLIENTS_DIR))
-    .concat(walk(join(ROOT, 'scripts')));
+    .concat(walk(join(ROOT, 'scripts')))
+    .concat(walk(join(ROOT, 'app', 'functions'))); // the lead Function must be secret-free too
   let hits = 0;
   for (const file of scan) {
     const text = readFileSync(file, 'utf8');
