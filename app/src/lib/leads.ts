@@ -27,6 +27,9 @@ export interface LeadPayload {
 
   company_website: string; // honeypot
   clientSlug: string;
+  /** Which template the lead came from — the Function tags with it and rejects a
+   *  submit from a template the client has opted out of. */
+  templateId: string;
 }
 
 export interface LeadResult {
@@ -35,24 +38,39 @@ export interface LeadResult {
 }
 
 /**
- * P4 will map this payload onto GHL's Upsert Contact body:
- *   locationId       <- client.crm.ghlLocationId
- *   tags             <- client.crm.leadTags
- *   source           <- client.crm.leadSource
- *   customFields[]   <- { id: client.crm.adClickIdFieldId, value: payload.adClickId }
- *                       plus the consent fields
- * The mapping lives server-side so the token never reaches the browser.
+ * POSTs the lead to the same-origin Pages Function at /api/lead, which does the GHL
+ * mapping server-side (slug -> location id -> per-client token). The browser never
+ * sees a token or a location id: the seam is a fetch, and everything sensitive is on
+ * the far side of it.
+ *
+ * The `client` argument is kept for signature stability (and a dev log); the Function
+ * routes by `payload.clientSlug`, so nothing client-specific has to be trusted from the
+ * browser beyond the slug, which the Function validates against its own registry.
+ *
+ * Throws on any non-2xx so the form falls into its error state, which offers the phone
+ * number — a submit that fails must never look like a submit that succeeded.
  */
 export async function submitLead(payload: LeadPayload, client: ResolvedClient): Promise<LeadResult> {
-  // ─────────────────────────────────────────────────────────────────
-  // PHASE 4 replaces this body with:
-  //   const res = await fetch('/api/lead', { method: 'POST', ... })
-  // ─────────────────────────────────────────────────────────────────
   if (import.meta.env.DEV) {
-    console.info('[P1 placeholder] lead for %s -> GHL location %s', client.slug, client.crm.ghlLocationId || '(unset)', payload);
+    console.info('[lead] POST /api/lead for %s (%s)', client.slug, payload.templateId || 'no-template');
   }
-  // Real latency so the submitting state, the disabled button and the
-  // double-submit guard are genuinely exercised before P4 wires the API.
-  await new Promise((r) => setTimeout(r, 600));
-  return { ok: true, contactId: null };
+
+  const res = await fetch('/api/lead', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify(payload),
+  });
+
+  if (!res.ok) {
+    let detail = '';
+    try {
+      detail = ((await res.json()) as { error?: string })?.error ?? '';
+    } catch {
+      /* non-JSON error body */
+    }
+    throw new Error(detail || `lead submit failed (${res.status})`);
+  }
+
+  const data = (await res.json().catch(() => ({}))) as { contactId?: string | null };
+  return { ok: true, contactId: data?.contactId ?? null };
 }

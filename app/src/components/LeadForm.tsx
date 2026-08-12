@@ -94,16 +94,26 @@ export function LeadForm({ client, labels, className }: Props) {
       utm: attribution.utm,
       company_website: values.company_website, // honeypot
       clientSlug: client.slug,
+      templateId: templateId ?? '',
     };
 
     try {
       await submitLead(payload, client);
-      // P3 fires the `generate_lead` dataLayer event HERE — after CRM success,
-      // before navigation — so a refresh of the thank-you page cannot double-count.
+      // Fire the conversion event ONLY on genuine CRM success, before navigation, so a
+      // failed submit never fires it and a refresh of the thank-you page cannot
+      // double-count. This is the event a GTM tag turns into the ad conversion.
+      window.dataLayer?.push({
+        event: 'generate_lead',
+        client: client.slug,
+        template: templateId ?? 'unknown',
+        placement: 'lead-form',
+      });
       const to = destination();
       if (/^[a-z][a-z0-9+.-]*:\/\//i.test(to)) window.location.assign(to);
       else navigate(to);
     } catch {
+      // A failed submit must not look like a success. The error state renders the
+      // client's phone number as a "call us" fallback, so the lead is not lost.
       setStatus('error');
     }
   }
