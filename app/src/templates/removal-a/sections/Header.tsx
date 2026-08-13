@@ -12,7 +12,7 @@
  */
 
 import type { ResolvedClient } from '../../../schema/resolve';
-import { SafeLogo } from '../../../components/Safe';
+import { HeaderBrand } from '../../../components/HeaderBrand';
 import { PhoneLink } from '../../../components/PhoneLink';
 import type { Copy } from './shared';
 
@@ -20,18 +20,9 @@ export function Header({ client, copy }: { client: ResolvedClient; copy: Copy })
   return (
     <header className="ra-header">
       <div className="ra-container ra-header-inner">
-        {/* No logo file on the record renders the client's name as a wordmark,
-            never a broken image (R5). */}
-        <SafeLogo
-          logoUrl={client.brand?.logoUrl}
-          clientName={client.name}
-          className="ra-logo"
-          srcset={client.brand?.logoSrcset}
-          width={client.brand?.logoWidth}
-          height={client.brand?.logoHeight}
-          sizes="(min-width: 768px) 88px, 60px"
-          priority
-        />
+        {/* The prominent brand lockup: logo + name. No logo file on the record
+            renders the name alone as a wordmark, never a broken image (R5). */}
+        <HeaderBrand client={client} />
 
         <PhoneLink
           client={client}

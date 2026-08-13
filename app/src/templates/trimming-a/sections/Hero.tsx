@@ -27,7 +27,6 @@ import { SafeText } from '../../../components/Safe';
 import { DeferredImage } from '../../../components/DeferredImage';
 import { LeadForm } from '../../../components/LeadForm';
 import { FORM_ANCHOR, altFor, photoSlots, withAlt } from '../slots';
-import { HeroBrand } from '../../../components/HeroBrand';
 import { CallRow, SplitHeading, type Copy } from './shared';
 
 export function Hero({ client, copy }: { client: ResolvedClient; copy: Copy }) {
@@ -37,11 +36,6 @@ export function Hero({ client, copy }: { client: ResolvedClient; copy: Copy }) {
 
   return (
     <section className="ta-hero">
-      <div className="ta-container">
-        {/* Premium Reorder v2: the client's logo + name, larger and centered
-            in the hero (record data; wordmark when no logo). */}
-        <HeroBrand client={client} className="ta-hbrand" />
-      </div>
       <div className="ta-container ta-hero-grid">
         <div className="ta-hero-copy">
           {hasBadge ? (

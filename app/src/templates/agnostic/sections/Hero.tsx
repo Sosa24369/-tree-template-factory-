@@ -26,7 +26,6 @@ import type { ResolvedClient } from '../../../schema/resolve';
 import { SafeText } from '../../../components/Safe';
 import { LeadForm } from '../../../components/LeadForm';
 import { PhoneLink } from '../../../components/PhoneLink';
-import { HeroBrand } from '../../../components/HeroBrand';
 import { agnosticChrome } from '../copy.defaults';
 import { CheckIcon } from './shared';
 import { hasText, orChrome, type Copy } from '../text';
@@ -45,11 +44,6 @@ export function Hero({ client, copy }: { client: ResolvedClient; copy: Copy }) {
 
   return (
     <section className={['ag-hero', hasCopy ? null : 'ag-hero--solo'].filter(Boolean).join(' ')}>
-      <div className="ag-container">
-        {/* Premium Reorder v2: the clean professional banner — the company's
-            logo + name from the record, wordmark when no logo exists. */}
-        <HeroBrand client={client} className="ag-hbrand" />
-      </div>
       <div className="ag-container ag-hero-grid">
         {hasCopy && (
           <div className="ag-hero-copy">

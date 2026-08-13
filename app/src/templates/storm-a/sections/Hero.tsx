@@ -24,7 +24,6 @@
 import type { CSSProperties, ReactNode } from 'react';
 import type { ResolvedClient } from '../../../schema/resolve';
 import { SafeText } from '../../../components/Safe';
-import { HeroBrand } from '../../../components/HeroBrand';
 import { stormStills, cssUrl } from '../support';
 import { AlertIcon, CallCta, FORM_ANCHOR, type Copy } from './shared';
 
@@ -52,11 +51,6 @@ export function Hero({
       className={['st-hero', art?.src ? null : 'st-hero--noart'].filter(Boolean).join(' ')}
       style={artStyle}
     >
-      <div className="st-container">
-        {/* Premium Reorder v2: the client's logo + name, larger and centered
-            in the hero (record data; wordmark when no logo). */}
-        <HeroBrand client={client} className="st-hbrand" />
-      </div>
       <div className="st-container st-hero-inner">
         <div className="st-hero-copy">
           <p className="st-eyebrow st-eyebrow--onInk">

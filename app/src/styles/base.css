@@ -201,37 +201,45 @@ a:focus-visible {
   animation: cta-bounce 2.8s ease-in-out infinite;
 }
 
-/* Hero brand lockup — the client's logo + company name, larger and centered
-   in the hero (owner's v2 directive). Data comes from the record via
-   <SafeLogo/>; with no logo the name renders as the wordmark. */
-.hbrand {
+/* Header brand lockup (owner's directive 2026-08-13) — the large logo + company
+   name treatment lives in the HEADER now; the mid-hero lockup is gone. One
+   shared treatment for all ten templates, data from the record via <SafeLogo/>;
+   with no logo file the name alone is the wordmark (blank-co / agnostic banner).
+
+   READABILITY: headers sit on light paper, so the name defaults to
+   var(--brand-primary) — dark on every client record (>= 4.5:1 on the papers).
+   A dark header (storm) overrides --hdbrand-name-color to its on-ink colour.
+   The name never inherits a hero's white. */
+.hdbrand {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 10px;
-  margin: 0 auto 22px;
-  text-align: center;
+  gap: 12px;
+  min-width: 0; /* the name shrinks and wraps rather than shoving the call CTA */
 }
 
-.hbrand-logo {
-  height: 96px;
-  width: 96px;
-  border-radius: 50%;
+.hdbrand-logo {
+  height: 64px;
+  width: 64px;
+  flex: 0 0 auto;
+  border-radius: 50%; /* clips the badge's opaque corners, as the old header logo did */
   object-fit: cover;
+  overflow: hidden; /* a dead logo path degrades to a clipped box, not loose alt text */
 }
 
-span.hbrand-logo[data-fallback='logo-text'] {
-  display: none; /* no logo file: the name line below is the wordmark */
-}
-
-.hbrand-name {
+.hdbrand-name {
   margin: 0;
-  font-size: clamp(19px, 3vw, 24px);
+  min-width: 0;
+  max-width: 30ch;
+  font-size: clamp(15px, 4.2vw, 21px);
   font-weight: 800;
   letter-spacing: -0.01em;
-  line-height: 1.15;
+  line-height: 1.12;
+  color: var(--hdbrand-name-color, var(--brand-primary));
+  overflow-wrap: break-word;
 }
 
 @media (min-width: 768px) {
-  .hbrand-logo { height: 120px; width: 120px; }
+  .hdbrand { gap: 16px; }
+  .hdbrand-logo { height: 96px; width: 96px; }
+  .hdbrand-name { font-size: 24px; }
 }

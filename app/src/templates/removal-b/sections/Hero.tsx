@@ -24,7 +24,6 @@
 import type { CSSProperties, ReactNode } from 'react';
 import type { ResolvedClient } from '../../../schema/resolve';
 import { SafeText } from '../../../components/Safe';
-import { HeroBrand } from '../../../components/HeroBrand';
 import { partitionMedia, photosFor } from '../../../lib/photos';
 import { cssUrl } from '../support';
 import { BoltIcon, BroomIcon, CallCta, Eyebrow, FORM_ANCHOR, Heading, PinIcon, ShieldIcon, StarIcon, type Copy } from './shared';
@@ -62,11 +61,6 @@ export function Hero({
       className={['rb-hero', art?.src ? null : 'rb-hero--noart'].filter(Boolean).join(' ')}
       style={artStyle}
     >
-      <div className="rb-container">
-        {/* Premium Reorder v2: the client's logo + name, larger and centered
-            in the hero (record data; wordmark when no logo). */}
-        <HeroBrand client={client} className="rb-hbrand" />
-      </div>
       <div className="rb-container rb-hero-inner">
         <div className="rb-hero-copy">
           <Eyebrow>{copy('hero.eyebrow')}</Eyebrow>

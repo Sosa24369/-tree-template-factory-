@@ -12,8 +12,8 @@
 import type { CSSProperties } from 'react';
 import type { ResolvedClient } from '../../schema/resolve';
 import type { PhotoSet } from '../../schema/client';
-import { SafeLogo, SafeText } from '../../components/Safe';
-import { HeroBrand } from '../../components/HeroBrand';
+import { SafeText } from '../../components/Safe';
+import { HeaderBrand } from '../../components/HeaderBrand';
 import { PhoneLink } from '../../components/PhoneLink';
 import { LeadForm } from '../../components/LeadForm';
 import { DeferredImage } from '../../components/DeferredImage';
@@ -89,15 +89,8 @@ export function TrimmingCPage({
       {/* ---- header: hairline, quiet ---- */}
       <header className="tc-header">
         <div className="tc-container tc-header-inner">
-          <SafeLogo
-            logoUrl={client.brand?.logoUrl}
-            clientName={client.name}
-            className="tc-logo"
-            srcset={client.brand?.logoSrcset}
-            sizes="(min-width: 768px) 88px, 60px"
-            width={client.brand?.logoWidth}
-            height={client.brand?.logoHeight}
-          />
+          {/* The prominent brand lockup: logo + name (name alone when no logo — R5). */}
+          <HeaderBrand client={client} />
           <PhoneLink client={client} placement="header" className="tc-call tc-call--header" subLabel={copy('header.tapToCall')}>
             {copy('header.callPrefix')}
             {client.phoneDisplay}
@@ -108,11 +101,6 @@ export function TrimmingCPage({
       <main>
         {/* ---- hero: the control's offer H1 in the variant's serif calm ---- */}
         <section className="tc-hero">
-          <div className="tc-container">
-            {/* Premium Reorder v2: the client's logo + name, larger and
-                centered in the hero. */}
-            <HeroBrand client={client} className="tc-hbrand" />
-          </div>
           <div className="tc-container tc-hero-grid">
             <div className="tc-hero-copy">
               <p className="tc-badge">

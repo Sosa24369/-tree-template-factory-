@@ -12,23 +12,14 @@
  */
 
 import type { ResolvedClient } from '../../../schema/resolve';
-import { SafeLogo } from '../../../components/Safe';
+import { HeaderBrand } from '../../../components/HeaderBrand';
 import { CallLine, type Copy } from './shared';
 
 export function Header({ client, copy }: { client: ResolvedClient; copy: Copy }) {
   return (
     <header className="tb-header">
       <div className="tb-container tb-header-inner">
-        <SafeLogo
-          logoUrl={client.brand?.logoUrl}
-          clientName={client.name}
-          className="tb-logo"
-          srcset={client.brand?.logoSrcset}
-          width={client.brand?.logoWidth}
-          height={client.brand?.logoHeight}
-          sizes="(min-width: 768px) 88px, 60px"
-          priority
-        />
+        <HeaderBrand client={client} />
         <CallLine client={client} copy={copy} placement="header" subKey="header.callSub" className="tb-call--bar" />
       </div>
     </header>

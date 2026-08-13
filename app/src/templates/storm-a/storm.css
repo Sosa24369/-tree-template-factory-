@@ -181,10 +181,11 @@
   min-height: 84px;
   padding-block: 12px;
 }
-/* border-radius clips the logo's opaque white corners into the circular badge, so it
-   sits cleanly on the dark storm header. aspect-ratio + the intrinsic width/height on
-   the <img> reserve the box before load (CLS 0). */
-.st-logo { height: 60px; width: auto; aspect-ratio: 1; border-radius: 50%; }
+/* The brand lockup is the shared .hdbrand treatment (base.css). This header is
+   DARK (st-ink), so the company name takes the on-ink colour — never the light
+   headers' brand-primary, which would vanish here. Measured >= 11:1 on every
+   storm palette (client greens, storm-b bark, storm-c deep bark). */
+.st-header .hdbrand-name { color: var(--st-onink); }
 .st-header-right { display: flex; align-items: center; gap: 14px; }
 
 .st-header-badge {
@@ -211,7 +212,6 @@
 @media (min-width: 720px) {
   .st-header-badge { display: inline-flex; }
   .st-header-inner { min-height: 120px; }
-  .st-logo { height: 88px; }
   .st-call--bar .phone-sub {
     display: block;
     margin: 0 0 0 4px;
@@ -802,12 +802,6 @@
 /* ---------------------------------------------------------------- *
  * Premium Reorder v2 (2026-08-13)
  * ---------------------------------------------------------------- */
-
-/* Hero brand lockup on the dark hero. */
-.storm .st-hbrand {
-  padding-top: clamp(28px, 5vw, 44px);
-  color: var(--st-onink);
-}
 
 /* The bounce wrapper must not add layout. */
 .storm .st-bounce {

@@ -5,7 +5,8 @@
  */
 
 import type { ResolvedClient } from '../../../schema/resolve';
-import { SafeLogo, SafeText } from '../../../components/Safe';
+import { SafeText } from '../../../components/Safe';
+import { HeaderBrand } from '../../../components/HeaderBrand';
 import { PhoneLink } from '../../../components/PhoneLink';
 import { ShieldIcon, type Copy } from './shared';
 
@@ -15,17 +16,9 @@ export function Header({ client, copy }: { client: ResolvedClient; copy: Copy })
   return (
     <header className="st-header">
       <div className="st-container st-header-inner">
-        {/* No logo file renders the client's name as a wordmark, never a broken image (R5). */}
-        <SafeLogo
-          logoUrl={client.brand?.logoUrl}
-          clientName={client.name}
-          className="st-logo"
-          srcset={client.brand?.logoSrcset}
-          width={client.brand?.logoWidth}
-          height={client.brand?.logoHeight}
-          sizes="(min-width: 768px) 88px, 60px"
-          priority
-        />
+        {/* The prominent brand lockup: logo + name (name in the on-ink colour —
+            this header is dark). No logo file renders the name alone (R5). */}
+        <HeaderBrand client={client} />
 
         <div className="st-header-right">
           {badge.trim() && (

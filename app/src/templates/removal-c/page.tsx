@@ -13,8 +13,8 @@
 import type { CSSProperties } from 'react';
 import type { ResolvedClient } from '../../schema/resolve';
 import type { PhotoSet } from '../../schema/client';
-import { SafeLogo, SafeText } from '../../components/Safe';
-import { HeroBrand } from '../../components/HeroBrand';
+import { SafeText } from '../../components/Safe';
+import { HeaderBrand } from '../../components/HeaderBrand';
 import { PhoneLink } from '../../components/PhoneLink';
 import { LeadForm } from '../../components/LeadForm';
 import { DeferredImage } from '../../components/DeferredImage';
@@ -154,15 +154,8 @@ export function RemovalCPage({
       {/* ---- header ---- */}
       <header className="rc-header">
         <div className="rc-container rc-header-inner">
-          <SafeLogo
-            logoUrl={client.brand?.logoUrl}
-            clientName={client.name}
-            className="rc-logo"
-            srcset={client.brand?.logoSrcset}
-            sizes="(min-width: 768px) 88px, 60px"
-            width={client.brand?.logoWidth}
-            height={client.brand?.logoHeight}
-          />
+          {/* The prominent brand lockup: logo + name (name alone when no logo — R5). */}
+          <HeaderBrand client={client} />
           <PhoneLink client={client} placement="header" className="rc-call rc-call--header" subLabel={copy('header.tapToCall')}>
             {copy('cta.callLabelPrefix')}
             {client.phoneDisplay}
@@ -173,11 +166,6 @@ export function RemovalCPage({
       <main>
         {/* ---- hero: the control's offer H1 in the variant's ink voice ---- */}
         <section className="rc-hero" style={heroStyle}>
-          <div className="rc-container">
-            {/* Premium Reorder v2: the client's logo + name, larger and
-                centered in the hero. */}
-            <HeroBrand client={client} className="rc-hbrand" />
-          </div>
           <div className="rc-container rc-hero-grid">
             <div className="rc-hero-copy">
               <RatingBadge copy={copy} />

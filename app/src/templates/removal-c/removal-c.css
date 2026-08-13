@@ -138,21 +138,7 @@
   min-height: 84px;
 }
 
-.removal-c .rc-logo {
-  height: 60px;
-  width: 60px;
-  border-radius: 50%;
-  object-fit: cover;
-}
-
-.removal-c span.rc-logo[data-fallback='logo-text'] {
-  height: auto;
-  width: auto;
-  border-radius: 0;
-  font-weight: 800;
-  font-size: 20px;
-  letter-spacing: -0.01em;
-}
+/* The brand lockup itself is the shared .hdbrand treatment (base.css). */
 
 /* ---------------- call CTAs ---------------- */
 
@@ -733,11 +719,6 @@
     z-index: 1;
   }
 
-  .removal-c .rc-logo {
-    height: 88px;
-    width: 88px;
-  }
-
   .removal-c .rc-header-inner {
     min-height: 120px;
   }
@@ -764,13 +745,6 @@
 /* ---------------------------------------------------------------- *
  * Premium Reorder v2 (2026-08-13)
  * ---------------------------------------------------------------- */
-
-.removal-c .rc-hbrand {
-  padding-top: clamp(24px, 4vw, 40px);
-  position: relative;
-  z-index: 1;
-  color: #ffffff;
-}
 
 .removal-c .rc-bounce {
   display: inline-block;

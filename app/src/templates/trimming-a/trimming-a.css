@@ -379,30 +379,7 @@
   padding-block: 12px;
 }
 
-/* max-width + overflow so a logo path that no longer resolves degrades to a clipped
-   box instead of dropping oversized alt text through the header. */
-.trimming-a .ta-logo {
-  height: 60px;
-  width: auto;
-  aspect-ratio: 1;
-  border-radius: 50%;
-  max-width: 200px;
-  overflow: hidden;
-  object-fit: contain;
-  font-size: 0.8125rem;
-  line-height: 1.2;
-}
-
-/* No logo file on the record: the client's name as a wordmark, never a broken image. */
-.trimming-a span.ta-logo {
-  display: inline-block;
-  height: auto;
-  font-size: 1.02rem;
-  font-weight: 760;
-  letter-spacing: -0.02em;
-  line-height: 1.15;
-  color: var(--brand-primary);
-}
+/* The brand lockup itself is the shared .hdbrand treatment (base.css). */
 
 .trimming-a .ta-call--bar {
   gap: 0 12px;
@@ -428,11 +405,6 @@
 @media (min-width: 768px) {
   .trimming-a .ta-header-inner {
     min-height: 120px;
-  }
-
-  .trimming-a .ta-logo {
-    height: 88px;
-    max-width: 280px;
   }
 
   .trimming-a .ta-call--bar {
@@ -1522,11 +1494,6 @@
 /* ---------------------------------------------------------------- *
  * Premium Reorder v2 (2026-08-13)
  * ---------------------------------------------------------------- */
-
-.trimming-a .ta-hbrand {
-  padding-top: clamp(24px, 4vw, 40px);
-  color: inherit;
-}
 
 .trimming-a .ta-bounce {
   display: inline-block;

@@ -303,40 +303,11 @@
   padding-block: 12px;
 }
 
-/* max-height + overflow so a wrong or missing logo FILE (a client record can point
-   at a path that no longer exists) degrades to a clipped box instead of dropping
-   oversized alt text through the header. */
-.removal-a .ra-logo {
-  height: 60px;
-  width: auto;
-  aspect-ratio: 1;
-  border-radius: 50%;
-  max-width: 200px;
-  overflow: hidden;
-  object-fit: contain;
-  font-size: 0.8125rem;
-  line-height: 1.2;
-}
-
-/* No logo file on the record: the client's name as a wordmark, never a broken image. */
-.removal-a span.ra-logo {
-  display: inline-block;
-  height: auto;
-  font-size: 1.05rem;
-  font-weight: 760;
-  letter-spacing: -0.02em;
-  line-height: 1.15;
-  color: var(--brand-primary);
-}
+/* The brand lockup itself is the shared .hdbrand treatment (base.css). */
 
 @media (min-width: 768px) {
   .removal-a .ra-header-inner {
     min-height: 120px;
-  }
-
-  .removal-a .ra-logo {
-    height: 88px;
-    max-width: 280px;
   }
 }
 
@@ -1369,13 +1340,6 @@
 /* ---------------------------------------------------------------- *
  * Premium Reorder v2 (2026-08-13)
  * ---------------------------------------------------------------- */
-
-.removal-a .ra-hbrand {
-  padding-top: clamp(24px, 4vw, 40px);
-  position: relative;
-  z-index: 1;
-  color: #ffffff;
-}
 
 .removal-a .ra-bounce {
   display: inline-block;

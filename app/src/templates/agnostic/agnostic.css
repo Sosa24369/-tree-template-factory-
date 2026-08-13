@@ -273,41 +273,14 @@
   padding-block: 12px;
 }
 
-/* max-height + overflow so a record pointing at a mark file that no longer
-   exists degrades to a clipped box rather than dropping oversized alt text
-   across the header. */
-.agnostic .ag-mark {
-  height: 60px;
-  width: auto;
-  aspect-ratio: 1;
-  border-radius: 50%;
-  max-width: 200px;
-  overflow: hidden;
-  object-fit: contain;
-  font-size: 0.8125rem;
-  line-height: 1.2;
-}
-
-/* No image file on the record: the company name as a wordmark. */
-.agnostic span.ag-mark {
-  display: inline-block;
-  height: auto;
-  font-size: 1.0625rem;
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  line-height: 1.15;
-  color: var(--brand-primary);
-}
+/* The brand lockup itself is the shared .hdbrand treatment (base.css); with no
+   image file the company name alone is the banner wordmark. */
 
 @media (min-width: 768px) {
   .agnostic .ag-header-inner {
     min-height: 120px;
   }
 
-  .agnostic .ag-mark {
-    height: 88px;
-    max-width: 280px;
-  }
 }
 
 /* ---------------------------------------------------------------- *
@@ -947,19 +920,6 @@
 /* ---------------------------------------------------------------- *
  * Premium Reorder v2 (2026-08-13)
  * ---------------------------------------------------------------- */
-
-.agnostic .ag-hbrand {
-  padding-top: clamp(24px, 4vw, 40px);
-  color: inherit;
-}
-
-/* The banner treatment: with no logo the name IS the banner — larger. */
-.agnostic .ag-hbrand span[data-fallback='logo-text'] {
-  display: none;
-}
-.agnostic .ag-hbrand .hbrand-name {
-  font-size: clamp(22px, 3.6vw, 30px);
-}
 
 .agnostic .ag-bounce {
   display: inline-block;

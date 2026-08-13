@@ -509,30 +509,7 @@
   gap: clamp(10px, 1.6vw, 18px);
 }
 
-/* max-height + overflow so a record pointing at a logo file that no longer exists
-   degrades to a clipped box instead of dropping oversized alt text through the bar. */
-.removal-b .rb-logo {
-  height: 60px;
-  width: auto;
-  aspect-ratio: 1;
-  border-radius: 50%;
-  max-width: 200px;
-  overflow: hidden;
-  object-fit: contain;
-  font-size: 0.8125rem;
-  line-height: 1.2;
-}
-
-/* No logo file: the client's name as a wordmark, never a broken image (R5). */
-.removal-b span.rb-logo {
-  display: inline-block;
-  height: auto;
-  font-size: 1.05rem;
-  font-weight: 780;
-  letter-spacing: -0.025em;
-  line-height: 1.15;
-  color: var(--brand-primary);
-}
+/* The brand lockup itself is the shared .hdbrand treatment (base.css). */
 
 .removal-b .rb-header-badge {
   display: none;
@@ -555,11 +532,6 @@
 @media (min-width: 900px) {
   .removal-b .rb-header-inner {
     min-height: 120px;
-  }
-
-  .removal-b .rb-logo {
-    height: 88px;
-    max-width: 280px;
   }
 
   .removal-b .rb-header-badge {
@@ -2072,13 +2044,6 @@
 /* ---------------------------------------------------------------- *
  * Premium Reorder v2 (2026-08-13)
  * ---------------------------------------------------------------- */
-
-.removal-b .rb-hbrand {
-  padding-top: clamp(24px, 4vw, 40px);
-  position: relative;
-  z-index: 1;
-  color: #ffffff;
-}
 
 .removal-b .rb-bounce {
   display: inline-block;

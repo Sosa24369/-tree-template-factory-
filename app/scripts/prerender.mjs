@@ -58,7 +58,9 @@ function lcpImage(client) {
  * stay in exact sync and the browser fetches one small variant.
  */
 const PHOTO_LCP_TEMPLATES = new Set(['removal-a', 'trimming-a']);
-const LOGO_SIZES = '(min-width: 768px) 88px, 60px';
+// Must match the sizes the <HeaderBrand/> lockup passes to its <img> (the header
+// logo displays at 64px mobile / 96px desktop since the logo swap of 2026-08-13).
+const LOGO_SIZES = '(min-width: 768px) 96px, 64px';
 
 function logoPreload(client) {
   const b = client?.brand;

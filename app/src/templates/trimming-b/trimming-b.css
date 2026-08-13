@@ -327,33 +327,9 @@
   padding-block: 12px;
 }
 
-/* max-height + overflow so a logo path that no longer resolves degrades to a
-   clipped box instead of dropping oversized alt text through the header. */
-.trimming-b .tb-logo {
-  height: 60px;
-  width: auto;
-  aspect-ratio: 1;
-  border-radius: 50%;
-  max-width: 200px;
-  overflow: hidden;
-  object-fit: contain;
-  font-size: 0.8125rem;
-  line-height: 1.2;
-}
-
-/* No logo file on the record: the client's name as a wordmark, never a broken
-   image. Set in the display face, which makes the fallback look deliberate. */
-.trimming-b span.tb-logo {
-  display: inline-block;
-  height: auto;
-  max-width: none;
-  font-family: var(--tb-display-face);
-  font-size: clamp(1.0625rem, 4vw, 1.25rem);
-  font-weight: 400;
-  letter-spacing: -0.015em;
-  line-height: 1.15;
-  color: var(--tb-ink);
-}
+/* The brand lockup itself is the shared .hdbrand treatment (base.css); the
+   name keeps this template's quiet ink rather than the display serif — the
+   lockup is shared chrome, identical across templates (the logo precedent). */
 
 /* Below this width the header is logo + number and nothing else. */
 @media (max-width: 559px) {
@@ -367,10 +343,6 @@
     min-height: 120px;
   }
 
-  .trimming-b .tb-logo {
-    height: 88px;
-    max-width: 280px;
-  }
 }
 
 /* ---------------------------------------------------------------- *
@@ -1116,10 +1088,6 @@
 /* ---------------------------------------------------------------- *
  * Premium Reorder v2 (2026-08-13)
  * ---------------------------------------------------------------- */
-
-.trimming-b .tb-hbrand {
-  margin-bottom: 26px;
-}
 
 .trimming-b .tb-bounce {
   display: inline-block;
