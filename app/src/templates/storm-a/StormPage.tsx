@@ -21,7 +21,7 @@ import type { Copy } from './sections/shared';
 import { ReviewsSlider } from '../../components/ReviewsSlider';
 import { Header } from './sections/Header';
 import { Hero } from './sections/Hero';
-import { Estimate } from './sections/Estimate';
+import { EstimatePanel } from './sections/Estimate';
 import { Trust } from './sections/Trust';
 import { Handle } from './sections/Handle';
 import { Process } from './sections/Process';
@@ -49,25 +49,18 @@ export function StormPage({
       <Header client={client} copy={copy} />
 
       <main>
-        {/* 1 — emergency premise, 911 safety line, CTAs */}
-        <Hero client={client} copy={copy} />
-        {/* 2 — the assessment form, high on the page */}
-        <Estimate client={client} copy={copy} />
-        {/* 3 — four trust points */}
-        <Trust copy={copy} />
-        {/* 4 — Trees / Fences / Cleanup */}
-        <Handle copy={copy} />
-        {/* 5 — how storm response works */}
-        <Process copy={copy} />
-        {/* 6 — recent storm work (client photographs only; hides when none) */}
-        <Work client={client} copy={copy} />
-        {/* 6b — Google reviews (Design Elevation 2026-08-12). Storm shipped
-            without a review block; the shared slider is added to BOTH variants
-            through this one shared tree, so the pair stays identical by
-            construction (the logo precedent). Deliberately heading-less: the
-            slider is self-labelling ("reviews from Google") and inventing a
-            storm-voice heading would be writing copy, which this session may
-            not do. Renders nothing for a client with no reviews (R5). */}
+        {/* CANONICAL STRUCTURE (owner's directive, 2026-08-12) — hero carries
+            the H1 block AND the assessment form AND the call CTA; then the
+            slider; then photo band 1; then process; then photo band 2; then
+            this page's remaining sections in their existing relative order;
+            then the service-areas carousel; then the footer. Copy untouched. */}
+
+        {/* 1 — hero: emergency premise, 911 line, call CTA + the form panel */}
+        <Hero client={client} copy={copy} formPanel={<EstimatePanel client={client} copy={copy} />} />
+
+        {/* 2 — Google reviews slider (heading-less: no storm review-heading
+            copy exists and none gets written). Nothing renders without
+            reviews on the record (R5). */}
         {(client.reviews ?? []).some((r) => (r?.body ?? '').trim()) && (
           <section className="st-section st-section--tint st-reviews">
             <div className="st-container">
@@ -75,14 +68,26 @@ export function StormPage({
             </div>
           </section>
         )}
-        {/* 7 — documentation your insurer will ask for */}
+
+        {/* 3 — photo band 1: the client's own storm shots + the section's
+            heading copy (hides entirely when the client has none) */}
+        <Work client={client} copy={copy} band={1} />
+
+        {/* 4 — how storm response works */}
+        <Process copy={copy} />
+
+        {/* 5 — photo band 2: the rest of the set, heading-less */}
+        <Work client={client} copy={copy} band={2} />
+
+        {/* 6 — the rest, in their existing relative order */}
+        <Trust copy={copy} />
+        <Handle copy={copy} />
         <Insurance copy={copy} />
-        {/* 8 — service-area grid */}
-        <Areas client={client} copy={copy} />
-        {/* 9 — eight storm questions */}
         <Faq copy={copy} />
-        {/* 10 — closing call band */}
         <FinalCta client={client} copy={copy} />
+
+        {/* 7 — service-areas carousel, last before the footer */}
+        <Areas client={client} copy={copy} />
       </main>
 
       <Footer client={client} copy={copy} />

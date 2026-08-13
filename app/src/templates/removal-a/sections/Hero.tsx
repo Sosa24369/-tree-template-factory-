@@ -17,7 +17,7 @@ import { LeadForm } from '../../../components/LeadForm';
 import { altFor, withAlt } from '../assets';
 import { partitionMedia, photosFor } from '../../../lib/photos';
 import { preloadLcpImage } from '../../../lib/preloadLcp';
-import { SplitHeading, type Copy } from './shared';
+import { CallCta, SplitHeading, type Copy } from './shared';
 
 export const FORM_ANCHOR = 'ra-estimate-form';
 
@@ -61,6 +61,13 @@ export function Hero({ client, copy }: { client: ResolvedClient; copy: Copy }) {
           <SplitHeading as="h1" className="ra-h1" parts={[copy('hero.h1a'), copy('hero.h1b')]} />
           <SafeText as="p" className="ra-hero-sub" value={copy('hero.h2')} />
           <SafeText as="p" className="ra-body ra-hero-body" value={copy('hero.body')} />
+
+          {/* CANONICAL STRUCTURE (2026-08-12): both capture paths in the hero —
+              the form card is beside/below; this is the prominent click-to-call,
+              built from the page's existing shared-CTA copy keys. */}
+          <div className="ra-hero-call">
+            <CallCta client={client} copy={copy} placement="hero" tone="solid" />
+          </div>
         </div>
 
         <div className="ra-form-card" id={FORM_ANCHOR}>

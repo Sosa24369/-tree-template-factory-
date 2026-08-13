@@ -26,12 +26,19 @@ import { LeadForm } from '../../../components/LeadForm';
 import { PhoneLink } from '../../../components/PhoneLink';
 import { Display, Eyebrow, FORM_ANCHOR, type Copy } from './shared';
 
-export function Estimate({ client, copy }: { client: ResolvedClient; copy: Copy }) {
+/**
+ * CANONICAL STRUCTURE (owner's directive, 2026-08-12): the closing form moved
+ * INTO the hero — the owner's structure puts the form and the call path in
+ * the hero on every page. Every estimate.* copy line renders word-for-word;
+ * only the position moved. The panel keeps its deep-ink surface, so the
+ * onInk copy classes still read correctly inside the paper hero.
+ */
+export function EstimatePanel({ client, copy }: { client: ResolvedClient; copy: Copy }) {
   const callPrefix = copy('estimate.callPrefix');
 
   return (
-    <section className="tb-estimate" id={FORM_ANCHOR}>
-      <div className="tb-container tb-estimate-grid">
+    <div className="tb-hero-form" id={FORM_ANCHOR}>
+      <div className="tb-estimate-grid tb-estimate-grid--hero">
         <div className="tb-estimate-copy">
           <Eyebrow value={copy('estimate.eyebrow')} />
           <Display as="h2" lines={[copy('estimate.h2a'), copy('estimate.h2b')]} />
@@ -62,6 +69,6 @@ export function Estimate({ client, copy }: { client: ResolvedClient; copy: Copy 
           />
         </div>
       </div>
-    </section>
+    </div>
   );
 }

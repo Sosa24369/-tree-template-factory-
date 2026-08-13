@@ -19,18 +19,27 @@
 import type { ResolvedClient } from '../../../schema/resolve';
 import { SafeText } from '../../../components/Safe';
 import { LeadForm } from '../../../components/LeadForm';
-import { CallCta, CheckIcon, FORM_ANCHOR, Heading, Section, type Copy } from './shared';
+import { CallCta, CheckIcon, FORM_ANCHOR, Heading, type Copy } from './shared';
 
 const REASSURANCES = [1, 2, 3];
 
-export function Estimate({ client, copy }: { client: ResolvedClient; copy: Copy }) {
+/**
+ * CANONICAL STRUCTURE (owner's directive, 2026-08-12): this panel now renders
+ * INSIDE the hero grid, not as a mid-page section — the owner's structure puts
+ * the form (and the call path) in the hero on every page. Every estimate.*
+ * copy line renders word-for-word exactly as before; only the position moved.
+ * NOTE for the A/B record: the variant's "name the $300 two thirds down"
+ * ordering is structurally neutralised by this directive (flagged in the
+ * session report); its copy VOICE remains the tested variable.
+ */
+export function EstimatePanel({ client, copy }: { client: ResolvedClient; copy: Copy }) {
   const ribbon = copy('estimate.ribbon');
   const reassurances = REASSURANCES.map((n) => copy(`estimate.reassure${n}`)).filter((text) => text.trim());
   const orCall = copy('estimate.orCall');
 
   return (
-    <Section id={FORM_ANCHOR} tone="paper" className="rb-estimate">
-      <div className="rb-estimate-grid">
+    <div id={FORM_ANCHOR} className="rb-hero-form">
+      <div className="rb-estimate-grid rb-estimate-grid--hero">
         <div className="rb-offer rb-rise">
           {ribbon.trim() && (
             <p className="rb-ribbon">
@@ -80,6 +89,6 @@ export function Estimate({ client, copy }: { client: ResolvedClient; copy: Copy 
           <SafeText as="p" className="rb-form-foot" value={copy('estimate.formFootnote')} />
         </div>
       </div>
-    </Section>
+    </div>
   );
 }

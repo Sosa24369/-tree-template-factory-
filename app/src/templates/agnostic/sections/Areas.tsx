@@ -16,7 +16,8 @@
 
 import type { ResolvedClient } from '../../../schema/resolve';
 import { SafeText } from '../../../components/Safe';
-import { PinIcon, Section, SectionHead } from './shared';
+import { ServiceAreasCarousel } from '../../../components/ServiceAreasCarousel';
+import { Section, SectionHead } from './shared';
 import { hasText, type Copy } from '../text';
 
 export function Areas({ client, copy }: { client: ResolvedClient; copy: Copy }) {
@@ -36,16 +37,10 @@ export function Areas({ client, copy }: { client: ResolvedClient; copy: Copy }) 
 
       <SafeText as="p" className="ag-area-line" value={area} />
 
-      {areas.length > 0 && (
-        <ul className="ag-area-list">
-          {areas.map((name, i) => (
-            <li className="ag-area" key={`${name}-${i}`}>
-              <PinIcon />
-              <span>{name}</span>
-            </li>
-          ))}
-        </ul>
-      )}
+      {/* CANONICAL STRUCTURE (2026-08-12): the pin list became the shared
+          continuously scrolling carousel (owner's directive — last section
+          before the footer on every page). Cities remain client data only. */}
+      {areas.length > 0 && <ServiceAreasCarousel client={client} />}
     </Section>
   );
 }

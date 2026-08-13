@@ -17,6 +17,7 @@ import { PhoneLink } from '../../components/PhoneLink';
 import { LeadForm } from '../../components/LeadForm';
 import { DeferredImage } from '../../components/DeferredImage';
 import { ReviewsSlider } from '../../components/ReviewsSlider';
+import { ServiceAreasCarousel } from '../../components/ServiceAreasCarousel';
 import { photosFor, partitionMedia } from '../../lib/photos';
 
 type Copy = (key: string) => string;
@@ -173,6 +174,68 @@ export function TrimmingCPage({
           </div>
         </section>
 
+        {/* CANONICAL STRUCTURE (owner's directive, 2026-08-12): slider under
+            the hero, photo bands around the process, areas carousel last. */}
+
+        {/* 2 — Google reviews slider (nothing without reviews, R5) */}
+        {(client.reviews ?? []).some((r) => (r?.body ?? '').trim()) && (
+          <section className="tc-section tc-reviews-band">
+            <div className="tc-container">
+              <ReviewsSlider client={client} />
+            </div>
+          </section>
+        )}
+
+        {/* 3 — photo band 1: before/after proof, first half */}
+        {gallery.slice(0, Math.ceil(gallery.length / 2)).length > 0 && (
+          <section className="tc-section tc-work">
+            <div className="tc-container">
+              <ul className="tc-work-grid">
+                {gallery.slice(0, Math.ceil(gallery.length / 2)).map((photo, i) => (
+                  <li key={i} className="tc-work-cell">
+                    <DeferredImage photo={photo} wrapperClassName="tc-work-frame" className="tc-work-img" />
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </section>
+        )}
+
+        {/* 4 — process */}
+        <section className="tc-section tc-section--tint tc-process">
+          <div className="tc-container">
+            <Split as="h2" className="tc-h2" a={copy('process.h1a')} b={copy('process.h1b')} stacked />
+            {steps.length > 0 && (
+              <ol className="tc-steps">
+                {steps.map((step, i) => (
+                  <li className="tc-step" key={i}>
+                    <SafeText as="span" className="tc-step-label" value={step.label} />
+                    <SafeText as="h3" className="tc-step-h" value={step.h} />
+                    <SafeText as="p" className="tc-step-body" value={step.body} />
+                  </li>
+                ))}
+              </ol>
+            )}
+          </div>
+        </section>
+
+        {/* 5 — photo band 2: the rest */}
+        {gallery.slice(Math.ceil(gallery.length / 2)).length > 0 && (
+          <section className="tc-section tc-work">
+            <div className="tc-container">
+              <ul className="tc-work-grid">
+                {gallery.slice(Math.ceil(gallery.length / 2)).map((photo, i) => (
+                  <li key={i} className="tc-work-cell">
+                    <DeferredImage photo={photo} wrapperClassName="tc-work-frame" className="tc-work-img" />
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </section>
+        )}
+
+        {/* 6 — the rest, existing relative order */}
+
         {/* ---- benefits as a hairline ledger ---- */}
         <section className="tc-section tc-benefits">
           <div className="tc-container">
@@ -189,27 +252,11 @@ export function TrimmingCPage({
           </div>
         </section>
 
-        {/* ---- before/after proof (client's own trimming photos) ---- */}
-        {gallery.length > 0 && (
-          <section className="tc-section tc-work">
-            <div className="tc-container">
-              <ul className="tc-work-grid" data-count={gallery.length}>
-                {gallery.map((photo, i) => (
-                  <li key={i} className="tc-work-cell">
-                    <DeferredImage photo={photo} wrapperClassName="tc-work-frame" className="tc-work-img" />
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </section>
-        )}
-
-        {/* ---- why + reviews slider ---- */}
+        {/* ---- why choose us ---- */}
         <section className="tc-section tc-section--deep tc-why">
           <div className="tc-container">
             <Split as="h2" className="tc-h2" a={copy('why.h1a')} b={copy('why.h1b')} stacked />
             <SafeText as="p" className="tc-lede tc-lede--onink" value={copy('why.body')} />
-            <ReviewsSlider client={client} />
             <div className="tc-cta-row">
               <PhoneLink client={client} placement="reviews" className="tc-call tc-call--onink" subLabel={copy('cta.callSubLabel')}>
                 {copy('cta.callLabelPrefix')}
@@ -240,41 +287,6 @@ export function TrimmingCPage({
                   </li>
                 ))}
               </ul>
-            )}
-          </div>
-        </section>
-
-        {/* ---- areas ---- */}
-        <section className="tc-section tc-areas">
-          <div className="tc-container">
-            <Split as="h2" className="tc-h2" a={copy('areas.h1a')} b={copy('areas.h1b')} />
-            <SafeText as="p" className="tc-lede" value={copy('areas.h2')} />
-            {cities.length > 0 && (
-              <ul className="tc-city-row">
-                {cities.map((city, i) => (
-                  <li className="tc-city" key={i}>
-                    {city}
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
-        </section>
-
-        {/* ---- process ---- */}
-        <section className="tc-section tc-section--tint tc-process">
-          <div className="tc-container">
-            <Split as="h2" className="tc-h2" a={copy('process.h1a')} b={copy('process.h1b')} stacked />
-            {steps.length > 0 && (
-              <ol className="tc-steps">
-                {steps.map((step, i) => (
-                  <li className="tc-step" key={i}>
-                    <SafeText as="span" className="tc-step-label" value={step.label} />
-                    <SafeText as="h3" className="tc-step-h" value={step.h} />
-                    <SafeText as="p" className="tc-step-body" value={step.body} />
-                  </li>
-                ))}
-              </ol>
             )}
           </div>
         </section>
@@ -361,6 +373,17 @@ export function TrimmingCPage({
             </a>
           </div>
         </section>
+
+        {/* 7 — service-areas carousel, last before the footer */}
+        {cities.length > 0 && (
+          <section className="tc-section tc-areas">
+            <div className="tc-container">
+              <Split as="h2" className="tc-h2" a={copy('areas.h1a')} b={copy('areas.h1b')} />
+              <SafeText as="p" className="tc-lede" value={copy('areas.h2')} />
+            </div>
+            <ServiceAreasCarousel client={client} />
+          </section>
+        )}
       </main>
 
       {/* ---- footer ---- */}

@@ -11,7 +11,6 @@
 
 import type { ResolvedClient } from '../../../schema/resolve';
 import { SafeText } from '../../../components/Safe';
-import { ReviewsSlider } from '../../../components/ReviewsSlider';
 import { CallCta, Section, SplitHeading, type Copy } from './shared';
 
 export function WhyChoose({ client, copy }: { client: ResolvedClient; copy: Copy }) {
@@ -27,11 +26,9 @@ export function WhyChoose({ client, copy }: { client: ResolvedClient; copy: Copy
         <SafeText as="p" className="ra-body ra-lede" value={copy('why.body')} />
       </div>
 
-      {/* Design Elevation 2026-08-12: static review cards -> the shared slider,
-          identical on every template (the logo precedent preserves the A/B).
-          Renders nothing for a client with no reviews (R5). */}
-      <ReviewsSlider client={client} />
-
+      {/* CANONICAL STRUCTURE (2026-08-12): the reviews slider moved to
+          position 2, directly under the hero (see index.tsx). This section
+          keeps its heading, service-area prose and call CTA. */}
       <div className="ra-cta-row">
         <CallCta client={client} copy={copy} placement="reviews" tone="solid" />
       </div>

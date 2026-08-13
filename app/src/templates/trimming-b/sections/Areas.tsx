@@ -17,6 +17,7 @@
 
 import type { ResolvedClient } from '../../../schema/resolve';
 import { SafeText } from '../../../components/Safe';
+import { ServiceAreasCarousel } from '../../../components/ServiceAreasCarousel';
 import { Eyebrow, Section, type Copy } from './shared';
 
 export function Areas({ client, copy }: { client: ResolvedClient; copy: Copy }) {
@@ -32,15 +33,11 @@ export function Areas({ client, copy }: { client: ResolvedClient; copy: Copy }) 
         <SafeText as="p" className="tb-body tb-measure" value={area} />
       </div>
 
-      {cities.length > 0 && (
-        <ul className="tb-areas-list">
-          {cities.map((city, i) => (
-            <li className="tb-area" key={`${city}-${i}`}>
-              {city.trim()}
-            </li>
-          ))}
-        </ul>
-      )}
+      {/* CANONICAL STRUCTURE (2026-08-12): the owner's directive puts a
+          continuously scrolling city carousel on every page, so the quiet
+          static list became the shared marquee. (The variant's original
+          no-marquee stance is explicitly overridden — noted in the report.) */}
+      {cities.length > 0 && <ServiceAreasCarousel client={client} />}
     </Section>
   );
 }

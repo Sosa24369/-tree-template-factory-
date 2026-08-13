@@ -51,6 +51,7 @@
 import { useEffect, type CSSProperties } from 'react';
 import { makeCopy, type ResolvedClient } from '../../schema/resolve';
 import { trimmingBCopy } from './copy.defaults';
+import { PhoneLink } from '../../components/PhoneLink';
 
 import { Header } from './sections/Header';
 import { Hero } from './sections/Hero';
@@ -62,7 +63,7 @@ import { Offer } from './sections/Offer';
 import { Reviews } from './sections/Reviews';
 import { Areas } from './sections/Areas';
 import { Faq } from './sections/Faq';
-import { Estimate } from './sections/Estimate';
+import { EstimatePanel } from './sections/Estimate';
 import { Footer } from './sections/Footer';
 
 import './trimming-b.css';
@@ -113,30 +114,41 @@ export function TrimmingB({ client }: { client: ResolvedClient }) {
       <Header client={client} copy={copy} />
 
       <main>
-        {/* 1 — the premise: a cut is permanent. No form, no photo, no discount. */}
-        <Hero client={client} copy={copy} />
-        {/* 2 — the three clearances every trim includes (roof, gutter, deadwood). */}
-        <Standard copy={copy} />
-        {/* 3 — one review, full width, read rather than scanned. */}
-        <Testimony client={client} copy={copy} />
-        {/* 4 — the four refusals. The trust lever this variant is built on. */}
-        <Restraint copy={copy} />
-        {/* 5 — the client's own trimming photographs, deferred, or nothing at all. */}
-        <Work client={client} copy={copy} />
-        {/* 6 — the offer. Stated once, here, with no countdown. */}
-        <Offer copy={copy} />
-        {/* 7 — the remaining reviews, demoted to a quiet ledger. */}
+        {/* CANONICAL STRUCTURE (owner's directive, 2026-08-12): hero with both
+            capture paths → reviews slider → photo band 1 → what-is-included →
+            photo band 2 → the rest in their existing relative order → the
+            areas carousel last before the footer. Copy untouched. */}
+
+        {/* 1 — the premise, the call line, and now the form panel too */}
+        <Hero client={client} copy={copy} formPanel={<EstimatePanel client={client} copy={copy} />} />
+        {/* 2 — the reviews section (its own eyebrow/heading + the slider) */}
         <Reviews client={client} copy={copy} />
-        {/* 8 — service area as running text, not a marquee. */}
-        <Areas client={client} copy={copy} />
-        {/* 9 — six questions, answered at length. */}
+        {/* 3 — photo band 1: the client's own trimming photographs */}
+        <Work client={client} copy={copy} band={1} />
+        {/* 4 — the three clearances every trim includes (what we handle) */}
+        <Standard copy={copy} />
+        {/* 5 — photo band 2: the rest */}
+        <Work client={client} copy={copy} band={2} />
+        {/* 6 — the rest, existing relative order */}
+        <Testimony client={client} copy={copy} />
+        <Restraint copy={copy} />
+        <Offer copy={copy} />
         <Faq copy={copy} />
-        {/* 10 — the form, last. */}
-        <Estimate client={client} copy={copy} />
+        {/* 7 — service-areas carousel, last before the footer */}
+        <Areas client={client} copy={copy} />
       </main>
 
       {/* 11 — footer */}
       <Footer client={client} copy={copy} />
+
+      {/* Canonical: the mobile sticky call bar. Hidden on desktop; renders
+          nothing for a record with no phone (R5). */}
+      <div className="tb-sticky">
+        <PhoneLink client={client} placement="sticky" className="tb-sticky-call" subLabel={copy('hero.callSub')}>
+          {copy('estimate.callPrefix')}
+          {client.phoneDisplay}
+        </PhoneLink>
+      </div>
     </div>
   );
 }

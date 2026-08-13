@@ -30,17 +30,27 @@ import { altFor, Eyebrow, Section, type Copy } from './shared';
 
 const MAX_PHOTOS = 6;
 
-export function Work({ client, copy }: { client: ResolvedClient; copy: Copy }) {
+/**
+ * CANONICAL STRUCTURE (2026-08-12): the gallery ships as TWO photo bands
+ * around the what-is-included section. Band 1 carries the heading copy and
+ * the first half; band 2 is the rest, heading-less. Either band collapses to
+ * nothing when it has no photos.
+ */
+export function Work({ client, copy, band }: { client: ResolvedClient; copy: Copy; band?: 1 | 2 }) {
   const { stills } = partitionMedia(photosFor(client, 'trimming'));
-  const shots = stills.slice(0, MAX_PHOTOS);
+  const all = stills.slice(0, MAX_PHOTOS);
+  const split = Math.ceil(all.length / 2);
+  const shots = band === 1 ? all.slice(0, split) : band === 2 ? all.slice(split) : all;
   if (shots.length === 0) return null;
 
   return (
     <Section tone="paper" className="tb-work">
-      <div className="tb-head">
-        <Eyebrow value={copy('work.eyebrow')} />
-        {copy('work.h2').trim() && <h2 className="tb-display tb-display--sm">{copy('work.h2')}</h2>}
-      </div>
+      {band !== 2 && (
+        <div className="tb-head">
+          <Eyebrow value={copy('work.eyebrow')} />
+          {copy('work.h2').trim() && <h2 className="tb-display tb-display--sm">{copy('work.h2')}</h2>}
+        </div>
+      )}
 
       <div className="tb-work-grid">
         {shots.map((shot, i) => (

@@ -47,6 +47,7 @@
 import { useEffect, type CSSProperties } from 'react';
 import { makeCopy, type ResolvedClient } from '../../schema/resolve';
 import { removalBCopy } from './copy.defaults';
+import { ReviewsSlider } from '../../components/ReviewsSlider';
 
 import { Header } from './sections/Header';
 import { Hero } from './sections/Hero';
@@ -54,7 +55,7 @@ import { TrustBar } from './sections/TrustBar';
 import { Signals } from './sections/Signals';
 import { Proof } from './sections/Proof';
 import { Work } from './sections/Work';
-import { Estimate } from './sections/Estimate';
+import { EstimatePanel } from './sections/Estimate';
 import { Process } from './sections/Process';
 import { Scope } from './sections/Scope';
 import { Areas } from './sections/Areas';
@@ -113,28 +114,34 @@ export function RemovalB({ client }: { client: ResolvedClient }) {
       <Header client={client} copy={copy} />
 
       <main>
-        {/* S1 — risk-led hero, call-first, no offer */}
-        <Hero client={client} copy={copy} />
-        {/* S2 — credential ticker */}
-        <TrustBar copy={copy} />
-        {/* S3 — five signals: how to read your own tree */}
-        <Signals copy={copy} />
-        {/* S4 — proof BEFORE the offer: stats + verified reviews */}
-        <Proof client={client} copy={copy} />
-        {/* S5 — recent removals mosaic (client photographs only) */}
-        <Work client={client} copy={copy} />
-        {/* S6 — the offer is named here for the first time, with the form */}
-        <Estimate client={client} copy={copy} />
-        {/* S7 — four steps on one timeline */}
+        {/* CANONICAL STRUCTURE (owner's directive, 2026-08-12): hero with both
+            capture paths → reviews slider → photo band 1 → process → photo
+            band 2 → the rest in their existing relative order → the areas
+            carousel last before the footer. Copy untouched; sections moved. */}
+
+        {/* 1 — risk-led hero + the estimate panel (offer copy + form) */}
+        <Hero client={client} copy={copy} formPanel={<EstimatePanel client={client} copy={copy} />} />
+        {/* 2 — Google reviews slider (nothing without reviews, R5) */}
+        {(client.reviews ?? []).some((r) => (r?.body ?? '').trim()) && (
+          <section className="rb-reviews-band">
+            <ReviewsSlider client={client} />
+          </section>
+        )}
+        {/* 3 — photo band 1: recent removals, first half (+ the client clip) */}
+        <Work client={client} copy={copy} band={1} />
+        {/* 4 — four steps on one timeline */}
         <Process copy={copy} />
-        {/* S8 — the takedown, and the ground afterwards */}
+        {/* 5 — photo band 2: the rest of the mosaic */}
+        <Work client={client} copy={copy} band={2} />
+        {/* 6 — the rest, existing relative order */}
+        <TrustBar copy={copy} />
+        <Signals copy={copy} />
+        <Proof client={client} copy={copy} />
         <Scope copy={copy} />
-        {/* S9 — service-area grid */}
-        <Areas client={client} copy={copy} />
-        {/* S10 — six objection-led questions */}
         <Faq copy={copy} />
-        {/* S11 — closing call band */}
         <FinalCta client={client} copy={copy} />
+        {/* 7 — service-areas carousel, last before the footer */}
+        <Areas client={client} copy={copy} />
       </main>
 
       {/* S12 */}

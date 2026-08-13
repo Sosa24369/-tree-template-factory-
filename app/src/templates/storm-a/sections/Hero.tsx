@@ -21,13 +21,21 @@
  * hero with no art panel and a wider copy column, which is a perfectly good hero.
  */
 
-import type { CSSProperties } from 'react';
+import type { CSSProperties, ReactNode } from 'react';
 import type { ResolvedClient } from '../../../schema/resolve';
 import { SafeText } from '../../../components/Safe';
 import { stormStills, cssUrl } from '../support';
 import { AlertIcon, CallCta, FORM_ANCHOR, type Copy } from './shared';
 
-export function Hero({ client, copy }: { client: ResolvedClient; copy: Copy }) {
+export function Hero({
+  client,
+  copy,
+  formPanel,
+}: {
+  client: ResolvedClient;
+  copy: Copy;
+  formPanel?: ReactNode;
+}) {
   const art = stormStills(client, 1)[0] ?? null;
   const artStyle = art?.src ? ({ '--st-art': cssUrl(art.src) } as CSSProperties) : undefined;
 
@@ -39,7 +47,10 @@ export function Hero({ client, copy }: { client: ResolvedClient; copy: Copy }) {
   const safety = copy('hero.safety');
 
   return (
-    <section className={['st-hero', art?.src ? null : 'st-hero--noart'].filter(Boolean).join(' ')}>
+    <section
+      className={['st-hero', art?.src ? null : 'st-hero--noart'].filter(Boolean).join(' ')}
+      style={artStyle}
+    >
       <div className="st-container st-hero-inner">
         <div className="st-hero-copy">
           <p className="st-eyebrow st-eyebrow--onInk">
@@ -77,21 +88,22 @@ export function Hero({ client, copy }: { client: ResolvedClient; copy: Copy }) {
             )}
             <CallCta client={client} copy={copy} placement="hero" prefix tone="outline" size="lg" subKey="cta.callSub" />
           </div>
+
+          {/* The rating chip that used to float on the desktop art panel — the
+              art panel gave its grid slot to the form (canonical structure),
+              so the chip's copy renders here, still in the hero. */}
+          <p className="st-hero-badge st-hero-badge--inline">
+            <span className="st-hero-badge-stars">{copy('hero.artBadgeStars')}</span>
+            <strong className="st-hero-badge-value">{copy('hero.artBadgeValue')}</strong>
+            <span className="st-hero-badge-label">{copy('hero.artBadgeLabel')}</span>
+          </p>
         </div>
 
-        {/* Decorative. The same photographs appear properly, with real alt text, in
-            the recent-storm-work section below. Desktop-only via CSS (see the
-            performance note above). */}
-        {art?.src && (
-          <div className="st-hero-art" aria-hidden="true">
-            <div className="st-hero-frame" style={artStyle} />
-            <div className="st-hero-badge">
-              <span className="st-hero-badge-stars">{copy('hero.artBadgeStars')}</span>
-              <strong className="st-hero-badge-value">{copy('hero.artBadgeValue')}</strong>
-              <span className="st-hero-badge-label">{copy('hero.artBadgeLabel')}</span>
-            </div>
-          </div>
-        )}
+        {/* CANONICAL STRUCTURE: the assessment form — with every estimate.*
+            copy line — sits IN the hero. The desktop photograph became the
+            section's masked backdrop (still CSS-only, still never fetched on
+            phones); the form panel owns the grid slot the art panel had. */}
+        {formPanel}
       </div>
     </section>
   );

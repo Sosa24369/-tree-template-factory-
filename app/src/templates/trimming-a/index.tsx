@@ -37,6 +37,8 @@
 import { useEffect, type CSSProperties } from 'react';
 import { makeCopy, type ResolvedClient } from '../../schema/resolve';
 import { trimmingACopy } from './copy.defaults';
+import { ReviewsSlider } from '../../components/ReviewsSlider';
+import { PhoneLink } from '../../components/PhoneLink';
 
 import { Header } from './sections/Header';
 import { Hero } from './sections/Hero';
@@ -100,34 +102,49 @@ export function TrimmingA({ client }: { client: ResolvedClient }) {
       <Header client={client} copy={copy} />
 
       <main>
-        {/* S2 — rating badge, offer headline, lead form */}
+        {/* CANONICAL STRUCTURE (owner's directive, 2026-08-12): hero with both
+            capture paths → reviews slider → photo band 1 → process → photo
+            band 2 → the rest in their existing relative order → the areas
+            marquee last before the footer. Copy untouched; sections moved. */}
+
+        {/* 1 — rating badge, offer headline, lead form + click-to-call */}
         <Hero client={client} copy={copy} />
-        {/* S3 — before/after slider */}
-        <Gallery client={client} />
-        {/* S4 — four benefit cards + first call CTA */}
-        <Benefits client={client} copy={copy} />
-        {/* S5 — why homeowners choose us, Google reviews, CTA */}
-        <WhyChoose client={client} copy={copy} />
-        {/* S6 — done clean, done right + work grid + CTA */}
-        <DoneRight client={client} copy={copy} />
-        {/* S7 — services we offer + CTA */}
-        <Services client={client} copy={copy} />
-        {/* S8 — areas we serve marquee */}
-        <Areas client={client} copy={copy} />
-        {/* S9 — how it works, four steps */}
+        {/* 2 — Google reviews slider (nothing without reviews on the record, R5) */}
+        {(client.reviews ?? []).some((r) => (r?.body ?? '').trim()) && (
+          <section className="ta-reviews-band">
+            <ReviewsSlider client={client} />
+          </section>
+        )}
+        {/* 3 — photo band 1: before/afters, first half (+ the client video) */}
+        <Gallery client={client} band={1} />
+        {/* 4 — how it works, four steps */}
         <Process copy={copy} />
-        {/* S10 — long-form SEO block + common requests */}
+        {/* 5 — photo band 2: the rest */}
+        <Gallery client={client} band={2} />
+        {/* 6 — the rest, existing relative order */}
+        <Benefits client={client} copy={copy} />
+        <WhyChoose client={client} copy={copy} />
+        <DoneRight client={client} copy={copy} />
+        <Services client={client} copy={copy} />
         <Longform copy={copy} />
-        {/* S10 — mid-page CTA + the "Ready To Get Those Trees Trimmed?" band */}
         <MidCta client={client} copy={copy} />
-        {/* S11 — FAQ */}
         <Faq copy={copy} />
-        {/* S12 — final CTA */}
         <FinalCta copy={copy} />
+        {/* 7 — areas we serve marquee, last before the footer */}
+        <Areas client={client} copy={copy} />
       </main>
 
       {/* S13 — footer */}
       <Footer client={client} copy={copy} />
+
+      {/* Canonical: the mobile sticky call bar. Hidden on desktop; renders
+          nothing for a record with no phone (R5). */}
+      <div className="ta-sticky">
+        <PhoneLink client={client} placement="sticky" className="ta-sticky-call" subLabel={copy('header.tapToCall')}>
+          {copy('header.callPrefix')}
+          {client.phoneDisplay}
+        </PhoneLink>
+      </div>
     </div>
   );
 }

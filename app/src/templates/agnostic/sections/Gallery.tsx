@@ -28,15 +28,25 @@ import { withAlt, type Copy } from '../text';
 
 const SIZES = '(max-width: 639px) 47vw, (max-width: 1023px) 31vw, 260px';
 
-export function Gallery({ client, copy }: { client: ResolvedClient; copy: Copy }) {
-  const { videos, stills } = partitionMedia(photosFor(client, 'generic'));
-  const clip = videos[0] ?? null;
+/**
+ * CANONICAL STRUCTURE (2026-08-12): the gallery ships as TWO photo bands
+ * around the services section. Band 1 carries the heading copy, the video
+ * (if any) and the first half; band 2 is the rest, heading-less. Either band
+ * collapses to nothing when it has no media.
+ */
+export function Gallery({ client, copy, band }: { client: ResolvedClient; copy: Copy; band?: 1 | 2 }) {
+  const { videos, stills: all } = partitionMedia(photosFor(client, 'generic'));
+  const clip = band === 2 ? null : (videos[0] ?? null);
+  const split = Math.ceil(all.length / 2);
+  const stills = band === 1 ? all.slice(0, split) : band === 2 ? all.slice(split) : all;
 
   if (stills.length === 0 && !clip) return null;
 
   return (
     <Section tone="tint" className="ag-gallery">
-      <SectionHead eyebrow={copy('gallery.eyebrow')} heading={copy('gallery.h2')} body={copy('gallery.body')} />
+      {band !== 2 && (
+        <SectionHead eyebrow={copy('gallery.eyebrow')} heading={copy('gallery.h2')} body={copy('gallery.body')} />
+      )}
 
       <ul className="ag-shots">
         {clip && (

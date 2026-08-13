@@ -1973,3 +1973,98 @@
     transform: none;
   }
 }
+
+/* ---------------------------------------------------------------- *
+ * CANONICAL STRUCTURE additions (owner's directive, 2026-08-12)
+ * ---------------------------------------------------------------- */
+
+/* Reviews slider band — position 2, directly under the hero. */
+.removal-b .rb-reviews-band {
+  padding: clamp(28px, 5vw, 52px) clamp(18px, 5vw, 44px);
+  max-width: var(--rb-max);
+  margin: 0 auto;
+}
+
+/* The estimate panel now rides in the hero. Stacks under the hero copy on
+   mobile; on desktop it owns the grid slot the art panel had. The offer copy
+   inside it sits on the dark hero, so it flips to the on-ink palette. */
+.removal-b .rb-hero-form {
+  margin-top: clamp(28px, 6vw, 40px);
+}
+
+.removal-b .rb-estimate-grid--hero {
+  display: grid;
+  gap: 22px;
+}
+
+.removal-b .rb-hero-form .rb-offer {
+  color: #ffffff;
+}
+
+.removal-b .rb-hero-form .rb-lede,
+.removal-b .rb-hero-form .rb-reassure,
+.removal-b .rb-hero-form .rb-offer-call-label {
+  color: color-mix(in srgb, #ffffff 82%, var(--brand-primary));
+}
+
+/* The inline rating chip (was floated on the art panel). */
+.removal-b .rb-hero-badge--inline {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 10px;
+  margin: 22px 0 0;
+  padding: 10px 16px;
+  border-radius: 12px;
+  background: var(--brand-accent);
+  color: color-mix(in srgb, var(--brand-accent) 12%, #000);
+  box-shadow: 0 16px 34px -16px rgba(0, 0, 0, 0.5);
+}
+
+@media (min-width: 980px) {
+  /* The photograph as a quiet right-edge backdrop (desktop only; the custom
+     property is consumed nowhere else, so phones never fetch the file). */
+  .removal-b .rb-hero:not(.rb-hero--noart) {
+    position: relative;
+    overflow: hidden;
+  }
+  .removal-b .rb-hero:not(.rb-hero--noart)::after {
+    content: '';
+    position: absolute;
+    inset: 0 0 0 50%;
+    background-image: var(--rb-art);
+    background-size: cover;
+    background-position: center;
+    opacity: 0.14;
+    pointer-events: none;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 55%);
+    mask-image: linear-gradient(90deg, transparent, #000 55%);
+  }
+  .removal-b .rb-hero-inner > * {
+    position: relative;
+    z-index: 1;
+  }
+  .removal-b .rb-hero-form {
+    margin-top: 0;
+  }
+}
+
+/* Reconciliation with the pre-canonical hero rules (this block is later in
+   the file, so it wins): the form panel is ALWAYS present now, so the noart
+   hero keeps two columns too, and the tall form card top-aligns the grid.
+   Inside the hero the estimate panel is always one column — the offer copy
+   sits above the form card, not beside it. */
+@media (min-width: 980px) {
+  .removal-b .rb-hero-inner {
+    align-items: start;
+  }
+  .removal-b .rb-hero--noart .rb-hero-inner {
+    grid-template-columns: minmax(0, 1.06fr) minmax(320px, 0.94fr);
+  }
+  .removal-b .rb-hero--noart .rb-hero-copy {
+    max-width: 40ch;
+  }
+}
+
+.removal-b .rb-estimate-grid--hero {
+  grid-template-columns: 1fr !important;
+}

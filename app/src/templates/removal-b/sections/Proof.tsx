@@ -18,7 +18,6 @@
 
 import type { ResolvedClient } from '../../../schema/resolve';
 import { SafeText } from '../../../components/Safe';
-import { ReviewsSlider } from '../../../components/ReviewsSlider';
 import { Eyebrow, Heading, Section, type Copy } from './shared';
 
 const STATS = [1, 2, 3];
@@ -54,11 +53,9 @@ export function Proof({ client, copy }: { client: ResolvedClient; copy: Copy }) 
         </ul>
       )}
 
-      {/* Design Elevation 2026-08-12: static review cards -> the shared slider,
-          identical on every template (the logo precedent preserves the A/B).
-          The proof-before-offer ORDER — this variant's tested variable — is
-          untouched; only the review treatment inside the section changed. */}
-      <ReviewsSlider client={client} />
+      {/* CANONICAL STRUCTURE (2026-08-12): the reviews slider moved to
+          position 2, directly under the hero (see index.tsx). This section
+          keeps its heading copy and the stat band. */}
     </Section>
   );
 }

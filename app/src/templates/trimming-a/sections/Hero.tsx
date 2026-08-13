@@ -27,7 +27,7 @@ import { SafeText } from '../../../components/Safe';
 import { DeferredImage } from '../../../components/DeferredImage';
 import { LeadForm } from '../../../components/LeadForm';
 import { FORM_ANCHOR, altFor, photoSlots, withAlt } from '../slots';
-import { SplitHeading, type Copy } from './shared';
+import { CallRow, SplitHeading, type Copy } from './shared';
 
 export function Hero({ client, copy }: { client: ResolvedClient; copy: Copy }) {
   const { hero } = photoSlots(client);
@@ -60,6 +60,13 @@ export function Hero({ client, copy }: { client: ResolvedClient; copy: Copy }) {
           <SplitHeading as="h1" className="ta-h1" parts={[copy('hero.h1a'), copy('hero.h1b')]} />
           <SafeText as="p" className="ta-hero-sub" value={copy('hero.h2')} />
           <SafeText as="p" className="ta-hero-body" value={copy('hero.body')} />
+
+          {/* CANONICAL STRUCTURE (2026-08-12): both capture paths in the hero —
+              the form card is the other one; this is the prominent
+              click-to-call, from the page's existing shared-CTA copy keys. */}
+          <div className="ta-hero-call">
+            <CallRow client={client} copy={copy} placement="hero" tone="onDeep" />
+          </div>
         </div>
 
         {/* The form owns the anchor both scroll-to-form CTAs target. */}

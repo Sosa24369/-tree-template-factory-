@@ -17,12 +17,20 @@ import { DeferredImage } from '../../../components/DeferredImage';
 import { altFor, withAlt } from '../assets';
 import { partitionMedia, photosFor } from '../../../lib/photos';
 
-export function Gallery({ client }: { client: ResolvedClient }) {
+/**
+ * CANONICAL STRUCTURE (2026-08-12): the rail ships as TWO photo bands around
+ * the process section. Band 1 = the video (if any) + the first half of the
+ * stills; band 2 = the rest, and either band collapses to nothing when empty
+ * — one band beats an empty frame.
+ */
+export function Gallery({ client, band }: { client: ResolvedClient; band?: 1 | 2 }) {
   // Photographs come from the CLIENT, never from the template's default artwork:
   // the control's slides are Texas Tree Tops' real job photos and must not appear
   // on another client's page. A client with no photography gets no gallery.
-  const { videos, stills } = partitionMedia(photosFor(client, 'removal'));
-  const clientVideo = videos[0] ?? null;
+  const { videos, stills: allStills } = partitionMedia(photosFor(client, 'removal'));
+  const split = Math.ceil(allStills.length / 2);
+  const stills = band === 1 ? allStills.slice(0, split) : band === 2 ? allStills.slice(split) : allStills;
+  const clientVideo = band === 2 ? null : (videos[0] ?? null);
   if (stills.length === 0 && !clientVideo) return null;
 
   return (

@@ -58,6 +58,7 @@
 import { useEffect, type CSSProperties } from 'react';
 import { makeCopy, type ResolvedClient } from '../../schema/resolve';
 import { agnosticCopy } from './copy.defaults';
+import { PhoneLink } from '../../components/PhoneLink';
 
 import { Header } from './sections/Header';
 import { Hero } from './sections/Hero';
@@ -117,25 +118,38 @@ export function Agnostic({ client }: { client: ResolvedClient }) {
       <Header client={client} copy={copy} />
 
       <main>
-        {/* Brand-colour band: headline, subhead, proof points, request form. */}
+        {/* CANONICAL STRUCTURE (owner's directive, 2026-08-12): hero with both
+            capture paths → reviews slider → photo band 1 → services → photo
+            band 2 → the rest in their existing relative order → the areas
+            carousel last before the footer. Placeholders untouched. */}
+
+        {/* 1 — brand-colour band: headline, proof points, form + call link */}
         <Hero client={client} copy={copy} />
-        {/* Four short credibility items. */}
-        <Trust copy={copy} />
-        {/* What this business does — twelve operator-filled slots. */}
-        <Services copy={copy} />
-        {/* The client's own photographs, deferred. Never anyone else's. */}
-        <Gallery client={client} copy={copy} />
-        {/* The client's own quotations. */}
+        {/* 2 — the client's own quotations, as the shared slider */}
         <Reviews client={client} copy={copy} />
-        {/* Where they work, from the client record. */}
-        <Areas client={client} copy={copy} />
-        {/* Eight question/answer slots. */}
+        {/* 3 — photo band 1: the client's own photographs, deferred */}
+        <Gallery client={client} copy={copy} band={1} />
+        {/* 4 — what this business does */}
+        <Services copy={copy} />
+        {/* 5 — photo band 2: the rest */}
+        <Gallery client={client} copy={copy} band={2} />
+        {/* 6 — the rest, existing relative order */}
+        <Trust copy={copy} />
         <Faq copy={copy} />
-        {/* Closing band — call, or jump back to the form. */}
         <FinalCta client={client} copy={copy} />
+        {/* 7 — service-areas carousel, last before the footer */}
+        <Areas client={client} copy={copy} />
       </main>
 
       <Footer client={client} copy={copy} />
+
+      {/* Canonical: the mobile sticky call bar. No copy is invented — the
+          number is the label; renders nothing without a phone (R5). */}
+      <div className="ag-sticky">
+        <PhoneLink client={client} placement="sticky" className="ag-sticky-call">
+          {client.phoneDisplay}
+        </PhoneLink>
+      </div>
     </div>
   );
 }

@@ -8,8 +8,16 @@
 
 import type { ResolvedClient } from '../../../schema/resolve';
 import { SafeSection, SafeText } from '../../../components/Safe';
-import { Eyebrow, Heading, PinIcon, Section, type Copy } from './shared';
+import { ServiceAreasCarousel } from '../../../components/ServiceAreasCarousel';
+import { Eyebrow, Heading, Section, type Copy } from './shared';
 
+/**
+ * CANONICAL STRUCTURE: the static city grid became the shared continuously
+ * scrolling carousel (owner's directive — last section before the footer on
+ * every page). The section's own heading copy is unchanged; the cities are
+ * still client data only, and an empty list still removes the whole section
+ * rather than leaving an orphan heading (R5).
+ */
 export function Areas({ client, copy }: { client: ResolvedClient; copy: Copy }) {
   const cities = (client.serviceAreaList ?? []).filter((city) => typeof city === 'string' && city.trim());
 
@@ -22,14 +30,7 @@ export function Areas({ client, copy }: { client: ResolvedClient; copy: Copy }) 
           <SafeText as="p" className="st-lede" value={copy('areas.lede')} />
         </div>
 
-        <ul className="st-area-grid">
-          {cities.map((city, i) => (
-            <li className="st-area" key={`${city}-${i}`}>
-              <PinIcon />
-              <SafeText as="span" value={city} />
-            </li>
-          ))}
-        </ul>
+        <ServiceAreasCarousel client={client} />
       </Section>
     </SafeSection>
   );

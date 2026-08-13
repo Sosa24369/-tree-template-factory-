@@ -30,6 +30,8 @@
 import { useEffect, type CSSProperties } from 'react';
 import { makeCopy, type ResolvedClient } from '../../schema/resolve';
 import { removalACopy } from './copy.defaults';
+import { ReviewsSlider } from '../../components/ReviewsSlider';
+import { PhoneLink } from '../../components/PhoneLink';
 
 import { Header } from './sections/Header';
 import { Hero } from './sections/Hero';
@@ -93,34 +95,50 @@ export function RemovalA({ client }: { client: ResolvedClient }) {
       <Header client={client} copy={copy} />
 
       <main>
-        {/* S1 — rating badge, hero headline, lead form */}
+        {/* CANONICAL STRUCTURE (owner's directive, 2026-08-12): hero with both
+            capture paths → reviews slider → photo band 1 → process → photo
+            band 2 → the rest in their existing relative order → the areas
+            marquee last before the footer. Copy untouched; sections moved. */}
+
+        {/* 1 — rating badge, hero headline, lead form + click-to-call */}
         <Hero client={client} copy={copy} />
-        {/* S2 — recent jobs */}
-        <Gallery client={client} />
-        {/* S3 — benefit strip + first call CTA */}
-        <Benefits client={client} copy={copy} />
-        {/* S4 — why choose us, service-area prose, Google reviews, CTA */}
-        <WhyChoose client={client} copy={copy} />
-        {/* S5 — restoration results + photo grid + CTA */}
-        <Restoration client={client} copy={copy} />
-        {/* S6 — services we offer + CTA */}
-        <Services client={client} copy={copy} />
-        {/* S7 — areas we serve marquee */}
-        <Areas client={client} copy={copy} />
-        {/* S8 — long-form SEO block + common requests */}
-        <Longform copy={copy} />
-        {/* S9 — mid-page CTA + "Ready To Get That Tree Handled?" band */}
-        <MidCta client={client} copy={copy} />
-        {/* S10 — how it works, four steps */}
+        {/* 2 — Google reviews slider (nothing without reviews on the record, R5) */}
+        {(client.reviews ?? []).some((r) => (r?.body ?? '').trim()) && (
+          <section className="ra-reviews-band">
+            <ReviewsSlider client={client} />
+          </section>
+        )}
+        {/* 3 — photo band 1: recent jobs, first half (+ the client video) */}
+        <Gallery client={client} band={1} />
+        {/* 4 — how it works, four steps */}
         <Process copy={copy} />
-        {/* S11 — FAQ */}
+        {/* 5 — photo band 2: the rest of the recent jobs */}
+        <Gallery client={client} band={2} />
+        {/* 6 — the rest, existing relative order */}
+        <Benefits client={client} copy={copy} />
+        <WhyChoose client={client} copy={copy} />
+        <Restoration client={client} copy={copy} />
+        <Services client={client} copy={copy} />
+        <Longform copy={copy} />
+        <MidCta client={client} copy={copy} />
         <Faq copy={copy} />
-        {/* S12 — final CTA */}
         <FinalCta client={client} copy={copy} />
+        {/* 7 — areas we serve marquee, last before the footer */}
+        <Areas client={client} copy={copy} />
       </main>
 
       {/* S13 — footer */}
       <Footer client={client} copy={copy} />
+
+      {/* Canonical: the mobile sticky call bar (both capture paths always a
+          thumb away). Hidden on desktop by CSS; PhoneLink renders nothing
+          for a record with no phone (R5). */}
+      <div className="ra-sticky">
+        <PhoneLink client={client} placement="sticky" className="ra-sticky-call" subLabel={copy('header.tapToCallMobile')}>
+          {copy('cta.callLabelPrefix')}
+          {client.phoneDisplay}
+        </PhoneLink>
+      </div>
     </div>
   );
 }

@@ -21,7 +21,7 @@
  * and a wider copy column, which is a perfectly good hero.
  */
 
-import type { CSSProperties } from 'react';
+import type { CSSProperties, ReactNode } from 'react';
 import type { ResolvedClient } from '../../../schema/resolve';
 import { SafeText } from '../../../components/Safe';
 import { partitionMedia, photosFor } from '../../../lib/photos';
@@ -31,7 +31,15 @@ import { BoltIcon, BroomIcon, CallCta, Eyebrow, FORM_ANCHOR, Heading, PinIcon, S
 /** One icon per credential chip, in copy order: insured, rated, fast, clean. */
 const CHIP_ICONS = [ShieldIcon, StarIcon, BoltIcon, BroomIcon] as const;
 
-export function Hero({ client, copy }: { client: ResolvedClient; copy: Copy }) {
+export function Hero({
+  client,
+  copy,
+  formPanel,
+}: {
+  client: ResolvedClient;
+  copy: Copy;
+  formPanel?: ReactNode;
+}) {
   // Stills only: a client's removal set can contain an .mp4 (the control's does),
   // and a video path in a CSS background paints nothing.
   const { stills } = partitionMedia(photosFor(client, 'removal'));
@@ -49,7 +57,10 @@ export function Hero({ client, copy }: { client: ResolvedClient; copy: Copy }) {
   const artStyle = art?.src ? ({ '--rb-art': cssUrl(art.src) } as CSSProperties) : undefined;
 
   return (
-    <section className={['rb-hero', art?.src ? null : 'rb-hero--noart'].filter(Boolean).join(' ')}>
+    <section
+      className={['rb-hero', art?.src ? null : 'rb-hero--noart'].filter(Boolean).join(' ')}
+      style={artStyle}
+    >
       <div className="rb-container rb-hero-inner">
         <div className="rb-hero-copy">
           <Eyebrow>{copy('hero.eyebrow')}</Eyebrow>
@@ -92,20 +103,22 @@ export function Hero({ client, copy }: { client: ResolvedClient; copy: Copy }) {
               ))}
             </ul>
           )}
+
+          {/* The rating chip that used to float on the desktop art panel —
+              the art panel gave its grid slot to the form (canonical
+              structure), so the chip's copy renders here, still in the hero. */}
+          <p className="rb-hero-badge rb-hero-badge--inline">
+            <span className="rb-hero-badge-stars">{copy('hero.artBadgeStars')}</span>
+            <strong className="rb-hero-badge-value">{copy('hero.artBadgeValue')}</strong>
+            <span className="rb-hero-badge-label">{copy('hero.artBadgeLabel')}</span>
+          </p>
         </div>
 
-        {/* Decorative. The same photographs are shown properly, with real alt text,
-            in the recent-removals section below. */}
-        {art?.src && (
-          <div className="rb-hero-art" aria-hidden="true">
-            <div className="rb-hero-frame" style={artStyle} />
-            <div className="rb-hero-badge">
-              <span className="rb-hero-badge-stars">{copy('hero.artBadgeStars')}</span>
-              <strong className="rb-hero-badge-value">{copy('hero.artBadgeValue')}</strong>
-              <span className="rb-hero-badge-label">{copy('hero.artBadgeLabel')}</span>
-            </div>
-          </div>
-        )}
+        {/* CANONICAL STRUCTURE (2026-08-12): the estimate panel — offer copy
+            and the form, every estimate.* line word-for-word — sits IN the
+            hero. The desktop photograph became the section's masked backdrop
+            (still desktop-only CSS; phones never fetch it). */}
+        {formPanel}
       </div>
     </section>
   );

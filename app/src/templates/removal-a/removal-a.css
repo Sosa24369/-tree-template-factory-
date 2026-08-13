@@ -1310,3 +1310,58 @@
     transform: none;
   }
 }
+
+/* ---------------------------------------------------------------- *
+ * CANONICAL STRUCTURE additions (owner's directive, 2026-08-12)
+ * ---------------------------------------------------------------- */
+
+/* Reviews slider band — position 2, directly under the hero. */
+.removal-a .ra-reviews-band {
+  padding: clamp(28px, 5vw, 52px) clamp(18px, 5vw, 44px);
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* The hero's prominent click-to-call (the form card is the other path). */
+.removal-a .ra-hero-call {
+  margin-top: 18px;
+}
+
+/* Mobile sticky call bar. */
+.removal-a .ra-sticky {
+  position: fixed;
+  inset: auto 0 0 0;
+  z-index: 40;
+  padding: 10px clamp(14px, 4vw, 20px) calc(10px + env(safe-area-inset-bottom));
+  background: color-mix(in srgb, var(--brand-primary) 92%, #000);
+}
+
+.removal-a .ra-sticky-call {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  width: 100%;
+  padding: 13px 22px;
+  border-radius: 12px;
+  background: var(--brand-accent);
+  color: color-mix(in srgb, var(--brand-accent) 12%, #000);
+  text-decoration: none;
+  font-weight: 800;
+  text-align: center;
+}
+
+.removal-a .ra-sticky-call .phone-sub {
+  font-weight: 600;
+  font-size: 12px;
+  opacity: 0.85;
+}
+
+.removal-a main {
+  padding-bottom: 84px;
+}
+
+@media (min-width: 768px) {
+  .removal-a .ra-sticky { display: none; }
+  .removal-a main { padding-bottom: 0; }
+}

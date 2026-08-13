@@ -25,6 +25,7 @@
 import type { ResolvedClient } from '../../../schema/resolve';
 import { SafeText } from '../../../components/Safe';
 import { LeadForm } from '../../../components/LeadForm';
+import { PhoneLink } from '../../../components/PhoneLink';
 import { agnosticChrome } from '../copy.defaults';
 import { CheckIcon } from './shared';
 import { hasText, orChrome, type Copy } from '../text';
@@ -60,7 +61,24 @@ export function Hero({ client, copy }: { client: ResolvedClient; copy: Copy }) {
                 ))}
               </ul>
             )}
+
+            {/* CANONICAL STRUCTURE (2026-08-12): both capture paths in the
+                hero. The number itself is the label — no copy is invented for
+                a template whose every string may legitimately be blank; the
+                link renders nothing at all without a phone on the record (R5). */}
+            <PhoneLink client={client} placement="hero" className="ag-hero-call">
+              {client.phoneDisplay}
+            </PhoneLink>
           </div>
+        )}
+
+        {/* With every hero copy key blank the copy column above does not render
+            (R5's spare request page) — the call path still belongs in the hero,
+            so it rides with the form card instead in that state. */}
+        {!hasCopy && (
+          <PhoneLink client={client} placement="hero" className="ag-hero-call ag-hero-call--solo">
+            {client.phoneDisplay}
+          </PhoneLink>
         )}
 
         <div className="ag-form-card" id={FORM_ANCHOR}>

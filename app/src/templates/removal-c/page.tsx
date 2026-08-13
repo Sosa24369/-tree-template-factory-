@@ -18,6 +18,7 @@ import { PhoneLink } from '../../components/PhoneLink';
 import { LeadForm } from '../../components/LeadForm';
 import { DeferredImage } from '../../components/DeferredImage';
 import { ReviewsSlider } from '../../components/ReviewsSlider';
+import { ServiceAreasCarousel } from '../../components/ServiceAreasCarousel';
 import { photosFor, partitionMedia } from '../../lib/photos';
 
 type Copy = (key: string) => string;
@@ -220,6 +221,68 @@ export function RemovalCPage({
           </div>
         </section>
 
+        {/* CANONICAL STRUCTURE (owner's directive, 2026-08-12): slider under
+            the hero, photo bands around the process, areas carousel last. */}
+
+        {/* 2 — Google reviews slider (nothing without reviews, R5) */}
+        {(client.reviews ?? []).some((r) => (r?.body ?? '').trim()) && (
+          <section className="rc-section rc-reviews-band">
+            <div className="rc-container">
+              <ReviewsSlider client={client} />
+            </div>
+          </section>
+        )}
+
+        {/* 3 — photo band 1: crew and equipment forward */}
+        {gallery.slice(0, Math.ceil(gallery.length / 2)).length > 0 && (
+          <section className="rc-section rc-work">
+            <div className="rc-container">
+              <ul className="rc-work-grid">
+                {gallery.slice(0, Math.ceil(gallery.length / 2)).map((photo, i) => (
+                  <li key={i} className="rc-work-cell">
+                    <DeferredImage photo={photo} wrapperClassName="rc-work-frame" className="rc-work-img" />
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </section>
+        )}
+
+        {/* 4 — process */}
+        <section className="rc-section rc-process">
+          <div className="rc-container">
+            <Split as="h2" className="rc-h2" a={copy('process.h1a')} b={copy('process.h1b')} stacked />
+            {steps.length > 0 && (
+              <ol className="rc-steps">
+                {steps.map((step, i) => (
+                  <li className="rc-step" key={i}>
+                    <SafeText as="span" className="rc-step-label" value={step.label} />
+                    <SafeText as="h3" className="rc-step-h" value={step.h} />
+                    <SafeText as="p" className="rc-step-body" value={step.body} />
+                  </li>
+                ))}
+              </ol>
+            )}
+          </div>
+        </section>
+
+        {/* 5 — photo band 2: before/afters as proof */}
+        {gallery.slice(Math.ceil(gallery.length / 2)).length > 0 && (
+          <section className="rc-section rc-work">
+            <div className="rc-container">
+              <ul className="rc-work-grid">
+                {gallery.slice(Math.ceil(gallery.length / 2)).map((photo, i) => (
+                  <li key={i} className="rc-work-cell">
+                    <DeferredImage photo={photo} wrapperClassName="rc-work-frame" className="rc-work-img" />
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </section>
+        )}
+
+        {/* 6 — the rest, existing relative order */}
+
         {/* ---- benefits ---- */}
         <section className="rc-section rc-benefits">
           <div className="rc-container">
@@ -236,27 +299,11 @@ export function RemovalCPage({
           </div>
         </section>
 
-        {/* ---- recent work (client's own removal photos; hides when none) ---- */}
-        {gallery.length > 0 && (
-          <section className="rc-section rc-work">
-            <div className="rc-container">
-              <ul className="rc-work-grid" data-count={gallery.length}>
-                {gallery.map((photo, i) => (
-                  <li key={i} className="rc-work-cell">
-                    <DeferredImage photo={photo} wrapperClassName="rc-work-frame" className="rc-work-img" />
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </section>
-        )}
-
-        {/* ---- why + reviews slider ---- */}
+        {/* ---- why choose us ---- */}
         <section className="rc-section rc-section--deep rc-why">
           <div className="rc-container">
             <Split as="h2" className="rc-h2" a={copy('why.h1a')} b={copy('why.h1b')} stacked />
             <SafeText as="p" className="rc-lede" value={copy('why.body')} />
-            <ReviewsSlider client={client} />
             <div className="rc-cta-row">
               <CallCta client={client} copy={copy} placement="reviews" tone="onInk" />
             </div>
@@ -281,23 +328,6 @@ export function RemovalCPage({
                 {services.map((s, i) => (
                   <li className="rc-service" key={i}>
                     {s}
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
-        </section>
-
-        {/* ---- areas ---- */}
-        <section className="rc-section rc-areas">
-          <div className="rc-container">
-            <Split as="h2" className="rc-h2" a={copy('areas.h1a')} b={copy('areas.h1b')} />
-            <SafeText as="p" className="rc-lede" value={copy('areas.h2')} />
-            {cities.length > 0 && (
-              <ul className="rc-city-row">
-                {cities.map((city, i) => (
-                  <li className="rc-city" key={i}>
-                    {city}
                   </li>
                 ))}
               </ul>
@@ -346,24 +376,6 @@ export function RemovalCPage({
           </div>
         </section>
 
-        {/* ---- process ---- */}
-        <section className="rc-section rc-process">
-          <div className="rc-container">
-            <Split as="h2" className="rc-h2" a={copy('process.h1a')} b={copy('process.h1b')} stacked />
-            {steps.length > 0 && (
-              <ol className="rc-steps">
-                {steps.map((step, i) => (
-                  <li className="rc-step" key={i}>
-                    <SafeText as="span" className="rc-step-label" value={step.label} />
-                    <SafeText as="h3" className="rc-step-h" value={step.h} />
-                    <SafeText as="p" className="rc-step-body" value={step.body} />
-                  </li>
-                ))}
-              </ol>
-            )}
-          </div>
-        </section>
-
         {/* ---- FAQ ---- */}
         {faqs.length > 0 && (
           <section className="rc-section rc-section--tint rc-faq">
@@ -402,6 +414,17 @@ export function RemovalCPage({
             </PhoneLink>
           </div>
         </section>
+
+        {/* 7 — service-areas carousel, last before the footer */}
+        {cities.length > 0 && (
+          <section className="rc-section rc-areas">
+            <div className="rc-container">
+              <Split as="h2" className="rc-h2" a={copy('areas.h1a')} b={copy('areas.h1b')} />
+              <SafeText as="p" className="rc-lede" value={copy('areas.h2')} />
+            </div>
+            <ServiceAreasCarousel client={client} />
+          </section>
+        )}
       </main>
 
       {/* ---- footer ---- */}

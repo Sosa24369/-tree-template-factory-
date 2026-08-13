@@ -28,11 +28,20 @@
  * the page; they start in the `work` section, all below the fold, all deferred.
  */
 
+import type { ReactNode } from 'react';
 import type { ResolvedClient } from '../../../schema/resolve';
 import { SafeText } from '../../../components/Safe';
 import { ArrowDownIcon, CallLine, Display, Eyebrow, FORM_ANCHOR, type Copy } from './shared';
 
-export function Hero({ client, copy }: { client: ResolvedClient; copy: Copy }) {
+export function Hero({
+  client,
+  copy,
+  formPanel,
+}: {
+  client: ResolvedClient;
+  copy: Copy;
+  formPanel?: ReactNode;
+}) {
   const secondary = copy('hero.secondary').trim();
 
   return (
@@ -57,6 +66,10 @@ export function Hero({ client, copy }: { client: ResolvedClient; copy: Copy }) {
             </a>
           )}
         </div>
+
+        {/* CANONICAL STRUCTURE (2026-08-12): the estimate panel — its deep-ink
+            surface and every estimate.* line intact — now sits in the hero. */}
+        {formPanel}
       </div>
     </section>
   );

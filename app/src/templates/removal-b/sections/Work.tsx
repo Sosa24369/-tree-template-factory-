@@ -27,20 +27,30 @@ import { Eyebrow, Heading, Section, type Copy } from './shared';
 /** Enough to fill the mosaic twice over; more than this is weight, not proof. */
 const MAX_TILES = 7;
 
-export function Work({ client, copy }: { client: ResolvedClient; copy: Copy }) {
+/**
+ * CANONICAL STRUCTURE (2026-08-12): the mosaic ships as TWO photo bands around
+ * the process section. Band 1 carries the section's heading copy, the video
+ * (if any) and the first half of the stills; band 2 is the rest, heading-less.
+ * Either band collapses to nothing when it has no media.
+ */
+export function Work({ client, copy, band }: { client: ResolvedClient; copy: Copy; band?: 1 | 2 }) {
   const { videos, stills } = partitionMedia(photosFor(client, 'removal'));
-  const clip = videos[0] ?? null;
-  const tiles = stills.slice(0, clip ? MAX_TILES - 1 : MAX_TILES);
+  const clip = band === 2 ? null : (videos[0] ?? null);
+  const all = stills.slice(0, (videos[0] ?? null) ? MAX_TILES - 1 : MAX_TILES);
+  const split = Math.ceil(all.length / 2);
+  const tiles = band === 1 ? all.slice(0, split) : band === 2 ? all.slice(split) : all;
 
   if (tiles.length === 0 && !clip) return null;
 
   return (
     <Section tone="tint" className="rb-work">
-      <div className="rb-head rb-rise">
-        <Eyebrow>{copy('work.eyebrow')}</Eyebrow>
-        <Heading as="h2" className="rb-h2" parts={[copy('work.h2a'), copy('work.h2b')]} />
-        <SafeText as="p" className="rb-lede" value={copy('work.lede')} />
-      </div>
+      {band !== 2 && (
+        <div className="rb-head rb-rise">
+          <Eyebrow>{copy('work.eyebrow')}</Eyebrow>
+          <Heading as="h2" className="rb-h2" parts={[copy('work.h2a'), copy('work.h2b')]} />
+          <SafeText as="p" className="rb-lede" value={copy('work.lede')} />
+        </div>
+      )}
 
       <ul className="rb-mosaic rb-rise">
         {clip && (

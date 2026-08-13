@@ -23,17 +23,28 @@ import { Eyebrow, Heading, Section, type Copy } from './shared';
 /** Enough to fill the mosaic; more than this is weight, not proof. */
 const MAX_TILES = 6;
 
-export function Work({ client, copy }: { client: ResolvedClient; copy: Copy }) {
-  const tiles = stormStills(client, MAX_TILES);
+/**
+ * CANONICAL STRUCTURE: the mosaic now ships as TWO photo bands around the
+ * process section (positions 3 and 5). Band 1 carries the section's heading
+ * copy and the first half of the set; band 2 is the remainder, heading-less
+ * (there is no second heading in the copy and none gets written). Either band
+ * collapses to nothing when it has no photos — one band beats an empty frame.
+ */
+export function Work({ client, copy, band }: { client: ResolvedClient; copy: Copy; band?: 1 | 2 }) {
+  const all = stormStills(client, MAX_TILES);
+  const split = Math.ceil(all.length / 2);
+  const tiles = band === 1 ? all.slice(0, split) : band === 2 ? all.slice(split) : all;
   if (tiles.length === 0) return null;
 
   return (
     <Section tone="paper" className="st-work">
-      <div className="st-head">
-        <Eyebrow>{copy('work.eyebrow')}</Eyebrow>
-        <Heading as="h2" className="st-h2" parts={[copy('work.h2a'), copy('work.h2b')]} />
-        <SafeText as="p" className="st-lede" value={copy('work.lede')} />
-      </div>
+      {band !== 2 && (
+        <div className="st-head">
+          <Eyebrow>{copy('work.eyebrow')}</Eyebrow>
+          <Heading as="h2" className="st-h2" parts={[copy('work.h2a'), copy('work.h2b')]} />
+          <SafeText as="p" className="st-lede" value={copy('work.lede')} />
+        </div>
+      )}
 
       <ul className="st-mosaic">
         {tiles.map((shot, i) => (

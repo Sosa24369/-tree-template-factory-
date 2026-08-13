@@ -1035,3 +1035,71 @@
     transform: none;
   }
 }
+
+/* ---------------------------------------------------------------- *
+ * CANONICAL STRUCTURE additions (owner's directive, 2026-08-12)
+ * ---------------------------------------------------------------- */
+
+/* The estimate panel in the hero: it keeps its deep-ink surface, so the
+   existing onInk copy classes read exactly as they did in the old closing
+   section — a dark, lifted card inside the paper hero. */
+.trimming-b .tb-hero-form {
+  margin-top: clamp(30px, 6vw, 48px);
+  padding: clamp(22px, 4vw, 36px);
+  border-radius: 16px;
+  background: var(--tb-deep);
+  color: #ffffff;
+  text-align: left;
+  box-shadow: 0 30px 70px -45px rgba(10, 14, 12, 0.7);
+}
+
+.trimming-b .tb-estimate-grid--hero {
+  display: grid;
+  gap: 22px;
+}
+
+@media (min-width: 900px) {
+  .trimming-b .tb-estimate-grid--hero {
+    grid-template-columns: minmax(0, 1fr) minmax(340px, 420px);
+    align-items: start;
+  }
+}
+
+/* Mobile sticky call bar. */
+.trimming-b .tb-sticky {
+  position: fixed;
+  inset: auto 0 0 0;
+  z-index: 40;
+  padding: 10px clamp(14px, 4vw, 20px) calc(10px + env(safe-area-inset-bottom));
+  background: color-mix(in srgb, var(--tb-deep) 94%, transparent);
+}
+
+.trimming-b .tb-sticky-call {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  width: 100%;
+  padding: 13px 22px;
+  border-radius: 10px;
+  background: var(--brand-primary);
+  color: var(--brand-on-primary, #ffffff);
+  text-decoration: none;
+  font-weight: 750;
+  text-align: center;
+}
+
+.trimming-b .tb-sticky-call .phone-sub {
+  font-weight: 600;
+  font-size: 12px;
+  opacity: 0.85;
+}
+
+.trimming-b main {
+  padding-bottom: 84px;
+}
+
+@media (min-width: 768px) {
+  .trimming-b .tb-sticky { display: none; }
+  .trimming-b main { padding-bottom: 0; }
+}

@@ -287,7 +287,49 @@
 .st-hero-primary { color: #1a1205; }
 
 /* Desktop art panel — hidden and UNREQUESTED on a phone. */
-.st-hero-art { display: none; }
+/* CANONICAL STRUCTURE (2026-08-12): the form panel owns the hero's second
+   grid slot; the desktop art panel became a masked backdrop on the section.
+   The photograph is still consumed ONLY inside the desktop media query, so a
+   phone never fetches it. */
+
+.st-hero-form {
+  margin-top: clamp(28px, 6vw, 40px);
+  display: grid;
+  gap: 16px;
+}
+
+.st-hero-form-copy {
+  color: var(--st-onink);
+}
+
+.st-hero-form-h2 {
+  margin: 10px 0 0;
+  font-size: clamp(1.3rem, 3vw, 1.6rem);
+  font-weight: 780;
+  letter-spacing: -0.015em;
+}
+
+.st-hero-form-lede {
+  margin: 8px 0 0;
+  font-size: 0.95rem;
+  color: color-mix(in srgb, var(--st-onink) 78%, transparent);
+}
+
+/* The rating chip, now inline in the copy column at every width. */
+.st-hero-badge--inline {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 10px;
+  margin: 22px 0 0;
+  padding: 10px 16px;
+  border-radius: var(--st-radius-sm);
+  background: var(--brand-accent);
+  color: #1a1205;
+  box-shadow: 0 16px 34px -16px rgba(0, 0, 0, 0.5);
+}
+.st-hero-badge-stars { font-size: 0.8rem; letter-spacing: 0.08em; }
+.st-hero-badge-value { font-size: 1.2rem; font-weight: 820; line-height: 1; }
+.st-hero-badge-label { font-size: 0.72rem; font-weight: 640; }
 
 @media (min-width: 700px) {
   .st-hero-actions { gap: 16px; }
@@ -297,53 +339,25 @@
   .st-hero-inner {
     display: grid;
     grid-template-columns: 1.05fr 0.95fr;
-    align-items: center;
+    align-items: start;
     gap: 48px;
   }
-  .st-hero--noart .st-hero-inner { grid-template-columns: 1fr; }
-  .st-hero--noart .st-hero-copy { max-width: 760px; }
+  .st-hero-form { margin-top: 0; }
 
-  .st-hero-art {
-    display: block;
-    position: relative;
-    aspect-ratio: 4 / 3;
-  }
-  .st-hero-frame {
+  /* The photograph as a quiet right-edge backdrop (desktop only — the custom
+     property is consumed nowhere else, so phones never request the file). */
+  .st-hero:not(.st-hero--noart)::after {
+    content: "";
     position: absolute;
-    inset: 0;
-    border-radius: var(--st-radius);
-    /* Consumed ONLY here, so a phone never fetches --st-art. */
+    inset: 0 0 0 50%;
     background-image: var(--st-art);
     background-size: cover;
     background-position: center;
-    box-shadow: 0 30px 60px -30px rgba(0, 0, 0, 0.6);
-  }
-  .st-hero-art::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    border-radius: var(--st-radius);
-    box-shadow: inset 0 0 0 1px var(--st-hairline-ink);
+    opacity: 0.14;
     pointer-events: none;
-    z-index: 1;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 55%);
+    mask-image: linear-gradient(90deg, transparent, #000 55%);
   }
-  .st-hero-badge {
-    position: absolute;
-    left: -14px;
-    bottom: 22px;
-    z-index: 2;
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-    padding: 14px 18px;
-    border-radius: var(--st-radius-sm);
-    background: var(--brand-accent);
-    color: #1a1205;
-    box-shadow: 0 16px 34px -16px rgba(0, 0, 0, 0.5);
-  }
-  .st-hero-badge-stars { font-size: 0.8rem; letter-spacing: 0.08em; }
-  .st-hero-badge-value { font-size: 1.35rem; font-weight: 820; line-height: 1; }
-  .st-hero-badge-label { font-size: 0.72rem; font-weight: 640; max-width: 15ch; }
 }
 
 /* ---------------------------------------------------------------- *
@@ -774,4 +788,13 @@
 
 .storm.storm-c .st-hero-inner {
   padding-block: clamp(64px, 10vw, 128px);
+}
+
+/* Hero form panel contrast: the white card must not inherit the hero's on-ink
+   text colour, and the panel's eyebrow needs the on-ink treatment. */
+.st-hero-form .st-form-card {
+  color: var(--st-text);
+}
+.st-hero-form-copy .st-eyebrow {
+  color: var(--st-onink);
 }

@@ -17,8 +17,16 @@ import type { ResolvedClient } from '../../../schema/resolve';
 import { DeferredImage } from '../../../components/DeferredImage';
 import { altFor, photoSlots, withAlt } from '../slots';
 
-export function Gallery({ client }: { client: ResolvedClient }) {
-  const { gallery, video } = photoSlots(client);
+/**
+ * CANONICAL STRUCTURE (2026-08-12): the rail ships as TWO photo bands around
+ * the process section. Band 1 = the video (if any) + the first half; band 2 =
+ * the rest; either collapses to nothing when empty.
+ */
+export function Gallery({ client, band }: { client: ResolvedClient; band?: 1 | 2 }) {
+  const { gallery: all, video: clientVideo } = photoSlots(client);
+  const split = Math.ceil(all.length / 2);
+  const gallery = band === 1 ? all.slice(0, split) : band === 2 ? all.slice(split) : all;
+  const video = band === 2 ? null : clientVideo;
   if (gallery.length === 0 && !video) return null;
 
   return (
