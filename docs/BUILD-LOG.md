@@ -978,3 +978,112 @@ This push also carries six prior-session commits that were committed locally but
 pushed (overnight T1–T5 + a Q1 Cloudflare Turnstile gate). Pushing syncs the private
 remote; it is NOT a deploy (the live site changes only via a direct-upload deploy in a
 deploy session). Old logo source files are left in place (rule 3: keep originals).
+
+---
+
+# DESIGN ELEVATION BUILD — 2026-08-12 (evening session)
+
+Six tasks: Turnstile verdict → bug sweep → reviews slider → -c hybrids →
+Lighthouse → deploy. Commits: `1e13390` (T2a leakage+typos), `2e39ee2` (T2b
+proofread), `8e41780` (T3 slider+reviews), `e859747` (T4 hybrids), plus this
+docs commit and the deploy.
+
+## Task 1 — Turnstile verdict: SAFE, deploy cleared
+
+Fail-open end to end while unconfigured. Server (`verifyTurnstile`, first
+check in `handleLead`): no `TURNSTILE_SECRET_KEY` in env → ok without any
+network call. Client: widget renders only if `/api/turnstile-config` returns
+a site key; no key (or a failed fetch) → no widget, submit not gated. With
+only the two `GHL_PIT_*` secrets set, **the lead form submits exactly as
+before the commit existed.** It enforces (403) only once the secret exists.
+RULE: set `TURNSTILE_SITE_KEY` and `TURNSTILE_SECRET_KEY` together, or
+neither — secret-without-site-key would 403 every submit. 42/42 tests.
+
+## Task 2 — bug sweep (the big find: the controls leaked their source client)
+
+- **Cross-client identity leak, live in production**: both extracted controls
+  hardcoded their source client's identity in copy defaults. TTT's live
+  trimming-a said "Choose J Valdez for Tree Trimming", claimed J VALDEZ's
+  insurance, and carried J Valdez's STREET ADDRESS in its footer; JV's and
+  blank-co's removal-a claimed to be Texas Tree Tops; TTT removal-a's faq.a7
+  carried J Valdez's service-city list (a sister-page paste defect in the
+  source itself). R4 never saw it — it grepped slugs/assets, not names.
+  FIX: `makeCopy` now interpolates `{{name}}/{{areaName}}/{{areaProse}}` from
+  the client record; brand/geo-bound defaults tokenized; source clients keep
+  byte-exact source strings via their OWN copyOverrides (TTT 5 keys, JV 11).
+  NEW `scripts/verify-r4-leakage.mjs` makes R4 permanent and widens it to
+  display names, phone digits and street addresses. PASS on 56 pages.
+- **Typos fixed under the owner mandate** ("a misspelling is not a tested
+  variable") — full before/after list in the session report; highlights:
+  removal-a "though August-31st"→"through August 31st", "Tree Cutting
+  ServiceBullet", doubled-verb button, singular FAQ heading, "no wild
+  surprise", comma splice, "$2Million", "safe and efficiently"; trimming-a
+  doubled space, stray ", —", unclosed paren, "start to finish..", duplicated
+  "patio work", wrong-service "tree removal" wording (P3-T2 approved class);
+  removal-b dropped word; trimming-b "come back"→"are cut back" (meaning
+  inversion); storm-a three straight apostrophes → curly.
+- **Sweeps clean**: all referenced assets exist on all pages; 22 pages × 4
+  widths (360/390/768/1280) — 0 horizontal overflow, 0 broken images; same
+  probe on the 8 new -c pages after T4.
+
+## Task 3 — reviews: 9 verbatim per client + one shared slider
+
+Read from each client's verified Google Business Profile in Chrome (sorted
+Newest), transcribed verbatim (typos, emoji, casing kept; names as First L.).
+TTT: profile `maps.google.com/?cid=4122891418016832820` — verified by
+triangulation (listing phone (682) 365-7478 appears 14× on
+texastreetopsllc.com and on TTT's own trucks; legal name matches). Two
+rating-only reviews skipped (nothing to quote). JV: profile
+`maps.google.com/?cid=10536913595490831481` — verified (listing phone
+(214) 985-7697 is the desktop-header number in the captured source page).
+Records carry rating per review + `reviewsSource` audit trail.
+**Owner GBP flags:** TTT's listing website points at texastreetops.com —
+a SUSPENDED hosting page; JV's points at jvaldeztreeservice.com (singular) —
+a dead domain. Both worth fixing in GBP for local SEO.
+Slider: shared `<ReviewsSlider/>`, CSS scroll-snap, no library, works fully
+prerendered, arrows post-hydration (hidden on touch), keyboard-focusable
+track, no autoplay, fixed card height + 6-line clamp (CLS 0), stars only
+from `review.rating`, inline-SVG Google G. Identical on all templates (logo
+precedent); trimming-b's Testimony pull quote untouched (its variable);
+storm gained a heading-less slider section in the SHARED StormPage.
+
+## Task 4 — the -c hybrids
+
+removal-c / trimming-c / storm-c: the control's copy, BYTE-IDENTICAL BY
+CONSTRUCTION (each -c re-exports its -a copy object; makeCopy inherits the
+-a per-client overrides), in the -b's design direction executed premium.
+Proven on built output: every -a text sentence >30 chars appears verbatim on
+its -c sibling (all clients); only the prerender <title> differs.
+Design notes per family are in each template's header comment. Registry/
+routing/prerender/lead-registry wired; JV excluded from storm-c; JV
+removal-c builds but keeps the not-for-ads flag (no removal photos);
+blank-co renders all three (R5). Build: 56 pages. Bundle: CSS 24.8KB gzip
+(+4.0), JS 119.8KB gzip (+4.7, off the critical path).
+
+## Task 5 — Lighthouse (APPLIED devtools throttling, mobile, GTM blocked)
+
+| page | Perf | LCP | CLS |
+|---|---:|---:|---:|
+| ttt/removal-c | 99* | 1.7s | 0 |
+| ttt/trimming-c | 99 | 1.7s | 0 |
+| ttt/storm-c | 99* | 1.7s | 0 |
+| jv/removal-c | 99 | 1.7s | 0 |
+| jv/trimming-c | 99 | 1.7s | 0 |
+| blank-co/removal-c | 99 | 1.6s | 0 |
+| blank-co/trimming-c | 99 | 1.6s | 0 |
+| blank-co/storm-c | 99 | 1.7s | 0 |
+| ttt/removal-a | 97–98 | 1.8–2.0s | 0 |
+| ttt/removal-b | 98* | 1.8s | 0 |
+| jv/trimming-a | 98 | 1.9s | 0 |
+| jv/trimming-b | 99 | 1.7s | 0 |
+| blank-co/storm-a | 99 | 1.7s | 0 |
+| ttt/storm-a (slider regression check) | 99 | 1.7s | 0 |
+
+\* cold-first-run artifacts (95/2.4, 97/2.1, 93/2.6) did not reproduce on
+warm re-runs — 99/≤1.8 across two repeats each; the machine was also running
+this build session. LCP ≤2.0s and CLS 0 held on EVERY run including cold.
+The slider is perf-neutral (storm-a with slider = its historical 99/1.7).
+
+## Task 6 — deploy
+
+See the deploy record below (appended post-deploy).
