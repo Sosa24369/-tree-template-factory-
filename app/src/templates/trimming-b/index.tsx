@@ -114,28 +114,31 @@ export function TrimmingB({ client }: { client: ResolvedClient }) {
       <Header client={client} copy={copy} />
 
       <main>
-        {/* CANONICAL STRUCTURE (owner's directive, 2026-08-12): hero with both
-            capture paths → reviews slider → photo band 1 → what-is-included →
-            photo band 2 → the rest in their existing relative order → the
-            areas carousel last before the footer. Copy untouched. */}
+        {/* CANONICAL STRUCTURE v2 (owner's directive, 2026-08-13 — supersedes
+            v1): hero (+ brand lockup + bouncing call line + form panel) →
+            offer band (this page's own offer, near the top per the
+            badges-live-near-the-top rule) → the captioned reviews block →
+            results caption over a symmetrical grid → what-is-included blurb
+            with photo → areas drift → remaining sections → footer. This page
+            has no process section, so v2 position 7 collapses. Copy untouched. */}
 
-        {/* 1 — the premise, the call line, and now the form panel too */}
+        {/* 1 — the premise, the call line, the brand lockup, the form panel */}
         <Hero client={client} copy={copy} formPanel={<EstimatePanel client={client} copy={copy} />} />
-        {/* 2 — the reviews section (its own eyebrow/heading + the slider) */}
+        {/* 2 — the page's own offer, relocated to the top band */}
+        <Offer copy={copy} />
+        {/* 3 — reviews, ONE block (its own eyebrow/heading + the slider) */}
         <Reviews client={client} copy={copy} />
-        {/* 3 — photo band 1: the client's own trimming photographs */}
-        <Work client={client} copy={copy} band={1} />
-        {/* 4 — the three clearances every trim includes (what we handle) */}
-        <Standard copy={copy} />
-        {/* 5 — photo band 2: the rest */}
-        <Work client={client} copy={copy} band={2} />
-        {/* 6 — the rest, existing relative order */}
+        {/* 4 — results: the work heading captions one symmetrical grid */}
+        <Work client={client} copy={copy} />
+        {/* 5 — what every trim includes, two-column with a client photo */}
+        <Standard client={client} copy={copy} />
+        {/* 6 — service areas, mid-page */}
+        <Areas client={client} copy={copy} />
+        {/* 7 — (no process section on this page) */}
+        {/* 8 — remaining sections in their existing relative order */}
         <Testimony client={client} copy={copy} />
         <Restraint copy={copy} />
-        <Offer copy={copy} />
         <Faq copy={copy} />
-        {/* 7 — service-areas carousel, last before the footer */}
-        <Areas client={client} copy={copy} />
       </main>
 
       {/* 11 — footer */}

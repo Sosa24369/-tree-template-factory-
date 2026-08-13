@@ -37,7 +37,6 @@
 import { useEffect, type CSSProperties } from 'react';
 import { makeCopy, type ResolvedClient } from '../../schema/resolve';
 import { trimmingACopy } from './copy.defaults';
-import { ReviewsSlider } from '../../components/ReviewsSlider';
 import { PhoneLink } from '../../components/PhoneLink';
 
 import { Header } from './sections/Header';
@@ -102,36 +101,32 @@ export function TrimmingA({ client }: { client: ResolvedClient }) {
       <Header client={client} copy={copy} />
 
       <main>
-        {/* CANONICAL STRUCTURE (owner's directive, 2026-08-12): hero with both
-            capture paths → reviews slider → photo band 1 → process → photo
-            band 2 → the rest in their existing relative order → the areas
-            marquee last before the footer. Copy untouched; sections moved. */}
+        {/* CANONICAL STRUCTURE v2 (owner's directive, 2026-08-13 — supersedes
+            v1): hero (+ brand lockup + bouncing call CTA) → offer band → the
+            captioned reviews block → results caption over a symmetrical grid
+            → services blurb with photo → areas drift (mid-page) → process →
+            remaining sections → footer. Copy untouched. */}
 
-        {/* 1 — rating badge, offer headline, lead form + click-to-call */}
+        {/* 1 — hero: brand lockup, badge, 10%-off headline, form + call */}
         <Hero client={client} copy={copy} />
-        {/* 2 — Google reviews slider (nothing without reviews on the record, R5) */}
-        {(client.reviews ?? []).some((r) => (r?.body ?? '').trim()) && (
-          <section className="ta-reviews-band">
-            <ReviewsSlider client={client} />
-          </section>
-        )}
-        {/* 3 — photo band 1: before/afters, first half (+ the client video) */}
-        <Gallery client={client} band={1} />
-        {/* 4 — how it works, four steps */}
-        <Process copy={copy} />
-        {/* 5 — photo band 2: the rest */}
-        <Gallery client={client} band={2} />
-        {/* 6 — the rest, existing relative order */}
+        {/* 2 — offer band: the page's existing offer + trust badges */}
         <Benefits client={client} copy={copy} />
+        {/* 3 — reviews, ONE block captioned by the page's own trust line */}
         <WhyChoose client={client} copy={copy} />
+        {/* 4 — results: "Done Clean, Done Right" captions its grid */}
         <DoneRight client={client} copy={copy} />
+        {/* 5 — services blurb, two-column with a client photo on the right */}
+        <Longform client={client} copy={copy} />
+        {/* 6 — areas we serve, mid-page between the photo work and process */}
+        <Areas client={client} copy={copy} />
+        {/* 7 — how it works, four steps (captioned by its own heading) */}
+        <Process copy={copy} />
+        {/* 8 — remaining sections in their existing relative order */}
+        <Gallery client={client} />
         <Services client={client} copy={copy} />
-        <Longform copy={copy} />
         <MidCta client={client} copy={copy} />
         <Faq copy={copy} />
         <FinalCta copy={copy} />
-        {/* 7 — areas we serve marquee, last before the footer */}
-        <Areas client={client} copy={copy} />
       </main>
 
       {/* S13 — footer */}

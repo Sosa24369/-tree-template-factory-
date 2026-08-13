@@ -14,16 +14,27 @@
  * disappears if every item is empty (R5).
  */
 
+import type { ResolvedClient } from '../../../schema/resolve';
 import { SafeText } from '../../../components/Safe';
-import { Display, Eyebrow, Section, type Copy } from './shared';
+import { DeferredImage } from '../../../components/DeferredImage';
+import { partitionMedia, photosFor } from '../../../lib/photos';
+import { altFor, Display, Eyebrow, Section, type Copy } from './shared';
 
-export function Standard({ copy }: { copy: Copy }) {
+/**
+ * Premium Reorder v2 (2026-08-13): the what-is-included blurb is two-column on
+ * desktop with a photograph of the CLIENT'S OWN trimming work on the right,
+ * stacked below on mobile. No photo on the record → type-only layout (R5).
+ */
+export function Standard({ client, copy }: { client: ResolvedClient; copy: Copy }) {
   const items = [1, 2, 3]
     .map((n) => ({ h: copy(`standard.item${n}.h`), body: copy(`standard.item${n}.body`) }))
     .filter((item) => item.h.trim() || item.body.trim());
 
   const heading = `${copy('standard.h2a')}${copy('standard.h2b')}`.trim();
   if (!heading && items.length === 0) return null;
+
+  const { stills } = partitionMedia(photosFor(client, 'trimming'));
+  const photo = stills[1] ?? stills[0] ?? null;
 
   return (
     <Section tone="paper" className="tb-standard">
@@ -33,6 +44,7 @@ export function Standard({ copy }: { copy: Copy }) {
         <SafeText as="p" className="tb-body tb-measure" value={copy('standard.body')} />
       </div>
 
+      <div className="tb-standard-body">
       {items.length > 0 && (
         <ol className="tb-ledger">
           {items.map((item, i) => (
@@ -50,6 +62,18 @@ export function Standard({ copy }: { copy: Copy }) {
           ))}
         </ol>
       )}
+
+      {photo && (
+        <div className="tb-standard-photo">
+          <DeferredImage
+            photo={photo.alt?.trim() ? photo : { ...photo, alt: altFor(client.name, 2) }}
+            className="tb-standard-photo-img"
+            wrapperClassName="tb-standard-photo-box"
+            sizes="(max-width: 979px) 92vw, 38vw"
+          />
+        </div>
+      )}
+      </div>
 
       <SafeText as="p" className="tb-note tb-measure" value={copy('standard.close')} />
     </Section>

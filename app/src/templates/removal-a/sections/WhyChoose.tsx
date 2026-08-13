@@ -11,6 +11,7 @@
 
 import type { ResolvedClient } from '../../../schema/resolve';
 import { SafeText } from '../../../components/Safe';
+import { ReviewsSlider } from '../../../components/ReviewsSlider';
 import { CallCta, Section, SplitHeading, type Copy } from './shared';
 
 export function WhyChoose({ client, copy }: { client: ResolvedClient; copy: Copy }) {
@@ -26,9 +27,11 @@ export function WhyChoose({ client, copy }: { client: ResolvedClient; copy: Copy
         <SafeText as="p" className="ra-body ra-lede" value={copy('why.body')} />
       </div>
 
-      {/* CANONICAL STRUCTURE (2026-08-12): the reviews slider moved to
-          position 2, directly under the hero (see index.tsx). This section
-          keeps its heading, service-area prose and call CTA. */}
+      {/* Premium Reorder v2 (2026-08-13): the section's own trust line — the
+          "Why … Homeowners Choose …" heading and prose above — is the CAPTION
+          of the reviews; heading, prose, slider and CTA are ONE block. */}
+      <ReviewsSlider client={client} />
+
       <div className="ra-cta-row">
         <CallCta client={client} copy={copy} placement="reviews" tone="solid" />
       </div>

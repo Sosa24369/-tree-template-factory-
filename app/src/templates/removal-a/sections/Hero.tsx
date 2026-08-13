@@ -17,6 +17,7 @@ import { LeadForm } from '../../../components/LeadForm';
 import { altFor, withAlt } from '../assets';
 import { partitionMedia, photosFor } from '../../../lib/photos';
 import { preloadLcpImage } from '../../../lib/preloadLcp';
+import { HeroBrand } from '../../../components/HeroBrand';
 import { CallCta, SplitHeading, type Copy } from './shared';
 
 export const FORM_ANCHOR = 'ra-estimate-form';
@@ -37,6 +38,11 @@ export function Hero({ client, copy }: { client: ResolvedClient; copy: Copy }) {
         <SafeImage photo={heroStills[0] ?? null} className="ra-hero-plate-img" loading="eager" fetchPriority="high" sizes="(max-width: 767px) 100vw, 55vw" />
       </div>
 
+      <div className="ra-container">
+        {/* Premium Reorder v2: the client's logo + name, larger and centered
+            in the hero (record data; wordmark when no logo). */}
+        <HeroBrand client={client} className="ra-hbrand" />
+      </div>
       <div className="ra-container ra-hero-grid">
         <div className="ra-hero-copy">
           {(ratingLetters.length > 0 || copy('ratingBadge.rating')) && (
@@ -66,7 +72,10 @@ export function Hero({ client, copy }: { client: ResolvedClient; copy: Copy }) {
               the form card is beside/below; this is the prominent click-to-call,
               built from the page's existing shared-CTA copy keys. */}
           <div className="ra-hero-call">
-            <CallCta client={client} copy={copy} placement="hero" tone="solid" />
+            {/* v2: gentle periodic bounce on the primary tap-to-call. */}
+            <span className="cta-bounce ra-bounce">
+              <CallCta client={client} copy={copy} placement="hero" tone="solid" />
+            </span>
           </div>
         </div>
 

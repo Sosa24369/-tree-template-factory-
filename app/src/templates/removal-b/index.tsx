@@ -47,8 +47,6 @@
 import { useEffect, type CSSProperties } from 'react';
 import { makeCopy, type ResolvedClient } from '../../schema/resolve';
 import { removalBCopy } from './copy.defaults';
-import { ReviewsSlider } from '../../components/ReviewsSlider';
-
 import { Header } from './sections/Header';
 import { Hero } from './sections/Hero';
 import { TrustBar } from './sections/TrustBar';
@@ -114,34 +112,30 @@ export function RemovalB({ client }: { client: ResolvedClient }) {
       <Header client={client} copy={copy} />
 
       <main>
-        {/* CANONICAL STRUCTURE (owner's directive, 2026-08-12): hero with both
-            capture paths → reviews slider → photo band 1 → process → photo
-            band 2 → the rest in their existing relative order → the areas
-            carousel last before the footer. Copy untouched; sections moved. */}
+        {/* CANONICAL STRUCTURE v2 (owner's directive, 2026-08-13 — supersedes
+            v1): hero (+ brand lockup + bouncing call CTA + estimate panel) →
+            badge band → the captioned reviews block → results caption over a
+            symmetrical grid → services blurb with photo → areas drift →
+            process → remaining sections → footer. Copy untouched. */}
 
         {/* 1 — risk-led hero + the estimate panel (offer copy + form) */}
         <Hero client={client} copy={copy} formPanel={<EstimatePanel client={client} copy={copy} />} />
-        {/* 2 — Google reviews slider (nothing without reviews, R5) */}
-        {(client.reviews ?? []).some((r) => (r?.body ?? '').trim()) && (
-          <section className="rb-reviews-band">
-            <ReviewsSlider client={client} />
-          </section>
-        )}
-        {/* 3 — photo band 1: recent removals, first half (+ the client clip) */}
-        <Work client={client} copy={copy} band={1} />
-        {/* 4 — four steps on one timeline */}
-        <Process copy={copy} />
-        {/* 5 — photo band 2: the rest of the mosaic */}
-        <Work client={client} copy={copy} band={2} />
-        {/* 6 — the rest, existing relative order */}
+        {/* 2 — badge band: the credential ticker, near the top */}
         <TrustBar copy={copy} />
-        <Signals copy={copy} />
+        {/* 3 — reviews, ONE block captioned by the proof heading + stat band */}
         <Proof client={client} copy={copy} />
-        <Scope copy={copy} />
+        {/* 4 — results: the work heading captions one symmetrical grid */}
+        <Work client={client} copy={copy} />
+        {/* 5 — services blurb, two-column with a client photo on the right */}
+        <Scope client={client} copy={copy} />
+        {/* 6 — service areas, mid-page between the photo work and process */}
+        <Areas client={client} copy={copy} />
+        {/* 7 — four steps on one timeline (captioned by its own heading) */}
+        <Process copy={copy} />
+        {/* 8 — remaining sections in their existing relative order */}
+        <Signals copy={copy} />
         <Faq copy={copy} />
         <FinalCta client={client} copy={copy} />
-        {/* 7 — service-areas carousel, last before the footer */}
-        <Areas client={client} copy={copy} />
       </main>
 
       {/* S12 */}

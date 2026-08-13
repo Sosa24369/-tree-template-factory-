@@ -27,6 +27,7 @@ import { SafeText } from '../../../components/Safe';
 import { DeferredImage } from '../../../components/DeferredImage';
 import { LeadForm } from '../../../components/LeadForm';
 import { FORM_ANCHOR, altFor, photoSlots, withAlt } from '../slots';
+import { HeroBrand } from '../../../components/HeroBrand';
 import { CallRow, SplitHeading, type Copy } from './shared';
 
 export function Hero({ client, copy }: { client: ResolvedClient; copy: Copy }) {
@@ -36,6 +37,11 @@ export function Hero({ client, copy }: { client: ResolvedClient; copy: Copy }) {
 
   return (
     <section className="ta-hero">
+      <div className="ta-container">
+        {/* Premium Reorder v2: the client's logo + name, larger and centered
+            in the hero (record data; wordmark when no logo). */}
+        <HeroBrand client={client} className="ta-hbrand" />
+      </div>
       <div className="ta-container ta-hero-grid">
         <div className="ta-hero-copy">
           {hasBadge ? (
@@ -61,11 +67,12 @@ export function Hero({ client, copy }: { client: ResolvedClient; copy: Copy }) {
           <SafeText as="p" className="ta-hero-sub" value={copy('hero.h2')} />
           <SafeText as="p" className="ta-hero-body" value={copy('hero.body')} />
 
-          {/* CANONICAL STRUCTURE (2026-08-12): both capture paths in the hero —
-              the form card is the other one; this is the prominent
-              click-to-call, from the page's existing shared-CTA copy keys. */}
+          {/* Both capture paths in the hero; v2 adds the gentle periodic
+              bounce on this primary tap-to-call. */}
           <div className="ta-hero-call">
-            <CallRow client={client} copy={copy} placement="hero" tone="onDeep" />
+            <span className="cta-bounce ta-bounce">
+              <CallRow client={client} copy={copy} placement="hero" tone="onDeep" />
+            </span>
           </div>
         </div>
 

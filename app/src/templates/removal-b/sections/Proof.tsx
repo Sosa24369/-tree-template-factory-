@@ -18,6 +18,7 @@
 
 import type { ResolvedClient } from '../../../schema/resolve';
 import { SafeText } from '../../../components/Safe';
+import { ReviewsSlider } from '../../../components/ReviewsSlider';
 import { Eyebrow, Heading, Section, type Copy } from './shared';
 
 const STATS = [1, 2, 3];
@@ -53,9 +54,10 @@ export function Proof({ client, copy }: { client: ResolvedClient; copy: Copy }) 
         </ul>
       )}
 
-      {/* CANONICAL STRUCTURE (2026-08-12): the reviews slider moved to
-          position 2, directly under the hero (see index.tsx). This section
-          keeps its heading copy and the stat band. */}
+      {/* Premium Reorder v2 (2026-08-13): the section's own trust line — the
+          proof eyebrow/heading/lede and the stat band — CAPTIONS the reviews;
+          all of it is ONE block again. */}
+      <ReviewsSlider client={client} />
     </Section>
   );
 }

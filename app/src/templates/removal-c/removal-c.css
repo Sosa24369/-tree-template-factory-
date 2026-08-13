@@ -760,3 +760,42 @@
     transition: none !important;
   }
 }
+
+/* ---------------------------------------------------------------- *
+ * Premium Reorder v2 (2026-08-13)
+ * ---------------------------------------------------------------- */
+
+.removal-c .rc-hbrand {
+  padding-top: clamp(24px, 4vw, 40px);
+  position: relative;
+  z-index: 1;
+  color: #ffffff;
+}
+
+.removal-c .rc-bounce {
+  display: inline-block;
+}
+
+/* Services blurb: text left, client photo right at desktop. */
+.removal-c .rc-longform-photo-box {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-radius: 14px;
+}
+.removal-c .rc-longform-photo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.removal-c .rc-longform-photo { margin-top: 22px; }
+@media (min-width: 980px) {
+  .removal-c .rc-longform-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(320px, 0.85fr);
+    gap: 44px;
+    align-items: start;
+  }
+  .removal-c .rc-longform-photo { margin-top: 0; }
+}

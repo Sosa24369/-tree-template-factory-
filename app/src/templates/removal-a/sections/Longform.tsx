@@ -8,15 +8,28 @@
  * a measured column, a rule, and a card of requests.
  */
 
+import type { ResolvedClient } from '../../../schema/resolve';
 import { SafeText } from '../../../components/Safe';
+import { DeferredImage } from '../../../components/DeferredImage';
+import { altFor, withAlt } from '../assets';
+import { partitionMedia, photosFor } from '../../../lib/photos';
 import { CheckIcon, Section, SplitHeading, type Copy } from './shared';
 
-export function Longform({ copy }: { copy: Copy }) {
+/**
+ * Premium Reorder v2 (2026-08-13): the services blurb is two-column on desktop
+ * with a photograph of the CLIENT'S OWN work on the right, stacked below on
+ * mobile. The photo is the second removal still (the hero plate leads with the
+ * first); a client with no photography gets the type-only layout back.
+ */
+export function Longform({ client, copy }: { client: ResolvedClient; copy: Copy }) {
   const requests: string[] = [];
   for (let n = 1; n <= 7; n += 1) {
     const text = copy(`longform.request${n}`);
     if (text.trim()) requests.push(text);
   }
+
+  const { stills } = partitionMedia(photosFor(client, 'removal'));
+  const photo = stills[1] ?? stills[0] ?? null;
 
   return (
     <Section tone="light" className="ra-longform">
@@ -28,6 +41,17 @@ export function Longform({ copy }: { copy: Copy }) {
           <SafeText as="p" className="ra-body" value={copy('longform.p1')} />
           <SafeText as="p" className="ra-body" value={copy('longform.p2')} />
         </div>
+
+        {photo && (
+          <div className="ra-longform-photo">
+            <DeferredImage
+              photo={photo.alt ? photo : withAlt(photo, altFor(client.name, 2))}
+              className="ra-longform-photo-img"
+              wrapperClassName="ra-longform-photo-box"
+              sizes="(max-width: 979px) 92vw, 38vw"
+            />
+          </div>
+        )}
 
         {requests.length > 0 && (
           <aside className="ra-requests">

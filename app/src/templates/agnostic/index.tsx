@@ -118,27 +118,28 @@ export function Agnostic({ client }: { client: ResolvedClient }) {
       <Header client={client} copy={copy} />
 
       <main>
-        {/* CANONICAL STRUCTURE (owner's directive, 2026-08-12): hero with both
-            capture paths → reviews slider → photo band 1 → services → photo
-            band 2 → the rest in their existing relative order → the areas
-            carousel last before the footer. Placeholders untouched. */}
+        {/* CANONICAL STRUCTURE v2 (owner's directive, 2026-08-13 — supersedes
+            v1): hero (banner + form + bouncing call link) → trust band → the
+            captioned reviews block → results caption over a symmetrical grid
+            → services → areas drift → remaining → footer. This template's
+            services are operator-filled placeholder slots, so the blurb-photo
+            treatment does not apply here (flagged). Placeholders untouched. */}
 
-        {/* 1 — brand-colour band: headline, proof points, form + call link */}
+        {/* 1 — banner, headline, proof points, form + call link */}
         <Hero client={client} copy={copy} />
-        {/* 2 — the client's own quotations, as the shared slider */}
-        <Reviews client={client} copy={copy} />
-        {/* 3 — photo band 1: the client's own photographs, deferred */}
-        <Gallery client={client} copy={copy} band={1} />
-        {/* 4 — what this business does */}
-        <Services copy={copy} />
-        {/* 5 — photo band 2: the rest */}
-        <Gallery client={client} copy={copy} band={2} />
-        {/* 6 — the rest, existing relative order */}
+        {/* 2 — trust band, near the top */}
         <Trust copy={copy} />
+        {/* 3 — reviews, ONE block (its own SectionHead + the slider) */}
+        <Reviews client={client} copy={copy} />
+        {/* 4 — results: the gallery heading captions one symmetrical grid */}
+        <Gallery client={client} copy={copy} />
+        {/* 5 — what this business does */}
+        <Services copy={copy} />
+        {/* 6 — service areas, mid-page */}
+        <Areas client={client} copy={copy} />
+        {/* 7/8 — remaining sections, existing relative order */}
         <Faq copy={copy} />
         <FinalCta client={client} copy={copy} />
-        {/* 7 — service-areas carousel, last before the footer */}
-        <Areas client={client} copy={copy} />
       </main>
 
       <Footer client={client} copy={copy} />

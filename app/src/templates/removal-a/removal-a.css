@@ -1365,3 +1365,72 @@
   .removal-a .ra-sticky { display: none; }
   .removal-a main { padding-bottom: 0; }
 }
+
+/* ---------------------------------------------------------------- *
+ * Premium Reorder v2 (2026-08-13)
+ * ---------------------------------------------------------------- */
+
+.removal-a .ra-hbrand {
+  padding-top: clamp(24px, 4vw, 40px);
+  position: relative;
+  z-index: 1;
+  color: #ffffff;
+}
+
+.removal-a .ra-bounce {
+  display: inline-block;
+}
+
+/* Results grid — symmetrical: uniform aspect ratio, aligned edges. */
+.removal-a .ra-grid-mosaic {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(2, 1fr);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.removal-a .ra-grid-mosaic li {
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-radius: 12px;
+}
+.removal-a .ra-grid-mosaic .ra-mosaic-img,
+.removal-a .ra-grid-mosaic img,
+.removal-a .ra-grid-mosaic span {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.removal-a .ra-grid-mosaic img {
+  object-fit: cover;
+}
+@media (min-width: 768px) {
+  .removal-a .ra-grid-mosaic { grid-template-columns: repeat(3, 1fr); }
+}
+
+/* Services blurb photo (right column at desktop, stacked below on mobile). */
+.removal-a .ra-longform-photo-box {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-radius: 14px;
+}
+.removal-a .ra-longform-photo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+@media (min-width: 980px) {
+  /* main text left · photo right · requests card follows full-width */
+  .removal-a .ra-longform-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(320px, 0.85fr);
+    gap: 44px;
+    align-items: start;
+  }
+  .removal-a .ra-requests {
+    grid-column: 1 / -1;
+  }
+}

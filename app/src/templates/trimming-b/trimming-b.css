@@ -1112,3 +1112,68 @@
 .trimming-b .tb-hero-form .tb-display-line--accent {
   color: color-mix(in srgb, var(--brand-accent) 78%, #ffffff);
 }
+
+/* ---------------------------------------------------------------- *
+ * Premium Reorder v2 (2026-08-13)
+ * ---------------------------------------------------------------- */
+
+.trimming-b .tb-hbrand {
+  margin-bottom: 26px;
+}
+
+.trimming-b .tb-bounce {
+  display: inline-block;
+}
+
+/* Results grid — symmetrical: the masonry columns become a uniform grid. */
+.trimming-b .tb-work-grid {
+  column-count: unset;
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(2, 1fr);
+}
+.trimming-b .tb-work-fig {
+  margin: 0;
+}
+.trimming-b .tb-work-box {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-radius: 10px;
+}
+.trimming-b .tb-work-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+@media (min-width: 768px) {
+  .trimming-b .tb-work-grid {
+    column-count: unset;
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* What-is-included: ledger left, client photo right at desktop. */
+.trimming-b .tb-standard-photo-box {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-radius: 12px;
+}
+.trimming-b .tb-standard-photo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.trimming-b .tb-standard-photo { margin-top: 22px; }
+@media (min-width: 980px) {
+  .trimming-b .tb-standard-body {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(320px, 0.85fr);
+    gap: 44px;
+    align-items: start;
+  }
+  .trimming-b .tb-standard-photo { margin-top: 0; }
+}

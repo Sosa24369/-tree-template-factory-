@@ -11,7 +11,12 @@
  */
 
 .sac {
-  overflow: hidden;
+  /* v2: user-scrollable as well as drifting — the strip scrolls on its own
+     axis while the transform drift runs; pausing (hover/focus/touch) leaves
+     an ordinary scrollable row. Scrollbar hidden; one fixed-height row. */
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
   padding-block: 6px;
   /* soft fade at both edges so pills enter/leave gracefully */
   -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
@@ -83,4 +88,8 @@
   .sac-row[aria-hidden='true'] {
     display: none;
   }
+}
+
+.sac::-webkit-scrollbar {
+  display: none;
 }

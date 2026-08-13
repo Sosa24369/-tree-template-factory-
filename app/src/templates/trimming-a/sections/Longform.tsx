@@ -17,13 +17,25 @@
  * so this block is set as type instead — a measured column and a card of requests.
  */
 
+import type { ResolvedClient } from '../../../schema/resolve';
 import { SafeText } from '../../../components/Safe';
+import { DeferredImage } from '../../../components/DeferredImage';
+import { altFor, photoSlots, withAlt } from '../slots';
 import { CheckIcon, Rule, Section, SplitHeading, type Copy } from './shared';
 
 const REQUESTS = [1, 2, 3, 4, 5, 6, 7];
 
-export function Longform({ copy }: { copy: Copy }) {
+/**
+ * Premium Reorder v2 (2026-08-13): the services blurb is two-column on desktop
+ * with a photograph of the CLIENT'S OWN work on the right (stacked below on
+ * mobile) — the source always carried a photo in this block, and now that the
+ * slot exists it comes from the client record like every other image (R4).
+ * No photo on the record → the type-only layout returns (R5).
+ */
+export function Longform({ client, copy }: { client: ResolvedClient; copy: Copy }) {
   const requests = REQUESTS.map((n) => copy(`longform.request${n}`)).filter((text) => text.trim());
+  const { grid } = photoSlots(client);
+  const photo = grid[1] ?? grid[0] ?? null;
 
   return (
     <Section tone="canvas" className="ta-longform">
@@ -37,6 +49,17 @@ export function Longform({ copy }: { copy: Copy }) {
           <SafeText as="p" className="ta-body" value={copy('longform.spacer')} />
           <SafeText as="p" className="ta-body" value={copy('longform.p2')} />
         </div>
+
+        {photo && (
+          <div className="ta-longform-photo">
+            <DeferredImage
+              photo={photo.alt ? photo : withAlt(photo, altFor(client.name, 2))}
+              className="ta-longform-photo-img"
+              wrapperClassName="ta-longform-photo-box"
+              sizes="(max-width: 979px) 92vw, 38vw"
+            />
+          </div>
+        )}
 
         {requests.length > 0 && (
           <aside className="ta-requests">

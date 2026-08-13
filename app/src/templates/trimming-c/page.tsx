@@ -13,6 +13,7 @@ import type { CSSProperties } from 'react';
 import type { ResolvedClient } from '../../schema/resolve';
 import type { PhotoSet } from '../../schema/client';
 import { SafeLogo, SafeText } from '../../components/Safe';
+import { HeroBrand } from '../../components/HeroBrand';
 import { PhoneLink } from '../../components/PhoneLink';
 import { LeadForm } from '../../components/LeadForm';
 import { DeferredImage } from '../../components/DeferredImage';
@@ -107,6 +108,11 @@ export function TrimmingCPage({
       <main>
         {/* ---- hero: the control's offer H1 in the variant's serif calm ---- */}
         <section className="tc-hero">
+          <div className="tc-container">
+            {/* Premium Reorder v2: the client's logo + name, larger and
+                centered in the hero. */}
+            <HeroBrand client={client} className="tc-hbrand" />
+          </div>
           <div className="tc-container tc-hero-grid">
             <div className="tc-hero-copy">
               <p className="tc-badge">
@@ -129,10 +135,13 @@ export function TrimmingCPage({
               <SafeText as="p" className="tc-hero-body" value={copy('hero.body')} />
 
               <div className="tc-hero-ctas">
-                <PhoneLink client={client} placement="hero" className="tc-call tc-call--solid" subLabel={copy('cta.callSubLabel')}>
-                  {copy('cta.callLabelPrefix')}
-                  {client.phoneDisplay}
-                </PhoneLink>
+                {/* v2: gentle periodic bounce on the primary tap-to-call. */}
+                <span className="cta-bounce tc-bounce">
+                  <PhoneLink client={client} placement="hero" className="tc-call tc-call--solid" subLabel={copy('cta.callSubLabel')}>
+                    {copy('cta.callLabelPrefix')}
+                    {client.phoneDisplay}
+                  </PhoneLink>
+                </span>
               </div>
 
               {/* Trust strip — record facts + one verbatim control line. */}
@@ -174,34 +183,105 @@ export function TrimmingCPage({
           </div>
         </section>
 
-        {/* CANONICAL STRUCTURE (owner's directive, 2026-08-12): slider under
-            the hero, photo bands around the process, areas carousel last. */}
+        {/* CANONICAL STRUCTURE v2 (owner's directive, 2026-08-13 — supersedes
+            v1): offer band → captioned reviews block → results caption over
+            one symmetrical grid → services blurb with photo → areas drift →
+            process → remaining → footer. Copy untouched. */}
 
-        {/* 2 — Google reviews slider (nothing without reviews, R5) */}
-        {(client.reviews ?? []).some((r) => (r?.body ?? '').trim()) && (
-          <section className="tc-section tc-reviews-band">
-            <div className="tc-container">
-              <ReviewsSlider client={client} />
+        {/* 2 — offer band: the control's own offer + trust badges */}
+        <section className="tc-section tc-benefits">
+          <div className="tc-container">
+            <ul className="tc-benefit-ledger">
+              {[1, 2, 3, 4]
+                .map((n) => copy(`benefits.item${n}`))
+                .filter((b) => b.trim())
+                .map((b, i) => (
+                  <li className="tc-benefit" key={i}>
+                    {b}
+                  </li>
+                ))}
+            </ul>
+          </div>
+        </section>
+
+        {/* 3 — reviews, ONE block captioned by the control's own trust line */}
+        <section className="tc-section tc-section--deep tc-why">
+          <div className="tc-container">
+            <Split as="h2" className="tc-h2" a={copy('why.h1a')} b={copy('why.h1b')} stacked />
+            <SafeText as="p" className="tc-lede tc-lede--onink" value={copy('why.body')} />
+            <ReviewsSlider client={client} />
+            <div className="tc-cta-row">
+              <PhoneLink client={client} placement="reviews" className="tc-call tc-call--onink" subLabel={copy('cta.callSubLabel')}>
+                {copy('cta.callLabelPrefix')}
+                {client.phoneDisplay}
+              </PhoneLink>
             </div>
-          </section>
-        )}
+          </div>
+        </section>
 
-        {/* 3 — photo band 1: before/after proof, first half */}
-        {gallery.slice(0, Math.ceil(gallery.length / 2)).length > 0 && (
-          <section className="tc-section tc-work">
+        {/* 4 — results: "Done Clean, Done Right" captions ONE symmetrical
+            grid of the client's own trimming work */}
+        <section className="tc-section tc-doneright">
+          <div className="tc-container tc-measure">
+            <Split as="h2" className="tc-h2" a={copy('doneRight.h1a')} b={copy('doneRight.h1b')} />
+            <SafeText as="p" className="tc-body" value={copy('doneRight.body')} />
+          </div>
+          {gallery.length > 0 && (
             <div className="tc-container">
               <ul className="tc-work-grid">
-                {gallery.slice(0, Math.ceil(gallery.length / 2)).map((photo, i) => (
+                {gallery.map((photo, i) => (
                   <li key={i} className="tc-work-cell">
                     <DeferredImage photo={photo} wrapperClassName="tc-work-frame" className="tc-work-img" />
                   </li>
                 ))}
               </ul>
             </div>
+          )}
+        </section>
+
+        {/* 5 — services blurb, two-column with a client photo on the right */}
+        <section className="tc-section tc-longform">
+          <div className="tc-container tc-longform-grid">
+            <div className="tc-longform-main tc-measure">
+              <SafeText as="p" className="tc-ribbon" value={copy('longform.badge')} />
+              <Split as="h2" className="tc-h2" a={copy('longform.h1a')} b={copy('longform.h1b')} />
+              <SafeText as="p" className="tc-lede" value={copy('longform.lede')} />
+              <SafeText as="p" className="tc-body" value={copy('longform.p1')} />
+              <SafeText as="p" className="tc-body" value={copy('longform.p2')} />
+              <Split as="h2" className="tc-h3" a={copy('longform.requestsH1a')} b={copy('longform.requestsH1b')} />
+              {requests.length > 0 && (
+                <ul className="tc-request-list">
+                  {requests.map((r, i) => (
+                    <li key={i}>{r}</li>
+                  ))}
+                </ul>
+              )}
+            </div>
+            {gallery[1] && (
+              <div className="tc-longform-photo">
+                <DeferredImage
+                  photo={gallery[1]}
+                  wrapperClassName="tc-longform-photo-box"
+                  className="tc-longform-photo-img"
+                  sizes="(max-width: 979px) 92vw, 38vw"
+                />
+              </div>
+            )}
+          </div>
+        </section>
+
+        {/* 6 — service areas, mid-page between the photo work and process */}
+        {cities.length > 0 && (
+          <section className="tc-section tc-areas">
+            <div className="tc-container">
+              <Split as="h2" className="tc-h2" a={copy('areas.h1a')} b={copy('areas.h1b')} />
+              <SafeText as="p" className="tc-lede" value={copy('areas.h2')} />
+            </div>
+            <ServiceAreasCarousel client={client} />
           </section>
         )}
 
-        {/* 4 — process */}
+        {/* 7 — process (captioned by its own heading) */}
         <section className="tc-section tc-section--tint tc-process">
           <div className="tc-container">
             <Split as="h2" className="tc-h2" a={copy('process.h1a')} b={copy('process.h1b')} stacked />
@@ -219,62 +299,7 @@ export function TrimmingCPage({
           </div>
         </section>
 
-        {/* 5 — photo band 2: the rest */}
-        {gallery.slice(Math.ceil(gallery.length / 2)).length > 0 && (
-          <section className="tc-section tc-work">
-            <div className="tc-container">
-              <ul className="tc-work-grid">
-                {gallery.slice(Math.ceil(gallery.length / 2)).map((photo, i) => (
-                  <li key={i} className="tc-work-cell">
-                    <DeferredImage photo={photo} wrapperClassName="tc-work-frame" className="tc-work-img" />
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </section>
-        )}
-
-        {/* 6 — the rest, existing relative order */}
-
-        {/* ---- benefits as a hairline ledger ---- */}
-        <section className="tc-section tc-benefits">
-          <div className="tc-container">
-            <ul className="tc-benefit-ledger">
-              {[1, 2, 3, 4]
-                .map((n) => copy(`benefits.item${n}`))
-                .filter((b) => b.trim())
-                .map((b, i) => (
-                  <li className="tc-benefit" key={i}>
-                    {b}
-                  </li>
-                ))}
-            </ul>
-          </div>
-        </section>
-
-        {/* ---- why choose us ---- */}
-        <section className="tc-section tc-section--deep tc-why">
-          <div className="tc-container">
-            <Split as="h2" className="tc-h2" a={copy('why.h1a')} b={copy('why.h1b')} stacked />
-            <SafeText as="p" className="tc-lede tc-lede--onink" value={copy('why.body')} />
-            <div className="tc-cta-row">
-              <PhoneLink client={client} placement="reviews" className="tc-call tc-call--onink" subLabel={copy('cta.callSubLabel')}>
-                {copy('cta.callLabelPrefix')}
-                {client.phoneDisplay}
-              </PhoneLink>
-            </div>
-          </div>
-        </section>
-
-        {/* ---- done right band ---- */}
-        <section className="tc-section tc-doneright">
-          <div className="tc-container tc-measure">
-            <Split as="h2" className="tc-h2" a={copy('doneRight.h1a')} b={copy('doneRight.h1b')} />
-            <SafeText as="p" className="tc-body" value={copy('doneRight.body')} />
-          </div>
-        </section>
-
-        {/* ---- services ---- */}
+        {/* 8 — remaining sections, existing relative order */}
         <section className="tc-section tc-section--tint tc-services">
           <div className="tc-container">
             <Split as="h2" className="tc-h2" a={copy('services.h1a')} b={copy('services.h1b')} />
@@ -285,25 +310,6 @@ export function TrimmingCPage({
                   <li className="tc-service" key={i}>
                     {s}
                   </li>
-                ))}
-              </ul>
-            )}
-          </div>
-        </section>
-
-        {/* ---- long-form ---- */}
-        <section className="tc-section tc-longform">
-          <div className="tc-container tc-measure">
-            <SafeText as="p" className="tc-ribbon" value={copy('longform.badge')} />
-            <Split as="h2" className="tc-h2" a={copy('longform.h1a')} b={copy('longform.h1b')} />
-            <SafeText as="p" className="tc-lede" value={copy('longform.lede')} />
-            <SafeText as="p" className="tc-body" value={copy('longform.p1')} />
-            <SafeText as="p" className="tc-body" value={copy('longform.p2')} />
-            <Split as="h2" className="tc-h3" a={copy('longform.requestsH1a')} b={copy('longform.requestsH1b')} />
-            {requests.length > 0 && (
-              <ul className="tc-request-list">
-                {requests.map((r, i) => (
-                  <li key={i}>{r}</li>
                 ))}
               </ul>
             )}
@@ -374,16 +380,6 @@ export function TrimmingCPage({
           </div>
         </section>
 
-        {/* 7 — service-areas carousel, last before the footer */}
-        {cities.length > 0 && (
-          <section className="tc-section tc-areas">
-            <div className="tc-container">
-              <Split as="h2" className="tc-h2" a={copy('areas.h1a')} b={copy('areas.h1b')} />
-              <SafeText as="p" className="tc-lede" value={copy('areas.h2')} />
-            </div>
-            <ServiceAreasCarousel client={client} />
-          </section>
-        )}
       </main>
 
       {/* ---- footer ---- */}

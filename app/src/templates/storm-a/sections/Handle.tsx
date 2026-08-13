@@ -9,14 +9,24 @@
  * and no items disappears, and the whole section hides when all three are empty (R5).
  */
 
+import type { ResolvedClient } from '../../../schema/resolve';
 import { SafeText } from '../../../components/Safe';
+import { DeferredImage } from '../../../components/DeferredImage';
+import { altFor, stormStills, withAlt } from '../support';
 import { CheckIcon, Eyebrow, FenceIcon, Heading, Section, TreeIcon, BroomIcon, type Copy } from './shared';
 
 const GROUP_ICONS = [TreeIcon, FenceIcon, BroomIcon] as const;
 const GROUPS = [1, 2, 3];
 const ITEMS = [1, 2, 3, 4, 5, 6];
 
-export function Handle({ copy }: { copy: Copy }) {
+/**
+ * Premium Reorder v2 (2026-08-13): the what-we-handle blurb becomes two-column
+ * on desktop with a photograph of the CLIENT'S OWN work on the right (stacked
+ * below on mobile). The photo is the last storm still — the results grid leads
+ * with the earlier ones — and a client with no storm photography simply gets
+ * the single-column layout back (R4/R5: never stock, never another client's).
+ */
+export function Handle({ client, copy }: { client: ResolvedClient; copy: Copy }) {
   const groups = GROUPS.map((g, gi) => ({
     Icon: GROUP_ICONS[gi],
     heading: copy(`handle.group${g}.h`),
@@ -24,6 +34,9 @@ export function Handle({ copy }: { copy: Copy }) {
   })).filter((group) => group.heading.trim() || group.items.length > 0);
 
   if (groups.length === 0) return null;
+
+  const all = stormStills(client);
+  const photo = all.length > 0 ? all[all.length - 1] : null;
 
   return (
     <Section tone="paper" className="st-handle">
@@ -33,7 +46,8 @@ export function Handle({ copy }: { copy: Copy }) {
         <SafeText as="p" className="st-lede" value={copy('handle.lede')} />
       </div>
 
-      <div className="st-handle-grid">
+      <div className="st-handle-body">
+        <div className="st-handle-grid">
         {groups.map(({ Icon, heading, items }, g) => (
           <div className="st-handle-panel" key={g}>
             <div className="st-handle-panel-head">
@@ -54,6 +68,18 @@ export function Handle({ copy }: { copy: Copy }) {
             </ul>
           </div>
         ))}
+        </div>
+
+        {photo && (
+          <div className="st-handle-photo">
+            <DeferredImage
+              photo={photo.alt ? photo : withAlt(photo, altFor(client.name, all.length))}
+              className="st-handle-photo-img"
+              wrapperClassName="st-handle-photo-box"
+              sizes="(max-width: 979px) 92vw, 40vw"
+            />
+          </div>
+        )}
       </div>
     </Section>
   );

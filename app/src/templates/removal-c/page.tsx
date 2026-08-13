@@ -14,6 +14,7 @@ import type { CSSProperties } from 'react';
 import type { ResolvedClient } from '../../schema/resolve';
 import type { PhotoSet } from '../../schema/client';
 import { SafeLogo, SafeText } from '../../components/Safe';
+import { HeroBrand } from '../../components/HeroBrand';
 import { PhoneLink } from '../../components/PhoneLink';
 import { LeadForm } from '../../components/LeadForm';
 import { DeferredImage } from '../../components/DeferredImage';
@@ -172,6 +173,11 @@ export function RemovalCPage({
       <main>
         {/* ---- hero: the control's offer H1 in the variant's ink voice ---- */}
         <section className="rc-hero" style={heroStyle}>
+          <div className="rc-container">
+            {/* Premium Reorder v2: the client's logo + name, larger and
+                centered in the hero. */}
+            <HeroBrand client={client} className="rc-hbrand" />
+          </div>
           <div className="rc-container rc-hero-grid">
             <div className="rc-hero-copy">
               <RatingBadge copy={copy} />
@@ -179,7 +185,10 @@ export function RemovalCPage({
               <SafeText as="p" className="rc-hero-sub" value={copy('hero.h2')} />
               <SafeText as="p" className="rc-hero-body" value={copy('hero.body')} />
               <div className="rc-hero-ctas">
-                <CallCta client={client} copy={copy} placement="hero" tone="onInk" />
+                {/* v2: gentle periodic bounce on the primary tap-to-call. */}
+                <span className="cta-bounce rc-bounce">
+                  <CallCta client={client} copy={copy} placement="hero" tone="onInk" />
+                </span>
                 <a className="rc-jump" href={`#${FORM_ANCHOR}`}>
                   <SafeText as="span" value={copy('form.headingA')} />
                   <SafeText as="span" value={copy('form.headingB')} />
@@ -221,34 +230,102 @@ export function RemovalCPage({
           </div>
         </section>
 
-        {/* CANONICAL STRUCTURE (owner's directive, 2026-08-12): slider under
-            the hero, photo bands around the process, areas carousel last. */}
+        {/* CANONICAL STRUCTURE v2 (owner's directive, 2026-08-13 — supersedes
+            v1): offer band → captioned reviews block → results caption over
+            one symmetrical grid → services blurb with photo → areas drift →
+            process → remaining → footer. Copy untouched. */}
 
-        {/* 2 — Google reviews slider (nothing without reviews, R5) */}
-        {(client.reviews ?? []).some((r) => (r?.body ?? '').trim()) && (
-          <section className="rc-section rc-reviews-band">
-            <div className="rc-container">
-              <ReviewsSlider client={client} />
+        {/* 2 — offer band: the control's own offer + trust badges */}
+        <section className="rc-section rc-benefits">
+          <div className="rc-container">
+            <ul className="rc-benefit-grid">
+              {[1, 2, 3, 4]
+                .map((n) => copy(`benefits.item${n}`))
+                .filter((b) => b.trim())
+                .map((b, i) => (
+                  <li className="rc-benefit" key={i}>
+                    {b}
+                  </li>
+                ))}
+            </ul>
+          </div>
+        </section>
+
+        {/* 3 — reviews, ONE block captioned by the control's own trust line */}
+        <section className="rc-section rc-section--deep rc-why">
+          <div className="rc-container">
+            <Split as="h2" className="rc-h2" a={copy('why.h1a')} b={copy('why.h1b')} stacked />
+            <SafeText as="p" className="rc-lede" value={copy('why.body')} />
+            <ReviewsSlider client={client} />
+            <div className="rc-cta-row">
+              <CallCta client={client} copy={copy} placement="reviews" tone="onInk" />
             </div>
-          </section>
-        )}
+          </div>
+        </section>
 
-        {/* 3 — photo band 1: crew and equipment forward */}
-        {gallery.slice(0, Math.ceil(gallery.length / 2)).length > 0 && (
-          <section className="rc-section rc-work">
+        {/* 4 — results: "Restoration Results Guaranteed" captions ONE
+            symmetrical grid of the client's own work */}
+        <section className="rc-section rc-restoration">
+          <div className="rc-container rc-measure">
+            <Split as="h2" className="rc-h2" a={copy('restoration.h1a')} b={copy('restoration.h1b')} />
+            <SafeText as="p" className="rc-body" value={copy('restoration.body')} />
+          </div>
+          {gallery.length > 0 && (
             <div className="rc-container">
               <ul className="rc-work-grid">
-                {gallery.slice(0, Math.ceil(gallery.length / 2)).map((photo, i) => (
+                {gallery.map((photo, i) => (
                   <li key={i} className="rc-work-cell">
                     <DeferredImage photo={photo} wrapperClassName="rc-work-frame" className="rc-work-img" />
                   </li>
                 ))}
               </ul>
             </div>
+          )}
+        </section>
+
+        {/* 5 — services blurb, two-column with a client photo on the right */}
+        <section className="rc-section rc-section--tint rc-longform">
+          <div className="rc-container rc-longform-grid">
+            <div className="rc-longform-main rc-measure">
+              <SafeText as="p" className="rc-ribbon" value={copy('longform.badge')} />
+              <Split as="h2" className="rc-h2" a={copy('longform.h2a')} b={copy('longform.h2b')} />
+              <SafeText as="p" className="rc-lede" value={copy('longform.lede')} />
+              <SafeText as="p" className="rc-body" value={copy('longform.p1')} />
+              <SafeText as="p" className="rc-body" value={copy('longform.p2')} />
+              <Split as="h2" className="rc-h3" a={copy('longform.requestsH2a')} b={copy('longform.requestsH2b')} />
+              {requests.length > 0 && (
+                <ul className="rc-request-list">
+                  {requests.map((r, i) => (
+                    <li key={i}>{r}</li>
+                  ))}
+                </ul>
+              )}
+            </div>
+            {gallery[1] && (
+              <div className="rc-longform-photo">
+                <DeferredImage
+                  photo={gallery[1]}
+                  wrapperClassName="rc-longform-photo-box"
+                  className="rc-longform-photo-img"
+                  sizes="(max-width: 979px) 92vw, 38vw"
+                />
+              </div>
+            )}
+          </div>
+        </section>
+
+        {/* 6 — service areas, mid-page between the photo work and process */}
+        {cities.length > 0 && (
+          <section className="rc-section rc-areas">
+            <div className="rc-container">
+              <Split as="h2" className="rc-h2" a={copy('areas.h1a')} b={copy('areas.h1b')} />
+              <SafeText as="p" className="rc-lede" value={copy('areas.h2')} />
+            </div>
+            <ServiceAreasCarousel client={client} />
           </section>
         )}
 
-        {/* 4 — process */}
+        {/* 7 — process (captioned by its own heading) */}
         <section className="rc-section rc-process">
           <div className="rc-container">
             <Split as="h2" className="rc-h2" a={copy('process.h1a')} b={copy('process.h1b')} stacked />
@@ -266,59 +343,7 @@ export function RemovalCPage({
           </div>
         </section>
 
-        {/* 5 — photo band 2: before/afters as proof */}
-        {gallery.slice(Math.ceil(gallery.length / 2)).length > 0 && (
-          <section className="rc-section rc-work">
-            <div className="rc-container">
-              <ul className="rc-work-grid">
-                {gallery.slice(Math.ceil(gallery.length / 2)).map((photo, i) => (
-                  <li key={i} className="rc-work-cell">
-                    <DeferredImage photo={photo} wrapperClassName="rc-work-frame" className="rc-work-img" />
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </section>
-        )}
-
-        {/* 6 — the rest, existing relative order */}
-
-        {/* ---- benefits ---- */}
-        <section className="rc-section rc-benefits">
-          <div className="rc-container">
-            <ul className="rc-benefit-grid">
-              {[1, 2, 3, 4]
-                .map((n) => copy(`benefits.item${n}`))
-                .filter((b) => b.trim())
-                .map((b, i) => (
-                  <li className="rc-benefit" key={i}>
-                    {b}
-                  </li>
-                ))}
-            </ul>
-          </div>
-        </section>
-
-        {/* ---- why choose us ---- */}
-        <section className="rc-section rc-section--deep rc-why">
-          <div className="rc-container">
-            <Split as="h2" className="rc-h2" a={copy('why.h1a')} b={copy('why.h1b')} stacked />
-            <SafeText as="p" className="rc-lede" value={copy('why.body')} />
-            <div className="rc-cta-row">
-              <CallCta client={client} copy={copy} placement="reviews" tone="onInk" />
-            </div>
-          </div>
-        </section>
-
-        {/* ---- restoration band ---- */}
-        <section className="rc-section rc-restoration">
-          <div className="rc-container rc-measure">
-            <Split as="h2" className="rc-h2" a={copy('restoration.h1a')} b={copy('restoration.h1b')} />
-            <SafeText as="p" className="rc-body" value={copy('restoration.body')} />
-          </div>
-        </section>
-
-        {/* ---- services ---- */}
+        {/* 8 — remaining sections, existing relative order */}
         <section className="rc-section rc-section--tint rc-services">
           <div className="rc-container">
             <Split as="h2" className="rc-h2" a={copy('services.h1a')} b={copy('services.h1b')} />
@@ -329,25 +354,6 @@ export function RemovalCPage({
                   <li className="rc-service" key={i}>
                     {s}
                   </li>
-                ))}
-              </ul>
-            )}
-          </div>
-        </section>
-
-        {/* ---- long-form ---- */}
-        <section className="rc-section rc-section--tint rc-longform">
-          <div className="rc-container rc-measure">
-            <SafeText as="p" className="rc-ribbon" value={copy('longform.badge')} />
-            <Split as="h2" className="rc-h2" a={copy('longform.h2a')} b={copy('longform.h2b')} />
-            <SafeText as="p" className="rc-lede" value={copy('longform.lede')} />
-            <SafeText as="p" className="rc-body" value={copy('longform.p1')} />
-            <SafeText as="p" className="rc-body" value={copy('longform.p2')} />
-            <Split as="h2" className="rc-h3" a={copy('longform.requestsH2a')} b={copy('longform.requestsH2b')} />
-            {requests.length > 0 && (
-              <ul className="rc-request-list">
-                {requests.map((r, i) => (
-                  <li key={i}>{r}</li>
                 ))}
               </ul>
             )}
@@ -415,16 +421,6 @@ export function RemovalCPage({
           </div>
         </section>
 
-        {/* 7 — service-areas carousel, last before the footer */}
-        {cities.length > 0 && (
-          <section className="rc-section rc-areas">
-            <div className="rc-container">
-              <Split as="h2" className="rc-h2" a={copy('areas.h1a')} b={copy('areas.h1b')} />
-              <SafeText as="p" className="rc-lede" value={copy('areas.h2')} />
-            </div>
-            <ServiceAreasCarousel client={client} />
-          </section>
-        )}
       </main>
 
       {/* ---- footer ---- */}

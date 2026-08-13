@@ -19,6 +19,7 @@
  * the city list is client data, and this component only owns the strip.
  */
 
+import { useState } from 'react';
 import type { ResolvedClient } from '../schema/resolve';
 import '../styles/service-areas-carousel.css';
 
@@ -27,12 +28,18 @@ export function ServiceAreasCarousel({ client }: { client: ResolvedClient }) {
     .filter((c) => typeof c === 'string' && c.trim())
     .map((c) => c.trim());
 
+  // Premium Reorder v2: touch pauses the drift (CSS handles hover/focus; touch
+  // has no hover, so a tiny bit of state does it post-hydration). The strip is
+  // also user-scrollable — overflow-x auto in the stylesheet.
+  const [touchPaused, setTouchPaused] = useState(false);
+
   if (cities.length === 0) return null;
 
   // The animation moves the track exactly -50%, so the visible strip must be
   // one full copy of the list; duration scales with list length so long lists
-  // do not blur past and short lists do not crawl.
-  const duration = Math.max(20, cities.length * 3);
+  // do not blur past and short lists do not crawl. v2 slowed the drift from
+  // 3s to 6s per city — a gentle drift, not a ticker.
+  const duration = Math.max(36, cities.length * 6);
 
   const row = (hidden: boolean) => (
     <ul className="sac-row" aria-hidden={hidden || undefined}>
@@ -45,8 +52,18 @@ export function ServiceAreasCarousel({ client }: { client: ResolvedClient }) {
   );
 
   return (
-    <div className="sac" role="group" aria-label="Service areas">
-      <div className="sac-track" style={{ animationDuration: `${duration}s` }} tabIndex={0}>
+    <div
+      className="sac"
+      role="group"
+      aria-label="Service areas"
+      onTouchStart={() => setTouchPaused(true)}
+      onTouchEnd={() => window.setTimeout(() => setTouchPaused(false), 4000)}
+    >
+      <div
+        className="sac-track"
+        style={{ animationDuration: `${duration}s`, animationPlayState: touchPaused ? 'paused' : undefined }}
+        tabIndex={0}
+      >
         {row(false)}
         {row(true)}
       </div>

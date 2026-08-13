@@ -22,7 +22,7 @@
  * - No avatar images (Google 403s them — settled), no autoplay, no library.
  */
 
-import { useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { ResolvedClient } from '../schema/resolve';
 import '../styles/reviews-slider.css';
 
@@ -49,6 +49,30 @@ function ArrowIcon({ flip }: { flip?: boolean }) {
 export function ReviewsSlider({ client }: { client: ResolvedClient }) {
   const reviews = (client.reviews ?? []).filter((r) => typeof r?.body === 'string' && r.body.trim());
   const trackRef = useRef<HTMLUListElement | null>(null);
+  // Premium Reorder v2: slow auto-advance (~7s/card), paused while the visitor
+  // hovers, touches, or focuses the slider. Hydration-only (the prerendered
+  // slider is a plain scroller until JS lands) and disabled entirely under
+  // prefers-reduced-motion. Scrolling never changes the track's height: CLS 0.
+  const [paused, setPaused] = useState(false);
+
+  useEffect(() => {
+    if (reviews.length < 2) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const id = window.setInterval(() => {
+      if (paused) return;
+      // Hidden tabs suspend rAF (smooth scrolling does nothing there) — skip
+      // the tick rather than queue jumps for when the tab comes back.
+      if (document.visibilityState === 'hidden') return;
+      const track = trackRef.current;
+      if (!track) return;
+      const card = track.querySelector<HTMLElement>('.rvs-card');
+      const step = card ? card.offsetWidth + 16 : track.clientWidth;
+      const atEnd = track.scrollLeft + track.clientWidth >= track.scrollWidth - step / 2;
+      if (atEnd) track.scrollTo({ left: 0, behavior: 'smooth' });
+      else track.scrollBy({ left: step, behavior: 'smooth' });
+    }, 7000);
+    return () => window.clearInterval(id);
+  }, [paused, reviews.length]);
 
   if (reviews.length === 0) return null;
 
@@ -61,7 +85,17 @@ export function ReviewsSlider({ client }: { client: ResolvedClient }) {
   };
 
   return (
-    <div className="rvs" role="group" aria-roledescription="carousel" aria-label="Customer reviews from Google">
+    <div
+      className="rvs"
+      role="group"
+      aria-roledescription="carousel"
+      aria-label="Customer reviews from Google"
+      onPointerEnter={() => setPaused(true)}
+      onPointerLeave={() => setPaused(false)}
+      onTouchStart={() => setPaused(true)}
+      onFocus={() => setPaused(true)}
+      onBlur={() => setPaused(false)}
+    >
       {/* eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex -- the
           scroller itself is the keyboard-operable control: focus it and the
           browser's native arrow-key scrolling pages through the cards. */}

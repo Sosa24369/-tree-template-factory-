@@ -31,6 +31,7 @@
 import type { ReactNode } from 'react';
 import type { ResolvedClient } from '../../../schema/resolve';
 import { SafeText } from '../../../components/Safe';
+import { HeroBrand } from '../../../components/HeroBrand';
 import { ArrowDownIcon, CallLine, Display, Eyebrow, FORM_ANCHOR, type Copy } from './shared';
 
 export function Hero({
@@ -47,6 +48,10 @@ export function Hero({
   return (
     <section className="tb-hero">
       <div className="tb-container tb-hero-inner">
+        {/* Premium Reorder v2: the client's logo + name, larger and centered
+            in the hero (record data; wordmark when no logo). */}
+        <HeroBrand client={client} className="tb-hbrand" />
+
         <Eyebrow value={copy('hero.eyebrow')} />
 
         <Display as="h1" className="tb-display--hero" lines={[copy('hero.h1a'), copy('hero.h1b')]} />
@@ -54,7 +59,10 @@ export function Hero({
         <SafeText as="p" className="tb-lede" value={copy('hero.body')} />
 
         <div className="tb-hero-actions">
-          <CallLine client={client} copy={copy} placement="hero" subKey="hero.callSub" className="tb-call--lead" />
+          {/* v2: gentle periodic bounce on the primary tap-to-call. */}
+          <span className="cta-bounce tb-bounce">
+            <CallLine client={client} copy={copy} placement="hero" subKey="hero.callSub" className="tb-call--lead" />
+          </span>
 
           {/* An ordinary in-page link, not a scroll-to-element script: it works
               before hydration, survives a JS failure, and can be opened in a new

@@ -183,3 +183,55 @@ a:focus-visible {
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
 }
+
+/* ---- Premium Reorder v2 (2026-08-13): shared hero furniture ---- */
+
+/* Gentle periodic bounce on each page's primary tap-to-call. Transform-only
+   (compositor), ~2.8s cycle, mostly at rest. The global reduced-motion rule
+   above already collapses it to nothing. Zero CLS: translateY never affects
+   layout. */
+@keyframes cta-bounce {
+  0%, 76%, 100% { transform: translateY(0); }
+  82% { transform: translateY(-7px); }
+  88% { transform: translateY(0); }
+  94% { transform: translateY(-3px); }
+}
+
+.cta-bounce {
+  animation: cta-bounce 2.8s ease-in-out infinite;
+}
+
+/* Hero brand lockup — the client's logo + company name, larger and centered
+   in the hero (owner's v2 directive). Data comes from the record via
+   <SafeLogo/>; with no logo the name renders as the wordmark. */
+.hbrand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin: 0 auto 22px;
+  text-align: center;
+}
+
+.hbrand-logo {
+  height: 96px;
+  width: 96px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+span.hbrand-logo[data-fallback='logo-text'] {
+  display: none; /* no logo file: the name line below is the wordmark */
+}
+
+.hbrand-name {
+  margin: 0;
+  font-size: clamp(19px, 3vw, 24px);
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  line-height: 1.15;
+}
+
+@media (min-width: 768px) {
+  .hbrand-logo { height: 120px; width: 120px; }
+}

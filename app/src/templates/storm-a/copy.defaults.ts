@@ -224,6 +224,11 @@ export const stormACopy: Record<string, string> = {
   'sticky.callSub': 'Storm line',
   'sticky.formLabel': 'Free assessment',
 
+  // Premium Reorder v2 (2026-08-13): every section carries a caption. Storm
+  // never had a reviews trust-line, so this is the mandated "plain descriptive
+  // header containing no claims or numbers" — chrome, not marketing copy.
+  'reviews.h2': 'Reviews from Google',
+
   'footer.tagline': 'Emergency storm damage response — trees, fences and cleanup, documented for your insurer.',
   'footer.disclaimer':
     'Free on-site assessment and written documentation included at no cost. Coverage decisions are between you and your carrier.',
