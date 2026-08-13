@@ -87,7 +87,9 @@ export const trimmingBCopy: Record<string, string> = {
 
   'standard.item2.h': 'The gutter line',
   'standard.item2.body':
-    'The branches feeding your gutters come back, and the debris the trim creates comes out of the gutters before we leave. Clearing the branch and leaving the gutter packed is half a job.',
+    'The branches feeding your gutters are cut back, and the debris the trim creates comes out of the gutters before we leave. Clearing the branch and leaving the gutter packed is half a job.',
+  // ↑ TYPO FIX 2026-08-12: read "come back" (branches regrowing — the opposite of
+  //   the promise); the file's parallel strings say "cut back" (item1, faq.a3).
 
   'standard.item3.h': 'The deadwood',
   'standard.item3.body':

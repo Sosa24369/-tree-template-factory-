@@ -41,7 +41,7 @@ export const stormACopy: Record<string, string> = {
   'header.badge': 'Licensed & insured',
   'header.callSub': 'Storm line — tap to call',
   'cta.callPrefix': 'Call ',
-  'cta.callSub': "We'll get a crew moving",
+  'cta.callSub': 'We’ll get a crew moving', // TYPO FIX 2026-08-12: curly apostrophe per file convention
 
   /* ---------------------------------------------------------------- *
    * HERO — the emergency premise. Speed and availability are the currency.
@@ -53,7 +53,7 @@ export const stormACopy: Record<string, string> = {
   'hero.eyebrow': 'Emergency storm response',
   'hero.h1InPrefix': 'Storm Damage in ',
   'hero.h1NoArea': 'Storm Damage?',
-  'hero.h1b': "We're Already Moving.",
+  'hero.h1b': 'We’re Already Moving.', // TYPO FIX 2026-08-12: curly apostrophe per file convention
   'hero.sub':
     'Emergency tree removal, fence repair and cleanup — a licensed, insured local crew, and written documentation for your insurer.',
   'hero.body':
@@ -73,7 +73,7 @@ export const stormACopy: Record<string, string> = {
    * ---------------------------------------------------------------- */
   'estimate.eyebrow': 'Free on-site assessment',
   'estimate.h2a': 'Tell us what happened. ',
-  'estimate.h2b': "We'll call you back.",
+  'estimate.h2b': 'We’ll call you back.', // TYPO FIX 2026-08-12: curly apostrophe per file convention
   'estimate.lede':
     'Thirty seconds now, and we’ll call you to get a crew scheduled. Trees on homes and vehicles are first in the queue.',
   'estimate.formHeading': 'Get a Free Storm Damage Assessment',

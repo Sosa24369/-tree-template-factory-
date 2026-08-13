@@ -184,7 +184,7 @@ export const removalBCopy: Record<string, string> = {
   'estimate.reassure2': 'Free estimate, no obligation, no pressure',
   'estimate.reassure3': 'Nobody turns up at the property unannounced',
 
-  'estimate.orCall': 'Would rather just talk it through?',
+  'estimate.orCall': 'Would you rather just talk it through?',
 
   'estimate.formHeading': 'Tell us about the tree',
   'estimate.formSub':
