@@ -273,19 +273,58 @@
   },
   "reviews": [
     {
-      "author": "Amy Pulaski",
-      "meta": "Google Review · a month ago",
-      "body": "Great service! I had a dead tree removed and replaced. Daniel sent numerous photos of trees for my approval. The two gentlemen who came to do the work were on time, courteous, and professional. They went above and beyond to make sure I was happy when they finished. I would highly recommend them."
+      "author": "Sandy M.",
+      "meta": "15 hours ago",
+      "rating": 5,
+      "body": "Wow....so glad I found these guys! Did a great job for a great price - win/win with these guys!!!"
     },
     {
-      "author": "Carol Malcik",
-      "meta": "Local Guide · 9 months ago",
-      "body": "Texas Tree Tops removed a massive tree over 100 feet tall from our backyard. The removal was challenging due to the tree's proximity to our house, the neighbors' house, the fence, and our pool. The team demonstrated exceptional skill and care."
+      "author": "Wanda G.",
+      "meta": "a day ago",
+      "rating": 5,
+      "body": "We want to share our experience with fence installation and tree cutting. We are so grateful 🙏🏻 to Daniel and his crew. They are very knowledgeable and professional at what they do. They did a beautiful job in a timely manner, and went above and beyond to our specifications. Great Services for the Price. I would Highly Recommend them to family and friends. Thank yall again God Bless yall, for all that you do..Will definitely call on you for future services"
     },
     {
-      "author": "John Bundren",
-      "meta": "Google Review · 11 months ago",
-      "body": "The Texas Tree Tops team did an amazing job taking down a huge pecan tree in our yard. They were fast, professional, and affordable. They had to navigate a tricky overhang on our neighbor's house as well. Daniel was also great to work with."
+      "author": "Matthew S.",
+      "meta": "6 days ago",
+      "rating": 5,
+      "body": "Had a large tree near the road that was all tangled up in the wires and started splitting in half. I had to take care of it quickly before it fell on my house. They were able to come same day and do everything. They were professional, didn’t damage anything, and did a great job - all for a very competitive price! Definitely recommend."
+    },
+    {
+      "author": "Kurt M.",
+      "meta": "2 weeks ago",
+      "rating": 5,
+      "body": "This is part One as I had two services performed and still resolving the second.\nI had a large Red Oak in the front and a Crape Myrtle that needed to be removed. I was provided a reasonable quote and information that I wish I had received a couple of years ago. The Red Oak was dying and could not be saved. I very much appreciated this as I had spent a few thousand dollars on it over the past two years trying to keep it.\nI was proved a very reasonable and competitive quote to remove and grind the stump and root trails.\nTexas Tree Top did a very good job and worked hard to bring down and remove the Red Oak. Very satisfied and would recommend them for tree care and removal."
+    },
+    {
+      "author": "Jessica O.",
+      "meta": "a month ago",
+      "rating": 5,
+      "body": "Excellent service. Very courteous staff, Quick response time, perfect clean up afterwards. They made sure everything was done the way I wanted. Would definitely use again!"
+    },
+    {
+      "author": "D T.",
+      "meta": "a month ago",
+      "rating": 5,
+      "body": "I enjoyed working with Texas Tree Tops. It’s refreshing to encounter a company who still places value on professionalism. So many companies now days drop the ball when it comes to being professional. They showed up on time and completed the tasks and did a great job.\nI would highly recommend."
+    },
+    {
+      "author": "Hoss W.",
+      "meta": "a month ago",
+      "rating": 5,
+      "body": "Great professional job! The The gate is very sturdy and robust. The wood is very beautiful. Nicole is just perfect. Every one was polite and respectful. I plan on using them again. (I got a fence installed)"
+    },
+    {
+      "author": "stacy s.",
+      "meta": "a month ago",
+      "rating": 5,
+      "body": "Everyone was really nice and they did a fantastic job with trimming my large tree. I would definitely use them again in the future."
+    },
+    {
+      "author": "Veronica M.",
+      "meta": "a month ago",
+      "rating": 5,
+      "body": "We are extremely pleased with the services we received from Texas Tree Tops. The crew trimmed our two overgrown trees in the back & front yards. I appreciate that they were clearly experienced in their craft as the job was done quickly, precise and with careful consideration for the property. Also they take care of removal and clean up of cut branches & debris. The trees now look well manicured not so bulky, much better. Overall very impressed. Affordable and job well done. We definitely plan on using them again and highly recommend you give them a try.\nThank you Daniel and crew."
     }
   ],
   "copyOverrides": {
@@ -297,5 +336,11 @@
       "meta.description": "Texas Tree Tops LLC provides safe tree removal, stump grinding, cleanup, and free estimates."
     }
   },
-  "reviewAvatarStyle": "initials"
+  "reviewAvatarStyle": "initials",
+  "reviewsSource": {
+    "profileUrl": "https://maps.google.com/?cid=4122891418016832820",
+    "profileName": "Texas Tree Tops-Tree Services LLC",
+    "pulledAt": "2026-08-12",
+    "note": "9 most recent 5-star text reviews, transcribed verbatim from the Google Business Profile (sorted Newest). Two rating-only reviews in that window (Eileen Petroski, Charles Leonard) skipped — no text to quote. Reviewer typos preserved."
+  }
 }

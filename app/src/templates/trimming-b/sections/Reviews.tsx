@@ -11,12 +11,12 @@
  */
 
 import type { ResolvedClient } from '../../../schema/resolve';
-import { SafeText } from '../../../components/Safe';
-import { Eyebrow, Section, splitReviews, type Copy } from './shared';
+import { ReviewsSlider } from '../../../components/ReviewsSlider';
+import { Eyebrow, Section, type Copy } from './shared';
 
 export function Reviews({ client, copy }: { client: ResolvedClient; copy: Copy }) {
-  const { rest } = splitReviews(client);
-  if (rest.length === 0) return null;
+  const usable = (client.reviews ?? []).filter((r) => typeof r?.body === 'string' && r.body.trim());
+  if (usable.length === 0) return null;
 
   return (
     <Section tone="paper" className="tb-reviews">
@@ -25,17 +25,11 @@ export function Reviews({ client, copy }: { client: ResolvedClient; copy: Copy }
         {copy('reviews.h2').trim() && <h2 className="tb-display tb-display--sm">{copy('reviews.h2')}</h2>}
       </div>
 
-      <ul className="tb-review-list">
-        {rest.map((review, i) => (
-          <li className="tb-review" key={i}>
-            <SafeText as="p" className="tb-review-body" value={review?.body} />
-            <p className="tb-review-who">
-              <SafeText as="span" className="tb-review-author" value={review?.author} />
-              <SafeText as="span" className="tb-review-meta" value={review?.meta} />
-            </p>
-          </li>
-        ))}
-      </ul>
+      {/* Design Elevation 2026-08-12: the quiet ledger -> the shared slider,
+          identical on every template, showing ALL reviews. The Testimony pull
+          quote stays untouched above — the proof-ordering variable this variant
+          tests is WHERE the featured quote sits, and it still sits there. */}
+      <ReviewsSlider client={client} />
     </Section>
   );
 }

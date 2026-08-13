@@ -18,6 +18,7 @@ import type { CSSProperties } from 'react';
 import type { ResolvedClient } from '../../schema/resolve';
 import type { Copy } from './sections/shared';
 
+import { ReviewsSlider } from '../../components/ReviewsSlider';
 import { Header } from './sections/Header';
 import { Hero } from './sections/Hero';
 import { Estimate } from './sections/Estimate';
@@ -60,6 +61,20 @@ export function StormPage({
         <Process copy={copy} />
         {/* 6 — recent storm work (client photographs only; hides when none) */}
         <Work client={client} copy={copy} />
+        {/* 6b — Google reviews (Design Elevation 2026-08-12). Storm shipped
+            without a review block; the shared slider is added to BOTH variants
+            through this one shared tree, so the pair stays identical by
+            construction (the logo precedent). Deliberately heading-less: the
+            slider is self-labelling ("reviews from Google") and inventing a
+            storm-voice heading would be writing copy, which this session may
+            not do. Renders nothing for a client with no reviews (R5). */}
+        {(client.reviews ?? []).some((r) => (r?.body ?? '').trim()) && (
+          <section className="st-section st-section--tint st-reviews">
+            <div className="st-container">
+              <ReviewsSlider client={client} />
+            </div>
+          </section>
+        )}
         {/* 7 — documentation your insurer will ask for */}
         <Insurance copy={copy} />
         {/* 8 — service-area grid */}

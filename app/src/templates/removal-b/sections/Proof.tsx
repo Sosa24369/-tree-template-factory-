@@ -18,10 +18,10 @@
 
 import type { ResolvedClient } from '../../../schema/resolve';
 import { SafeText } from '../../../components/Safe';
-import { Eyebrow, Heading, QuoteMark, Section, StarIcon, type Copy } from './shared';
+import { ReviewsSlider } from '../../../components/ReviewsSlider';
+import { Eyebrow, Heading, Section, type Copy } from './shared';
 
 const STATS = [1, 2, 3];
-const STARS = [0, 1, 2, 3, 4];
 
 export function Proof({ client, copy }: { client: ResolvedClient; copy: Copy }) {
   const reviews = (client.reviews ?? []).filter((r) => (r?.body ?? '').trim() || (r?.author ?? '').trim());
@@ -32,8 +32,6 @@ export function Proof({ client, copy }: { client: ResolvedClient; copy: Copy }) 
   })).filter((stat) => stat.value.trim());
 
   if (stats.length === 0 && reviews.length === 0) return null;
-
-  const starsLabel = copy('proof.altStars');
 
   return (
     <Section tone="ink" className="rb-proof">
@@ -56,33 +54,11 @@ export function Proof({ client, copy }: { client: ResolvedClient; copy: Copy }) 
         </ul>
       )}
 
-      {reviews.length > 0 && (
-        <ul className="rb-reviews">
-          {reviews.map((review, i) => (
-            <li className="rb-review rb-rise" key={i}>
-              <span className="rb-review-quote" aria-hidden="true">
-                <QuoteMark />
-              </span>
-
-              <span className="rb-review-stars" role="img" aria-label={starsLabel || undefined}>
-                {STARS.map((n) => (
-                  <StarIcon key={n} />
-                ))}
-              </span>
-
-              <SafeText as="p" className="rb-review-body" value={review?.body} />
-
-              <span className="rb-review-who">
-                <SafeText as="span" className="rb-review-author" value={review?.author} />
-                {/* review.meta is the client's own attribution line — typically
-                    "Google Review · a month ago". The section eyebrow already names
-                    the source, so nothing is stamped on top of it here. */}
-                <SafeText as="span" className="rb-review-meta" value={review?.meta} />
-              </span>
-            </li>
-          ))}
-        </ul>
-      )}
+      {/* Design Elevation 2026-08-12: static review cards -> the shared slider,
+          identical on every template (the logo precedent preserves the A/B).
+          The proof-before-offer ORDER — this variant's tested variable — is
+          untouched; only the review treatment inside the section changed. */}
+      <ReviewsSlider client={client} />
     </Section>
   );
 }

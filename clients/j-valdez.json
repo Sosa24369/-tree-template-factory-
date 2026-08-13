@@ -141,29 +141,58 @@
   },
   "reviews": [
     {
-      "author": "Christopher Medley",
+      "author": "Josh M.",
+      "meta": "8 hours ago",
+      "rating": 5,
+      "body": "Have many neighbors who have used J Valdez Tree Services and heard great things. Set up a time to meet with Felix and did a prior walk through with me and then scheduled the job. His crew showed up when they said they would and did everything exactly as described. They are quick, clean and efficient. Would highly recommend to anyone needing tree work done. Great work and great pricing."
+    },
+    {
+      "author": "Nell D.",
+      "meta": "a day ago",
+      "rating": 5,
+      "body": "A great job trimming our trees. Cleanup was awesome!"
+    },
+    {
+      "author": "Johnnie E.",
+      "meta": "a day ago",
+      "rating": 5,
+      "body": "This is the best tree service in Texas"
+    },
+    {
+      "author": "john l.",
+      "meta": "a week ago",
+      "rating": 5,
+      "body": "Felix was very professional and did a great job."
+    },
+    {
+      "author": "Wilson B.",
+      "meta": "a week ago",
+      "rating": 5,
+      "body": "Very good job. Courteous thorough professional"
+    },
+    {
+      "author": "kathryn o.",
+      "meta": "2 weeks ago",
+      "rating": 5,
+      "body": "Great job! Professional, quick and clean!"
+    },
+    {
+      "author": "Marshall P.",
       "meta": "3 weeks ago",
-      "body": "Outstanding work! Above and beyond my expectations! Felix and his crew were very careful and very thorough. My neighbors are all very pleased with their work also. Highly recommend! And at a great price too!"
+      "rating": 5,
+      "body": "Used several times, always on time, always fair, always professional, and always do a great job."
     },
     {
-      "author": "Phil Vidrine",
-      "meta": "1 week ago",
-      "body": "They did a fantastic job. I wanted a clear view of the river and they did a great job. They worked quickly and checked with me multiple times during the job to make sure I was satisfied. Very professional job! If you need tree work, you should use them!"
+      "author": "Matt B.",
+      "meta": "3 weeks ago",
+      "rating": 5,
+      "body": "I appreciated that they were reasonably priced, fully insured, and respectful of my property and my time. They did an excellent job safely removing a tree that was getting too close to our house. We will be calling them for tree trimming any time we need it. They came for a free quote on my schedule and showed up to remove my tree when they said they would. They had the tree removed before I even heard back from another company. Very impressed!"
     },
     {
-      "author": "Jameon Bolin",
-      "meta": "a month ago",
-      "body": "I'm very happy with the work they did to remove 5 trees & cut 2 back from my house. Their cleanup was thorough & they didn't tear up my yard anymore than absolutely necessary. They ground down the stumps & 4 or 5 other stumps left by other tree companies. I think this company definitely gets 5 stars!!!"
-    },
-    {
-      "author": "Elizabeth Gonzalez",
-      "meta": "2 months ago",
-      "body": "Zero question why these guys have a 5 Star average, the owner is extremely diligent, their crew is very focused and hard working, they high quality equipment and attention to detail. Clean up afterwards was excellent, they even cleaned our pool and brushed excess leaves/debris. Highly recommend."
-    },
-    {
-      "author": "Tom Slater",
-      "meta": "2 months ago",
-      "body": "Excellent work, very professional and careful not to cut wires or damage outdoor furniture, cleaned up as if they were never here - highly recommend this tree service!"
+      "author": "Gabe O.",
+      "meta": "3 weeks ago",
+      "rating": 5,
+      "body": "Felix and his team were prompt, quick and very professional. I was very happy with how they worked with our aging parents."
     }
   ],
   "copyOverrides": {
@@ -185,5 +214,11 @@
   "excludedTemplates": [
     "storm-a",
     "storm-b"
-  ]
+  ],
+  "reviewsSource": {
+    "profileUrl": "https://maps.google.com/?cid=10536913595490831481",
+    "profileName": "J Valdez Tree Service",
+    "pulledAt": "2026-08-12",
+    "note": "9 most recent 5-star text reviews, transcribed verbatim from the Google Business Profile (sorted Newest). All 10 newest had text; the 9 newest kept. Reviewer casing preserved."
+  }
 }

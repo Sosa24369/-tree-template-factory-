@@ -17,14 +17,11 @@
  */
 
 import type { ResolvedClient } from '../../../schema/resolve';
-import { SafeSection, SafeText } from '../../../components/Safe';
+import { SafeText } from '../../../components/Safe';
+import { ReviewsSlider } from '../../../components/ReviewsSlider';
 import { CallRow, Rule, Section, SplitHeading, type Copy } from './shared';
 
 export function WhyChoose({ client, copy }: { client: ResolvedClient; copy: Copy }) {
-  const reviews = (client.reviews ?? []).filter((review) => (review?.body ?? '').trim() || (review?.author ?? '').trim());
-  const stars = copy('ratingBadge.stars');
-  const wordmark = [...copy('ratingBadge.logoText')];
-
   return (
     <Section tone="deep" className="ta-why">
       <div className="ta-why-head">
@@ -33,35 +30,10 @@ export function WhyChoose({ client, copy }: { client: ResolvedClient; copy: Copy
         <SafeText as="p" className="ta-why-body" value={copy('why.body')} />
       </div>
 
-      <SafeSection when={reviews}>
-        <ul className="ta-reviews">
-          {reviews.map((review, i) => (
-            <li className="ta-review" key={i}>
-              <div className="ta-review-top">
-                {stars.trim() ? (
-                  <span className="ta-review-stars" aria-hidden="true">
-                    {stars}
-                  </span>
-                ) : null}
-                {wordmark.length > 0 ? (
-                  <span className="ta-review-mark">
-                    {wordmark.map((letter, n) => (
-                      <span key={n} className="ta-rating-letter">
-                        {letter}
-                      </span>
-                    ))}
-                  </span>
-                ) : null}
-              </div>
-              <SafeText as="p" className="ta-review-body" value={review?.body} />
-              <p className="ta-review-who">
-                <SafeText as="span" className="ta-review-author" value={review?.author} />
-                <SafeText as="span" className="ta-review-meta" value={review?.meta} />
-              </p>
-            </li>
-          ))}
-        </ul>
-      </SafeSection>
+      {/* Design Elevation 2026-08-12: static review cards -> the shared slider,
+          identical on every template (the logo precedent preserves the A/B).
+          Renders nothing for a client with no reviews (R5). */}
+      <ReviewsSlider client={client} />
 
       <CallRow client={client} copy={copy} placement="reviews" tone="onDeep" />
     </Section>

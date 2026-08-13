@@ -10,13 +10,11 @@
  */
 
 import type { ResolvedClient } from '../../../schema/resolve';
-import { SafeImage, SafeSection, SafeText } from '../../../components/Safe';
-import { reviewGoogle, reviewStars, withAlt } from '../assets';
+import { SafeText } from '../../../components/Safe';
+import { ReviewsSlider } from '../../../components/ReviewsSlider';
 import { CallCta, Section, SplitHeading, type Copy } from './shared';
 
 export function WhyChoose({ client, copy }: { client: ResolvedClient; copy: Copy }) {
-  const reviews = client.reviews ?? [];
-
   return (
     <Section tone="plate" className="ra-why">
       <div className="ra-measure">
@@ -29,23 +27,10 @@ export function WhyChoose({ client, copy }: { client: ResolvedClient; copy: Copy
         <SafeText as="p" className="ra-body ra-lede" value={copy('why.body')} />
       </div>
 
-      <SafeSection when={reviews}>
-        <ul className="ra-reviews">
-          {reviews.map((review, i) => (
-            <li className="ra-review" key={i}>
-              <div className="ra-review-top">
-                <SafeImage photo={withAlt(reviewStars, copy('reviews.altStars'))} className="ra-review-stars" />
-                <SafeImage photo={withAlt(reviewGoogle, copy('reviews.altGoogle'))} className="ra-review-google" />
-              </div>
-              <SafeText as="p" className="ra-review-body" value={review?.body} />
-              <div className="ra-review-who">
-                <SafeText as="span" className="ra-review-author" value={review?.author} />
-                <SafeText as="span" className="ra-review-meta" value={review?.meta} />
-              </div>
-            </li>
-          ))}
-        </ul>
-      </SafeSection>
+      {/* Design Elevation 2026-08-12: static review cards -> the shared slider,
+          identical on every template (the logo precedent preserves the A/B).
+          Renders nothing for a client with no reviews (R5). */}
+      <ReviewsSlider client={client} />
 
       <div className="ra-cta-row">
         <CallCta client={client} copy={copy} placement="reviews" tone="solid" />

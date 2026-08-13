@@ -1,0 +1,139 @@
+/**
+ * ReviewsSlider — shared styles, scoped .rvs-*.
+ *
+ * Self-contained by design: the card is a light surface with its own ink
+ * colours, so the slider reads identically on a paper section (trimming-a),
+ * an ink section (removal-b's proof band) and storm's dark plate — that
+ * sameness IS the point (identical treatment preserves every A/B pair).
+ *
+ * Zero CLS: the card height is fixed and the body is line-clamped, so the
+ * track's height never depends on content length, font arrival, or JS.
+ * Stars are text glyphs and the Google G is inline SVG — zero requests.
+ */
+
+.rvs {
+  position: relative;
+}
+
+.rvs-track {
+  display: flex;
+  gap: 16px;
+  margin: 0;
+  padding: 4px 4px 8px;
+  list-style: none;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.rvs-track::-webkit-scrollbar {
+  display: none;
+}
+
+.rvs-track:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 4px;
+  border-radius: 8px;
+}
+
+.rvs-card {
+  flex: 0 0 min(340px, 86%);
+  scroll-snap-align: start;
+  box-sizing: border-box;
+  height: 240px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 20px;
+  border-radius: 14px;
+  background: #ffffff;
+  color: #20261f;
+  border: 1px solid rgba(18, 26, 20, 0.12);
+  box-shadow: 0 1px 2px rgba(10, 16, 12, 0.06), 0 8px 24px -18px rgba(10, 16, 12, 0.35);
+}
+
+.rvs-stars {
+  color: #fbbc04; /* Google's review gold — deliberately NOT the brand accent */
+  font-size: 17px;
+  line-height: 1;
+  letter-spacing: 3px;
+}
+
+.rvs-body {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.55;
+  flex: 1 1 auto;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 6; /* the visual "trim with an ellipsis" — data stays verbatim */
+}
+
+.rvs-who {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.rvs-author {
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.rvs-source {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: #5f6368;
+}
+
+.rvs-g {
+  display: block;
+}
+
+.rvs-nav {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  margin-top: 10px;
+}
+
+.rvs-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  border: 1px solid rgba(18, 26, 20, 0.18);
+  background: #ffffff;
+  color: #20261f;
+  cursor: pointer;
+  padding: 0;
+}
+
+.rvs-btn:hover {
+  background: #f2f4f1;
+}
+
+.rvs-btn:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
+
+/* Touch devices scroll the track directly; the buttons only add clutter. */
+@media (hover: none) and (pointer: coarse) {
+  .rvs-nav {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .rvs-card {
+    height: 252px;
+  }
+}

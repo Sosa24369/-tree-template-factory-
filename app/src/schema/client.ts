@@ -187,8 +187,20 @@ export interface ClientRecord {
   /** Per-service photo sets, keyed by service. Missing or empty is legal (R5). */
   photos: Partial<Record<'removal' | 'trimming' | 'storm' | 'generic', PhotoSet[]>>;
 
-  /** Google/other reviews rendered in review sections. Empty is legal (R5). */
-  reviews: Array<{ author: string; meta: string; body: string }>;
+  /**
+   * Google/other reviews rendered in review sections. Empty is legal (R5).
+   * Every entry is transcribed VERBATIM from the client's own review profile —
+   * never written, merged, or "cleaned up" (a fabricated review is a legal
+   * problem, not a copy choice). `rating` is the review's own star count
+   * (sliders render it; absent means 5, the historical default).
+   */
+  reviews: Array<{ author: string; meta: string; body: string; rating?: number }>;
+
+  /**
+   * Where the reviews above were read from, and when — the audit trail that
+   * makes "verbatim" checkable. Set whenever reviews are (re)transcribed.
+   */
+  reviewsSource?: { profileUrl: string; profileName?: string; pulledAt: string; note?: string };
 
   /**
    * Per-client, per-template copy overrides. A template ships pre-filled defaults;
