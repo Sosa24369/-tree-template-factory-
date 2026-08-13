@@ -1103,3 +1103,12 @@
   .trimming-b .tb-sticky { display: none; }
   .trimming-b main { padding-bottom: 0; }
 }
+
+/* Hero form panel contrast: the eyebrow and the display's accent line were
+   tinted for paper; on the panel's deep-ink surface they flip to lifted tones. */
+.trimming-b .tb-hero-form .tb-eyebrow {
+  color: color-mix(in srgb, #ffffff 72%, var(--brand-primary));
+}
+.trimming-b .tb-hero-form .tb-display-line--accent {
+  color: color-mix(in srgb, var(--brand-accent) 78%, #ffffff);
+}
