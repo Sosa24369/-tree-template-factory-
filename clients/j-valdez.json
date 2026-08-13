@@ -213,7 +213,8 @@
   "reviewAvatarStyle": "initials",
   "excludedTemplates": [
     "storm-a",
-    "storm-b"
+    "storm-b",
+    "storm-c"
   ],
   "reviewsSource": {
     "profileUrl": "https://maps.google.com/?cid=10536913595490831481",

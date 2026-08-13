@@ -1,0 +1,701 @@
+/* ====================================================================
+   trimming-c — THE HYBRID, executed premium (Design Elevation 2026-08-12).
+
+   Design direction is trimming-b's: paper ground, one system-serif display
+   face against the system sans, hairlines instead of cards, three quiet
+   surfaces, brand-derived tints, no hero photograph at any width. Execution
+   is elevated: a larger editorial scale, wider air, a lifted form card beside
+   the display block, and a sticky mobile call bar.
+
+   RULES (the -b charter, inherited):
+   1. Everything scoped under .trimming-c.
+   2. No brand literal (R1) — color-mix() from var(--brand-*); hex = neutrals.
+   3. No client asset path anywhere in this file.
+   4. Performance is the design: no webfont, text LCP at every width,
+      below-fold photos are <DeferredImage>, hover/detail transitions only.
+   5. Mobile first.
+   ==================================================================== */
+
+.trimming-c {
+  /* neutrals */
+  --tc-ink: #14171a;
+  --tc-ink-2: #4a5158;
+  --tc-muted: #767d84;
+  --tc-paper: #fcfbf9;
+  --tc-paper-2: #ffffff;
+
+  /* brand-derived */
+  --tc-tint: color-mix(in srgb, var(--brand-primary) 5%, var(--tc-paper));
+  --tc-rule: color-mix(in srgb, var(--brand-primary) 17%, #dfdcd6);
+  --tc-rule-soft: color-mix(in srgb, var(--brand-primary) 9%, #e8e5df);
+  --tc-deep: color-mix(in srgb, var(--brand-primary) 88%, #000000);
+  --tc-deeper: color-mix(in srgb, var(--brand-primary) 62%, #000000);
+  --tc-accent-on-light: color-mix(in srgb, var(--brand-accent) 55%, #000000);
+  --tc-accent-lift: color-mix(in srgb, var(--brand-accent) 78%, #ffffff);
+  --ra-placeholder: color-mix(in srgb, var(--brand-primary) 7%, #ecebe7);
+
+  /* the display face — resident on every platform it names, zero requests */
+  --tc-serif: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, 'Times New Roman', serif;
+
+  --tc-max: 1180px;
+
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  color: var(--tc-ink);
+  background: var(--tc-paper);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+.trimming-c .tc-container {
+  width: 100%;
+  max-width: var(--tc-max);
+  margin: 0 auto;
+  padding: 0 clamp(18px, 5vw, 44px);
+}
+
+.trimming-c .tc-measure {
+  max-width: 720px;
+}
+
+.trimming-c .tc-section {
+  padding-block: clamp(52px, 8.5vw, 108px);
+}
+
+.trimming-c .tc-section--tint {
+  background: var(--tc-tint);
+}
+
+.trimming-c .tc-section--deep {
+  background: var(--tc-deep);
+  color: #ffffff;
+}
+
+/* ---------------- type ---------------- */
+
+.trimming-c .tc-display {
+  margin: 0 0 14px;
+  font-family: var(--tc-serif);
+  font-weight: 600;
+  font-size: clamp(34px, 7.4vw, 62px);
+  line-height: 1.06;
+  letter-spacing: -0.015em;
+}
+
+.trimming-c .tc-h2 {
+  margin: 0 0 16px;
+  font-family: var(--tc-serif);
+  font-weight: 600;
+  font-size: clamp(26px, 4.4vw, 40px);
+  line-height: 1.12;
+  letter-spacing: -0.012em;
+}
+
+.trimming-c .tc-h3 {
+  margin: 34px 0 10px;
+  font-family: var(--tc-serif);
+  font-weight: 600;
+  font-size: clamp(20px, 3vw, 26px);
+}
+
+.trimming-c .tc-stacked span {
+  display: block;
+}
+
+.trimming-c .tc-accent {
+  color: var(--tc-accent-on-light);
+}
+
+.trimming-c .tc-section--deep .tc-accent {
+  color: var(--tc-accent-lift);
+}
+
+.trimming-c .tc-lede {
+  margin: 0 0 18px;
+  font-size: clamp(16px, 2.4vw, 19px);
+  color: var(--tc-ink-2);
+  max-width: 740px;
+}
+
+.trimming-c .tc-lede--onink {
+  color: color-mix(in srgb, #ffffff 82%, var(--brand-primary));
+}
+
+.trimming-c .tc-body {
+  margin: 0 0 16px;
+  color: var(--tc-ink-2);
+}
+
+/* ---------------- header ---------------- */
+
+.trimming-c .tc-header {
+  background: var(--tc-paper);
+  border-bottom: 1px solid var(--tc-rule);
+}
+
+.trimming-c .tc-header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 84px;
+}
+
+.trimming-c .tc-logo {
+  height: 60px;
+  width: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.trimming-c span.tc-logo[data-fallback='logo-text'] {
+  height: auto;
+  width: auto;
+  border-radius: 0;
+  font-family: var(--tc-serif);
+  font-weight: 600;
+  font-size: 21px;
+}
+
+/* ---------------- call CTAs + jumps ---------------- */
+
+.trimming-c .tc-call {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  padding: 13px 22px;
+  border-radius: 10px;
+  text-decoration: none;
+  font-weight: 750;
+  line-height: 1.15;
+  text-align: center;
+}
+
+.trimming-c .tc-call--header,
+.trimming-c .tc-call--solid {
+  background: var(--brand-primary);
+  color: var(--brand-on-primary, #ffffff);
+}
+
+.trimming-c .tc-call--onink {
+  background: var(--brand-accent);
+  color: color-mix(in srgb, var(--brand-accent) 12%, #000000);
+}
+
+.trimming-c .tc-call .phone-sub,
+.trimming-c .tc-call span:last-child:not(:only-child) {
+  font-weight: 600;
+  font-size: 12px;
+  opacity: 0.85;
+}
+
+.trimming-c .tc-jump {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  margin-top: 6px;
+  padding: 13px 24px;
+  border-radius: 10px;
+  background: var(--brand-primary);
+  color: var(--brand-on-primary, #ffffff);
+  text-decoration: none;
+  font-weight: 750;
+}
+
+.trimming-c .tc-jump-sub {
+  font-weight: 600;
+  font-size: 12px;
+  opacity: 0.85;
+}
+
+/* ---------------- hero ---------------- */
+
+.trimming-c .tc-hero {
+  background: var(--tc-tint);
+  border-bottom: 1px solid var(--tc-rule-soft);
+}
+
+.trimming-c .tc-hero-grid {
+  display: grid;
+  gap: clamp(26px, 5vw, 56px);
+  padding-block: clamp(44px, 8vw, 112px);
+}
+
+.trimming-c .tc-hero-sub {
+  margin: 0 0 12px;
+  font-weight: 650;
+  font-size: clamp(16px, 2.5vw, 19px);
+  color: var(--tc-accent-on-light);
+}
+
+.trimming-c .tc-hero-body {
+  margin: 0 0 22px;
+  max-width: 640px;
+  color: var(--tc-ink-2);
+}
+
+.trimming-c .tc-hero-ctas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-bottom: 22px;
+}
+
+/* rating badge */
+.trimming-c .tc-badge {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px;
+  margin: 0 0 20px;
+  font-size: 14px;
+  color: var(--tc-ink-2);
+}
+
+.trimming-c .tc-badge-word {
+  font-weight: 800;
+}
+
+.trimming-c .tc-badge-letter:nth-child(1) { color: #4285f4; }
+.trimming-c .tc-badge-letter:nth-child(2) { color: #ea4335; }
+.trimming-c .tc-badge-letter:nth-child(3) { color: #fbbc04; }
+.trimming-c .tc-badge-letter:nth-child(4) { color: #4285f4; }
+.trimming-c .tc-badge-letter:nth-child(5) { color: #34a853; }
+.trimming-c .tc-badge-letter:nth-child(6) { color: #ea4335; }
+
+.trimming-c .tc-badge-stars {
+  color: #fbbc04;
+  letter-spacing: 2px;
+}
+
+/* trust strip */
+.trimming-c .tc-trust {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.trimming-c .tc-trust-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 13px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+  background: var(--tc-paper-2);
+  border: 1px solid var(--tc-rule);
+  color: var(--tc-ink-2);
+}
+
+.trimming-c .tc-trust-stars {
+  color: #fbbc04;
+  letter-spacing: 1.5px;
+}
+
+/* form card */
+.trimming-c .tc-form-card {
+  background: var(--tc-paper-2);
+  border: 1px solid var(--tc-rule);
+  border-radius: 14px;
+  padding: clamp(20px, 3.4vw, 30px);
+  box-shadow: 0 24px 60px -42px rgba(20, 23, 26, 0.5);
+  scroll-margin-top: 20px;
+}
+
+.trimming-c .tc-form-h {
+  margin: 0 0 6px;
+  font-family: var(--tc-serif);
+  font-weight: 600;
+  font-size: clamp(21px, 3vw, 26px);
+}
+
+.trimming-c .tc-form-h--mobile {
+  display: none;
+}
+
+.trimming-c .tc-form-sub {
+  margin: 0 0 16px;
+  font-size: 14px;
+  color: var(--tc-muted);
+}
+
+@media (max-width: 767px) {
+  /* The control ships DIFFERENT form headings per breakpoint; so does this. */
+  .trimming-c .tc-form-h--desktop {
+    display: none;
+  }
+  .trimming-c .tc-form-h--mobile {
+    display: block;
+  }
+}
+
+/* ---------------- benefits ledger ---------------- */
+
+.trimming-c .tc-benefits {
+  padding-block: clamp(28px, 4vw, 48px);
+}
+
+.trimming-c .tc-benefit-ledger {
+  display: grid;
+  gap: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--tc-rule);
+}
+
+.trimming-c .tc-benefit {
+  padding: 14px 2px;
+  border-bottom: 1px solid var(--tc-rule);
+  font-weight: 600;
+  font-size: 15px;
+}
+
+/* ---------------- work ---------------- */
+
+.trimming-c .tc-work {
+  padding-block: clamp(30px, 4.5vw, 56px);
+}
+
+.trimming-c .tc-work-grid {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.trimming-c .tc-work-frame {
+  display: block;
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--ra-placeholder);
+}
+
+.trimming-c .tc-work-img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+
+/* ---------------- reviews / why ---------------- */
+
+.trimming-c .tc-cta-row {
+  display: flex;
+  justify-content: center;
+  margin-top: 26px;
+}
+
+.trimming-c .tc-why .rvs {
+  margin-top: 26px;
+}
+
+/* ---------------- services ---------------- */
+
+.trimming-c .tc-service-grid {
+  display: grid;
+  gap: 0 28px;
+  margin: 18px 0 0;
+  padding: 0;
+  list-style: none;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+
+.trimming-c .tc-service {
+  padding: 10px 2px;
+  border-bottom: 1px solid var(--tc-rule-soft);
+  font-weight: 550;
+  font-size: 15px;
+  color: var(--tc-ink-2);
+}
+
+/* ---------------- areas ---------------- */
+
+.trimming-c .tc-city-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 18px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.trimming-c .tc-city {
+  padding: 7px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--tc-rule);
+  background: var(--tc-paper-2);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--tc-ink-2);
+}
+
+/* ---------------- process ---------------- */
+
+.trimming-c .tc-steps {
+  display: grid;
+  gap: 0;
+  margin: 24px 0 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--tc-rule);
+}
+
+.trimming-c .tc-step {
+  display: grid;
+  gap: 4px;
+  padding: 18px 2px;
+  border-bottom: 1px solid var(--tc-rule);
+}
+
+.trimming-c .tc-step-label {
+  font-size: 12.5px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--tc-accent-on-light);
+}
+
+.trimming-c .tc-step-h {
+  margin: 0;
+  font-family: var(--tc-serif);
+  font-weight: 600;
+  font-size: 19px;
+}
+
+.trimming-c .tc-step-body {
+  margin: 0;
+  font-size: 14.5px;
+  color: var(--tc-ink-2);
+}
+
+/* ---------------- longform ---------------- */
+
+.trimming-c .tc-ribbon {
+  display: inline-block;
+  margin: 0 0 14px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 12.5px;
+  font-weight: 750;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--tc-accent-on-light);
+  border: 1px solid var(--tc-rule);
+  background: var(--tc-paper-2);
+}
+
+.trimming-c .tc-request-list {
+  margin: 8px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.trimming-c .tc-request-list li {
+  position: relative;
+  padding: 8px 0 8px 24px;
+  color: var(--tc-ink-2);
+}
+
+.trimming-c .tc-request-list li::before {
+  content: '';
+  position: absolute;
+  left: 2px;
+  top: 17px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--tc-accent-on-light);
+}
+
+/* ---------------- mid CTA ---------------- */
+
+.trimming-c .tc-offer {
+  margin: 0 0 8px;
+  font-weight: 750;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  color: var(--tc-accent-on-light);
+}
+
+/* ---------------- ready band ---------------- */
+
+.trimming-c .tc-ready {
+  text-align: center;
+}
+
+/* ---------------- FAQ ---------------- */
+
+.trimming-c .tc-faq-list {
+  margin-top: 22px;
+  border-top: 1px solid var(--tc-rule);
+}
+
+.trimming-c .tc-faq-item {
+  border-bottom: 1px solid var(--tc-rule);
+}
+
+.trimming-c .tc-faq-q {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 16px 2px;
+  cursor: pointer;
+  font-weight: 650;
+  list-style: none;
+}
+
+.trimming-c .tc-faq-q::-webkit-details-marker {
+  display: none;
+}
+
+.trimming-c .tc-faq-mark {
+  flex: 0 0 auto;
+  width: 12px;
+  height: 12px;
+  position: relative;
+}
+
+.trimming-c .tc-faq-mark::before,
+.trimming-c .tc-faq-mark::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  background: var(--tc-accent-on-light);
+}
+
+.trimming-c .tc-faq-mark::before {
+  width: 12px;
+  height: 1.5px;
+}
+
+.trimming-c .tc-faq-mark::after {
+  width: 1.5px;
+  height: 12px;
+  transition: transform 160ms ease;
+}
+
+.trimming-c details[open] .tc-faq-mark::after {
+  transform: rotate(90deg);
+}
+
+.trimming-c .tc-faq-a {
+  margin: 0;
+  padding: 0 2px 16px;
+  color: var(--tc-ink-2);
+}
+
+.trimming-c .tc-faq-item--orphan {
+  padding-top: 16px;
+}
+
+/* ---------------- footer ---------------- */
+
+.trimming-c .tc-footer {
+  background: var(--tc-deep);
+  color: color-mix(in srgb, #ffffff 78%, var(--brand-primary));
+  padding-block: 34px;
+  font-size: 14px;
+}
+
+.trimming-c .tc-footer-inner {
+  display: grid;
+  gap: 6px;
+}
+
+.trimming-c .tc-footer-name {
+  margin: 0;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.trimming-c .tc-footer-address,
+.trimming-c .tc-footer-copyright {
+  margin: 0;
+}
+
+.trimming-c .tc-footer-legal {
+  margin: 4px 0 0;
+  display: flex;
+  gap: 16px;
+}
+
+.trimming-c .tc-footer-link {
+  color: inherit;
+}
+
+/* ---------------- sticky mobile call bar ---------------- */
+
+.trimming-c .tc-sticky {
+  position: fixed;
+  inset: auto 0 0 0;
+  z-index: 40;
+  padding: 10px clamp(14px, 4vw, 20px) calc(10px + env(safe-area-inset-bottom));
+  background: color-mix(in srgb, var(--tc-deep) 93%, transparent);
+  backdrop-filter: blur(8px);
+}
+
+.trimming-c .tc-sticky-call {
+  width: 100%;
+}
+
+.trimming-c main {
+  padding-bottom: 84px;
+}
+
+/* ---------------- desktop ---------------- */
+
+@media (min-width: 980px) {
+  .trimming-c .tc-hero-grid {
+    grid-template-columns: minmax(0, 1.25fr) minmax(340px, 0.85fr);
+    align-items: start;
+  }
+
+  .trimming-c .tc-logo {
+    height: 88px;
+    width: 88px;
+  }
+
+  .trimming-c .tc-header-inner {
+    min-height: 120px;
+  }
+
+  .trimming-c .tc-benefit-ledger {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0 40px;
+  }
+
+  .trimming-c .tc-work-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .trimming-c .tc-steps {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0 40px;
+  }
+
+  .trimming-c .tc-sticky {
+    display: none;
+  }
+
+  .trimming-c main {
+    padding-bottom: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .trimming-c * {
+    transition: none !important;
+  }
+}

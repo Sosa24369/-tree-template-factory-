@@ -743,3 +743,35 @@
   .st-sticky { display: none; }
   .storm main { padding-bottom: 0; }
 }
+
+/* ---------------------------------------------------------------- *
+ * storm-c — the hybrid's ELEVATION layer (Design Elevation 2026-08-12).
+ *
+ * storm-c renders the same shared page as -a and -b; its palette arrives as
+ * inline custom properties from storm-c/index.tsx. These rules are the premium
+ * execution pass on top: a bigger, tighter display scale, more generous
+ * vertical rhythm, and finer hairlines. Scoped to .storm-c only — the parents'
+ * A/B is untouched. Nothing here adds a request or animates layout.
+ * ---------------------------------------------------------------- */
+
+.storm.storm-c .st-h1 {
+  font-size: clamp(36px, 7.4vw, 68px);
+  letter-spacing: -0.022em;
+  line-height: 1.04;
+}
+
+.storm.storm-c .st-section {
+  padding-block: clamp(56px, 9vw, 110px);
+}
+
+.storm.storm-c .st-head {
+  max-width: 780px;
+}
+
+.storm.storm-c .st-eyebrow {
+  letter-spacing: 0.14em;
+}
+
+.storm.storm-c .st-hero-inner {
+  padding-block: clamp(64px, 10vw, 128px);
+}

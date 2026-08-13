@@ -13,25 +13,33 @@ import { RemovalA } from './removal-a';
 import { TrimmingA } from './trimming-a';
 import { RemovalB } from './removal-b';
 import { TrimmingB } from './trimming-b';
+import { RemovalC } from './removal-c';
+import { TrimmingC } from './trimming-c';
 import { StormA } from './storm-a';
 import { StormB } from './storm-b';
+import { StormC } from './storm-c';
 import { Agnostic } from './agnostic';
 
 export interface TemplateMeta {
   id: TemplateId;
   label: string;
   service: 'removal' | 'trimming' | 'storm' | 'agnostic';
-  variant: 'control' | 'variant' | 'blank';
+  /** hybrid = the -c pages: the control's exact copy in the variant's design
+   *  direction, executed premium (Design Elevation 2026-08-12). */
+  variant: 'control' | 'variant' | 'hybrid' | 'blank';
   built: boolean;
 }
 
 export const TEMPLATE_META: TemplateMeta[] = [
   { id: 'removal-a', label: 'Tree Removal — Control', service: 'removal', variant: 'control', built: true },
   { id: 'removal-b', label: 'Tree Removal — Variant', service: 'removal', variant: 'variant', built: true },
+  { id: 'removal-c', label: 'Tree Removal — Hybrid', service: 'removal', variant: 'hybrid', built: true },
   { id: 'trimming-a', label: 'Tree Trimming — Control', service: 'trimming', variant: 'control', built: true },
   { id: 'trimming-b', label: 'Tree Trimming — Variant', service: 'trimming', variant: 'variant', built: true },
+  { id: 'trimming-c', label: 'Tree Trimming — Hybrid', service: 'trimming', variant: 'hybrid', built: true },
   { id: 'storm-a', label: 'Storm Damage — Control', service: 'storm', variant: 'control', built: true },
   { id: 'storm-b', label: 'Storm Damage — Variant', service: 'storm', variant: 'variant', built: true },
+  { id: 'storm-c', label: 'Storm Damage — Hybrid', service: 'storm', variant: 'hybrid', built: true },
   { id: 'agnostic', label: 'Service-Agnostic — Blank', service: 'agnostic', variant: 'blank', built: true },
 ];
 
@@ -59,10 +67,16 @@ export function renderTemplate(id: TemplateId, client: ResolvedClient): ReactEle
       return <RemovalB client={client} />;
     case 'trimming-b':
       return <TrimmingB client={client} />;
+    case 'removal-c':
+      return <RemovalC client={client} />;
+    case 'trimming-c':
+      return <TrimmingC client={client} />;
     case 'storm-a':
       return <StormA client={client} />;
     case 'storm-b':
       return <StormB client={client} />;
+    case 'storm-c':
+      return <StormC client={client} />;
     case 'agnostic':
       return <Agnostic client={client} />;
     default:

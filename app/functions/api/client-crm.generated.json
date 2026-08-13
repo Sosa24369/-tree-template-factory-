@@ -2,10 +2,13 @@
   "knownTemplates": [
     "removal-a",
     "removal-b",
+    "removal-c",
     "trimming-a",
     "trimming-b",
+    "trimming-c",
     "storm-a",
     "storm-b",
+    "storm-c",
     "agnostic"
   ],
   "clients": {
@@ -30,7 +33,8 @@
       "leadSource": "Google Ads — Landing Page",
       "excludedTemplates": [
         "storm-a",
-        "storm-b"
+        "storm-b",
+        "storm-c"
       ]
     },
     "texas-tree-tops": {

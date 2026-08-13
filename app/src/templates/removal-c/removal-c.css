@@ -1,0 +1,762 @@
+/* ====================================================================
+   removal-c — THE HYBRID, executed premium (Design Elevation 2026-08-12).
+
+   Design direction is removal-b's: ink and brand-derived layered surfaces,
+   text-led hero, considered depth. Execution is elevated: a larger display
+   scale with tight tracking, more generous rhythm, a glass form card riding
+   beside the H1, and a sticky mobile call bar.
+
+   RULES (inherited from the -b stylesheet's own charter):
+   1. Every rule is scoped under .removal-c.
+   2. Brand colour never appears as a literal (R1) — everything brand-coloured
+      derives from var(--brand-*) via color-mix(); hex literals are neutrals.
+   3. No client asset path. The one hero photograph arrives as --rc-art from
+      the record and is consumed ONLY inside a desktop media query.
+   4. Performance is part of the design: no webfont, no library, the mobile
+      hero is colour + type (H1 = LCP), transform/opacity animation only.
+   5. Mobile first.
+   ==================================================================== */
+
+.removal-c {
+  /* neutrals */
+  --rc-ink: #0b1216;
+  --rc-ink-2: #45525c;
+  --rc-muted: #67737d;
+  --rc-paper: #ffffff;
+  --rc-line: #e4e9ee;
+
+  /* brand-derived (no literals) */
+  --rc-tint: color-mix(in srgb, var(--brand-primary) 5%, #ffffff);
+  --rc-tint-2: color-mix(in srgb, var(--brand-primary) 10%, #ffffff);
+  --rc-hairline: color-mix(in srgb, var(--brand-primary) 16%, var(--rc-line));
+  --rc-deep: color-mix(in srgb, var(--brand-primary) 84%, #000000);
+  --rc-deeper: color-mix(in srgb, var(--brand-primary) 45%, #000000);
+  --rc-accent-lift: color-mix(in srgb, var(--brand-accent) 80%, #ffffff);
+  --rc-accent-on-light: color-mix(in srgb, var(--brand-accent) 58%, #000000);
+  --ra-placeholder: color-mix(in srgb, var(--brand-primary) 9%, #eef1f3);
+
+  --rc-max: 1200px;
+  --rc-radius: 16px;
+
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  color: var(--rc-ink);
+  background: var(--rc-paper);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+.removal-c .rc-container {
+  width: 100%;
+  max-width: var(--rc-max);
+  margin: 0 auto;
+  padding: 0 clamp(18px, 5vw, 44px);
+}
+
+.removal-c .rc-measure {
+  max-width: 760px;
+}
+
+.removal-c .rc-section {
+  padding-block: clamp(52px, 8.5vw, 104px);
+}
+
+.removal-c .rc-section--tint {
+  background: var(--rc-tint);
+}
+
+.removal-c .rc-section--deep {
+  background: linear-gradient(160deg, var(--rc-deep), var(--rc-deeper));
+  color: #ffffff;
+}
+
+/* ---------------- type ---------------- */
+
+.removal-c .rc-h1 {
+  margin: 0 0 14px;
+  font-size: clamp(36px, 8vw, 66px);
+  line-height: 1.03;
+  letter-spacing: -0.024em;
+  font-weight: 800;
+}
+
+.removal-c .rc-h2 {
+  margin: 0 0 16px;
+  font-size: clamp(26px, 4.6vw, 42px);
+  line-height: 1.1;
+  letter-spacing: -0.018em;
+  font-weight: 800;
+}
+
+.removal-c .rc-h3 {
+  margin: 34px 0 10px;
+  font-size: clamp(20px, 3vw, 26px);
+  letter-spacing: -0.012em;
+  font-weight: 750;
+}
+
+.removal-c .rc-stacked span {
+  display: block;
+}
+
+.removal-c .rc-accent {
+  color: var(--rc-accent-on-light);
+}
+
+.removal-c .rc-section--deep .rc-accent,
+.removal-c .rc-hero .rc-accent {
+  color: var(--rc-accent-lift);
+}
+
+.removal-c .rc-lede {
+  margin: 0 0 18px;
+  font-size: clamp(16px, 2.4vw, 19px);
+  color: var(--rc-ink-2);
+  max-width: 760px;
+}
+
+.removal-c .rc-section--deep .rc-lede {
+  color: color-mix(in srgb, #ffffff 82%, var(--brand-primary));
+}
+
+.removal-c .rc-body {
+  margin: 0 0 16px;
+  color: var(--rc-ink-2);
+}
+
+/* ---------------- header ---------------- */
+
+.removal-c .rc-header {
+  background: var(--rc-paper);
+  border-bottom: 1px solid var(--rc-hairline);
+}
+
+.removal-c .rc-header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 84px;
+}
+
+.removal-c .rc-logo {
+  height: 60px;
+  width: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.removal-c span.rc-logo[data-fallback='logo-text'] {
+  height: auto;
+  width: auto;
+  border-radius: 0;
+  font-weight: 800;
+  font-size: 20px;
+  letter-spacing: -0.01em;
+}
+
+/* ---------------- call CTAs ---------------- */
+
+.removal-c .rc-call {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  padding: 13px 22px;
+  border-radius: 12px;
+  text-decoration: none;
+  font-weight: 800;
+  line-height: 1.15;
+  text-align: center;
+}
+
+.removal-c .rc-call--solid,
+.removal-c .rc-call--header {
+  background: var(--brand-primary);
+  color: var(--brand-on-primary, #ffffff);
+}
+
+.removal-c .rc-call--onink {
+  background: var(--brand-accent);
+  color: color-mix(in srgb, var(--brand-accent) 12%, #000000);
+  box-shadow: 0 10px 28px -14px color-mix(in srgb, var(--brand-accent) 60%, transparent);
+}
+
+.removal-c .rc-call .phone-sub,
+.removal-c .rc-call span:last-child:not(:only-child) {
+  font-weight: 600;
+  font-size: 12px;
+  opacity: 0.85;
+}
+
+/* ---------------- hero ---------------- */
+
+.removal-c .rc-hero {
+  background:
+    radial-gradient(120% 90% at 85% 0%, color-mix(in srgb, var(--brand-accent) 16%, transparent), transparent 60%),
+    linear-gradient(158deg, var(--rc-deep) 12%, var(--rc-deeper) 92%);
+  color: #ffffff;
+}
+
+.removal-c .rc-hero-grid {
+  display: grid;
+  gap: clamp(26px, 5vw, 56px);
+  padding-block: clamp(44px, 8vw, 108px);
+}
+
+.removal-c .rc-hero-sub {
+  margin: 0 0 12px;
+  font-size: clamp(17px, 2.6vw, 21px);
+  font-weight: 650;
+  color: var(--rc-accent-lift);
+}
+
+.removal-c .rc-hero-body {
+  margin: 0 0 22px;
+  max-width: 620px;
+  color: color-mix(in srgb, #ffffff 84%, var(--brand-primary));
+}
+
+.removal-c .rc-hero-ctas {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 22px;
+}
+
+.removal-c .rc-jump {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 12px 20px;
+  border-radius: 12px;
+  border: 1.5px solid color-mix(in srgb, #ffffff 38%, transparent);
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: 700;
+}
+
+.removal-c .rc-jump:hover {
+  border-color: #ffffff;
+}
+
+.removal-c .rc-jump--solid {
+  border: 0;
+  background: var(--brand-primary);
+  color: var(--brand-on-primary, #ffffff);
+  box-shadow: 0 14px 30px -18px color-mix(in srgb, var(--brand-primary) 70%, transparent);
+}
+
+.removal-c .rc-jump-sub {
+  font-weight: 600;
+  font-size: 12px;
+  opacity: 0.85;
+}
+
+/* trust strip */
+.removal-c .rc-trust {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.removal-c .rc-trust-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 13px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 650;
+  background: color-mix(in srgb, #ffffff 12%, transparent);
+  border: 1px solid color-mix(in srgb, #ffffff 22%, transparent);
+  color: color-mix(in srgb, #ffffff 92%, var(--brand-primary));
+}
+
+.removal-c .rc-trust-stars {
+  color: #fbbc04;
+  letter-spacing: 1.5px;
+}
+
+/* rating badge */
+.removal-c .rc-badge {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px;
+  margin: 0 0 18px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  width: fit-content;
+  background: color-mix(in srgb, #ffffff 10%, transparent);
+  border: 1px solid color-mix(in srgb, #ffffff 18%, transparent);
+  font-size: 14px;
+}
+
+.removal-c .rc-badge-word {
+  font-weight: 800;
+  letter-spacing: 0.01em;
+}
+
+/* Google wordmark letter colours (same treatment the controls use). */
+.removal-c .rc-badge-letter:nth-child(1) { color: #4285f4; }
+.removal-c .rc-badge-letter:nth-child(2) { color: #ea4335; }
+.removal-c .rc-badge-letter:nth-child(3) { color: #fbbc04; }
+.removal-c .rc-badge-letter:nth-child(4) { color: #4285f4; }
+.removal-c .rc-badge-letter:nth-child(5) { color: #34a853; }
+.removal-c .rc-badge-letter:nth-child(6) { color: #ea4335; }
+
+.removal-c .rc-badge-stars {
+  color: #fbbc04;
+  letter-spacing: 2px;
+}
+
+.removal-c .rc-badge-rating {
+  font-size: 16px;
+}
+
+.removal-c .rc-badge-caption {
+  flex-basis: 100%;
+  font-size: 12px;
+  opacity: 0.8;
+}
+
+/* form card */
+.removal-c .rc-form-card {
+  background: var(--rc-paper);
+  color: var(--rc-ink);
+  border-radius: var(--rc-radius);
+  padding: clamp(20px, 3.4vw, 30px);
+  box-shadow: 0 30px 70px -40px rgba(4, 10, 8, 0.55);
+  scroll-margin-top: 20px;
+}
+
+.removal-c .rc-form-h {
+  margin: 0 0 6px;
+  font-size: clamp(21px, 3vw, 26px);
+  letter-spacing: -0.014em;
+  font-weight: 800;
+}
+
+.removal-c .rc-form-h .rc-accent {
+  color: var(--rc-accent-on-light);
+}
+
+.removal-c .rc-form-sub {
+  margin: 0 0 16px;
+  font-size: 14px;
+  color: var(--rc-muted);
+}
+
+/* ---------------- benefits ---------------- */
+
+.removal-c .rc-benefits {
+  padding-block: clamp(30px, 4.5vw, 52px);
+  border-bottom: 1px solid var(--rc-hairline);
+}
+
+.removal-c .rc-benefit-grid {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+}
+
+.removal-c .rc-benefit {
+  padding: 16px 18px;
+  border-radius: 12px;
+  background: var(--rc-tint);
+  border: 1px solid var(--rc-hairline);
+  font-weight: 650;
+  font-size: 15px;
+}
+
+/* ---------------- work mosaic ---------------- */
+
+.removal-c .rc-work {
+  padding-block: clamp(36px, 5.5vw, 64px);
+}
+
+.removal-c .rc-work-grid {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.removal-c .rc-work-frame {
+  display: block;
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--ra-placeholder);
+}
+
+.removal-c .rc-work-img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+
+/* ---------------- reviews section ---------------- */
+
+.removal-c .rc-cta-row {
+  display: flex;
+  justify-content: center;
+  margin-top: 26px;
+}
+
+.removal-c .rc-why .rvs {
+  margin-top: 26px;
+}
+
+/* ---------------- services ---------------- */
+
+.removal-c .rc-service-grid {
+  display: grid;
+  gap: 8px 20px;
+  margin: 18px 0 0;
+  padding: 0;
+  list-style: none;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+
+.removal-c .rc-service {
+  position: relative;
+  padding: 9px 0 9px 26px;
+  border-bottom: 1px solid var(--rc-hairline);
+  font-weight: 550;
+  font-size: 15px;
+}
+
+.removal-c .rc-service::before {
+  content: '';
+  position: absolute;
+  left: 2px;
+  top: 15px;
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  transform: rotate(45deg);
+  background: var(--rc-accent-on-light);
+}
+
+/* ---------------- areas ---------------- */
+
+.removal-c .rc-city-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 18px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.removal-c .rc-city {
+  padding: 7px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--rc-hairline);
+  background: var(--rc-paper);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--rc-ink-2);
+}
+
+/* ---------------- longform ---------------- */
+
+.removal-c .rc-ribbon {
+  display: inline-block;
+  margin: 0 0 14px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 12.5px;
+  font-weight: 750;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--rc-accent-on-light);
+  background: color-mix(in srgb, var(--brand-accent) 14%, #ffffff);
+  border: 1px solid color-mix(in srgb, var(--brand-accent) 32%, #ffffff);
+}
+
+.removal-c .rc-request-list {
+  margin: 8px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.removal-c .rc-request-list li {
+  position: relative;
+  padding: 8px 0 8px 26px;
+  color: var(--rc-ink-2);
+}
+
+.removal-c .rc-request-list li::before {
+  content: '';
+  position: absolute;
+  left: 2px;
+  top: 16px;
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  transform: rotate(45deg);
+  background: var(--rc-accent-on-light);
+}
+
+/* ---------------- near-you + ready ---------------- */
+
+.removal-c .rc-near {
+  text-align: left;
+}
+
+.removal-c .rc-ready {
+  text-align: center;
+}
+
+.removal-c .rc-ready .rc-h2 {
+  margin-bottom: 6px;
+}
+
+/* ---------------- process ---------------- */
+
+.removal-c .rc-steps {
+  display: grid;
+  gap: 14px;
+  margin: 26px 0 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: step;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+
+.removal-c .rc-step {
+  padding: 20px;
+  border-radius: var(--rc-radius);
+  background: var(--rc-tint);
+  border: 1px solid var(--rc-hairline);
+}
+
+.removal-c .rc-step-label {
+  display: inline-block;
+  margin-bottom: 8px;
+  font-size: 12.5px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--rc-accent-on-light);
+}
+
+.removal-c .rc-step-h {
+  margin: 0 0 6px;
+  font-size: 18px;
+  font-weight: 750;
+}
+
+.removal-c .rc-step-body {
+  margin: 0;
+  font-size: 14.5px;
+  color: var(--rc-ink-2);
+}
+
+/* ---------------- FAQ ---------------- */
+
+.removal-c .rc-faq-list {
+  margin-top: 22px;
+  border-top: 1px solid var(--rc-hairline);
+}
+
+.removal-c .rc-faq-item {
+  border-bottom: 1px solid var(--rc-hairline);
+}
+
+.removal-c .rc-faq-q {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 16px 2px;
+  cursor: pointer;
+  font-weight: 700;
+  list-style: none;
+}
+
+.removal-c .rc-faq-q::-webkit-details-marker {
+  display: none;
+}
+
+.removal-c .rc-faq-mark {
+  flex: 0 0 auto;
+  width: 12px;
+  height: 12px;
+  position: relative;
+}
+
+.removal-c .rc-faq-mark::before,
+.removal-c .rc-faq-mark::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  background: var(--rc-accent-on-light);
+}
+
+.removal-c .rc-faq-mark::before {
+  width: 12px;
+  height: 2px;
+}
+
+.removal-c .rc-faq-mark::after {
+  width: 2px;
+  height: 12px;
+  transition: transform 160ms ease;
+}
+
+.removal-c details[open] .rc-faq-mark::after {
+  transform: rotate(90deg);
+}
+
+.removal-c .rc-faq-a {
+  margin: 0;
+  padding: 0 2px 16px;
+  color: var(--rc-ink-2);
+}
+
+.removal-c .rc-faq-item--orphan {
+  padding-top: 16px;
+}
+
+/* ---------------- final CTA ---------------- */
+
+.removal-c .rc-final {
+  text-align: center;
+}
+
+.removal-c .rc-final .rc-lede {
+  margin-inline: auto;
+}
+
+.removal-c .rc-final .rc-call {
+  margin-top: 10px;
+}
+
+/* ---------------- footer ---------------- */
+
+.removal-c .rc-footer {
+  background: var(--rc-ink);
+  color: color-mix(in srgb, #ffffff 78%, var(--brand-primary));
+  padding-block: 34px;
+  font-size: 14px;
+}
+
+.removal-c .rc-footer-inner {
+  display: grid;
+  gap: 6px;
+}
+
+.removal-c .rc-footer-name {
+  margin: 0;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.removal-c .rc-footer-copyright {
+  margin: 0;
+}
+
+.removal-c .rc-footer-legal {
+  margin: 4px 0 0;
+  display: flex;
+  gap: 16px;
+}
+
+.removal-c .rc-footer-link {
+  color: inherit;
+}
+
+/* ---------------- sticky mobile call bar ---------------- */
+
+.removal-c .rc-sticky {
+  position: fixed;
+  inset: auto 0 0 0;
+  z-index: 40;
+  padding: 10px clamp(14px, 4vw, 20px) calc(10px + env(safe-area-inset-bottom));
+  background: color-mix(in srgb, var(--rc-deep) 92%, transparent);
+  backdrop-filter: blur(8px);
+}
+
+.removal-c .rc-sticky-call {
+  width: 100%;
+}
+
+.removal-c main {
+  padding-bottom: 84px; /* room for the sticky bar */
+}
+
+/* ---------------- desktop ---------------- */
+
+@media (min-width: 980px) {
+  .removal-c .rc-hero-grid {
+    grid-template-columns: minmax(0, 1.25fr) minmax(340px, 0.85fr);
+    align-items: start;
+  }
+
+  /* The client photograph enters ONLY here — phones never fetch it. */
+  .removal-c .rc-hero {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .removal-c .rc-hero::after {
+    content: '';
+    position: absolute;
+    inset: 0 0 0 58%;
+    background-image: var(--rc-art, none);
+    background-size: cover;
+    background-position: center;
+    opacity: 0.16;
+    pointer-events: none;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 45%);
+    mask-image: linear-gradient(90deg, transparent, #000 45%);
+  }
+
+  .removal-c .rc-hero-grid > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  .removal-c .rc-logo {
+    height: 88px;
+    width: 88px;
+  }
+
+  .removal-c .rc-header-inner {
+    min-height: 120px;
+  }
+
+  .removal-c .rc-work-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .removal-c .rc-sticky {
+    display: none;
+  }
+
+  .removal-c main {
+    padding-bottom: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .removal-c * {
+    transition: none !important;
+  }
+}

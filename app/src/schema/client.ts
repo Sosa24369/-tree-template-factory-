@@ -10,19 +10,25 @@
 export type TemplateId =
   | 'removal-a'
   | 'removal-b'
+  | 'removal-c'
   | 'trimming-a'
   | 'trimming-b'
+  | 'trimming-c'
   | 'storm-a'
   | 'storm-b'
+  | 'storm-c'
   | 'agnostic';
 
 export const TEMPLATE_IDS: TemplateId[] = [
   'removal-a',
   'removal-b',
+  'removal-c',
   'trimming-a',
   'trimming-b',
+  'trimming-c',
   'storm-a',
   'storm-b',
+  'storm-c',
   'agnostic',
 ];
 

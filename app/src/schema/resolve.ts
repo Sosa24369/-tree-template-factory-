@@ -176,13 +176,21 @@ function interpolateCopy(value: string, client: ResolvedClient): string {
  * Copy resolution: template default unless this client overrides that key,
  * then {{token}} interpolation from the client record (see above).
  * Returns '' for an unknown key rather than throwing or rendering "undefined" (R5).
+ *
+ * `inheritOverridesFrom` exists for the -c hybrids: removal-c renders
+ * removal-a's copy BYTE-IDENTICALLY, and for the source client part of that
+ * copy lives in copyOverrides['removal-a'] (its source-exact strings). The
+ * hybrid names its parent here so those overrides apply to it too; its own
+ * copyOverrides['removal-c'] entries still win if ever set.
  */
 export function makeCopy(
   client: ResolvedClient,
   templateId: TemplateId,
-  defaults: Record<string, string>
+  defaults: Record<string, string>,
+  inheritOverridesFrom?: TemplateId
 ) {
-  const overrides = client.copyOverrides?.[templateId] ?? {};
+  const inherited = inheritOverridesFrom ? (client.copyOverrides?.[inheritOverridesFrom] ?? {}) : {};
+  const overrides = { ...inherited, ...(client.copyOverrides?.[templateId] ?? {}) };
   return function copy(key: string): string {
     const value = overrides[key] ?? defaults[key];
     if (value === undefined) {

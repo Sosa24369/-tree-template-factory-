@@ -41,7 +41,7 @@ export function StormPage({
 }: {
   client: ResolvedClient;
   copy: Copy;
-  variant: 'storm-a' | 'storm-b';
+  variant: 'storm-a' | 'storm-b' | 'storm-c';
   brandStyle: CSSProperties;
 }) {
   return (
