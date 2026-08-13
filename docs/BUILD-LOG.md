@@ -1175,3 +1175,54 @@ Chrome probe 27 pages × 4 widths: 0 overflow, 0 broken images · live: all
 spot pages 200 + prerendered, unknown routes 404, /api/lead 405, leakage
 greps 0 both directions, carousel + slider + 192px logo rendering live.
 Still NOT declared ready for ads (GTM/CallRail publishing pending).
+
+---
+
+# PREMIUM REORDER & POLISH (canonical v2) — 2026-08-13 (deployed)
+
+Owner verdict on the live pages: hero right, everything under it out of order
+and mediocre. Canonical v2 (supersedes v1) applied to ALL TEN templates
+(commit `e75c013`):
+
+1. HERO — as-is, plus: primary tap-to-call gains a gentle transform-only
+   bounce (~2.8s cycle; global reduced-motion rule kills it; zero CLS), and a
+   NEW shared <HeroBrand/> renders the client's logo + company name larger
+   and centered in the hero (record data; wordmark when no logo — the
+   agnostic banner treatment). Same preloaded logo file — zero new requests.
+2. OFFER BAND directly under the hero — each page's own existing badges
+   relocated: removal/trimming benefits strips, storm Trust, removal-b's
+   credential ticker, trimming-b's Offer section, agnostic Trust. No page
+   fabricated a band.
+3. REVIEWS as ONE captioned block — captioned by each page's own trust line
+   ("Why … Homeowners Choose …" on the extracted controls and hybrids,
+   Proof heading + stat band on removal-b, existing section heads on
+   trimming-b/agnostic; storm got the mandated plain descriptive header
+   "Reviews from Google" — the one new non-claim string). Slider gained a 7s
+   auto-advance: pauses on hover/touch/focus, skips ticks in hidden tabs,
+   disabled under reduced motion, fixed height (CLS 0).
+4. RESULTS — each page's results heading captions ONE symmetrical photo
+   grid: uniform 4:3 tiles, aligned edges, no ragged rows (trimming-b's
+   masonry became a grid).
+5. SERVICES BLURB two-column with a CLIENT photo on the right (stacked below
+   on mobile): longform on removal/trimming a+c, Scope on removal-b, Standard
+   on trimming-b, Handle on storm. No photo on record → type-only layout
+   (R5). Agnostic's services are operator placeholders — blurb-photo n/a.
+6. AREAS moved mid-page (between photo work and process), REMOVED from the
+   footer zone everywhere. Marquee slowed to a gentle drift (6s/city),
+   pauses on hover/focus + touch, user-scrollable.
+7. PROCESS captioned by its own heading (trimming-b has none — slot
+   collapses). 8. Remaining sections in existing order, footer.
+
+Copy FROZEN — zero body-copy edits; captions are promoted existing lines;
+a→c parity re-ran green after every move. Turnstile re-verdict (code +
+tests only): unchanged, fail-open, form submits — prod secrets list still
+exactly the two GHL_PITs; 42/42 tests.
+
+Verified: v2 order machine-checked on all 10 (built output); R4 PASS;
+factory rules PASS; FAQ a11y PASS; tracking 108; parity PASS; tsc clean;
+96-combo width probe clean; auto-advance verified armed (hidden-tab
+suspension by design). Lighthouse (applied throttling, GTM blocked, warm):
+-c pages 98–99 / ≤1.8s / 0 · removal-a 97/2.0 (photo-LCP variance band) ·
+removal-b 98/1.9 · storm-a 99/1.8 · jv trimming-a 98/1.9 · jv trimming-b
+99/1.7 · blank-co storm-a 99/1.7. FCP == LCP on every checked page — the
+lockup and bounce did not move the LCP element.
