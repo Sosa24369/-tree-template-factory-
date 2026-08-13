@@ -1127,3 +1127,51 @@ gate (inert), the enlarged logos (b90d043), and everything from this session.
 5. GTM cost note stands: with containers publishing, expect ~92–97 Perf on
    live-client pages (third-party cost); field LCP/CLS stay green.
 6. NOT declared "ready for ads" — third-party tracking still pending.
+
+---
+
+# CANONICAL STRUCTURE BUILD — 2026-08-13 (deployed)
+
+Owner's directive applied: ONE section order for every landing page — hero
+(H1 + the lead form + a prominent click-to-call, sticky call bar on mobile) →
+Google reviews slider → photo band 1 → process/what-we-handle → photo band 2 →
+the page's remaining sections in their existing relative order → a
+continuously scrolling service-areas carousel → footer. Explicit override of
+the old structural-fidelity rule; copy moved, never changed. Commits
+`f170da6` + `e06509d`, deployed `79aa49b4` to tree-template-factory.pages.dev.
+
+- Tasks 1–3 of the directive (Turnstile verdict, bug sweep, reviews) were
+  completed and logged in the Design Elevation entry above; the verdict was
+  re-confirmed against production post-deploy (`wrangler pages secret list`:
+  exactly the two GHL_PIT secrets — no GHL_DRY_RUN, no Turnstile keys, form
+  fail-open and submitting).
+- NEW shared ServiceAreasCarousel: CSS-only marquee (doubled track, clone
+  aria-hidden), pauses on hover/focus, reduced-motion → static scrollable
+  row, fixed height (CLS 0). Cities per client, record-sourced ONLY:
+  TTT 25 (record, originally the live page's pill list), JV 10 (record,
+  from its live pages), blank-co 0 → section omitted (fixture, by design).
+- Forms into heroes: removal-b/trimming-b/storm Estimate sections became
+  EstimatePanels inside their heroes (every estimate.* line word-for-word).
+  FLAG: removal-b's "name the $300 two-thirds down" ordering is structurally
+  neutralised by the directive; its copy voice remains the tested variable.
+  trimming-b's deliberate no-marquee stance likewise overridden.
+- Photo bands split around the process section on every template; either
+  band collapses when the client lacks photos. GAPS flagged: blank-co has
+  no photos (no bands — fixture); JV removal pages band from the trimming
+  cascade (standing not-for-ads flag); JV has no storm pages at all.
+- Contrast follow-ups on the panels that moved onto dark surfaces (storm
+  form card + eyebrow, trimming-b eyebrow + accent display line).
+
+Lighthouse (applied devtools throttling, mobile, GTM blocked; warm runs):
+all eight -c pages 99 / ≤1.8s / 0 · removal-b 98/1.8 · storm-a 99/1.8 ·
+jv trimming-a 98/1.8 · jv trimming-b 99/1.7 · blank-co storm-a 99/1.6 ·
+removal-a 98/1.9 (dedicated re-runs; one 96/2.0 reading mid-batch was
+machine-load variance — LCP never exceeded 2.0s, CLS 0 on every run).
+
+Verified: R4 PASS (56 pages) · factory rules PASS · FAQ a11y PASS ·
+tracking 108 · lead 42/42 · tsc clean · a→c copy parity PASS post-move ·
+canonical order machine-checked on all ten templates, re-checked LIVE ·
+Chrome probe 27 pages × 4 widths: 0 overflow, 0 broken images · live: all
+spot pages 200 + prerendered, unknown routes 404, /api/lead 405, leakage
+greps 0 both directions, carousel + slider + 192px logo rendering live.
+Still NOT declared ready for ads (GTM/CallRail publishing pending).
