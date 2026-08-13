@@ -3,18 +3,25 @@
  *
  * COPY IS LOCKED. DESIGN IS FREE.
  *
- * Every string below is reproduced BYTE-FOR-BYTE from the live Texas Tree Tops
- * "Routine Removal" landing page (https://texastreetopsllc.com/landing-page-352422),
- * as captured in source/removal/copy.md. That page is the control in the
- * design A/B test, so its wording is the constant. `removal-a` may be re-laid-out,
- * re-styled, re-typed and re-animated however we like — but if a single character
- * of this file changes, the control has been altered and the test is invalid.
+ * Every string below derives from the live Texas Tree Tops "Routine Removal"
+ * landing page (https://texastreetopsllc.com/landing-page-352422), as captured in
+ * source/removal/copy.md — that archive stays the byte-exact record. Two owner
+ * mandates have since amended this file (each edit is flagged inline with its date):
+ *
+ *   - P3-T2 + DESIGN ELEVATION 2026-08-12: mechanical typos are DEFECTS, not copy
+ *     ("a misspelling is not a tested variable") — fixed and listed in the session
+ *     report. Deliberate STYLE quirks (load-bearing spaces, curly quotes, the
+ *     hard-coded year) remain untouched.
+ *   - LEAKAGE FIX 2026-08-12: brand- and geo-bound strings used to hardcode the
+ *     source client's name/cities, which every OTHER client inherited (J Valdez and
+ *     blank-co pages literally said "Texas Tree Tops"). Those strings now compose
+ *     from the client record via {{name}} / {{areaName}} / {{areaProse}} tokens
+ *     (schema/resolve.ts interpolateCopy). Where the source string is correct
+ *     content that tokens cannot reproduce (TTT's legal entity name, its Tarrant
+ *     prose lists), the byte-exact string lives in
+ *     clients/texas-tree-tops.json → copyOverrides['removal-a'].
  *
  * Consequences, spelled out because they look like bugs:
- *   - Typos are DELIBERATE. "Tree Cutting ServiceBullet", "no wild surprise",
- *     "Save $300 though August-31st", "Get Request my tree removal free estimate",
- *     "Frequently Asked Question" (singular), "removals safe and efficiently",
- *     "©Copyright" (no space). Do not fix them. See the FIDELITY NOTES at the bottom.
  *   - Trailing and leading spaces are LOAD-BEARING. The source splits several
  *     headings across two nodes and puts the word gap in one of them. Each is
  *     flagged inline. A "helpful" trim closes the gap in the rendered heading.
@@ -64,12 +71,13 @@ export const removalACopy: Record<string, string> = {
    * SECTION 1 — Hero headline block
    * ---------------------------------------------------------------- */
   'hero.h1a': '$300 Off Your Tree Removal',
-  'hero.h1b': ' West Dallas Homeowners', // ← LEADING SPACE. GEO-BOUND.
+  'hero.h1b': ' {{areaName|Local}} Homeowners', // ← LEADING SPACE. GEO via {{areaName}} (client.serviceArea).
   'hero.h2': 'Get Your Tree Service Handled In Hours With Our Summer Special!',
   'hero.body':
-    'Get $300 Off With your Tree Removal Service All Summer! Whether you need a tree removal estimate, a tree removal quote, or a local tree removal company near you for expert help- our crew can handle the removal from start to finish. Save $300 though August-31st. Call Today!',
-  // ↑ "With your" (lower-case y), "help-" with no space before the dash, and
-  //   "though August-31st" where "through" is meant. All three are in the source.
+    'Get $300 Off With Your Tree Removal Service All Summer! Whether you need a tree removal estimate, a tree removal quote, or a local tree removal company near you for expert help — our crew can handle the removal from start to finish. Save $300 through August 31st. Call Today!',
+  // ↑ DESIGN-ELEVATION TYPO FIXES (2026-08-12, owner mandate "a misspelling is not a
+  //   tested variable"): "With your" -> "With Your", "help-" -> "help —",
+  //   "though August-31st" -> "through August 31st". Source strings in copy.md.
 
   /* ---------------------------------------------------------------- *
    * SECTION 1 — Lead form heading + fields
@@ -106,7 +114,8 @@ export const removalACopy: Record<string, string> = {
    * ---------------------------------------------------------------- */
   'benefits.item1': '$300 Off Qualifying Tree Removal Services',
   'benefits.item2': 'Fast Scheduling & Same-Day Tree Removals',
-  'benefits.item3': 'Licensed & Insured Service Up To $2Million',
+  'benefits.item3': 'Licensed & Insured Service Up To $2 Million',
+  // ↑ TYPO FIX 2026-08-12: source ran "$2Million" together; space restored.
   'benefits.item4': 'Safe Tree Removal, Debris Cleanup & Final Walkthrough',
 
   /* ---------------------------------------------------------------- *
@@ -122,15 +131,16 @@ export const removalACopy: Record<string, string> = {
   /* ---------------------------------------------------------------- *
    * SECTION 4 — Why choose us + Google reviews
    * ---------------------------------------------------------------- */
-  'why.h1a': 'Why West Dallas Homeowners', // GEO-BOUND
-  'why.h1b': 'Choose Texas Tree Tops for Tree Removal', // BRAND-BOUND
+  'why.h1a': 'Why {{areaName|Local}} Homeowners', // GEO via {{areaName}}
+  'why.h1b': 'Choose {{name}} for Tree Removal', // BRAND via {{name}}
   'why.body':
-    'Texas Tree Tops provides fast, reliable tree removal service for homeowners in Highland Park, University Park, Kessler Park / N. Oak Cliff, Colleyville, Coppell, Flower Mound, Cedar Hill / DeSoto / Duncanville, Southlake, Colleyville, Grapevine Keller Trophy Club Westlake Mansfield Fort Worth Hurst, Euless, Bedford, Coppell, Carrollton, Farmers Branch, Addison, Irving, Grand Prairie, and Surrounding West Dallas',
-  // ↑ GEO-BOUND AND BRAND-BOUND, and the single most client-specific string in
-  //   this file: it is a prose service-area list. "Colleyville" and "Coppell"
-  //   each appear twice and the "Grapevine Keller Trophy Club Westlake Mansfield
-  //   Fort Worth Hurst" run has no commas — both preserved. For a non-control
-  //   client, override this key (or compose it from client.serviceAreaList).
+    '{{name}} provides fast, reliable tree removal service for homeowners in {{areaProse|your area}}.',
+  // ↑ LEAKAGE FIX 2026-08-12: this default used to hardcode the source client's name
+  //   and 20-city prose list, so EVERY other client's page (and blank-co) claimed to
+  //   be Texas Tree Tops serving TTT's cities. Now composed from the client record.
+  //   Texas Tree Tops keeps its source-exact prose list (typo-fixed: duplicated
+  //   Colleyville/Coppell removed, commas restored to the "Grapevine … Hurst" run)
+  //   via clients/texas-tree-tops.json copyOverrides['removal-a'].
 
   // Review-card icon alts. The card CONTENT — author, "Google Review · a month
   // ago", and the quotation — is client data (client.reviews[]), not copy.
@@ -143,9 +153,9 @@ export const removalACopy: Record<string, string> = {
   'restoration.h1a': 'Restoration ', // ← TRAILING SPACE
   'restoration.h1b': 'Results Guaranteed',
   'restoration.body':
-    'Our large crews use specialized equipment to complete removals safe and efficiently — because when a tree needs to come down, you need it handled fast and done right!',
-  // ↑ "safe and efficiently" (source says "safe", not "safely"); the dash is an
-  //   em dash U+2014, not a hyphen.
+    'Our large crews use specialized equipment to complete removals safely and efficiently — because when a tree needs to come down, you need it handled fast and done right!',
+  // ↑ TYPO FIX 2026-08-12: source said "safe and efficiently"; corrected to "safely".
+  //   The dash is an em dash U+2014, not a hyphen.
 
   /* ---------------------------------------------------------------- *
    * SECTION 6 — Tree Removal Services We Offer
@@ -155,14 +165,15 @@ export const removalACopy: Record<string, string> = {
   'services.h1a': 'Tree Removal ', // ← TRAILING SPACE
   'services.h1b': 'Services We Offer',
   'services.body':
-    'Safe, clean, and professional tree removal service for East Dallas homeowners who need the job handled without a mess left behind.',
-  // ↑ GEO-BOUND, and says EAST Dallas on a WEST Dallas page. Source defect, preserved.
+    'Safe, clean, and professional tree removal service for {{areaName|local}} homeowners who need the job handled without a mess left behind.',
+  // ↑ GEO FIX 2026-08-12: source said EAST Dallas on this WEST Dallas page (the
+  //   sister-page paste defect). Now composed from the client record.
 
   'services.item1': 'Residential Tree Removal',
   'services.item2': 'Dead Tree Removal',
   'services.item3': 'Large Tree Removal',
   'services.item4': 'Oak Tree Removal',
-  'services.item5': 'Tree Cutting ServiceBullet', // editor artifact: "Bullet" welded on. PRESERVED.
+  'services.item5': 'Tree Cutting Service', // TYPO FIX 2026-08-12: source welded the editor artifact "Bullet" onto this item.
   'services.item6': 'Safe Tree Removal Near Homes',
   'services.item7': 'Local Tree Removal Company',
   'services.item8': 'Stump Grinding',
@@ -177,7 +188,7 @@ export const removalACopy: Record<string, string> = {
   'services.item17': 'Crane-Assisted Tree Removal',
   'services.item18': 'Tree Removal Estimate',
   'services.item19': 'Tree Removal For Yard',
-  'services.item20': 'West Dallas Tree Removal ', // ← TRAILING SPACE. GEO-BOUND.
+  'services.item20': '{{areaName|Local}} Tree Removal ', // ← TRAILING SPACE. GEO via {{areaName}}.
 
   /* ---------------------------------------------------------------- *
    * SECTION 7 — Areas We Serve
@@ -185,8 +196,10 @@ export const removalACopy: Record<string, string> = {
    * ---------------------------------------------------------------- */
   'areas.h1a': 'Areas ', // ← TRAILING SPACE
   'areas.h1b': 'We Serve',
-  'areas.h2': 'Top Rated West Dallas Local Tree Trimming Company',
-  // ↑ GEO-BOUND, and says TRIMMING on a REMOVAL page. Source defect, preserved.
+  'areas.h2': 'Top Rated {{areaName|Local}} Local Tree Removal Company',
+  // ↑ FIXES 2026-08-12: geo via {{areaName}}, and the source said "Tree TRIMMING
+  //   Company" on this REMOVAL page — wrong-service word corrected (same class as
+  //   the approved P3-T2 form.subline fix).
 
   /* ---------------------------------------------------------------- *
    * SECTION 8 — Long-form SEO block
@@ -199,12 +212,15 @@ export const removalACopy: Record<string, string> = {
   'longform.h2b': 'Safely, Cleanly & Carefully',
   'longform.lede': 'Careful Tree Removal. Complete Cleanup. No Mess.',
   'longform.p1':
-    'Some trees become a problem slowly. They lean toward the house, crowd the driveway, drop limbs across the yard, block sunlight, or sit exactly where a cleaner, better outdoor space should be. When that happens, Texas Tree Tops is the local tree removal company Fort Worth homeowners call to get the tree handled without chaos, guesswork, or a mess left behind.',
-  // ↑ GEO-BOUND (Fort Worth) and BRAND-BOUND.
+    'Some trees become a problem slowly. They lean toward the house, crowd the driveway, drop limbs across the yard, block sunlight, or sit exactly where a cleaner, better outdoor space should be. When that happens, {{name}} is the local tree removal company {{areaName|local}} homeowners call to get the tree handled without chaos, guesswork, or a mess left behind.',
+  // ↑ LEAKAGE FIX 2026-08-12: brand + geo now compose from the client record.
+  //   Texas Tree Tops keeps its source-exact sentence ("Fort Worth homeowners" —
+  //   a real TTT service city) via copyOverrides['removal-a'].
   'longform.p2':
-    'We provide professional tree removal service in Fort Worth, Arlington, Keller, Southlake, North Richland Hills, Hurst, Bedford, Haltom City, and throughout Tarrant County. Whether you need residential tree removal, dead tree removal, large tree removal, oak tree removal, or tree cutting service, our crew can inspect the job, explain your options, give you a tree removal estimate, and handle the removal from start to finish.',
-  // ↑ GEO-BOUND: a second, different prose service-area list — Tarrant County —
-  //   on a Dallas County page. Preserved.
+    'We provide professional tree removal service in {{areaProse|your area}}. Whether you need residential tree removal, dead tree removal, large tree removal, oak tree removal, or tree cutting service, our crew can inspect the job, explain your options, give you a tree removal estimate, and handle the removal from start to finish.',
+  // ↑ LEAKAGE FIX 2026-08-12: the source's Tarrant-County prose list (real TTT
+  //   territory) moves to TTT's copyOverrides; every other client composes from
+  //   its own record.
   'longform.requestsH2a': 'Common Tree Removal ', // ← TRAILING SPACE
   'longform.requestsH2b': 'Requests We Handle',
   'longform.request1': 'Residential tree removal for unwanted, overgrown, or poorly placed trees',
@@ -222,7 +238,7 @@ export const removalACopy: Record<string, string> = {
   'nearYou.h2': 'Looking for a Tree Removal Company Near You?',
   'nearYou.body':
     'Request your free tree removal estimate today and our team will call you with the next steps for your tree removal quote.',
-  'nearYou.button': 'Get Request my tree removal free estimate', // doubled verb + mixed case. PRESERVED.
+  'nearYou.button': 'Request my tree removal free estimate', // TYPO FIX 2026-08-12: source doubled the verb ("Get Request my …").
   'nearYou.buttonSub': 'Request a call back',
 
   'readyCta.h1a': 'Ready To Get ', // ← TRAILING SPACE
@@ -246,8 +262,8 @@ export const removalACopy: Record<string, string> = {
   'process.step2.label': 'Step 2',
   'process.step2.h2': 'We Inspect The Job',
   'process.step2.body':
-    'Our crew looks at the tree size, access, nearby structures, stump grinding options, and cleanup needs so there are no wild surprise',
-  // ↑ ends "no wild surprise" — missing plural "s" AND missing the full stop. Both preserved.
+    'Our crew looks at the tree size, access, nearby structures, stump grinding options, and cleanup needs so there are no wild surprises.',
+  // ↑ TYPO FIX 2026-08-12: source ended "no wild surprise" — plural and full stop restored.
 
   'process.step3.label': 'Step 3',
   'process.step3.h2': 'Safe Tree Removal',
@@ -263,13 +279,13 @@ export const removalACopy: Record<string, string> = {
    * SECTION 11 — FAQ (10 pairs)
    * ---------------------------------------------------------------- */
   'faq.h1a': 'Top 10 ', // ← TRAILING SPACE
-  'faq.h1b': 'Frequently Asked Question', // singular in the source. PRESERVED.
+  'faq.h1b': 'Frequently Asked Questions', // TYPO FIX 2026-08-12: source heading was singular.
   'faq.h1c': ' About Tree Removals', // ← LEADING SPACE
 
   'faq.q1': 'How fast can you come out for a tree removal estimate?',
   'faq.a1':
-    'In many cases, we can schedule same-day or next-available estimates while crews are open. If you need tree removal service in West Dallas, send your request and we’ll call you with the next steps.',
-  // ↑ GEO-BOUND (West Dallas).
+    'In many cases, we can schedule same-day or next-available estimates while crews are open. If you need tree removal service in {{areaName|your area}}, send your request and we’ll call you with the next steps.',
+  // ↑ GEO via {{areaName}}.
 
   'faq.q2': 'How much does tree removal cost?',
   'faq.a2':
@@ -289,15 +305,18 @@ export const removalACopy: Record<string, string> = {
 
   'faq.q6': 'Are you licensed and insured?',
   'faq.a6':
-    'Yes. Texas Tree Tops is licensed and insured, with coverage up to $2M. Tree removal can be dangerous work, especially around homes, fences, roofs, and driveways, so you want a crew that knows how to handle the job safely.',
-  // ↑ BRAND-BOUND. Also note "$2M" here vs "$2Million" in benefits.item3 — the
-  //   source writes the insurance figure two different ways. Both preserved.
+    'Yes. {{name}} is licensed and insured, with coverage up to $2M. Tree removal can be dangerous work, especially around homes, fences, roofs, and driveways, so you want a crew that knows how to handle the job safely.',
+  // ↑ BRAND via {{name}}. NOTE: the "$2M" coverage figure is copy, not record data —
+  //   flagged for the owner: a future client without $2M coverage would need to
+  //   override this key or the page overstates their insurance.
 
   'faq.q7': 'What areas do you serve?',
   'faq.a7':
-    'We provide tree removal service in East Dallas, Mesquite, Garland, Rowlett, Rockwall, Sunnyvale, Heath, Fate, Forney, and the Lake Ray Hubbard area.',
-  // ↑ GEO-BOUND: a third, different prose service-area list — East Dallas — that
-  //   matches neither the H1 (West Dallas) nor longform.p2 (Tarrant County).
+    'We provide tree removal service in {{areaProse|your area}}.',
+  // ↑ LEAKAGE FIX 2026-08-12: the source answer carried the SISTER COMPANY'S
+  //   service-area list (East Dallas / Mesquite / Garland … is J Valdez territory,
+  //   not TTT's) — the page-builder paste defect this factory exists to kill.
+  //   Composed from the client record for every client, including TTT.
 
   'faq.q8': 'When should I remove a tree?',
   'faq.a8':
@@ -319,17 +338,22 @@ export const removalACopy: Record<string, string> = {
   'finalCta.h1a': 'Need Tree Removal?',
   'finalCta.h1b': ' Get a Free Estimate Today', // ← LEADING SPACE
   'finalCta.body':
-    'Fast tree removal service for homeowners in West Dallas, Whether the tree is dead, overgrown, blocking your yard, or sitting too close to the house, our crew can inspect it, explain your options, and handle the removal cleanly.',
-  // ↑ GEO-BOUND. Comma splice with a capital "Whether" is in the source. PRESERVED.
+    'Fast tree removal service for homeowners in {{areaName|your area}}. Whether the tree is dead, overgrown, blocking your yard, or sitting too close to the house, our crew can inspect it, explain your options, and handle the removal cleanly.',
+  // ↑ GEO via {{areaName}}. TYPO FIX 2026-08-12: the source's comma splice
+  //   ("… West Dallas, Whether …") becomes a full stop.
   'finalCta.linkLabel': 'Get my free estimate',
   'finalCta.linkSub': 'Click to call',
 
   /* ---------------------------------------------------------------- *
    * SECTION 13 — Footer
    * ---------------------------------------------------------------- */
-  'footer.companyName': 'Texas Tree Tops Tree Service LLC', // BRAND-BOUND
-  'footer.copyright': '©Copyright Texas Tree Tops. | All rights reserved 2026',
-  // ↑ BRAND-BOUND. No space after "©", and the year is hard-coded. PRESERVED.
+  'footer.companyName': '{{name}}',
+  // ↑ LEAKAGE FIX 2026-08-12: was the source client's LEGAL entity name
+  //   ("Texas Tree Tops Tree Service LLC") — now {{name}}; TTT keeps its legal
+  //   name via copyOverrides['removal-a'] (a legal name is not composable).
+  'footer.copyright': '© Copyright {{name}}. | All rights reserved 2026',
+  // ↑ BRAND via {{name}}. TYPO FIX 2026-08-12: space restored after "©".
+  //   The year stays hard-coded exactly as the source wrote it.
   'footer.privacyLabel': 'Privacy Policy',
   'footer.termsLabel': 'Terms of Service',
 
@@ -337,9 +361,11 @@ export const removalACopy: Record<string, string> = {
    * <head> — document metadata
    * meta author was just the bare company name, so it is client data, not copy.
    * ---------------------------------------------------------------- */
-  'meta.title': 'Tree Removal Services in West Dallas | Texas Tree Tops', // GEO + BRAND-BOUND
+  'meta.title': 'Tree Removal Services in {{areaName|Your Area}} | {{name}}', // GEO + BRAND via tokens
   'meta.description':
-    'Texas Tree Tops LLC provides safe tree removal, stump grinding, cleanup, and free estimates.', // BRAND-BOUND
+    '{{name}} provides safe tree removal, stump grinding, cleanup, and free estimates.',
+  // ↑ LEAKAGE FIX 2026-08-12: was "Texas Tree Tops LLC provides …" for every client.
+  //   TTT keeps its "LLC" wording via copyOverrides['removal-a'].
 };
 
 export default removalACopy;
@@ -381,56 +407,46 @@ export default removalACopy;
  *        faq.h1c                   ' About Tree Removals'
  *        finalCta.h1b              ' Get a Free Estimate Today'
  *
- * 3. GEO-BOUND DEFAULTS — for P2/P3.
- *    These strings hard-code a place name inside a fixed marketing sentence, so
- *    they stay in copy (not the client record) and are changed per client through
- *    client.copyOverrides['removal-a']. Any client that is not Texas Tree Tops in
- *    West Dallas MUST override every key in this list or the page will name the
- *    wrong city. The P3 editor should surface these as a single "geography" group.
+ * 3. GEO- AND BRAND-BOUND DEFAULTS — RESOLVED 2026-08-12 via copy tokens.
+ *    These keys now compose from the client record at render time
+ *    ({{name}} / {{areaName}} / {{areaProse}}, schema/resolve.ts). No override is
+ *    required for a new client to render its own name and geography; blank-co
+ *    degrades to the tokens' neutral fallbacks (R5).
  *
- *      hero.h1b          ' West Dallas Homeowners'
- *      why.h1a           'Why West Dallas Homeowners'
- *      why.body          prose service-area list — Highland Park … Surrounding West Dallas
- *      services.body     'East Dallas homeowners'          ← EAST, on a WEST Dallas page
- *      services.item20   'West Dallas Tree Removal '
- *      areas.h2          'Top Rated West Dallas Local Tree Trimming Company'
- *      longform.p1       'Fort Worth homeowners'
- *      longform.p2       prose service-area list — Fort Worth … Tarrant County
- *      faq.a1            'tree removal service in West Dallas'
- *      faq.a7            prose service-area list — East Dallas … Lake Ray Hubbard
- *      finalCta.body     'homeowners in West Dallas'
- *      meta.title        'Tree Removal Services in West Dallas'
+ *      hero.h1b · why.h1a · why.h1b · why.body · services.body · services.item20
+ *      areas.h2 · longform.p1 · longform.p2 · faq.a1 · faq.a6 · faq.a7
+ *      finalCta.body · footer.companyName · footer.copyright · meta.title
+ *      meta.description
  *
- *    FOUR different geographies coexist in the control — West Dallas, East Dallas,
- *    Fort Worth and Tarrant County. That is not an extraction error, it is what the
- *    live page says. The control reproduces it; a real client build overrides it.
+ *    Texas Tree Tops (the source client) carries byte-exact source strings in
+ *    copyOverrides['removal-a'] ONLY where the source content is real and
+ *    uncomposable: why.body (its 20-city prose list, typo-fixed), longform.p1
+ *    (Fort Worth is genuine TTT territory), longform.p2 (Tarrant list),
+ *    footer.companyName (legal entity name), meta.description ("LLC" wording).
+ *    faq.a7 is NOT preserved for TTT — the source answer carried J VALDEZ's
+ *    service list (the sister-page paste defect), so TTT composes from its own
+ *    record like everyone else.
  *
- * 4. BRAND-BOUND DEFAULTS — contain the control client's company name inside a
- *    fixed sentence. Same treatment: override per client.
+ * 4. (Merged into note 3.)
  *
- *      why.h1b            'Choose Texas Tree Tops for Tree Removal'
- *      why.body           'Texas Tree Tops provides fast, reliable …'
- *      longform.p1        '… Texas Tree Tops is the local tree removal company …'
- *      faq.a6             'Texas Tree Tops is licensed and insured …'
- *      footer.companyName 'Texas Tree Tops Tree Service LLC'
- *      footer.copyright   '©Copyright Texas Tree Tops. | All rights reserved 2026'
- *      meta.title         '… | Texas Tree Tops'
- *      meta.description   'Texas Tree Tops LLC provides …'
- *
- *    footer.copyright also hard-codes the year 2026, exactly as the source does.
- *
- * 5. DELIBERATE SOURCE DEFECTS PRESERVED — do not "fix" these:
- *      hero.body          'With your' · 'help-' · 'Save $300 though August-31st'
- *      benefits.item3     '$2Million'  (vs '$2M' in faq.a6 — two spellings, both kept)
- *      restoration.body   'removals safe and efficiently'  (should be 'safely')
- *      services.item5     'Tree Cutting ServiceBullet'
- *      services.body      'East Dallas' on a West Dallas page
- *      areas.h2           'Tree Trimming Company' on a tree-removal page
- *      nearYou.button     'Get Request my tree removal free estimate'
- *      process.step2.body '… no wild surprise'  (no plural, no full stop)
- *      faq.h1b            'Frequently Asked Question'  (singular)
- *      finalCta.body      'in West Dallas, Whether the tree is dead…'  (comma splice)
- *      footer.copyright   '©Copyright'  (no space after the ©)
+ * 5. SOURCE DEFECTS — status after the 2026-08-12 typo mandate
+ *    ("real typos get fixed on both sides of a pair; a misspelling is not a
+ *    tested variable"). FIXED, and listed in the session report:
+ *      hero.body          'With your' → 'With Your' · 'help-' → 'help —'
+ *                         · 'though August-31st' → 'through August 31st'
+ *      benefits.item3     '$2Million' → '$2 Million'
+ *      restoration.body   'safe and efficiently' → 'safely and efficiently'
+ *      services.item5     'Tree Cutting ServiceBullet' → 'Tree Cutting Service'
+ *      services.body      'East Dallas' on a West Dallas page → {{areaName}}
+ *      areas.h2           'Tree Trimming Company' → 'Tree Removal Company'
+ *      nearYou.button     doubled verb 'Get Request my …' → 'Request my …'
+ *      process.step2.body 'no wild surprise' → 'no wild surprises.'
+ *      faq.h1b            'Frequently Asked Question' → 'Frequently Asked Questions'
+ *      finalCta.body      comma splice '… , Whether' → '… . Whether'
+ *      footer.copyright   '©Copyright' → '© Copyright'
+ *    KEPT (style, not defects): every load-bearing space, the U+00A0 in
+ *    cta.callSubLabel, curly quotes, '$2M' vs '$2 Million' phrasing difference,
+ *    the hard-coded year 2026, 'and Surrounding West Dallas' (in TTT's override).
  *
  * 6. WHAT THE CONTROL DOES NOT SAY. Three strings from the source are deliberately
  *    absent because they are client data or dead controls, not copy:

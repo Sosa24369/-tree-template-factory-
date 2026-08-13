@@ -125,7 +125,56 @@ export function resolveClient(raw: ClientRecord): {
 }
 
 /**
- * Copy resolution: template default unless this client overrides that key.
+ * Copy interpolation tokens. A default (or an override) may embed
+ * `{{token}}` or `{{token|fallback}}`; the value is composed from the CLIENT
+ * RECORD at resolution time, never hardcoded in a template (R1/R4).
+ *
+ *   {{name}}      → client.name
+ *   {{areaName}}  → client.serviceArea up to the first comma ("West Dallas, TX"
+ *                   → "West Dallas") — the form marketing prose wants
+ *   {{areaProse}} → client.serviceAreaList joined as English prose
+ *                   ("A, B, and C")
+ *
+ * The fallback renders when the record value is blank (the blank-co R5 fixture),
+ * so a tokenized sentence degrades to neutral prose — never to a stray gap, and
+ * never to another client's place or name, which is exactly the defect this
+ * mechanism exists to kill: the extracted controls used to ship their source
+ * client's name and geography to every other client as the default.
+ * An unknown token renders its fallback (or ''), never the raw braces (R5).
+ */
+const COPY_TOKEN_RE = /\{\{(\w+)(?:\|([^}]*))?\}\}/g;
+
+function joinProse(items: string[]): string {
+  if (items.length <= 1) return items[0] ?? '';
+  if (items.length === 2) return `${items[0]} and ${items[1]}`;
+  return `${items.slice(0, -1).join(', ')}, and ${items[items.length - 1]}`;
+}
+
+function interpolateCopy(value: string, client: ResolvedClient): string {
+  if (!value.includes('{{')) return value;
+  return value.replace(COPY_TOKEN_RE, (_m, token: string, fallback = '') => {
+    switch (token) {
+      case 'name':
+        return (client.name ?? '').trim() || fallback;
+      case 'areaName': {
+        const area = (client.serviceArea ?? '').split(',')[0].trim();
+        return area || fallback;
+      }
+      case 'areaProse': {
+        const cities = (client.serviceAreaList ?? [])
+          .filter((c) => typeof c === 'string' && c.trim())
+          .map((c) => c.trim());
+        return cities.length ? joinProse(cities) : fallback;
+      }
+      default:
+        return fallback;
+    }
+  });
+}
+
+/**
+ * Copy resolution: template default unless this client overrides that key,
+ * then {{token}} interpolation from the client record (see above).
  * Returns '' for an unknown key rather than throwing or rendering "undefined" (R5).
  */
 export function makeCopy(
@@ -140,6 +189,6 @@ export function makeCopy(
       if (import.meta.env.DEV) console.warn(`[copy] missing key "${key}" for ${templateId}`);
       return '';
     }
-    return value;
+    return interpolateCopy(value, client);
   };
 }

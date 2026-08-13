@@ -288,6 +288,14 @@
       "body": "The Texas Tree Tops team did an amazing job taking down a huge pecan tree in our yard. They were fast, professional, and affordable. They had to navigate a tricky overhang on our neighbor's house as well. Daniel was also great to work with."
     }
   ],
-  "copyOverrides": {},
+  "copyOverrides": {
+    "removal-a": {
+      "why.body": "Texas Tree Tops provides fast, reliable tree removal service for homeowners in Highland Park, University Park, Kessler Park / N. Oak Cliff, Colleyville, Coppell, Flower Mound, Cedar Hill / DeSoto / Duncanville, Southlake, Grapevine, Keller, Trophy Club, Westlake, Mansfield, Fort Worth, Hurst, Euless, Bedford, Carrollton, Farmers Branch, Addison, Irving, Grand Prairie, and Surrounding West Dallas",
+      "longform.p1": "Some trees become a problem slowly. They lean toward the house, crowd the driveway, drop limbs across the yard, block sunlight, or sit exactly where a cleaner, better outdoor space should be. When that happens, Texas Tree Tops is the local tree removal company Fort Worth homeowners call to get the tree handled without chaos, guesswork, or a mess left behind.",
+      "longform.p2": "We provide professional tree removal service in Fort Worth, Arlington, Keller, Southlake, North Richland Hills, Hurst, Bedford, Haltom City, and throughout Tarrant County. Whether you need residential tree removal, dead tree removal, large tree removal, oak tree removal, or tree cutting service, our crew can inspect the job, explain your options, give you a tree removal estimate, and handle the removal from start to finish.",
+      "footer.companyName": "Texas Tree Tops Tree Service LLC",
+      "meta.description": "Texas Tree Tops LLC provides safe tree removal, stump grinding, cleanup, and free estimates."
+    }
+  },
   "reviewAvatarStyle": "initials"
 }

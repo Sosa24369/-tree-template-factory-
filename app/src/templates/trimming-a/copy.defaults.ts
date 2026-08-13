@@ -3,30 +3,28 @@
  *
  * COPY IS LOCKED. DESIGN IS FREE.
  *
- * Every string below is reproduced BYTE-FOR-BYTE from the live J Valdez Tree
- * Services "Tree Trimming" landing page (https://jvaldeztreeservices.com/landing-page-997015),
- * as captured in source/trimming/copy.md. That page is the control in the design
- * A/B test, so its wording is the constant. `trimming-a` may be re-laid-out,
- * re-styled and re-typed however we like — but if a single character of this file
- * changes, the control has been altered and the test is invalid.
+ * Every string below derives from the live J Valdez Tree Services "Tree Trimming"
+ * landing page (https://jvaldeztreeservices.com/landing-page-997015), as captured
+ * in source/trimming/copy.md — that archive stays the byte-exact record. Two owner
+ * mandates have since amended this file (each edit is flagged inline with its date):
  *
- * P3-T2 APPROVED EXCEPTIONS — three source defects corrected on the same basis as
- * the four P0 fixes (a defect is not a copy choice). Applied to trimming-a AND
- * trimming-b so the A/B comparison stays valid:
- *   - "dicousnt" -> "discount"                       (hero.body)
- *   - "Mutli-Tree Pricing" -> "Multi-Tree Pricing"   (services.item10)
- *   - form.subline "tree removal quote" -> "tree trimming quote"
- * These three, and ONLY these three, are corrected. Everything else stays locked.
+ *   - P3-T2 + DESIGN ELEVATION 2026-08-12: mechanical typos are DEFECTS, not copy
+ *     ("a misspelling is not a tested variable"). Fixed and listed in the session
+ *     report: "dicousnt"→"discount", "Mutli-Tree"→"Multi-Tree", the wrong-service
+ *     "tree removal" wording (form.subline, why.body, faq.a7, faq.a10), the
+ *     doubled space "includes  roof", the stray "trim, —" comma, the never-closed
+ *     "(Multi-Tree Bundle Pricing", "start to finish..", singular "Frequently
+ *     Asked Question", the duplicated "patio work", the welded "Available—", and
+ *     "©Copyright" with no space.
+ *   - LEAKAGE FIX 2026-08-12: brand- and geo-bound strings used to hardcode
+ *     J Valdez's name, cities, and STREET ADDRESS, which every other client
+ *     inherited (Texas Tree Tops' live page said "Choose J Valdez" and carried
+ *     J Valdez's address in its footer). Those strings now compose from the client
+ *     record via {{name}} / {{areaName}} / {{areaProse}} tokens
+ *     (schema/resolve.ts interpolateCopy). J Valdez keeps source-exact wording
+ *     (minus the typo fixes) via clients/j-valdez.json copyOverrides['trimming-a'].
  *
  * Consequences, spelled out because they look like bugs:
- *   - Typos are DELIBERATE (except the two corrected above). The never-closed
- *     "(Multi-Tree Bundle Pricing", "no wild surprises", "start to finish..",
- *     "Frequently Asked Question" (singular), the duplicated "patio work",
- *     "©Copyright" with no space. Do not fix them. See the FIDELITY NOTES at the
- *     bottom for the complete list and where each one sits.
- *   - "tree removal" STILL appears three times on a tree TRIMMING page (why.body,
- *     faq.a7, faq.a10). Those are outside the T2 mandate — only form.subline was
- *     corrected — so they stay exactly as the live page says.
  *   - Leading and trailing spaces are LOAD-BEARING. The source splits most headings
  *     across two or three nodes and puts the word gap inside one of them. Each is
  *     flagged inline. A "helpful" trim fuses two words in the rendered heading.
@@ -80,16 +78,18 @@ export const trimmingACopy: Record<string, string> = {
   /* ---------------------------------------------------------------- *
    * SECTION 2 — Hero headline block
    * ---------------------------------------------------------------- */
-  'hero.h1a': 'East Dallas Get 10% Off Tree Trimming With ', // ← TRAILING SPACE. GEO-BOUND.
+  'hero.h1a': '{{areaName|Local}} Get 10% Off Tree Trimming With ', // ← TRAILING SPACE. GEO via {{areaName}}.
   'hero.h1b': 'Roof & Gutter Branch Clearance', // <strong> run
-  'hero.h2': 'Same-Week Appointments Available— Get Your Trees Trimmed Today! Summer Special Ends Soon. ',
-  // ↑ TRAILING SPACE, and the em dash is welded to "Available" with no space before it.
+  'hero.h2': 'Same-Week Appointments Available — Get Your Trees Trimmed Today! Summer Special Ends Soon. ',
+  // ↑ TRAILING SPACE kept. TYPO FIX 2026-08-12: the em dash was welded to
+  //   "Available" with no space before it.
   'hero.body':
-    "Need a tree trimming service near you? Our East Dallas crew includes  roof and gutter branch clearance with every trim, — plus a 10% discount and multi-tree bundle pricing when more than one tree needs work. Whether it's a curb-appeal shape-up, full tree pruning, or overgrown limbs hanging over your roofline, we inspect every branch, walk you through your options upfront, and handle the trim and cleanup start to finish. No surprises on price. No debris left behind.",
-  // ↑ P3-T2 APPROVED EXCEPTION: "dicousnt" -> "discount". A misspelling is a defect,
-  //   not a copy choice, on the same basis as the four P0 fixes. The other two source
-  //   defects here — the DOUBLED SPACE in "includes  roof" and the stray ", —" after
-  //   "with every trim" — are NOT in the mandate and stay as faithful control copy.
+    "Need a tree trimming service near you? Our {{areaName|local}} crew includes roof and gutter branch clearance with every trim — plus a 10% discount and multi-tree bundle pricing when more than one tree needs work. Whether it's a curb-appeal shape-up, full tree pruning, or overgrown limbs hanging over your roofline, we inspect every branch, walk you through your options upfront, and handle the trim and cleanup start to finish. No surprises on price. No debris left behind.",
+  // ↑ P3-T2 APPROVED EXCEPTION: "dicousnt" -> "discount". DESIGN-ELEVATION TYPO
+  //   FIXES 2026-08-12 (same mandate class): doubled space in "includes  roof"
+  //   collapsed; stray comma in "with every trim, —" removed. GEO now via
+  //   {{areaName}} — the hardcoded "East Dallas" leaked J Valdez's geography onto
+  //   every other client's page.
 
   /* ---------------------------------------------------------------- *
    * SECTION 2 — Lead form heading + fields
@@ -103,7 +103,7 @@ export const trimmingACopy: Record<string, string> = {
   'form.headingA': 'Get Your ', // ← TRAILING SPACE (desktop)
   'form.headingB': 'Free Trimming Estimate', // coloured <strong> run (desktop)
   'form.headingMobileA': 'Get Your Free Tree Trimming Estimate  ', // ← TWO TRAILING SPACES
-  'form.headingMobileB': 'East Dallas & Nearby', // coloured <strong> run (mobile). GEO-BOUND.
+  'form.headingMobileB': '{{areaName|Your Area}} & Nearby', // coloured <strong> run (mobile). GEO via {{areaName}}.
 
   // Authored TWICE in the source (paragraph-BOeRKrin1Q and paragraph-hPbI9yy1Ja),
   // byte-identical, and both carry hideDesktop AND hideMobile — so the control
@@ -149,8 +149,8 @@ export const trimmingACopy: Record<string, string> = {
   /* ---------------------------------------------------------------- *
    * SECTION 4 — Four benefit cards
    * ---------------------------------------------------------------- */
-  'benefits.item1': '10% Off Tree Trimming With Roof & Gutter Clearance! (Multi-Tree Bundle Pricing',
-  // ↑ The opening parenthesis is NEVER CLOSED in the source. PRESERVED.
+  'benefits.item1': '10% Off Tree Trimming With Roof & Gutter Clearance! (Multi-Tree Bundle Pricing)',
+  // ↑ TYPO FIX 2026-08-12: the source never closed the parenthesis.
   'benefits.item2': 'Same-Week Scheduling & Tree Trimming Appointments',
   'benefits.item3': 'Licensed & Insured Service Up To $2 Million',
   'benefits.item4': 'Safe Tree Trimming, Debris Cleanup & Final Walkthrough',
@@ -171,11 +171,15 @@ export const trimmingACopy: Record<string, string> = {
    * The two heading parts are two separate <h1> elements with NO gap between them,
    * so they only make sense as separate lines (rendered `stacked`).
    * ---------------------------------------------------------------- */
-  'why.h1a': 'Why East Dallas Homeowners', // GEO-BOUND
-  'why.h1b': 'Choose J Valdez for Tree Trimming', // BRAND-BOUND
+  'why.h1a': 'Why {{areaName|Local}} Homeowners', // GEO via {{areaName}}
+  'why.h1b': 'Choose {{name}} for Tree Trimming', // BRAND via {{name}}
   'why.body':
-    'J Valdez Tree Service provides fast, reliable tree removal service for homeowners in Mesquite, Garland, Rowlett, Rockwall, Sunnyvale, Heath, Fate, and East Dallas.',
-  // ↑ "tree removal service" on a TRIMMING page. BRAND- and GEO-BOUND. PRESERVED.
+    '{{name}} provides fast, reliable tree trimming service for homeowners in {{areaProse|your area}}.',
+  // ↑ LEAKAGE FIX 2026-08-12: this default hardcoded "J Valdez Tree Service" and
+  //   its cities, which rendered on TEXAS TREE TOPS' live trimming-a page (and
+  //   blank-co). Composed from the record now. J Valdez keeps its source-exact
+  //   sentence (short brand + its own list, wrong-service word fixed) via
+  //   clients/j-valdez.json copyOverrides['trimming-a'].
 
   /* ---------------------------------------------------------------- *
    * SECTION 6 — "Tree Trimming Done Clean, Done Right" photo grid
@@ -194,7 +198,7 @@ export const trimmingACopy: Record<string, string> = {
   'services.h1a': 'Tree Trimming ', // ← TRAILING SPACE
   'services.h1b': 'Services We Offer', // coloured <strong> run
   'services.body':
-    'Safe, clean, and professional tree trimming service for East Dallas homeowners who need the job handled without a mess left behind.', // GEO-BOUND
+    'Safe, clean, and professional tree trimming service for {{areaName|local}} homeowners who need the job handled without a mess left behind.', // GEO via {{areaName}}
 
   // Column 1 (bulletList-DW1kSshz9P)
   'services.item1': 'Residential Tree Trimming',
@@ -210,7 +214,7 @@ export const trimmingACopy: Record<string, string> = {
   'services.item9': 'Debris Cleanup & Haul Away',
   'services.item10': 'Multi-Tree Pricing', // ← P3-T2 APPROVED EXCEPTION: source transposed "Mutli-Tree"; a typo is a defect, corrected.
   'services.item11': 'Final Walkthrough Included',
-  'services.item12': 'East Dallas Tree Trim Service ', // ← TRAILING SPACE. GEO-BOUND.
+  'services.item12': '{{areaName|Local}} Tree Trim Service ', // ← TRAILING SPACE. GEO via {{areaName}}.
 
   // Column 3 (bulletList-NHH49kGF49) — five items, not six.
   'services.item13': 'Affordable Tree Trimming Service',
@@ -226,7 +230,7 @@ export const trimmingACopy: Record<string, string> = {
    * ---------------------------------------------------------------- */
   'areas.h1a': 'Areas ', // ← TRAILING SPACE. Coloured <strong> run.
   'areas.h1b': 'We Serve',
-  'areas.h2': 'Top Rated East Dallas Local Tree Trimming Company', // GEO-BOUND
+  'areas.h2': 'Top Rated {{areaName|Local}} Local Tree Trimming Company', // GEO via {{areaName}}
 
   /* ---------------------------------------------------------------- *
    * SECTION 9 — How our tree trimming service works
@@ -270,14 +274,17 @@ export const trimmingACopy: Record<string, string> = {
   'longform.h1b': 'Safely, Cleanly & Carefully', // coloured <strong> run
   'longform.lede': 'Careful Tree Trimming. Complete Cleanup. No Mess.',
   'longform.p1':
-    'Some trees just need attention before small problems become bigger ones. Branches creep toward the roofline, crowd the driveway, hang over the fence, or block sunlight from the yard. When that happens, J Valdez Tree Service is the local tree trimming company East Dallas homeowners call to get branches handled without chaos, guesswork, or a mess left behind.', // BRAND- and GEO-BOUND
+    'Some trees just need attention before small problems become bigger ones. Branches creep toward the roofline, crowd the driveway, hang over the fence, or block sunlight from the yard. When that happens, {{name}} is the local tree trimming company {{areaName|local}} homeowners call to get branches handled without chaos, guesswork, or a mess left behind.',
+  // ↑ LEAKAGE FIX 2026-08-12: brand + geo compose from the record; J Valdez keeps
+  //   its source-exact sentence via copyOverrides['trimming-a'].
   'longform.spacer': '',
   // ↑ An EMPTY <h2> sits between p1 and p2 in the source. Recorded so the block is
   //   complete; <SafeText/> renders nothing for it, which is exactly what an empty
   //   spacer element contributes.
   'longform.p2':
-    'We provide professional tree trimming and pruning services in East Dallas, Mesquite, Garland, Rowlett, Rockwall, Sunnyvale, Heath, Fate, and the Lake Ray Hubbard area. Whether you need a tree trimming service, a tree pruning service, roofline branch clearance, or trim trees near your driveway and fence line, our crew can inspect the job, explain your options, give you a tree trimming estimate, and handle the work start to finish..',
-  // ↑ DOUBLE FULL STOP at the end: "start to finish..". GEO-BOUND. PRESERVED.
+    'We provide professional tree trimming and pruning services in {{areaProse|your area}}. Whether you need a tree trimming service, a tree pruning service, roofline branch clearance, or trim trees near your driveway and fence line, our crew can inspect the job, explain your options, give you a tree trimming estimate, and handle the work start to finish.',
+  // ↑ GEO via {{areaProse}}; J Valdez keeps its source-exact list via override.
+  //   TYPO FIX 2026-08-12: the double full stop "finish.." becomes one.
 
   'longform.requestsH1a': 'Common Tree Trimming ', // ← TRAILING SPACE
   'longform.requestsH1b': 'Requests We Handle', // coloured <strong> run
@@ -285,8 +292,9 @@ export const trimmingACopy: Record<string, string> = {
   'longform.request2': 'Tree pruning service for weak, dead, or storm-prone limbs before they become a hazard',
   'longform.request3': 'Roof & gutter branch clearance for limbs touching or overhanging your roofline or siding',
   'longform.request4':
-    'Tree Trimming before landscaping, patio work, fencing, sod, or outdoor upgrades patio work, Etc',
-  // ↑ "patio work" appears TWICE and the line ends ", Etc". Both PRESERVED.
+    'Tree Trimming before landscaping, patio work, fencing, sod, or outdoor upgrades, Etc',
+  // ↑ TYPO FIX 2026-08-12: the source repeated "patio work" at the end of the line.
+  //   The ", Etc" styling stays as written.
   'longform.request5': 'Canopy thinning and crown reduction for a cleaner, safer, healthier yard',
   'longform.request6': 'Tree shaping and structural trimming when you want the job fully done right',
   'longform.request7': 'Debris cleanup & final walkthrough after Trimming',
@@ -307,12 +315,14 @@ export const trimmingACopy: Record<string, string> = {
    * SECTION 11 — FAQ
    * ---------------------------------------------------------------- */
   'faq.h1a': 'Top 10 ', // ← TRAILING SPACE
-  'faq.h1b': 'Frequently Asked Question', // SINGULAR in the source. PRESERVED.
+  'faq.h1b': 'Frequently Asked Questions', // TYPO FIX 2026-08-12: source heading was singular.
   'faq.h1c': ' About Tree Trimming', // ← LEADING SPACE
 
   'faq.q1': 'How fast can you come out for a tree trimming estimate?',
   'faq.a1':
-    "In many cases, we can schedule same-day or next-available estimates while crews are open. If you need tree trimming service in Mesquite, Garland, Rowlett, Rockwall, Sunnyvale, Heath, Fate, or East Dallas, send your request and we'll call you with the next steps.", // GEO-BOUND
+    "In many cases, we can schedule same-day or next-available estimates while crews are open. If you need tree trimming service in {{areaProse|your area}}, send your request and we'll call you with the next steps.",
+  // ↑ GEO via {{areaProse}}; J Valdez keeps its source-exact "… or East Dallas"
+  //   phrasing via override.
 
   'faq.q2': 'How much does tree trimming cost?',
   'faq.a2':
@@ -330,7 +340,9 @@ export const trimmingACopy: Record<string, string> = {
 
   'faq.q5': 'Are you licensed and insured?',
   'faq.a5':
-    'Yes. J Valdez Tree Service is licensed and insured, with coverage up to $2M. Tree trimming can be dangerous work, especially around homes, fences, roofs, and driveways, so you want a crew that knows how to handle the job safely.', // BRAND-BOUND
+    'Yes. {{name}} is licensed and insured, with coverage up to $2M. Tree trimming can be dangerous work, especially around homes, fences, roofs, and driveways, so you want a crew that knows how to handle the job safely.',
+  // ↑ BRAND via {{name}} (this used to assert J VALDEZ's insurance on TTT's page).
+  //   NOTE for the owner: the "$2M" figure itself is copy, not record data.
 
   'faq.q6': 'When should I trim my trees?',
   'faq.a6':
@@ -338,8 +350,10 @@ export const trimmingACopy: Record<string, string> = {
 
   'faq.q7': 'What areas do you serve?',
   'faq.a7':
-    'We provide tree removal service in East Dallas, Mesquite, Garland, Rowlett, Rockwall, Sunnyvale, Heath, Fate, Forney, and the Lake Ray Hubbard area.',
-  // ↑ "tree removal service" on a TRIMMING page. GEO-BOUND. PRESERVED.
+    'We provide tree trimming service in {{areaProse|your area}}.',
+  // ↑ FIXES 2026-08-12: "tree REMOVAL service" on a trimming page corrected
+  //   (approved P3-T2 class); geo via {{areaProse}}. J Valdez keeps its source
+  //   phrasing (service word fixed) via override.
 
   'faq.q8': ' Can you help if I need trees shaped up before selling, renting, or hosting?',
   // ↑ LEADING SPACE inside the <h4>. PRESERVED.
@@ -352,8 +366,9 @@ export const trimmingACopy: Record<string, string> = {
 
   'faq.q10': 'How do I get started?',
   'faq.a10':
-    'Fill out the form and request your free tree removal estimate. We’ll call you, review the job, answer your questions, and help you figure out the best next step for your property.',
-  // ↑ "tree removal estimate" on a TRIMMING page, and the CURLY apostrophe in "We’ll".
+    'Fill out the form and request your free tree trimming estimate. We’ll call you, review the job, answer your questions, and help you figure out the best next step for your property.',
+  // ↑ FIX 2026-08-12: "tree REMOVAL estimate" on a trimming page corrected
+  //   (approved P3-T2 class). The CURLY apostrophe in "We’ll" stays.
 
   /* ---------------------------------------------------------------- *
    * SECTION 12 — Final CTA
@@ -363,20 +378,27 @@ export const trimmingACopy: Record<string, string> = {
   'finalCta.h1a': 'Need Tree Trimming?',
   'finalCta.h1b': 'Get a Free Estimate Today', // <strong> run
   'finalCta.body':
-    'Fast tree trimming service for homeowners in East Dallas, Mesquite, Garland, Rowlett, Rockwall, Sunnyvale, Heath, and Fate. Whether branches are overgrown, hanging over your roof, or crowding your yard, our crew can inspect it, explain your options, and handle the trim cleanly.',
-  // ↑ Forney is MISSING from this city list although it appears in the marquee and in
-  //   faq.a7. GEO-BOUND. PRESERVED.
+    'Fast tree trimming service for homeowners in {{areaProse|your area}}. Whether branches are overgrown, hanging over your roof, or crowding your yard, our crew can inspect it, explain your options, and handle the trim cleanly.',
+  // ↑ GEO via {{areaProse}}; J Valdez keeps its source-exact (Forney-less) list
+  //   via override.
   'finalCta.button': 'Get my free estimate',
   'finalCta.buttonSub': 'Click to call',
 
   /* ---------------------------------------------------------------- *
    * SECTION 13 — Footer
    * ---------------------------------------------------------------- */
-  'footer.companyName': 'J Valdez Tree Service LLC', // BRAND-BOUND
-  'footer.address': '2413 Pinehurst Lane Mesquite, TX 75150', // BRAND- and GEO-BOUND
-  'footer.copyright': '©Copyright J. Valdez Tree Service Co. | All rights reserved 2026',
-  // ↑ No space after "©", and "J. Valdez" with a full stop here vs "J Valdez"
-  //   everywhere else on the page. The year 2026 is hard-coded, as in the source.
+  'footer.companyName': '{{name}}',
+  // ↑ LEAKAGE FIX 2026-08-12: was J Valdez's LEGAL entity name for every client;
+  //   J Valdez keeps "J Valdez Tree Service LLC" via copyOverrides['trimming-a'].
+  'footer.address': '',
+  // ↑ LEAKAGE FIX 2026-08-12: this default was J VALDEZ'S STREET ADDRESS
+  //   ("2413 Pinehurst Lane Mesquite, TX 75150"), which rendered in the footer of
+  //   Texas Tree Tops' and blank-co's pages. An address is client data: it now
+  //   ships only via that client's own copyOverrides (empty renders nothing).
+  'footer.copyright': '© Copyright {{name}}. | All rights reserved 2026',
+  // ↑ BRAND via {{name}}. TYPO FIX 2026-08-12: space restored after "©". J Valdez
+  //   keeps its "J. Valdez Tree Service Co." wording via override; the year stays
+  //   hard-coded as the source wrote it.
   'footer.privacyLabel': 'Privacy Policy',
   'footer.termsLabel': 'Terms of Service',
 
@@ -435,31 +457,36 @@ export default trimmingACopy;
  *      SPACE-ONLY (1):
  *        form.label.requiredGap    ' '   (the gap between "Phone" and its "*" span)
  *
- * 3. DELIBERATE DEFECTS, in document order. Every one of these is in the live page
- *    and every one of them is the control. Fixing any of them invalidates the test —
- *    EXCEPT the three marked [T2-CORRECTED], approved exceptions applied to both
- *    trimming templates (see the P3-T2 note at the top of this file).
+ * 3. SOURCE DEFECTS — status after the 2026-08-12 typo mandate ("real typos get
+ *    fixed on both sides of a pair; a misspelling is not a tested variable").
+ *    [T2] = the original P3-T2 exceptions; [DE] = Design Elevation 2026-08-12.
  *
- *      hero.body            doubled space in "includes  roof"
- *      hero.body            "dicousnt" (discount)                 [T2-CORRECTED -> "discount"]
- *      hero.body            stray ", —" after "with every trim"
- *      hero.h2              "Available—" with no space before the em dash
- *      form.headingMobileA  doubled space before "East Dallas & Nearby"
- *      form.subline         "tree removal quote" on a TRIMMING page [T2-CORRECTED -> "tree trimming quote"]
- *      benefits.item1       "(Multi-Tree Bundle Pricing" — parenthesis never closed
- *      why.body             "tree removal service" on a TRIMMING page
- *      services.item10      "Mutli-Tree Pricing" — transposed letters [T2-CORRECTED -> "Multi-Tree Pricing"]
- *      longform.p2          "start to finish.." — double full stop
- *      longform.request4    "patio work" duplicated, line ends ", Etc"
- *      process.step2.body   "no wild surprises"
- *      faq.h1b              "Frequently Asked Question" — singular
- *      faq.a3               a verbatim copy of faq.a2 that answers a different
- *                           question, and drops faq.a2's final full stop
- *      faq.a7               "tree removal service" on a TRIMMING page
+ *    FIXED (all listed in the session report):
+ *      hero.body            doubled space "includes  roof"        [DE]
+ *      hero.body            "dicousnt" -> "discount"              [T2]
+ *      hero.body            stray ", —" after "with every trim"   [DE]
+ *      hero.h2              "Available—" -> "Available —"         [DE]
+ *      form.subline         "tree removal quote" -> trimming      [T2]
+ *      benefits.item1       unclosed parenthesis closed           [DE]
+ *      why.body             "tree removal service" -> trimming    [DE]
+ *      services.item10      "Mutli-Tree" -> "Multi-Tree"          [T2]
+ *      longform.p2          "finish.." -> "finish."               [DE]
+ *      longform.request4    duplicated "patio work" removed       [DE]
+ *      faq.h1b              "Question" -> "Questions"             [DE]
+ *      faq.a7               "tree removal service" -> trimming    [DE]
+ *      faq.a10              "tree removal estimate" -> trimming   [DE]
+ *      footer.copyright     "©Copyright" -> "© Copyright"         [DE]
+ *
+ *    KEPT (style/content, not mechanical typos — flagged to the owner instead):
+ *      form.headingMobileA  doubled trailing space (load-bearing source spacing)
+ *      process.step2.body   "no wild surprises" (correct here; removal-a's copy
+ *                           of the sentence was the broken one)
+ *      faq.a3               a verbatim copy of faq.a2 that does not answer its own
+ *                           question — fixing it means WRITING copy; owner call
  *      faq.q8               leading space inside the heading
- *      faq.a10              "tree removal estimate" on a TRIMMING page
- *      finalCta.body        Forney missing from a city list that includes it elsewhere
- *      footer.copyright     "©Copyright" (no space) and "J. Valdez" vs "J Valdez"
+ *      finalCta.body        Forney missing from J Valdez's override list (source)
+ *      footer.copyright     "J. Valdez" vs "J Valdez" (in J Valdez's override)
+ *      longform.request4    the ", Etc" line ending
  *
  *    Not in this file, because they are not copy: the review typo "they high quality
  *    equipment" lives in client.reviews[] (a real customer's words, reproduced as
@@ -469,36 +496,23 @@ export default trimmingACopy;
  *    behaviour, recorded in structure.md §5.18 and in the section files that replace
  *    them.
  *
- * 4. GEO-BOUND DEFAULTS — for P3.
- *    These strings hard-code a place name inside a fixed marketing sentence, so they
- *    stay in copy (not in the client record) and are changed per client through
- *    client.copyOverrides['trimming-a']. Any client that is not this one MUST
- *    override every key in this list or the page will name the wrong city. The P3
- *    editor should surface them as a single "geography" group.
+ * 4./5. GEO- AND BRAND-BOUND DEFAULTS — RESOLVED 2026-08-12 via copy tokens.
+ *    These keys now compose from the client record at render time
+ *    ({{name}} / {{areaName}} / {{areaProse}}, schema/resolve.ts interpolateCopy):
  *
- *      hero.h1a             'East Dallas Get 10% Off…'
- *      form.headingMobileB  'East Dallas & Nearby'
- *      why.h1a              'Why East Dallas Homeowners'
- *      why.body             prose city list — Mesquite … East Dallas
- *      services.body        'East Dallas homeowners'
- *      services.item12      'East Dallas Tree Trim Service '
- *      areas.h2             'Top Rated East Dallas Local Tree Trimming Company'
- *      longform.p1          'East Dallas homeowners call…'
- *      longform.p2          prose city list — East Dallas … Lake Ray Hubbard
- *      faq.a1               prose city list — Mesquite … East Dallas
- *      faq.a7               prose city list — East Dallas … Lake Ray Hubbard
- *      finalCta.body        prose city list, minus Forney
- *      footer.address       '2413 Pinehurst Lane Mesquite, TX 75150'
+ *      hero.h1a · form.headingMobileB · why.h1a · why.h1b · why.body
+ *      services.body · services.item12 · areas.h2 · longform.p1 · longform.p2
+ *      faq.a1 · faq.a5 · faq.a7 · finalCta.body · footer.companyName
+ *      footer.address (now EMPTY by default — an address only ships from a
+ *      client's own copyOverrides) · footer.copyright
  *
- * 5. BRAND-BOUND DEFAULTS — contain the control client's company name inside a fixed
- *    sentence. Same treatment: override per client.
- *
- *      why.h1b              'Choose J Valdez for Tree Trimming'
- *      why.body             'J Valdez Tree Service provides…'
- *      longform.p1          '… J Valdez Tree Service is the local tree trimming…'
- *      faq.a5               'J Valdez Tree Service is licensed and insured…'
- *      footer.companyName   'J Valdez Tree Service LLC'
- *      footer.copyright     '©Copyright J. Valdez Tree Service Co. …'
+ *    J Valdez (the source client) carries byte-exact source strings — minus the
+ *    listed typo fixes — in clients/j-valdez.json copyOverrides['trimming-a'] for:
+ *    why.h1b (short brand "J Valdez"), why.body, longform.p1, faq.a1, faq.a5,
+ *    faq.a7, finalCta.body (the Forney-less list), footer.companyName (legal
+ *    entity), footer.address, footer.copyright ("J. Valdez Tree Service Co.").
+ *    No other client needs an override to render its own name and geography;
+ *    blank-co degrades to the tokens' neutral fallbacks (R5).
  *
  * 6. STRINGS IN THE SOURCE THAT ARE DELIBERATELY NOT KEYS HERE.
  *
