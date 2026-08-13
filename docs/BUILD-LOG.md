@@ -1226,3 +1226,79 @@ suspension by design). Lighthouse (applied throttling, GTM blocked, warm):
 removal-b 98/1.9 · storm-a 99/1.8 · jv trimming-a 98/1.9 · jv trimming-b
 99/1.7 · blank-co storm-a 99/1.7. FCP == LCP on every checked page — the
 lockup and bounce did not move the LCP element.
+
+---
+
+# HEADER LOGO SWAP — 2026-08-13 (deployed)
+
+Owner verdict on canonical v2: the big centered logo+name lockup belongs in the
+HEADER, not the middle of the hero. Applied to ALL TEN templates, all clients,
+in one move (commit `51b430d`, deployed `f4c4ec99`):
+
+1. **Header:** the small logo-only mark (60/88px) is replaced by a shared
+   `<HeaderBrand/>` lockup — the logo at **64px mobile / 96px desktop** with the
+   **company name as text beside it**. One shared `.hdbrand` treatment in
+   base.css, wired into all eight header implementations (removal-a/b/c,
+   trimming-a/b/c, the ONE shared storm header, agnostic). Same preloaded logo
+   file (192px webp, displayed ≤96px — never upscaled); prerender preload
+   `imagesizes` updated to match. Header min-heights unchanged (84→120);
+   measured header height 85–121px across every page/width, no ballooning.
+2. **Hero:** `<HeroBrand/>` deleted — component, all eight call sites, base
+   `.hbrand` rules and every per-template `*-hbrand` rule. Exactly one logo at
+   the top of every page. The agnostic banner keeps its wordmark path: with no
+   logo file the name alone renders in the header (blank-co verified).
+
+## Name readability (the non-negotiable) — measured, not eyeballed
+
+`.hdbrand-name` colours from `--hdbrand-name-color`: default
+`var(--brand-primary)` on the light header papers; storm's dark header
+overrides to `--st-onink` (#eef4f0). The white hero-name treatment is gone with
+the hero lockup. Computed contrast measured in Chrome (composited effective
+background under the name, incl. the translucent color-mix header surfaces) on
+16 representative pages × 4 widths (360/390/768/1280) — 64 combos, **all ≥
+4.5:1 with margin**:
+
+| client | light headers (name = brand primary) | storm dark header (name = on-ink) |
+|---|---|---|
+| Texas Tree Tops | 11.53–11.93 : 1 | 10.26 (storm-a green) · 11.90 (storm-b bark) · 13.03 (storm-c) |
+| J Valdez | 13.05–13.50 : 1 | n/a (storm excluded) |
+| Blank Co (wordmark) | 14.16 : 1 | 11.84 : 1 |
+
+Same probe confirmed at every width: 0 lockup/call-CTA overlaps (min gap 14px),
+0 horizontal overflow, 0 logos anywhere in a `<main>`.
+
+## Performance — measured, applied DevTools throttling (mobile, GTM blocked, warm)
+
+The LCP element on every checked page is hero TEXT (never the logo — verified
+from each report's LCP node), CLS 0 everywhere:
+
+| page | Perf | LCP | | page | Perf | LCP |
+|---|---:|---:|---|---|---:|---:|
+| ttt/storm-a | 99 | 1.8s | | ttt/trimming-a | 98 | 1.9s |
+| ttt/storm-b | 99 | 1.8s | | ttt/trimming-b | 99 | 1.7s |
+| ttt/storm-c | 99 | 1.8s | | ttt/trimming-c | 99 | 1.7s |
+| ttt/removal-a | 98 | 1.9s | | ttt/agnostic | 99 | 1.7s |
+| ttt/removal-b | 98 | 1.8s | | jv/trimming-a | 98 | 1.9s |
+| ttt/removal-c | 99 | 1.8s | | jv/trimming-b | 99 | 1.7s |
+| | | | | blank-co/storm-a | 99 | 1.6s |
+
+(Methodology gotcha for future runs: serving dist with `python3 -m http.server`
+depressed every score to 80–87 / LCP 3.2s — it is single-threaded. `vite
+preview` restores the true numbers. Nothing was wrong with the pages.)
+
+## Audits + deploy
+
+R4 leakage PASS (56 pages, both directions) · factory rules PASS (R5 blank-co
+intact) · FAQ a11y PASS · lead 42/42 · tracking 108 · tsc clean · a→c copy
+parity PASS on built output (only the prerender `<title>` differs, the
+documented exception) · copy/phones/reviews/GTM/lead path untouched.
+
+Deployed via direct upload (`wrangler pages deploy dist`). Live: **all 27
+main pages 200 + prerendered, each with exactly ONE brand lockup (in the
+header) and NONE in the hero**; `/api/lead` 405; unknown routes + excluded
+`/p/j-valdez/storm-a/` 404; JV trimming-a and TTT storm-a/removal-a visually
+confirmed in Chrome (dark-green name on white paper, light name on storm ink).
+
+Standing owner flag, now louder: the TTT logo's baked-in `(817) 607-3485` is
+rendered at 96px desktop — the clean replacement logo file is still wanted
+before ad spend.
