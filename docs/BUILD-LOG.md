@@ -1087,3 +1087,43 @@ The slider is perf-neutral (storm-a with slider = its historical 99/1.7).
 ## Task 6 — deploy
 
 See the deploy record below (appended post-deploy).
+
+### Deploy record (2026-08-12, this session — Task 1 verdict cleared it)
+
+Direct upload: `wrangler pages deploy dist --project-name=tree-template-factory`
+(60 new files + Functions bundle; deployment 02c0572a). Verified LIVE on
+https://tree-template-factory.pages.dev :
+
+- Every spot-checked page 200 and PRERENDERED (real markup: the $300 H1 on
+  removal-c, "Choose Texas Tree Tops for Tree Trimming" + "West Dallas Get
+  10% Off" on TTT trimming-a — the identity-leak fix is live; the storm-c
+  hero renders; 9 slider cards; the 192px logo markup).
+- The 8 new -c URLs live for their applicable clients; /p/j-valdez/storm-c/
+  → 404 (excluded, not generated). Unknown routes → real 404 and the root
+  is the neutral placeholder (the overnight T1 fix is now finally deployed).
+- Live leakage greps: 0 "J Valdez"/Pinehurst on TTT pages, 0 "Texas Tree
+  Tops" on JV pages.
+- `GET /api/lead` → 405 (Function live). `wrangler pages secret list`:
+  exactly GHL_PIT_TEXAS_TREE_TOPS + GHL_PIT_J_VALDEZ — **GHL_DRY_RUN is NOT
+  set** (real calls) and no Turnstile keys (fail-open; the form submits).
+- No leads created, real or test, per the brief.
+
+This deploy also takes LIVE, for the first time: the overnight T1–T3
+hardening, per-client GTM injection + transaction_id dedupe, the Turnstile
+gate (inert), the enlarged logos (b90d043), and everything from this session.
+
+# START HERE NEXT (post Design-Elevation)
+
+1. Human/console (unchanged): verify+delete the two GHL test contacts;
+   publish GTM Ads conversion tags + CallRail swap URLs
+   (TRACKING_MANUAL_LIST.md); create TTT ad_click_id field; host legal
+   drafts + fill consent URLs; answer OVERNIGHT_QUESTIONS Q3 storm copy.
+2. Turnstile keys: create site+secret and set BOTH together (or neither).
+3. GBP hygiene flags from the review pull: TTT's listing website points at
+   a SUSPENDED domain (texastreetops.com); JV's at a dead domain
+   (jvaldeztreeservice.com). Fix in each Google Business Profile.
+4. J Valdez removal photos still wanted (removal-a/b/c render trimming
+   cascade; not for ad traffic until real removal shots exist).
+5. GTM cost note stands: with containers publishing, expect ~92–97 Perf on
+   live-client pages (third-party cost); field LCP/CLS stay green.
+6. NOT declared "ready for ads" — third-party tracking still pending.
