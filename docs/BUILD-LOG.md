@@ -1302,3 +1302,29 @@ confirmed in Chrome (dark-green name on white paper, light name on storm ink).
 Standing owner flag, now louder: the TTT logo's baked-in `(817) 607-3485` is
 rendered at 96px desktop — the clean replacement logo file is still wanted
 before ad spend.
+
+---
+
+# GTM VERIFY & GUARD — 2026-08-14 (deployed)
+
+Directive: set/verify the GTM container per client and prove no cross-client
+container leak. **Both records were ALREADY CORRECT — no record change**:
+texas-tree-tops `GTM-W32M4C6F`, j-valdez `GTM-PFZPR33H` (blank-co null, by
+design). Injection re-verified on all 56 built pages: every client page
+carries its own head snippet + `<noscript>` iframe and ONLY its own ID;
+blank-co and the neutral root/404 carry none.
+
+**R4 widened (commit `a5fe9c2`):** `tracking.gtmContainerId` is now a
+permanent leakage needle — another client's container on a page would fire
+conversions into the wrong ad account. Needle proven with a planted
+wrong-client ID (caught, exit 1), clean pass on the real build.
+
+Guards: R4 PASS · factory rules PASS · FAQ a11y PASS · lead 42/42 ·
+tracking 108 · a→c parity PASS · tsc clean. Lighthouse AS BUILT with GTM
+live (applied devtools throttling, mobile, warm): TTT pages 96–97,
+JV pages 92–93, blank-co (no GTM) 99 — **LCP ≤ 1.9s and CLS 0 on every
+page**; the point cost is the third-party GTM script itself, exactly the
+~92–97 predicted by the standing note (Logo Prominence, 2026-08-12).
+
+Deployed `42cf7b99` via direct upload. Live: 21 spot-checked pages 200,
+each carrying exactly its own GTM ID in head + noscript; fixture clean.
