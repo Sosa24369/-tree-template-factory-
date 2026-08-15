@@ -70,6 +70,14 @@ for (const c of clients) {
     const addr = perTemplate?.['footer.address'];
     if (addr && addr.trim()) needles.push({ what: `street address "${addr}"`, re: new RegExp(escapeRe(addr.trim()), 'i') });
   }
+  if (c.tracking?.gtmContainerId) {
+    // A page carrying another client's GTM container would fire conversions
+    // into the wrong ad account — same severity as a wrong phone number.
+    needles.push({
+      what: `GTM container ${c.tracking.gtmContainerId}`,
+      re: new RegExp(escapeRe(c.tracking.gtmContainerId)),
+    });
+  }
   needlesBySlug.set(c.slug, needles);
 }
 
@@ -107,4 +115,4 @@ if (violations.length) {
   for (const v of violations) console.error('  ' + v);
   process.exit(1);
 }
-console.log(`R4 PASS — ${pagesChecked} built pages: no client's slug, assets, display name, phone, or address on another client's (or a neutral) page.`);
+console.log(`R4 PASS — ${pagesChecked} built pages: no client's slug, assets, display name, phone, address, or GTM container on another client's (or a neutral) page.`);
