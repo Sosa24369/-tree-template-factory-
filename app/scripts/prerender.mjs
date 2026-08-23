@@ -134,8 +134,33 @@ function pageHead(client, template) {
   return bits.join('\n    ');
 }
 
+/**
+ * Test fixtures never ship.
+ *
+ * `blank-co` exists to prove R5 — that every template degrades gracefully with no
+ * logo, no photos, no reviews and no legal URLs. It is a test artefact, not a
+ * client, and it has no business being reachable on a public advertising domain.
+ *
+ * R5 does not need it deployed. The rule check in scripts/verify-factory-rules.mjs
+ * reads the fixture straight off disk, and rendering it in a browser is a LOCAL
+ * activity. So the default build — and therefore every deploy — omits it, and you
+ * opt back in explicitly when you want the pages to click through:
+ *
+ *     INCLUDE_FIXTURES=1 npm run build     (or: npm run build:fixtures)
+ *
+ * Default-excluded rather than pruned-after-the-fact on purpose: a fixture that is
+ * never generated cannot be forgotten and uploaded, whereas a cleanup step can be
+ * skipped.
+ */
+const INCLUDE_FIXTURES = process.env.INCLUDE_FIXTURES === '1';
+const skippedFixtures = [];
+
 const routes = [];
 for (const { client } of listClients()) {
+  if (client.isFixture && !INCLUDE_FIXTURES) {
+    skippedFixtures.push(client.slug);
+    continue;
+  }
   for (const template of TEMPLATE_META) {
     if (!template.built) continue;
     // A client opts out of templates for services it does not sell — never generate
@@ -202,6 +227,12 @@ for (const route of routes) {
 }
 
 console.log(`prerendered ${written} page(s)`);
+if (skippedFixtures.length) {
+  console.log(
+    `  fixtures EXCLUDED from this build (never deployed): ${skippedFixtures.join(', ')}` +
+      `\n  to render them locally: INCLUDE_FIXTURES=1 npm run build`
+  );
+}
 if (failures.length) {
   console.error(`\n${failures.length} route(s) failed:`);
   for (const f of failures) console.error(`  ${f}`);

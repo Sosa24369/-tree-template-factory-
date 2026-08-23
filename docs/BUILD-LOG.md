@@ -1408,3 +1408,65 @@ nowhere in `app/src/`; all factory rules pass; tsc clean; 56 pages prerendered.
 
 Note: screenshots returned blank frames at desktop width (known quirk), so visual
 proof here is DOM measurement rather than an image.
+
+---
+
+# FIXTURE EXCLUSION FROM DEPLOY — 2026-08-14
+
+Two internal surfaces were reported as publicly reachable. **One was real, one
+was already closed** — recorded here so the closed one is not "fixed" again.
+
+## 1. blank-co was live — FIXED by never generating it
+
+`blank-co` is the R5 fixture: a deliberately empty client that proves every
+template degrades gracefully with no logo, photos, reviews or legal URLs. It is
+a test artefact and had no business on a public advertising domain. It was
+serving 200 at `/p/blank-co/*`.
+
+**R5 does not need it deployed, or even built.** `scripts/verify-factory-rules.mjs`
+reads `clients/blank-co.json` straight off disk (lines 141–153) and asserts the
+fixture is still empty; rendering it in a browser is a local activity. So the
+fixture is now excluded from the build entirely rather than deployed-with-noindex.
+
+- `clients/blank-co.json` gains `"isFixture": true`; `ClientRecord.isFixture`
+  declares it.
+- `scripts/prerender.mjs` skips fixture clients unless `INCLUDE_FIXTURES=1`, and
+  prints which ones it skipped so the exclusion is visible in every build log.
+- `npm run build:fixtures` renders them when you want to click through locally.
+
+**Default-excluded rather than pruned after the fact, on purpose:** a page that is
+never generated cannot be forgotten and uploaded. A cleanup step can be skipped.
+
+Proof both directions: `npm run build` → **36 pages, 0 blank-co**;
+`npm run build:fixtures` → **56 pages, 20 blank-co**. R5 passes either way.
+
+## 2. The public root was NOT serving the dev roster — already closed
+
+Reported as still serving the internal roster. It is not, and has not been since
+overnight T1 on 2026-08-12. Verified live before changing anything:
+
+- `GET /` → 200, 644 bytes, `<title>Landing pages</title>`, body "Nothing to see
+  here", `<meta name="robots" content="noindex">`, zero client names and zero
+  `/p/` links.
+- `GET /some-random-path` → **real 404**.
+- `App.tsx:166` — `import.meta.env.DEV ? <Index /> : <PublicRoot />`.
+- The roster copy is **not present in the production JS bundle** at all
+  (tree-shaken); grep for its strings returns nothing.
+
+The roster *is* served at `/` by the **dev server on :5273**, which is almost
+certainly what was seen. No change made — there was nothing to change.
+
+## Checks (all green, this build)
+
+| Check | Result |
+|---|---|
+| `tsc --noEmit` | clean |
+| factory rules (R1, R3, **R5**, FIX1, assets, schema) | all pass |
+| R4 leakage | PASS — 36 pages, both directions |
+| lead Function contract | 42 passed, 0 failed |
+| FAQ a11y | 35 pages, 128 `<summary>`, 0 orphan answers |
+| source fidelity | 575 strings, 0 missing |
+| tracking | 88 checks passed |
+
+Pre-upload dist audit: 0 blank-co paths · no `dashboard.html` · `404.html` present
+· root titled "Landing pages" with `noindex` · 35 pages + 404.

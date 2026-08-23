@@ -199,6 +199,17 @@ export interface PhotoSet {
 }
 
 export interface ClientRecord {
+  /**
+   * TEST FIXTURE — not a real client, and never deployed.
+   *
+   * A fixture exists to prove the template rules (R5 graceful degradation) hold
+   * against deliberately missing data. scripts/prerender.mjs skips these clients
+   * unless INCLUDE_FIXTURES=1, so a test page cannot reach a public advertising
+   * domain. The rule check in scripts/verify-factory-rules.mjs reads the fixture
+   * from disk and does not need it built or deployed.
+   */
+  isFixture?: boolean;
+
   /** Stable key. Also the filename: /clients/<slug>.json */
   slug: string;
   name: string;

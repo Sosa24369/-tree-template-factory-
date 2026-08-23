@@ -1,6 +1,7 @@
 {
   "_comment": "R5 FIXTURE — deliberately minimal. No logo, no photos, no reviews, no service-area list, no GTM, no legal URLs. Every template must render this without crashing and without printing 'undefined'. Do not 'fix' this record; it exists to fail loudly if the graceful-degradation guarantees regress.",
 
+  "isFixture": true,
   "slug": "blank-co",
   "name": "Blank Co",
   "serviceArea": "",

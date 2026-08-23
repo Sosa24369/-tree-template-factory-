@@ -8,7 +8,8 @@
     "build": "node ../scripts/generate-lead-registry.mjs && tsc -b && vite build && vite build --ssr src/entry-server.tsx --outDir dist-ssr && node scripts/prerender.mjs",
     "lint": "oxlint",
     "preview": "vite preview",
-    "build:spa": "tsc -b && vite build"
+    "build:spa": "tsc -b && vite build",
+    "build:fixtures": "INCLUDE_FIXTURES=1 npm run build"
   },
   "dependencies": {
     "react": "^19.2.8",
