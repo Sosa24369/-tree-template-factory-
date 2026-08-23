@@ -40,7 +40,9 @@
   "phone": {
     "e164": "+16824520735",
     "kind": "ghl-tracking",
-    "displayOverride": null
+    "displayOverride": null,
+    "googleAdsCallAsset": null,
+    "googleAdsCallAssetPending": "Awaiting this client's Google Ads call asset number. Leave null until supplied — do NOT guess it and do NOT reuse another client's number. Null renders nothing, which is the correct state."
   },
   "leadDestination": {
     "thankYouUrl": "/thank-you",

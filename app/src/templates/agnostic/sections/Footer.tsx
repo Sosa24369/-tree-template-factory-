@@ -21,6 +21,7 @@ import type { ResolvedClient } from '../../../schema/resolve';
 import { SafeText } from '../../../components/Safe';
 import { agnosticChrome } from '../copy.defaults';
 import { hasText, orChrome, type Copy } from '../text';
+import { GoogleAdsCallAsset } from '../../../components/GoogleAdsCallAsset';
 
 export function Footer({ client, copy }: { client: ResolvedClient; copy: Copy }) {
   const privacyUrl = client.consent?.privacyPolicyUrl ?? '';
@@ -53,6 +54,9 @@ export function Footer({ client, copy }: { client: ResolvedClient; copy: Copy })
         <SafeText as="p" className="ag-footer-copyright" value={copy('footer.copyright')} />
         <SafeText as="p" className="ag-footer-note" value={copy('footer.note')} />
       </div>
+      {/* Google Ads call asset — visible, unlinked, DNI-excluded.
+          Renders nothing when the client has no call asset number. */}
+      <GoogleAdsCallAsset client={client} />
     </footer>
   );
 }

@@ -21,6 +21,12 @@ export interface ResolvedClient extends ClientRecord {
   phoneDisplay: string;
   /** tel: href, always derived from the same e164 as phoneDisplay. */
   phoneHref: string;
+  /**
+   * Google Ads call asset number, formatted for display. Empty string when the
+   * client has not supplied one — which renders nothing rather than a placeholder.
+   * Display only: there is deliberately no matching href.
+   */
+  googleAdsCallAssetDisplay: string;
   /** Post-submit destination after the external-domain guard has been applied. */
   safeThankYouUrl: string;
 }
@@ -56,6 +62,30 @@ export function resolveClient(raw: ClientRecord): {
   }
   const phoneDisplay = raw.phone?.displayOverride?.trim() || formatPhoneDisplay(e164);
   const phoneHref = e164 ? `tel:${e164}` : '';
+
+  // ---- Google Ads call asset (display only) -------------------------------
+  // Validated but never fatal: a malformed value renders nothing and raises a
+  // warning, because a broken footer line must not take a landing page down.
+  const callAssetRaw = (raw.phone?.googleAdsCallAsset ?? '').trim();
+  let googleAdsCallAssetDisplay = '';
+  if (callAssetRaw) {
+    if (/^\+\d{10,15}$/.test(callAssetRaw)) {
+      googleAdsCallAssetDisplay = formatPhoneDisplay(callAssetRaw);
+      if (callAssetRaw === e164) {
+        issues.push({
+          level: 'warning',
+          field: 'phone.googleAdsCallAsset',
+          message: 'The Google Ads call asset number is the same as the main CTA number, so the footer line just repeats it. That is legal but probably not what was intended.',
+        });
+      }
+    } else {
+      issues.push({
+        level: 'error',
+        field: 'phone.googleAdsCallAsset',
+        message: `"${callAssetRaw}" is not E.164. Expected +1XXXXXXXXXX. Rendering nothing rather than a malformed number, which would fail Google's call-asset check anyway.`,
+      });
+    }
+  }
 
   // ---- Lead destination (FIX 1) -------------------------------------------
   const requested = (raw.leadDestination?.thankYouUrl ?? '').trim() || CLIENT_DEFAULTS.leadDestination.thankYouUrl;
@@ -118,6 +148,7 @@ export function resolveClient(raw: ClientRecord): {
     leadDestination: { thankYouUrl: requested, isExternalAllowed: externalAllowed },
     phoneDisplay,
     phoneHref,
+    googleAdsCallAssetDisplay,
     safeThankYouUrl,
   };
 

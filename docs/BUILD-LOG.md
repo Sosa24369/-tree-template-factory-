@@ -1328,3 +1328,83 @@ page**; the point cost is the third-party GTM script itself, exactly the
 
 Deployed `42cf7b99` via direct upload. Live: 21 spot-checked pages 200,
 each carrying exactly its own GTM ID in head + noscript; fixture clean.
+
+---
+
+# GOOGLE ADS CALL ASSET + PHONE SOURCE OF TRUTH — 2026-08-14
+
+## Phone question: SETTLED. Deployment freeze LIFTED.
+
+Founder decision, recorded here as the standing rule:
+
+> **The number in the CRM is each client's real main number. That is the source
+> of truth.** The Google Business Profile numbers and the number printed inside
+> the Texas Tree Tops logo artwork are **stale**.
+
+Consequences:
+
+- The pages already render the CRM numbers, so **the deployment freeze that was
+  held on "unconfirmed destination numbers" is lifted**. Texas Tree Tops
+  `+16824520735` and J Valdez `+14694021196` are correct as they stand in
+  `clients/*.json`. No routing change was made — nothing needed changing.
+- `(817) 607-3485`, printed inside the Texas Tree Tops logo image, is **stale**.
+  It renders in the header and footer of every TTT page and no DNI script can
+  ever swap a number baked into a raster image. Treat any call from it as
+  untracked. Superseded by the clean logo when supplied; do not engineer around it.
+- The earlier P0 finding still stands as history: the *source* GHL pages had the
+  TTT mobile header displaying one number while dialling J Valdez's. That defect
+  does not exist in this build — display and `tel:` both derive from one
+  `phone.e164` per client and are structurally incapable of diverging.
+
+## Google Ads call asset line
+
+New per-client field `phone.googleAdsCallAsset`, rendered by
+`components/GoogleAdsCallAsset.tsx` as the last line of the footer.
+
+- **J Valdez: `+12145449487`** — live on all 7 of her templates.
+- **Texas Tree Tops: `null`** — deliberately empty. That number must come from
+  the founder's tracking specialist. **Do not guess it and do not reuse another
+  client's number.** `googleAdsCallAssetPending` in the record says so.
+- **blank-co: `null`** — the R5 fixture exercises the empty path.
+
+Design constraints, all deliberate and all load-bearing:
+
+1. **Visible, never hidden.** Ordinary text in normal flow. No `display:none`,
+   `visibility:hidden`, zero-size box, off-screen transform or
+   background-matched colour. Google's call-asset check requires a *visible*
+   number, so hiding it fails the check — and showing a crawler something the
+   user cannot see is cloaking, an Ads policy violation that risks the account.
+2. **Not a link.** No `tel:` href, so a tap cannot reach a line outside GHL and
+   CallRail, uncounted.
+3. **Never swapped.** `data-dni="exclude"` + `notranslate`. ⚠️ CONFIRM the exact
+   CallRail exclusion mechanism at P4 and verify this number does not swap — a
+   swapped number here silently invalidates the verification.
+
+### Colour: inherited, and why it changed mid-build
+
+First pass used an explicit muted grey plus a per-footer dark override. Measured
+in-browser it produced **4.32:1 and 4.34:1** — under the 4.5:1 AA floor — and the
+dark-footer selector list *missed* `removal-a`, putting light grey on dark green.
+It now inherits the footer's own text colour, so the line is exactly as legible as
+the legal line beside it on every template, with no selector list to keep in sync.
+De-emphasis comes from size and position (13px, last line), not from fading text
+toward its background — which is both what fails the check and what looks like
+cloaking.
+
+Measured after the change: 6 of 7 templates **12.29–19.75:1**. `trimming-b` sits at
+**4.03:1**, which is that footer's own existing colour — identical for its legal
+line, pre-existing, not introduced here. Worth fixing separately.
+
+### Coverage
+
+"All J Valdez pages" is **7, not 10**: `j-valdez.excludedTemplates` already
+excludes `storm-a/b/c`, so those are not her pages. Any template added later is
+covered automatically because the value comes from the record, not the template.
+
+Verified: 7/7 J Valdez pages carry it; 0 Texas Tree Tops pages; 0 blank-co pages;
+`visible: true` on all 7; no `tel:` link; `data-dni="exclude"` present; last
+element in `<footer>`; number appears **only** in `clients/j-valdez.json` and
+nowhere in `app/src/`; all factory rules pass; tsc clean; 56 pages prerendered.
+
+Note: screenshots returned blank frames at desktop width (known quirk), so visual
+proof here is DOM measurement rather than an image.

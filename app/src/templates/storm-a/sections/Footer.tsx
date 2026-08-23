@@ -10,6 +10,7 @@
 import type { ResolvedClient } from '../../../schema/resolve';
 import { SafeLogo, SafeSection, SafeText } from '../../../components/Safe';
 import type { Copy } from './shared';
+import { GoogleAdsCallAsset } from '../../../components/GoogleAdsCallAsset';
 
 export function Footer({ client, copy }: { client: ResolvedClient; copy: Copy }) {
   const privacyUrl = client.consent?.privacyPolicyUrl ?? '';
@@ -48,6 +49,9 @@ export function Footer({ client, copy }: { client: ResolvedClient; copy: Copy })
           {`© ${year}${name ? ` ${name}` : ''}${rights.trim() ? `. ${rights}` : ''}`}
         </p>
       </div>
+      {/* Google Ads call asset — visible, unlinked, DNI-excluded.
+          Renders nothing when the client has no call asset number. */}
+      <GoogleAdsCallAsset client={client} />
     </footer>
   );
 }

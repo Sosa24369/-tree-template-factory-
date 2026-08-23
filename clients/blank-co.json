@@ -16,7 +16,8 @@
   "phone": {
     "e164": "+15550000000",
     "kind": "direct",
-    "displayOverride": null
+    "displayOverride": null,
+    "googleAdsCallAsset": null
   },
 
   "leadDestination": {

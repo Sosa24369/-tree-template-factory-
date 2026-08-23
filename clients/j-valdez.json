@@ -25,7 +25,8 @@
   "phone": {
     "e164": "+14694021196",
     "kind": "ghl-tracking",
-    "displayOverride": null
+    "displayOverride": null,
+    "googleAdsCallAsset": "+12145449487"
   },
   "leadDestination": {
     "thankYouUrl": "/thank-you",

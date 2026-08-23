@@ -64,6 +64,30 @@ export interface ClientPhone {
    * consistent. Only set this if a client insists on a different presentation.
    */
   displayOverride: string | null;
+
+  /**
+   * GOOGLE ADS CALL ASSET NUMBER — display only, never a CTA.
+   *
+   * Google verifies a call asset by rendering the landing page and checking the
+   * number is VISIBLY present. This field puts it in the footer as small, muted,
+   * de-emphasised text so it satisfies that check without competing with the real
+   * call-to-action.
+   *
+   * Three rules this field exists to enforce, all of them deliberate:
+   *
+   *  1. VISIBLE, NEVER HIDDEN. It is rendered as ordinary text in normal document
+   *     flow. No display:none, no visibility:hidden, no off-screen positioning, no
+   *     background-coloured text. Hiding it would fail Google's check anyway AND
+   *     count as cloaking, which is an Ads policy violation.
+   *  2. NOT A LINK. No tel: href, so a customer who somehow taps it does not reach
+   *     an untracked line outside GHL and CallRail.
+   *  3. NEVER SWAPPED. Tagged so CallRail's DNI cannot rewrite it — a swapped
+   *     number here would silently break the verification it exists for.
+   *
+   * E.164, e.g. "+15551234567". Empty string or null renders nothing at all, which
+   * is the correct state for any client who has not supplied one.
+   */
+  googleAdsCallAsset: string | null;
 }
 
 /* ------------------------------------------------------------------ *

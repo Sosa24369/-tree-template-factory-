@@ -243,3 +243,34 @@ a:focus-visible {
   .hdbrand-logo { height: 96px; width: 96px; }
   .hdbrand-name { font-size: 24px; }
 }
+
+/* ==========================================================================
+   GOOGLE ADS CALL ASSET LINE
+   Small, genuinely visible. Lives in every template's footer, below the legal
+   line, via <GoogleAdsCallAsset/>.
+
+   DO NOT hide this element. No display:none, no visibility:hidden, no 0px size,
+   no off-screen transform, no background-matched colour, no opacity fade.
+   Google's call-asset check requires a VISIBLE number, and hiding it would also
+   be cloaking — an Ads policy violation. Quiet is the goal; invisible is a bug.
+
+   COLOUR IS INHERITED ON PURPOSE. An earlier version set an explicit grey plus a
+   per-footer dark override, which measured 4.32:1 and 4.34:1 on two templates —
+   under the 4.5:1 AA floor — and missed removal-a's dark footer entirely, putting
+   light grey on dark green. Inheriting the footer's own text colour means the
+   number is exactly as legible as the legal line beside it on EVERY template,
+   including ones added later, with no selector list to keep in sync.
+
+   De-emphasis comes from size and position (13px, last line of the footer), not
+   from fading the text toward its background — which is the thing that looks like
+   cloaking and is also what fails the check.
+   ========================================================================== */
+.gads-call-asset {
+  margin: 10px 0 0;
+  font-size: 13px;
+  line-height: 1.5;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  color: inherit;   /* never a hardcoded grey — see note above */
+  opacity: 1;       /* never fade this out */
+}

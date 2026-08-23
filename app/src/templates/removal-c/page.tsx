@@ -21,6 +21,7 @@ import { DeferredImage } from '../../components/DeferredImage';
 import { ReviewsSlider } from '../../components/ReviewsSlider';
 import { ServiceAreasCarousel } from '../../components/ServiceAreasCarousel';
 import { photosFor, partitionMedia } from '../../lib/photos';
+import { GoogleAdsCallAsset } from '../../components/GoogleAdsCallAsset';
 
 type Copy = (key: string) => string;
 
@@ -431,6 +432,9 @@ export function RemovalCPage({
             </p>
           )}
         </div>
+        {/* Google Ads call asset — visible, unlinked, DNI-excluded.
+            Renders nothing when the client has no call asset number. */}
+        <GoogleAdsCallAsset client={client} />
       </footer>
 
       {/* ---- sticky mobile call bar ---- */}
