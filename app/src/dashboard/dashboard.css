@@ -154,3 +154,13 @@ body { margin: 0; background: var(--d-bg); color: var(--d-ink); font-family: ui-
 .dash-thumb-wrap .dash-thumb { cursor: crosshair; object-fit: cover; aspect-ratio: 4 / 3; width: 100%; }
 .dash-handle--photo { position: absolute; top: 4px; left: 4px; padding: 2px 6px; border-radius: 4px; background: rgba(255,255,255,.9); }
 .dash-focal { position: absolute; width: 14px; height: 14px; margin: -7px 0 0 -7px; border: 2px solid #fff; border-radius: 50%; background: var(--d-accent); box-shadow: 0 0 0 2px rgba(0,0,0,.35); pointer-events: none; }
+
+/* ---- Publish panel ---- */
+.dash-publish { margin: 12px 0; border: 1px solid var(--d-line); border-radius: 8px; background: var(--d-panel); overflow: hidden; }
+.dash-publish-head { display: flex; align-items: center; gap: 12px; padding: 8px 12px; border-bottom: 1px solid var(--d-line); font-size: 13px; }
+.dash-publish-head a { color: var(--d-accent); }
+.dash-publish-head button { margin-left: auto; }
+.dash-publish-tail { margin: 0; padding: 10px 12px; max-height: 240px; overflow: auto; font: 12px/1.45 ui-monospace, monospace; background: #0f172a; color: #cbd5e1; white-space: pre-wrap; }
+.dash-publish--live .dash-publish-head { background: #ecfdf3; }
+.dash-publish--failed .dash-publish-head { background: #fde8e8; }
+.dash-publish--pulling .dash-publish-head, .dash-publish--building .dash-publish-head, .dash-publish--deploying .dash-publish-head { background: #fff7e6; }

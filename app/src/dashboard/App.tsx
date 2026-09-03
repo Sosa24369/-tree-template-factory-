@@ -61,6 +61,19 @@ export function App() {
   // Copy keys contain dots (hero.h1a), so this writes the nested object directly
   // rather than through setPath.
   const [tagged, setTagged] = useState<number | null>(null);
+  // Publish state (server-only; the dev plugin has no /api/publish and stays idle).
+  const [pub, setPub] = useState<any>({ state: 'idle' });
+  const [pubOpen, setPubOpen] = useState(false);
+  useEffect(() => {
+    let stop = false;
+    const tick = async () => { try { const s = await api.publishStatus(); if (!stop) setPub(s); } catch { /* dev plugin: no endpoint */ } };
+    tick(); const t = setInterval(tick, 2500); return () => { stop = true; clearInterval(t); };
+  }, []);
+  async function startPublish() {
+    if (dirty) { setToast('Save first — publish deploys what is committed.'); return; }
+    setPubOpen(true);
+    try { setPub(await api.publish()); } catch (e: any) { setToast('Publish request failed: ' + e.message); }
+  }
   useEffect(() => {
     const onEdit = (e: MessageEvent) => {
       if (e.data?.type === 'dash-preview-tagged') { setTagged(e.data.tagged); return; }
@@ -149,6 +162,7 @@ export function App() {
                 <button className="dash-btn" type="button" disabled={busy || !dirty || validation.errors.length > 0} onClick={reviewSave}>
                   Review &amp; save
                 </button>
+                <button className="dash-btn dash-btn--ghost" type="button" disabled={busy || ['pulling','building','deploying'].includes(pub.state)} onClick={startPublish} title="Commit + push, build, and deploy the landing pages">{['pulling','building','deploying'].includes(pub.state) ? `Publishing… (${pub.state})` : pub.state === 'live' ? 'Publish again' : pub.state === 'failed' ? 'Publish (last failed)' : 'Publish'}</button>
               </div>
             </header>
 
@@ -179,6 +193,17 @@ export function App() {
         <iframe ref={iframeRef} className="dash-frame" src="/dashboard-preview.html" title="Live preview" />
       </section>
 
+      {(pubOpen || pub.state === 'failed') && pub.state !== 'idle' && (
+        <div className={`dash-publish dash-publish--${pub.state}`}>
+          <div className="dash-publish-head">
+            <strong>Publish: {pub.state}{pub.stage && pub.stage !== pub.state ? ` (${pub.stage})` : ''}</strong>
+            {pub.url && <a href={pub.url} target="_blank" rel="noreferrer">{pub.url}</a>}
+            {pub.exitCode != null && pub.state === 'failed' && <code>exit {pub.exitCode} at {pub.stage}</code>}
+            <button className="dash-btn dash-btn--ghost dash-btn--sm" type="button" onClick={() => setPubOpen(false)}>Hide</button>
+          </div>
+          <pre className="dash-publish-tail">{(pub.tail ?? []).join('\n') || '…'}</pre>
+        </div>
+      )}
       {toast && <div className="dash-toast" onClick={() => setToast(null)}>{toast}</div>}
 
       {diff !== null && (

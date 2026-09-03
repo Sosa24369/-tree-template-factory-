@@ -66,6 +66,8 @@ async function j<T>(res: Response): Promise<T> {
 }
 
 export const api = {
+  publishStatus: () => fetch('/api/publish').then((r) => j<any>(r)),
+  publish: () => fetch('/api/publish', { method: 'POST' }).then((r) => j<any>(r)),
   clients: () => fetch('/api/dash/clients').then((r) => j<{ clients: { slug: string; name: string }[] }>(r)),
   client: (slug: string) => fetch(`/api/dash/client/${slug}`).then((r) => j<{ record: Json }>(r)),
   assets: (slug: string) => fetch(`/api/dash/assets/${slug}`).then((r) => j<{ files: { name: string; src: string }[] }>(r)),

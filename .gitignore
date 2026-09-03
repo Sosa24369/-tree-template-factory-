@@ -23,3 +23,10 @@ app/node_modules/
 app/dist/
 node_modules/
 app/dist-ssr/
+
+# Editor service (server/) — dependencies and the built dashboard UI
+server/node_modules/
+app/dist-dashboard/
+# Local env for running server/ on this machine
+.env
+server/.env

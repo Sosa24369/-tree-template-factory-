@@ -127,7 +127,9 @@ const sourceFiles = walk(
   const scan = walk(join(ROOT, 'app', 'src'))
     .concat(walk(CLIENTS_DIR))
     .concat(walk(join(ROOT, 'scripts')))
-    .concat(walk(join(ROOT, 'app', 'functions'))); // the lead Function must be secret-free too
+    .concat(walk(join(ROOT, 'app', 'functions'))) // the lead Function must be secret-free too
+    .concat(walk(join(ROOT, 'server'), (p) => !/node_modules/.test(p))) // the editor service too
+    .concat([join(ROOT, 'app', 'dashboard-core.mjs'), join(ROOT, 'app', 'dashboard-server.mjs')].filter(existsSync));
   let hits = 0;
   for (const file of scan) {
     const text = readFileSync(file, 'utf8');

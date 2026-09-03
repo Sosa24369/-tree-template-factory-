@@ -1,0 +1,4 @@
+# Railway (Nixpacks) — the editor service needs git for the volume clone/push and the
+# build tools sharp compiles against. Node itself is detected from package.json.
+[phases.setup]
+nixPkgs = ["nodejs_22", "git", "python3", "gcc", "gnumake"]

@@ -1,0 +1,16 @@
+{
+  "name": "tree-template-factory-editor",
+  "private": true,
+  "type": "module",
+  "version": "0.1.0",
+  "description": "Authenticated content editor for the landing-page factory. Separate Railway service; never part of the landing-page bundle.",
+  "scripts": {
+    "start": "node index.mjs",
+    "hash-password": "node hash-password.mjs"
+  },
+  "engines": { "node": ">=20" },
+  "dependencies": {
+    "@hono/node-server": "^2.1.1",
+    "hono": "^4.13.5"
+  }
+}
