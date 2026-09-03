@@ -1,0 +1,112 @@
+{
+  "slug": "rt-probe",
+  "name": "RT Probe",
+  "serviceArea": "East Dallas, TX",
+  "serviceAreaList": [
+    "Mesquite",
+    "Garland",
+    "Rowlett",
+    "Rockwall",
+    "Sunnyvale",
+    "Heath",
+    "Fate",
+    "Forney",
+    "Lake Ray Hubbard",
+    "East Dallas"
+  ],
+  "brand": {
+    "logoUrl": null,
+    "primaryColor": "#14342b",
+    "accentColor": "#e0913a",
+    "onPrimaryColor": "#ffffff",
+    "logoWidth": 192,
+    "logoHeight": 192,
+    "fontPairing": "editorial",
+    "spacingScale": "roomy"
+  },
+  "phone": {
+    "e164": "+14694021196",
+    "kind": "ghl-tracking",
+    "displayOverride": null,
+    "googleAdsCallAsset": "+12145449487"
+  },
+  "leadDestination": {
+    "thankYouUrl": "/thank-you",
+    "isExternalAllowed": false
+  },
+  "consent": {
+    "smsCopy": "By checking this box you agree to receive text messages from J Valdez Tree Services about your estimate and service. Message frequency varies. Message and data rates may apply. Reply STOP to opt out or HELP for help.",
+    "required": false,
+    "privacyPolicyUrl": "",
+    "termsOfServiceUrl": "",
+    "legalUrlsPending": "Awaiting this client's own Privacy Policy and Terms that name the business by name (supplied from their A2P run). The shared links.treeleads.io agency URLs must NOT be used: A2P expects the policy to name the sender."
+  },
+  "crm": {
+    "ghlLocationId": "FaHof000UZrAJUKORVCj",
+    "adClickIdFieldId": "DTlYvWAb5Y0M3iXyWfcH",
+    "leadTags": [
+      "google-ads",
+      "landing-page"
+    ],
+    "leadSource": "Google Ads — Landing Page"
+  },
+  "tracking": {
+    "gtmContainerId": "GTM-PFZPR33H",
+    "callRailSwapScriptUrl": null
+  },
+  "photos": {
+    "trimming": [
+      {
+        "src": "/assets/rt-probe/probe-74f19330.webp",
+        "srcset": "/assets/rt-probe/probe-74f19330.webp 96w",
+        "width": 96,
+        "height": 72,
+        "alt": "",
+        "focal": {
+          "x": 0.25,
+          "y": 0.8
+        }
+      }
+    ]
+  },
+  "reviews": [],
+  "copyOverrides": {
+    "trimming-b": {
+      "hero.h1": "Round-trip probe headline"
+    }
+  },
+  "reviewAvatarStyle": "initials",
+  "excludedTemplates": [
+    "storm-a",
+    "storm-b",
+    "storm-c"
+  ],
+  "reviewsSource": {
+    "profileUrl": "https://maps.google.com/?cid=10536913595490831481",
+    "profileName": "J Valdez Tree Service",
+    "pulledAt": "2026-08-12",
+    "note": "9 most recent 5-star text reviews, transcribed verbatim from the Google Business Profile (sorted Newest). All 10 newest had text; the 9 newest kept. Reviewer casing preserved."
+  },
+  "_comment": "Duplicated from j-valdez as a starting point. Fill name/phone/area, add this client's OWN photos (none copied), and set legal URLs before running SMS.",
+  "layout": {
+    "trimming-b": {
+      "sections": [
+        {
+          "id": "reviews",
+          "hidden": false
+        },
+        {
+          "id": "offer",
+          "hidden": true
+        },
+        {
+          "id": "hero",
+          "hidden": false
+        }
+      ],
+      "sizes": {
+        "work": "full"
+      }
+    }
+  }
+}
