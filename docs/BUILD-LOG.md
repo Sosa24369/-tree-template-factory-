@@ -1832,3 +1832,53 @@ Vite adapter re-checked after the extraction: clients 200; forged `trimming-a` l
 
 Railway: the service, a volume at `/data`, the env vars by name, and the full loop from
 the Railway URL — edit → save (commit on GitHub) → publish (live on pages.dev).
+
+---
+
+# VISUAL EDITOR — P3: RAILWAY — PREPARED, HELD AT `railway up` — 2026-08-14
+
+## Done on Railway (workspace sosa24369's Projects)
+
+| | |
+|---|---|
+| Project | `tree-template-editor` — id `8c6cf8c2-2133-4747-a523-06935d8614b0`, linked from the repo root |
+| Service | `editor` |
+| Volume | `editor-volume` mounted at `/data` (the working clone lives at `/data/repo`) |
+| Variables set | `DASHBOARD_PASSWORD_HASH`, `SESSION_SECRET`, `GITHUB_REPO`, `REPO_DIR`, `CLOUDFLARE_ACCOUNT_ID`, `CF_PAGES_PROJECT` — values live in Railway only |
+| Config | `railway.json` (build: root + app + server installs, dashboard UI build; start: `node server/index.mjs`; health `/healthz`) · `nixpacks.toml` (git + build tools for sharp) |
+| Runbook | `docs/DEPLOY-EDITOR.md` |
+
+The login password is in `~/.tree-template-factory/railway-editor-secrets.txt`
+(mode 600, outside the repo). Move it to a password manager.
+
+## Not done — blocked on two secrets only the owner can mint
+
+- **`GITHUB_TOKEN`** — fine-grained PAT, repository access limited to this repo,
+  permission **Contents: Read and write**. Without it the service cannot clone the
+  private repo on boot and exits; that is why `railway up` was not run.
+- **`CLOUDFLARE_API_TOKEN`** — **Account · Cloudflare Pages · Edit** on account
+  `ef07a2f57e930a4d6499a45560b78d9f`. Without it publish fails loudly at `deploying`
+  (proven in P2 item 5) but the editor otherwise works.
+
+Then, from the repo root:
+
+```
+railway variable set -s editor GITHUB_TOKEN='…' CLOUDFLARE_API_TOKEN='…'
+railway up --detach
+railway domain
+```
+
+and the P3 DoD runs against the printed URL: the three gate curls (401 / 302 / `ok`),
+the full loop (sign in → edit → save → commit visible on GitHub → publish → `live`
+→ the change on `tree-template-factory.pages.dev`), and
+`grep -rn "dashboard\|/login\|hono" app/dist | wc -l` → 0.
+
+## Notes
+
+- Railway has deprecated `railway.json`/`railway.toml` in favour of
+  `.railway/railway.ts`; existing files work until **2026-12-01**. Migrate with
+  `railway config migrate` before then.
+- `railway volume add` attaches to the *linked* service; run `railway service editor`
+  first or it silently does nothing (first attempt).
+- The first publish on a fresh volume runs `npm ci` twice in the clone; expect a few
+  minutes. Later publishes are ~1 minute.
