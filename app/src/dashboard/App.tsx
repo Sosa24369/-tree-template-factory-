@@ -15,6 +15,7 @@ import type { Json } from './lib';
 import { api, validate } from './lib';
 import { Form } from './Form';
 import './dashboard.css';
+import { Layout } from './Layout';
 
 const TEMPLATES = ['storm-a', 'storm-b', 'removal-a', 'removal-b', 'trimming-a', 'trimming-b', 'agnostic'];
 
@@ -55,6 +56,27 @@ export function App() {
     window.addEventListener('message', onReady);
     return () => window.removeEventListener('message', onReady);
   }, [postPreview]);
+
+  // Inline copy edits arrive from the preview iframe and land in copyOverrides.
+  // Copy keys contain dots (hero.h1a), so this writes the nested object directly
+  // rather than through setPath.
+  const [tagged, setTagged] = useState<number | null>(null);
+  useEffect(() => {
+    const onEdit = (e: MessageEvent) => {
+      if (e.data?.type === 'dash-preview-tagged') { setTagged(e.data.tagged); return; }
+      if (e.data?.type !== 'dash-copy-edit') return;
+      const { templateId, key, value } = e.data as { templateId: string; key: string; value: string };
+      setRecord((r: Json) => {
+        if (!r) return r;
+        const overrides = { ...(r.copyOverrides ?? {}) };
+        overrides[templateId] = { ...(overrides[templateId] ?? {}), [key]: value };
+        return { ...r, copyOverrides: overrides };
+      });
+      setDirty(true);
+    };
+    window.addEventListener('message', onEdit);
+    return () => window.removeEventListener('message', onEdit);
+  }, []);
 
   const onChange = (r: Json) => { setRecord(r); setDirty(true); };
 
@@ -137,6 +159,7 @@ export function App() {
               </div>
             )}
 
+            <Layout record={record} templateId={previewTpl} onChange={onChange} />
             <Form record={record} onChange={onChange} slug={slug!} />
           </>
         )}
@@ -151,7 +174,7 @@ export function App() {
               </option>
             ))}
           </select>
-          <span className="dash-help">live preview</span>
+          <span className="dash-help">live preview · click any text to edit it{tagged !== null ? ` (${tagged} editable)` : ''}{/-a$/.test(previewTpl) ? ' · control: copy edits affect the A/B test' : ''}</span>
         </div>
         <iframe ref={iframeRef} className="dash-frame" src="/dashboard-preview.html" title="Live preview" />
       </section>

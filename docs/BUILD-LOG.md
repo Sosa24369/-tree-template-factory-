@@ -1575,3 +1575,165 @@ per-fixture layout warnings (resolver):
 
 npm run build   ->  prerendered 36 page(s); layout-* dirs in dist: 0
 ```
+
+---
+
+# VISUAL EDITOR — P1: THE EDITOR, RUNNING LOCALLY — 2026-08-14
+
+## What now works (dev server, `/dashboard.html`)
+
+- **Layout panel** — per previewed template: drag-handle reorder (pointer-based, no
+  library) plus ↑/↓ buttons, show/hide toggle, size token select (S/M/L/full, default
+  marked). Header, footer and the sticky bar are pinned. On every `-a` template the
+  panel is read-only with "Control template — layout is locked so the A/B test stays
+  valid." — and the server refuses the write regardless.
+- **Photo panel** — drag-handle reorder within a service; click the subject of a
+  thumbnail to set a non-destructive focal point (`focal {x,y}` → `object-position`);
+  "Centre" clears it; swap and upload unchanged.
+- **Style** — `brand.fontPairing` (system / editorial / grotesk) and
+  `brand.spacingScale` (compact / default / roomy) as selects.
+- **Inline copy editing in the preview** — rendered text is matched back to copy keys
+  and tagged `data-copy-key`; click to edit in place, Enter/blur commits, Esc reverts;
+  the edit lands in `copyOverrides[templateId][key]` and the preview re-renders. On a
+  `-a` the hint reads "control: copy edits affect the A/B test".
+- **Templates** — non-default sizes wrap the section in `<div class="size-X">`;
+  `data-font` / `data-spacing` on the root only when non-default; `object-position`
+  only when `focal` is set. **Nothing is emitted for defaults**, so every existing page
+  is byte-identical (proven below).
+- **Fonts** — three pairings self-hosted from `@fontsource-variable` (Inter, Fraunces,
+  Space Grotesk; Latin subset via unicode-range). Declared as `@font-face` for all; a
+  browser downloads a face only when a `[data-font]` rule applies, so `system` costs
+  zero requests.
+
+## Files
+
+`src/dashboard/{Layout.tsx (new), Photos.tsx, App.tsx, preview-entry.tsx, schema.ts,
+dashboard.css}` · `dashboard-server.mjs` (422 guard) · `src/lib/{renderSections.tsx,
+brandAttrs.ts (new)}` · `src/components/Safe.tsx` (focal) · `src/schema/layout.mjs`
+(+defaultSize, pinned ends) · `src/templates/registry.tsx` (COPY_DEFAULTS) ·
+`src/styles/base.css` · 8 template roots (`{...brandAttrs(client)}`) ·
+`package.json` (3 fontsource deps).
+
+## Decisions the brief did not cover
+
+- **Inline editing is preview-side instrumentation.** Templates are NOT modified to
+  emit `data-copy-key`; the preview iframe matches rendered text back to copy values
+  after each render and tags matches. Zero template change, zero production markup.
+  Cost: a value shared by two keys is tagged with the first key (`data-copy-keys`
+  lists all); rare in practice (67 tagged on trimming-b).
+- **Size is a wrapper, not a prop.** ~60 section components would each have needed
+  a className pass-through; a block div around a block section has no layout effect
+  of its own, and is emitted only for a non-default token.
+- **Required sections are pinned to the manifest's ends.** Found during the
+  round-trip: a client array listing only body ids pushed `header` to 4th in the
+  resolved order. Rendering was unaffected (required sections are static JSX) but the
+  panel would have shown it wrongly. The resolver now keeps the leading required run
+  first and the trailing run last; only the body between them reorders.
+- **Focal point on an existing photo is non-destructive** (`object-position`); the
+  upload-time crop that bakes pixels via sharp is unchanged and separate.
+- **Spacing scale** overrides `padding-block` on direct children of `<main>` with
+  fixed clamps rather than multiplying each template's own values — templates do not
+  share a padding variable. Header/footer/sticky are untouched by design.
+
+## Defects found while verifying, all fixed
+
+1. Three `-c` templates re-export their control's copy under a named alias — no
+   default export. `COPY_DEFAULTS` imports fixed.
+2. **Fonts silently missing**: the `@import`s were appended at the END of base.css.
+   CSS `@import` after any other rule is invalid, and Vite dropped them without a
+   word — the built CSS had 0 `@font-face` rules. Moved to the top: 13 faces, 13 woff2
+   files in dist, and a default page still references none.
+3. Required-section pinning (above).
+4. Three edit scripts missed their anchors because I copied indentation from
+   `sed`-prefixed output. Re-done with indentation-agnostic matching.
+
+## DoD — evidence
+
+**1. Round-trips (throwaway client `rt-probe`, then removed).** One save →
+`HTTP 200 {"ok":true,"commit":"cef0863"}`. Read back from disk:
+
+```
+layout.trimming-b        undefined -> {"sections":[{"id":"reviews"…},{"id":"offer","hidden":true},{"id":"hero"…}],"sizes":{"work":"full"}}
+photos.trimming[0].focal undefined -> {"x":0.25,"y":0.8}
+brand.fontPairing        undefined -> "editorial"
+brand.spacingScale       undefined -> "roomy"
+copyOverrides.trimming-b undefined -> {"hero.h1":"Round-trip probe headline"}
+```
+Built page for that record: `data-font="editorial"`, `data-spacing="roomy"`,
+`class="size-full" data-section="work"`, `object-position:25% 80%`, the override
+headline present, `tb-offer` absent, reviews before hero. (Output appended below.)
+
+**2. Lock.** UI on `trimming-a`: lock text shown, 0 move buttons, 15/15 selects and
+checkboxes disabled. Forged request (`layout['removal-a']` on j-valdez):
+`HTTP 422 {"error":"layout_locked","templateId":"removal-a"}`; file untouched.
+
+**3. Preview updates without saving.** Clicking ↑ on `offer`: iframe DOM order went
+`tb-hero, tb-section…` → `tb-section, tb-hero…`; postMessage log carried
+`layout: [header, offer, hero]`; dirty marker `•` set; nothing written. Inline edit
+on `header.callSub`: became editable, blur committed, iframe re-rendered "EDITED VIA
+PREVIEW", element no longer editable. Test edits discarded by reload — never saved.
+
+**4. Performance.** `trimming-b` default vs a probe with reorder + `testimony` hidden
++ `work=L` + `offer=S`, production build, Lighthouse mobile:
+`99 / LCP 2.0s / CLS 0 / TBT 0ms` for BOTH. Zero cost.
+
+**5. Byte-identical for defaults.** With JS+CSS hashes normalized, all 36 rendered
+pages are identical to the pre-P0 baseline. tsc clean; all seven verifiers pass.
+
+## Limitations
+
+- The `data-copy-key` matcher tags leaf elements whose full text equals a copy value;
+  copy rendered inside a larger mixed-content element is not clickable (edit it in
+  the Copy & offer group instead).
+- Spacing scale does not reach sections that pad an inner container rather than
+  their root.
+- No auth, no server yet — P2.
+
+## What P2 adds
+
+`server/` (Hono): login gate, git-backed persistence on a volume, publish state
+machine, `.env.example`.
+
+### P1 addendum — what the built-page probe actually showed, and three more fixes
+
+The first built-HTML probe (`rt-probe`) was partly mis-targeted and is corrected here
+rather than left as written above:
+
+- `copy override rendered: 0` was **my test's fault** — I wrote `hero.h1`; trimming-b's
+  keys are `hero.h1a`/`hero.h1b`. Re-run with the real key: **rendered (1)**.
+- `reviews before hero: NO` was also the test: `new-client` deliberately copies no
+  reviews, so the section hid itself (R5). Re-run on a full clone: **yes**.
+- `focal object-position: (empty)` in the static HTML was real, and led to three fixes:
+  1. **`DeferredImage` ignored `focal`.** It is the second image path (trimming-b,
+     removal-b, agnostic galleries) and mounts its `<img>` only on intersection, so it
+     is never in prerendered HTML — which is why the static probe could not see it.
+     Fixed on both the mounted `<img>` and the `<noscript>` fallback.
+  2. **The storm and removal-b heroes paint the photo as a CSS background**
+     (`--st-art` / `--rb-art`, desktop-only), where `object-position` does not apply.
+     They now also emit `--st-art-pos` / `--rb-art-pos` from `focal`, consumed as
+     `background-position: var(--xx-art-pos, <original default>)`. Emitted only when
+     set; the CSS default is byte-for-byte the old value.
+  3. **`IntersectionObserver` never fires in a hidden iframe**, so the first live test
+     mounted nothing. The re-test disables IO in the preview frame to exercise
+     `DeferredImage`'s real no-observer fallback (the same path a no-JS/old browser
+     takes).
+
+Evidence, re-run correctly:
+
+```
+live (trimming-b, IO disabled, focal on every photo): 9 imgs mounted, 7 photos,
+  7/7 non-centre — hero-photo-1 5% 90% · hero-photo-2 10% 90% · gallery-slide-1 15% 90% …
+static (removal-a, eager SafeImage path, TTT clone with focal): object-position in the
+  prerendered HTML — 10% 70% · 15% 70% · 20% 70%
+static (rt-probe2, trimming-b): data-font="editorial" · data-spacing="roomy" ·
+  class="size-full" data-section="work" · override headline rendered · tb-offer absent ·
+  reviews before hero — all as saved
+```
+
+Two verifier fixes in passing: the pinned-header change moved the client-ordered body
+to index 1 in `layout-unknown-ids`, so that assertion was updated (`header, faq, hero`);
+and three edit scripts had missed their anchors because I copied indentation from
+`sed`-prefixed output — redone with indentation-agnostic matching.
+
+All probe clients (`rt-probe`, `rt-probe2`, `rt-probe3`, `rt-probe4`) were removed and
+the deployable build rebuilt; none exist in `clients/` or `dist/`.

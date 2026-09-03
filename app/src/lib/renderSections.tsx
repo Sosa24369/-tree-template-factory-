@@ -6,13 +6,16 @@
  * stay as static JSX in the template exactly where they are, because they are pinned
  * by definition; only ids present in `renderers` are rendered here.
  *
- * Output-neutral by construction: with no client `layout`, the resolved order IS the
- * manifest order, nothing is hidden, and every section renders at its default size —
- * so a template converted to this helper produces byte-identical HTML. That property
- * is what the P0 build diff proves.
+ * SIZE TOKENS. A section rendered at its manifest default emits nothing extra — so a
+ * client with no `layout` produces byte-identical HTML (the P0 invariant). A section
+ * at a NON-default size is wrapped in one block div carrying `size-<token>` and
+ * `data-section`, which base.css turns into padding / width rules. A wrapper rather
+ * than a prop because ~60 section components would otherwise each need editing to
+ * forward a class, and a block div around a block section has no layout effect of
+ * its own.
  */
 
-import type { ReactNode } from 'react';
+import { Fragment, type ReactNode } from 'react';
 import type { SizeToken, TemplateId } from '../schema/client';
 import type { ResolvedClient } from '../schema/resolve';
 
@@ -30,10 +33,17 @@ export function renderSections(
     if (s.hidden) continue;
     const render = renderers[s.id];
     if (!render) continue;
-    out.push(<Fragment key={s.id}>{render({ size: s.size, index })}</Fragment>);
+    const node = render({ size: s.size, index });
+    out.push(
+      s.size !== s.defaultSize ? (
+        <div key={s.id} className={`size-${s.size}`} data-section={s.id}>
+          {node}
+        </div>
+      ) : (
+        <Fragment key={s.id}>{node}</Fragment>
+      )
+    );
     index++;
   }
   return out;
 }
-
-import { Fragment } from 'react';

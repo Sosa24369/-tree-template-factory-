@@ -23,6 +23,7 @@ import { ServiceAreasCarousel } from '../../components/ServiceAreasCarousel';
 import { photosFor, partitionMedia } from '../../lib/photos';
 import { GoogleAdsCallAsset } from '../../components/GoogleAdsCallAsset';
 import { renderSections } from '../../lib/renderSections';
+import { brandAttrs } from '../../lib/brandAttrs';
 
 type Copy = (key: string) => string;
 
@@ -152,7 +153,7 @@ export function RemovalCPage({
   const termsUrl = (client.consent?.termsOfServiceUrl ?? '').trim();
 
   return (
-    <div className="removal-c" style={brandStyle}>
+    <div className="removal-c" style={brandStyle} {...brandAttrs(client)}>
       {/* ---- header ---- */}
       <header className="rc-header">
         <div className="rc-container rc-header-inner">

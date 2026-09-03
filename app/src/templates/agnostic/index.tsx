@@ -74,6 +74,7 @@ import { clean } from './text';
 
 import './agnostic.css';
 import { renderSections } from '../../lib/renderSections';
+import { brandAttrs } from '../../lib/brandAttrs';
 
 /**
  * Only set a custom property when the record actually carries a value, so a
@@ -115,7 +116,7 @@ export function Agnostic({ client }: { client: ResolvedClient }) {
   }, [title, description]);
 
   return (
-    <div className="agnostic" style={brandVars(client)}>
+    <div className="agnostic" style={brandVars(client)} {...brandAttrs(client)}>
       <Header client={client} copy={copy} />
 
       <main>

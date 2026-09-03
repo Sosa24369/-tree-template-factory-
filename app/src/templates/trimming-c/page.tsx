@@ -22,6 +22,7 @@ import { ServiceAreasCarousel } from '../../components/ServiceAreasCarousel';
 import { photosFor, partitionMedia } from '../../lib/photos';
 import { GoogleAdsCallAsset } from '../../components/GoogleAdsCallAsset';
 import { renderSections } from '../../lib/renderSections';
+import { brandAttrs } from '../../lib/brandAttrs';
 
 type Copy = (key: string) => string;
 
@@ -87,7 +88,7 @@ export function TrimmingCPage({
   const ratingWord = copy('ratingBadge.logoText');
 
   return (
-    <div className="trimming-c" style={brandStyle}>
+    <div className="trimming-c" style={brandStyle} {...brandAttrs(client)}>
       {/* ---- header: hairline, quiet ---- */}
       <header className="tc-header">
         <div className="tc-container tc-header-inner">

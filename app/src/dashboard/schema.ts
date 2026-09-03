@@ -76,6 +76,24 @@ export const FIELDS: FieldDef[] = [
   { path: 'brand.primaryColor', label: 'Primary colour', group: 'identity', type: 'color', help: 'Header, hero, primary buttons.' },
   { path: 'brand.accentColor', label: 'Accent colour', group: 'identity', type: 'color', help: 'CTAs, highlights, the second half of headings.' },
   { path: 'brand.onPrimaryColor', label: 'Text-on-primary', group: 'identity', type: 'color', help: 'Text colour on primary-coloured buttons. Usually white.' },
+  {
+    path: 'brand.fontPairing', label: 'Typography', group: 'identity', type: 'select',
+    options: [
+      { value: 'system', label: 'System (fastest — no font download)' },
+      { value: 'editorial', label: 'Editorial — Fraunces headings, Inter body' },
+      { value: 'grotesk', label: 'Grotesk — Space Grotesk headings, Inter body' },
+    ],
+    help: 'Self-hosted fonts, Latin subset. Only the chosen pairing is ever downloaded.',
+  },
+  {
+    path: 'brand.spacingScale', label: 'Spacing', group: 'identity', type: 'select',
+    options: [
+      { value: 'default', label: 'Default' },
+      { value: 'compact', label: 'Compact — tighter vertical rhythm' },
+      { value: 'roomy', label: 'Roomy — more air between sections' },
+    ],
+    help: 'Vertical rhythm of the page body. Header, footer and the sticky bar are unaffected.',
+  },
 
   // contact
   {

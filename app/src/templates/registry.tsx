@@ -19,6 +19,17 @@ import { StormA } from './storm-a';
 import { StormB } from './storm-b';
 import { StormC } from './storm-c';
 import { Agnostic } from './agnostic';
+import removalACopyDefaults from './removal-a/copy.defaults';
+import removalBCopyDefaults from './removal-b/copy.defaults';
+import { removalCCopy as removalCCopyDefaults } from './removal-c/copy.defaults';
+import trimmingACopyDefaults from './trimming-a/copy.defaults';
+import trimmingBCopyDefaults from './trimming-b/copy.defaults';
+import { trimmingCCopy as trimmingCCopyDefaults } from './trimming-c/copy.defaults';
+import stormACopyDefaults from './storm-a/copy.defaults';
+import stormBCopyDefaults from './storm-b/copy.defaults';
+import { stormCCopy as stormCCopyDefaults } from './storm-c/copy.defaults';
+import agnosticCopyDefaults from './agnostic/copy.defaults';
+
 
 export interface TemplateMeta {
   id: TemplateId;
@@ -101,3 +112,22 @@ export function isTemplateApplicable(
 ): boolean {
   return !(client.excludedTemplates ?? []).includes(id);
 }
+
+
+/**
+ * Every template's shipped copy defaults, keyed by template id. Used by the
+ * dashboard preview to map rendered text back to a copy key for inline editing.
+ * Read-only: nothing here changes what a page renders.
+ */
+export const COPY_DEFAULTS: Record<TemplateId, Record<string, string>> = {
+  'removal-a': removalACopyDefaults,
+  'removal-b': removalBCopyDefaults,
+  'removal-c': removalCCopyDefaults,
+  'trimming-a': trimmingACopyDefaults,
+  'trimming-b': trimmingBCopyDefaults,
+  'trimming-c': trimmingCCopyDefaults,
+  'storm-a': stormACopyDefaults,
+  'storm-b': stormBCopyDefaults,
+  'storm-c': stormCCopyDefaults,
+  agnostic: agnosticCopyDefaults,
+};

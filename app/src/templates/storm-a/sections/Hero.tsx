@@ -37,7 +37,13 @@ export function Hero({
   formPanel?: ReactNode;
 }) {
   const art = stormStills(client, 1)[0] ?? null;
-  const artStyle = art?.src ? ({ '--st-art': cssUrl(art.src) } as CSSProperties) : undefined;
+  const artStyle = art?.src
+    ? ({
+        '--st-art': cssUrl(art.src),
+        // Focal point (editor) -> background-position. Only when set, so default output is unchanged.
+        ...(art.focal ? { '--st-art-pos': `${Math.round(art.focal.x * 100)}% ${Math.round(art.focal.y * 100)}%` } : {}),
+      } as CSSProperties)
+    : undefined;
 
   const area = (client.serviceArea ?? '').trim();
   const firstLine = area ? `${copy('hero.h1InPrefix')}${area}?` : copy('hero.h1NoArea');

@@ -56,6 +56,7 @@ import { Footer } from './sections/Footer';
 
 import './trimming-a.css';
 import { renderSections } from '../../lib/renderSections';
+import { brandAttrs } from '../../lib/brandAttrs';
 
 /**
  * Only set a custom property when the record actually carries a value, so a
@@ -97,7 +98,7 @@ export function TrimmingA({ client }: { client: ResolvedClient }) {
   }, [title, description]);
 
   return (
-    <div className="trimming-a" style={brandVars(client)}>
+    <div className="trimming-a" style={brandVars(client)} {...brandAttrs(client)}>
       {/* S1 — header bar */}
       <Header client={client} copy={copy} />
 

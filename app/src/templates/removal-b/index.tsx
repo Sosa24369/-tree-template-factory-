@@ -64,6 +64,7 @@ import { StickyBar } from './sections/StickyBar';
 
 import './removal-b.css';
 import { renderSections } from '../../lib/renderSections';
+import { brandAttrs } from '../../lib/brandAttrs';
 
 /**
  * Only set a custom property when the record actually carries a value, so a
@@ -109,7 +110,7 @@ export function RemovalB({ client }: { client: ResolvedClient }) {
   }, [title, description]);
 
   return (
-    <div className="removal-b" style={brandVars(client)}>
+    <div className="removal-b" style={brandVars(client)} {...brandAttrs(client)}>
       <Header client={client} copy={copy} />
 
       <main>

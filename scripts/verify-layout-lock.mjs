@@ -62,7 +62,7 @@ const TB = MANIFESTS['trimming-b'];
   expect(r.sections.length === TB.length && r.sections.every((s) => !s.hidden), 'layout-empty -> manifest defaults'); }
 { const r = resolveLayout(TB, fx('layout-unknown-ids').layout['trimming-b']);
   const ids = r.sections.map((s) => s.id);
-  expect(!ids.includes('not-a-real-section') && ids[0] === 'faq' && ids[1] === 'hero', 'layout-unknown-ids -> unknown id dropped, known order kept');
+  expect(!ids.includes('not-a-real-section') && ids[0] === 'header' && ids[1] === 'faq' && ids[2] === 'hero', 'layout-unknown-ids -> unknown id dropped, header pinned first, client order kept');
   expect(r.sections.find((s) => s.id === 'faq').hidden === true, 'layout-unknown-ids -> faq hidden as requested');
   expect(r.sections.find((s) => s.id === 'faq').size === TB.find((s) => s.id === 'faq').defaultSize, 'layout-unknown-ids -> size "XL" rejected, default kept');
   expect(r.sections.find((s) => s.id === 'work').size === 'L', 'layout-unknown-ids -> valid size "L" applied');

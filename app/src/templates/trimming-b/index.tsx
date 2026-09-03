@@ -68,6 +68,7 @@ import { Footer } from './sections/Footer';
 
 import './trimming-b.css';
 import { renderSections } from '../../lib/renderSections';
+import { brandAttrs } from '../../lib/brandAttrs';
 
 /**
  * Only set a custom property when the record actually carries a value, so a
@@ -109,7 +110,7 @@ export function TrimmingB({ client }: { client: ResolvedClient }) {
   }, [title, description]);
 
   return (
-    <div className="trimming-b" style={brandVars(client)}>
+    <div className="trimming-b" style={brandVars(client)} {...brandAttrs(client)}>
       {/* Sticky: the number has to stay reachable, because on this side of the test
           the form is eleven sections away. */}
       <Header client={client} copy={copy} />

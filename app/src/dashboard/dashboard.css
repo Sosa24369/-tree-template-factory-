@@ -127,3 +127,30 @@ body { margin: 0; background: var(--d-bg); color: var(--d-ink); font-family: ui-
   .dash { grid-template-columns: 200px 1fr; }
   .dash-preview { display: none; }
 }
+
+/* ---- Layout panel ---- */
+.dash-layout-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.dash-lock { margin: 6px 0 0; padding: 8px 10px; border-radius: 6px; background: #fff4e5; color: #8a5a00; font-size: 13px; }
+.dash-layout-list { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 4px; }
+.dash-layout-row { display: grid; grid-template-columns: 24px 1fr auto; align-items: center; gap: 10px; padding: 6px 8px; border: 1px solid var(--d-line); border-radius: 6px; background: var(--d-panel); user-select: none; }
+.dash-layout-row.is-pinned { background: #f7f8fa; color: var(--d-muted); }
+.dash-layout-row.is-hidden .dash-layout-name { opacity: .45; text-decoration: line-through; }
+.dash-layout-row.is-over { border-color: var(--d-accent); box-shadow: inset 0 3px 0 var(--d-accent); }
+.dash-layout-row.is-dragging { opacity: .5; }
+.dash-layout-name { display: flex; flex-direction: column; gap: 1px; font-size: 13px; }
+.dash-layout-name code { font-size: 11px; color: var(--d-muted); }
+.dash-layout-controls { display: flex; align-items: center; gap: 6px; }
+.dash-handle { cursor: grab; touch-action: none; font-size: 16px; line-height: 1; color: var(--d-muted); text-align: center; }
+.dash-handle.is-disabled { cursor: default; }
+.dash-btn--xs { padding: 2px 7px; font-size: 12px; line-height: 1.2; }
+.dash-input--xs { padding: 2px 6px; font-size: 12px; width: auto; }
+.dash-check { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; color: var(--d-muted); }
+
+/* ---- Photo reorder + focal ---- */
+.dash-photo { touch-action: none; }
+.dash-photo.is-dragging { opacity: .5; }
+.dash-photo.is-over { outline: 2px solid var(--d-accent); outline-offset: 2px; }
+.dash-thumb-wrap { position: relative; }
+.dash-thumb-wrap .dash-thumb { cursor: crosshair; object-fit: cover; aspect-ratio: 4 / 3; width: 100%; }
+.dash-handle--photo { position: absolute; top: 4px; left: 4px; padding: 2px 6px; border-radius: 4px; background: rgba(255,255,255,.9); }
+.dash-focal { position: absolute; width: 14px; height: 14px; margin: -7px 0 0 -7px; border: 2px solid #fff; border-radius: 50%; background: var(--d-accent); box-shadow: 0 0 0 2px rgba(0,0,0,.35); pointer-events: none; }

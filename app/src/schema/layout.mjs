@@ -25,14 +25,14 @@ const isSizeToken = (v) => typeof v === 'string' && SIZE_TOKENS.includes(v);
  * @param {ReadonlyArray<{id:string,label:string,required:boolean,defaultSize:string}>} manifest
  * @param {unknown} clientLayout   raw value of client.layout[templateId], may be anything
  * @param {{ locked?: boolean }} [opts]  locked = this is a control (-a) template
- * @returns {{ sections: Array<{id:string,hidden:boolean,size:string,required:boolean}>, warnings: string[] }}
+ * @returns {{ sections: Array<{id:string,hidden:boolean,size:string,defaultSize:string,required:boolean}>, warnings: string[] }}
  */
 export function resolveLayout(manifest, clientLayout, opts = {}) {
   const warnings = [];
   const byId = new Map(manifest.map((s) => [s.id, s]));
 
   const defaults = () =>
-    manifest.map((s) => ({ id: s.id, hidden: false, size: s.defaultSize, required: !!s.required }));
+    manifest.map((s) => ({ id: s.id, hidden: false, size: s.defaultSize, defaultSize: s.defaultSize, required: !!s.required }));
 
   // Controls: the layout is ignored wholesale so the A/B test stays valid (R2).
   if (opts.locked) {
@@ -59,22 +59,40 @@ export function resolveLayout(manifest, clientLayout, opts = {}) {
     warnings.push('layout.sections is not an array — using template order');
   }
 
-  // 2 + 3: client order first, unknown ids dropped, omitted ids appended.
+  // Required sections are PINNED to their manifest positions: the leading run
+  // (header) stays first and the trailing run (footer, sticky) stays last no matter
+  // what the client's array says. Only the body in between is reorderable.
+  let lead = 0; while (lead < manifest.length && manifest[lead].required) lead++;
+  let trail = manifest.length; while (trail > lead && manifest[trail - 1].required) trail--;
+  const prefix = manifest.slice(0, lead).map((s) => ({ id: s.id, hidden: false }));
+  const suffix = manifest.slice(trail).map((s) => ({ id: s.id, hidden: false }));
+  const bodyIds = new Set(manifest.slice(lead, trail).map((s) => s.id));
+
+  // 2 + 3: client order for the body, unknown ids dropped, omitted body ids appended.
   const seen = new Set();
-  const ordered = [];
+  const body = [];
   let unknown = 0;
   for (const entry of rawSections ?? []) {
     const id = entry && typeof entry === 'object' ? entry.id : entry;
     if (typeof id !== 'string' || !byId.has(id)) { unknown++; continue; }
+    if (!bodyIds.has(id)) continue;            // pinned ids keep their place; a hidden flag on them is handled in step 4
     if (seen.has(id)) continue;
     seen.add(id);
     const hidden = entry && typeof entry === 'object' ? entry.hidden === true : false;
-    ordered.push({ id, hidden });
+    body.push({ id, hidden });
   }
   if (unknown) warnings.push(`layout.sections had ${unknown} id(s) not in this template's manifest — ignored`);
+  for (const s of manifest.slice(lead, trail)) {
+    if (!seen.has(s.id)) body.push({ id: s.id, hidden: false });
+  }
+  const ordered = [...prefix, ...body, ...suffix];
 
-  for (const s of manifest) {
-    if (!seen.has(s.id)) ordered.push({ id: s.id, hidden: false });
+  // A client that tried to hide a pinned section gets the warning from step 4.
+  for (const entry of rawSections ?? []) {
+    const id = entry && typeof entry === 'object' ? entry.id : entry;
+    if (typeof id === 'string' && byId.has(id) && !bodyIds.has(id) && entry?.hidden === true) {
+      const hit = ordered.find((o) => o.id === id); if (hit) hit.hidden = true;   // step 4 forces it back and counts it
+    }
   }
 
   // 4 + 5
@@ -85,7 +103,7 @@ export function resolveLayout(manifest, clientLayout, opts = {}) {
     const required = !!def.required;
     if (required && hidden) { forced++; hidden = false; }
     const size = isSizeToken(rawSizes[id]) ? rawSizes[id] : def.defaultSize;
-    return { id, hidden, size, required };
+    return { id, hidden, size, defaultSize: def.defaultSize, required };
   });
   for (const [k, v] of Object.entries(rawSizes)) {
     if (!byId.has(k) || !isSizeToken(v)) badSizes++;

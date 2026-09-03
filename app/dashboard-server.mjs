@@ -214,6 +214,10 @@ export function dashboardApi() {
           if (req.method === 'POST' && url === '/api/dash/save') {
             const { slug, record, message } = await readBody(req);
             if (!okSlug(slug)) return send(res, 400, { error: 'bad slug' });
+            // R2 — a control (-a) template's layout can never be written, whatever the UI
+            // sends. The editor hides the controls; this is the guard.
+            const lockedLayout = Object.keys(record?.layout ?? {}).find((id) => /-a$/.test(id));
+            if (lockedLayout) return send(res, 422, { error: 'layout_locked', templateId: lockedLayout });
             const { errors, warnings } = validate(record);
             if (errors.length) return send(res, 422, { error: 'validation failed', errors, warnings });
 

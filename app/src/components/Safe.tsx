@@ -56,7 +56,9 @@ export function SafeImage({
       {...(photo.srcset ? { srcSet: photo.srcset, sizes } : {})}
       alt={photo.alt ?? ''}
       className={className}
-      style={style}
+      // A focal point (set by dragging in the editor) becomes object-position. Only
+      // emitted when present, so an untouched photo renders exactly as before.
+      style={photo.focal ? { ...style, objectPosition: `${Math.round(photo.focal.x * 100)}% ${Math.round(photo.focal.y * 100)}%` } : style}
       loading={loading}
       fetchPriority={fetchPriority}
       {...(photo.width != null ? { width: photo.width } : {})}

@@ -54,7 +54,13 @@ export function Hero({
   const areaPrefix = copy('hero.areaPrefix');
   const secondary = copy('hero.secondary');
 
-  const artStyle = art?.src ? ({ '--rb-art': cssUrl(art.src) } as CSSProperties) : undefined;
+  const artStyle = art?.src
+    ? ({
+        '--rb-art': cssUrl(art.src),
+        // Focal point (editor) -> background-position. Only when set, so default output is unchanged.
+        ...(art.focal ? { '--rb-art-pos': `${Math.round(art.focal.x * 100)}% ${Math.round(art.focal.y * 100)}%` } : {}),
+      } as CSSProperties)
+    : undefined;
 
   return (
     <section

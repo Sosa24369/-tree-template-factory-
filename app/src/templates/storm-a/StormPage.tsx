@@ -34,6 +34,7 @@ import { FinalCta } from './sections/FinalCta';
 import { Footer } from './sections/Footer';
 import { StickyBar } from './sections/StickyBar';
 import { renderSections } from '../../lib/renderSections';
+import { brandAttrs } from '../../lib/brandAttrs';
 
 export function StormPage({
   client,
@@ -47,7 +48,7 @@ export function StormPage({
   brandStyle: CSSProperties;
 }) {
   return (
-    <div className={`storm ${variant}`} style={brandStyle}>
+    <div className={`storm ${variant}`} style={brandStyle} {...brandAttrs(client)}>
       <Header client={client} copy={copy} />
 
       <main>

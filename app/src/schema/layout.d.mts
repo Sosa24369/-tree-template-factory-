@@ -13,6 +13,7 @@ export interface ResolvedSection {
   id: string;
   hidden: boolean;
   size: SizeToken;
+  defaultSize: SizeToken;
   required: boolean;
 }
 

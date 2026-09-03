@@ -34,7 +34,7 @@ export function Photos({ record, onChange, slug }: { record: Json; onChange: (r:
     <div className="dash-field">
       <span className="dash-label">Photos</span>
       <span className="dash-help">
-        This client’s own job photos, per service. Uploads are optimised and given responsive variants automatically. Only ever
+        This client’s own job photos, per service. Drag the handle to reorder; click a photo’s subject to set its focal point. Uploads are optimised and given responsive variants automatically. Only ever
         written to <code>/assets/{slug}/</code>.
       </span>
       {SERVICES.map((svc) => (
@@ -47,6 +47,8 @@ export function Photos({ record, onChange, slug }: { record: Json; onChange: (r:
 function PhotoService({ svc, slug, list, onList }: { svc: Service; slug: string; list: any[]; onList: (l: any[]) => void }) {
   const [busy, setBusy] = useState(false);
   const [picking, setPicking] = useState(false);
+  const [from, setFrom] = useState<number | null>(null);
+  const [over, setOver] = useState<number | null>(null);
   const [pending, setPending] = useState<{ dataUrl: string; file: File } | null>(null);
 
   const setAt = (i: number, patch: any) => onList(list.map((p, n) => (n === i ? { ...p, ...patch } : p)));
@@ -60,13 +62,35 @@ function PhotoService({ svc, slug, list, onList }: { svc: Service; slug: string;
         {list.length === 0 && <span className="dash-empty-slot">empty — needs photos</span>}
       </div>
 
-      <div className="dash-photo-grid">
+      <div className="dash-photo-grid" onPointerLeave={() => setOver(null)}>
         {list.map((p, i) => (
-          <div className="dash-photo" key={p.src ?? i}>
-            <img src={p.src} alt="" className="dash-thumb" />
+          <div
+            className={`dash-photo ${from === i ? "is-dragging" : ""} ${over === i && from !== null && from !== i ? "is-over" : ""}`}
+            key={p.src ?? i}
+            onPointerEnter={() => from !== null && setOver(i)}
+            onPointerUp={() => { if (from !== null && over !== null && from !== over) { const n = [...list]; const [it] = n.splice(from, 1); n.splice(over, 0, it); onList(n); } setFrom(null); setOver(null); }}
+          >
+            <div className="dash-thumb-wrap">
+              <img
+                src={p.src}
+                alt=""
+                className="dash-thumb"
+                style={p.focal ? { objectPosition: `${Math.round(p.focal.x * 100)}% ${Math.round(p.focal.y * 100)}%` } : undefined}
+                onClick={(e) => {
+                  // Click on the subject sets a non-destructive focal point (object-position),
+                  // unlike the crop baked in at upload.
+                  const r = (e.target as HTMLImageElement).getBoundingClientRect();
+                  setAt(i, { focal: { x: +((e.clientX - r.left) / r.width).toFixed(3), y: +((e.clientY - r.top) / r.height).toFixed(3) } });
+                }}
+                title="Click the subject to set the focal point"
+              />
+              {p.focal && <span className="dash-focal" style={{ left: `${p.focal.x * 100}%`, top: `${p.focal.y * 100}%` }} aria-hidden="true" />}
+              <span className="dash-handle dash-handle--photo" aria-label="Drag to reorder" onPointerDown={(e) => { (e.target as HTMLElement).setPointerCapture?.(e.pointerId); setFrom(i); setOver(i); }} onPointerUp={(e) => (e.target as HTMLElement).releasePointerCapture?.(e.pointerId)}>⠿</span>
+            </div>
             <input className="dash-input dash-input--sm" placeholder="alt text" value={p.alt ?? ''} onChange={(e) => setAt(i, { alt: e.target.value })} />
             <div className="dash-photo-actions">
               {p.srcset ? <span className="dash-badge dash-badge--ok" title={p.srcset}>srcset ✓</span> : <span className="dash-badge dash-badge--warn">no srcset</span>}
+              {p.focal && <button className="dash-btn dash-btn--ghost dash-btn--sm" type="button" title="Back to centred crop" onClick={() => { const { focal: _f, ...rest } = p; onList(list.map((q, n) => (n === i ? rest : q))); }}>Centre</button>}
               <button className="dash-btn dash-btn--ghost dash-btn--sm" type="button" onClick={() => remove(i)}>
                 Remove
               </button>

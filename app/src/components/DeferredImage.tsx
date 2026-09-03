@@ -70,6 +70,8 @@ export function DeferredImage({
     >
       {show && (
         <img
+            // Focal point (set in the editor) -> object-position; emitted only when present.
+            style={photo.focal ? { objectPosition: `${Math.round(photo.focal.x * 100)}% ${Math.round(photo.focal.y * 100)}%` } : undefined}
           src={photo.src}
           {...(photo.srcset ? { srcSet: photo.srcset, sizes } : {})}
           alt={photo.alt ?? ''}
@@ -80,7 +82,7 @@ export function DeferredImage({
         />
       )}
       <noscript>
-        <img src={photo.src} alt={photo.alt ?? ''} className={className} loading="lazy" />
+        <img src={photo.src} alt={photo.alt ?? ''} className={className} loading="lazy" style={photo.focal ? { objectPosition: `${Math.round(photo.focal.x * 100)}% ${Math.round(photo.focal.y * 100)}%` } : undefined} />
       </noscript>
     </span>
   );
