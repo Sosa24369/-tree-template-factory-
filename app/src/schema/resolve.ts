@@ -9,6 +9,8 @@
  */
 
 import { CLIENT_DEFAULTS, type ClientRecord, type TemplateId } from './client';
+import { isControlTemplate, resolveLayout, type ResolvedSection } from './layout.mjs';
+import { MANIFESTS } from '../templates/manifests.mjs';
 
 export interface ResolveIssue {
   level: 'error' | 'warning';
@@ -29,6 +31,12 @@ export interface ResolvedClient extends ClientRecord {
   googleAdsCallAssetDisplay: string;
   /** Post-submit destination after the external-domain guard has been applied. */
   safeThankYouUrl: string;
+  /**
+   * Every template's section order after applying this client's `layout`, the
+   * manifest defaults, and the control lock. Templates render from this, never from
+   * the raw `layout` field. Always present for every TemplateId (R5).
+   */
+  resolvedLayout: Record<TemplateId, ResolvedSection[]>;
 }
 
 /** One canonical display format for the whole factory: (214) 985-7697 */
@@ -138,6 +146,24 @@ export function resolveClient(raw: ClientRecord): {
     });
   }
 
+  // ---- Layout (LAYOUT IS DATA) --------------------------------------------
+  // Resolved for every template up front so a template never has to guard against
+  // a missing entry. Controls (-a) are locked: their layout is ignored with a warning.
+  const rawLayout = (raw as { layout?: unknown }).layout;
+  const layoutIsObject = rawLayout != null && typeof rawLayout === 'object' && !Array.isArray(rawLayout);
+  if (rawLayout != null && !layoutIsObject) {
+    issues.push({ level: 'warning', field: 'layout', message: 'layout is not an object — every template uses its defaults.' });
+  }
+  const resolvedLayout = {} as Record<TemplateId, ResolvedSection[]>;
+  for (const templateId of Object.keys(MANIFESTS) as TemplateId[]) {
+    const entry = layoutIsObject ? (rawLayout as Record<string, unknown>)[templateId] : undefined;
+    const { sections, warnings } = resolveLayout(MANIFESTS[templateId], entry, {
+      locked: isControlTemplate(templateId),
+    });
+    resolvedLayout[templateId] = sections;
+    for (const w of warnings) issues.push({ level: 'warning', field: `layout.${templateId}`, message: w });
+  }
+
   const client: ResolvedClient = {
     ...raw,
     serviceAreaList: raw.serviceAreaList ?? [],
@@ -150,6 +176,7 @@ export function resolveClient(raw: ClientRecord): {
     phoneHref,
     googleAdsCallAssetDisplay,
     safeThankYouUrl,
+    resolvedLayout,
   };
 
   return { client, issues };

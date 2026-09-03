@@ -1470,3 +1470,108 @@ certainly what was seen. No change made — there was nothing to change.
 
 Pre-upload dist audit: 0 blank-co paths · no `dashboard.html` · `404.html` present
 · root titled "Landing pages" with `noindex` · 35 pages + 404.
+
+---
+
+# VISUAL EDITOR — P0: LAYOUT BECOMES DATA — 2026-08-14
+
+Brief: `docs/prompts/visual-editor-build.md` (written, then improved with the
+prompt-expert skill: every DoD is a command with an expected output; the -a lock is
+a verifier, not a sentence; refusal paths and publish failure semantics are exact).
+
+## What now works
+
+Section order is no longer hardcoded JSX. Every template exports a manifest
+(`app/src/templates/manifests.mjs`, data only) and renders its body through
+`renderSections(client, templateId, renderers)`, which walks
+`client.resolvedLayout[templateId]`. A client may reorder, hide or resize the
+non-required sections of any NON-control template by setting
+`layout[templateId] = { sections: [{id, hidden}], sizes: {id: 'S'|'M'|'L'|'full'} }`.
+
+- `resolveClient` computes `resolvedLayout` for all 10 templates up front (R5: never
+  a missing entry), applying: manifest order → client order (unknown ids dropped) →
+  omitted ids appended → required sections forced visible → bad sizes dropped.
+- **Controls are locked (R2):** every `-a` template ignores `layout` entirely and
+  raises a warning if one is present. `scripts/verify-layout-lock.mjs` sets a
+  reversed layout on every -a for every client and asserts nothing moved.
+- Header, Footer and the sticky call bar are `required` everywhere: pinned, never
+  hidden. They stay as static JSX in each template, outside the helper.
+- Schema also gains `PhotoSet.focal {x,y}` and `ClientBrand.fontPairing` /
+  `spacingScale` (consumed in P1; no output yet).
+
+## Files
+
+`app/src/schema/layout.mjs` (+ `.d.mts`) · `app/src/templates/manifests.mjs`
+(+ `.d.mts`) · `app/src/lib/renderSections.tsx` · `app/src/schema/{client,resolve}.ts`
+· `app/src/lib/clientRegistry.ts` (fixtures glob) · 8 render sites: `removal-a/b`,
+`trimming-a/b`, `agnostic` (`index.tsx`), `storm-a/StormPage.tsx` (serves storm-a/b/c),
+`removal-c/page.tsx`, `trimming-c/page.tsx` · `clients/_fixtures/layout-*.json` ×4 ·
+`scripts/verify-layout-lock.mjs`.
+
+## Decisions the brief did not cover
+
+- **Shared logic is plain JS.** No `tsx`, no `allowJs` in this repo, so
+  `layout.mjs` + `manifests.mjs` with `.d.mts` companions give ONE implementation
+  used by both the TypeScript app and the Node verifier. Two copies would drift.
+- **Required sections stay as static JSX** rather than flowing through the helper.
+  They are pinned by definition, so this is equivalent and keeps the diff small.
+- **The -c pages were not split into components.** Their `<main>` blocks were wrapped
+  verbatim as renderer closures (fragments emit no DOM). Same output, minimal risk.
+- **P0 passes `size` through resolution but no component consumes it yet.** A
+  default-size class on every section would have changed output; P1 wires
+  components to emit a class only for a non-default token.
+- The prompt's "exactly one warning" per fixture was over-precise: the resolver
+  reports one warning per distinct problem, so `layout-unknown-ids` raises 2
+  (unknown ids + bad sizes). Real counts are in the DoD output below.
+
+## DoD — commands and output
+
+**1. Byte-identical.** Raw `diff -r /tmp/before /tmp/after` differs ONLY in the
+content-hashed JS filename (`index-Bv8zJycB.js` → `index-pxVoUVoU.js`), which must
+change because the JS changed. With that one token normalized:
+`IDENTICAL — every rendered HTML file byte-identical (36 files)`;
+`non-hash diff lines: 0`; CSS hash unchanged (`index-lb90h1w-.css`).
+
+**2. Verifiers.** factory rules: all pass (R1 across 136 files, R3 across 186) ·
+R4 PASS 36 pages · lead Function 42/42 · FAQ a11y 0 orphans · source fidelity
+575/575 · tracking 88/88 · **layout-lock: 13/13 PASS** (3 -a templates × 3 clients
+unchanged; trimming-b honours reorder/hide/size; all four fixtures behave as
+specified).
+
+**3. R5 fixtures.** `INCLUDE_FIXTURES=1 npm run build` — see the run output
+appended below by the session. Deployable build restored afterwards
+(`layout-*` dirs in dist: 0).
+
+**4.** `tsc --noEmit`: clean.
+
+## Limitations
+
+- Sizes resolve but do not yet render (P1).
+- Section reorder for the three storm templates is shared (one manifest, one
+  `StormPage`), so a client's `layout['storm-b']` and `layout['storm-c']` are
+  independent records but reorder the same component tree.
+
+## What P1 adds
+
+The editor itself, locally: layout panel (drag reorder, hide, size), photo panel
+(reorder, focal point, swap, upload), style panel, inline copy editing in the
+preview — plus size classes and `object-position` in the templates.
+
+### P0 DoD item 3 — R5 fixture build, actual output
+
+```
+INCLUDE_FIXTURES=1 npm run build
+  prerendered 136 page(s)                (36 real + 20 blank-co + 80 layout-*)
+  layout-* pages built: 80
+  'undefined' occurrences in layout-* pages: 0
+  'NaN' / '[object' occurrences:            0
+  trimming-b on layout-hides-required: 1 footer, 1 sticky bar   (required sections forced visible)
+
+per-fixture layout warnings (resolver):
+  layout-missing          0
+  layout-empty            0
+  layout-unknown-ids      2   [trimming-b: unknown ids, bad sizes]
+  layout-hides-required   2   [removal-a: control lock; trimming-b: required hidden]
+
+npm run build   ->  prerendered 36 page(s); layout-* dirs in dist: 0
+```

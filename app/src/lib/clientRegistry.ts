@@ -9,7 +9,12 @@
 import type { ClientRecord } from '../schema/client';
 import { resolveClient, type ResolveIssue, type ResolvedClient } from '../schema/resolve';
 
-const modules = import.meta.glob<{ default: ClientRecord }>('../../../clients/*.json', { eager: true });
+// Real clients live in /clients. Test fixtures live in /clients/_fixtures and carry
+// isFixture: true, which scripts/prerender.mjs uses to keep them out of every deploy.
+const modules = import.meta.glob<{ default: ClientRecord }>(
+  ['../../../clients/*.json', '../../../clients/_fixtures/*.json'],
+  { eager: true }
+);
 
 export interface RegistryEntry {
   client: ResolvedClient;

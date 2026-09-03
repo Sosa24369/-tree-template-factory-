@@ -63,6 +63,7 @@ import { Footer } from './sections/Footer';
 import { StickyBar } from './sections/StickyBar';
 
 import './removal-b.css';
+import { renderSections } from '../../lib/renderSections';
 
 /**
  * Only set a custom property when the record actually carries a value, so a
@@ -112,30 +113,20 @@ export function RemovalB({ client }: { client: ResolvedClient }) {
       <Header client={client} copy={copy} />
 
       <main>
-        {/* CANONICAL STRUCTURE v2 (owner's directive, 2026-08-13 — supersedes
-            v1): hero (+ brand lockup + bouncing call CTA + estimate panel) →
-            badge band → the captioned reviews block → results caption over a
-            symmetrical grid → services blurb with photo → areas drift →
-            process → remaining sections → footer. Copy untouched. */}
 
-        {/* 1 — risk-led hero + the estimate panel (offer copy + form) */}
-        <Hero client={client} copy={copy} formPanel={<EstimatePanel client={client} copy={copy} />} />
-        {/* 2 — badge band: the credential ticker, near the top */}
-        <TrustBar copy={copy} />
-        {/* 3 — reviews, ONE block captioned by the proof heading + stat band */}
-        <Proof client={client} copy={copy} />
-        {/* 4 — results: the work heading captions one symmetrical grid */}
-        <Work client={client} copy={copy} />
-        {/* 5 — services blurb, two-column with a client photo on the right */}
-        <Scope client={client} copy={copy} />
-        {/* 6 — service areas, mid-page between the photo work and process */}
-        <Areas client={client} copy={copy} />
-        {/* 7 — four steps on one timeline (captioned by its own heading) */}
-        <Process copy={copy} />
-        {/* 8 — remaining sections in their existing relative order */}
-        <Signals copy={copy} />
-        <Faq copy={copy} />
-        <FinalCta client={client} copy={copy} />
+        {renderSections(client, 'removal-b', {
+          hero: () => <Hero client={client} copy={copy} formPanel={<EstimatePanel client={client} copy={copy} />} />,
+          'trust-bar': () => <TrustBar copy={copy} />,
+          proof: () => <Proof client={client} copy={copy} />,
+          work: () => <Work client={client} copy={copy} />,
+          scope: () => <Scope client={client} copy={copy} />,
+          areas: () => <Areas client={client} copy={copy} />,
+          process: () => <Process copy={copy} />,
+          signals: () => <Signals copy={copy} />,
+          faq: () => <Faq copy={copy} />,
+          'final-cta': () => <FinalCta client={client} copy={copy} />,
+
+        })}
       </main>
 
       {/* S12 */}

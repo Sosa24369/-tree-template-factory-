@@ -73,6 +73,7 @@ import { Footer } from './sections/Footer';
 import { clean } from './text';
 
 import './agnostic.css';
+import { renderSections } from '../../lib/renderSections';
 
 /**
  * Only set a custom property when the record actually carries a value, so a
@@ -118,28 +119,18 @@ export function Agnostic({ client }: { client: ResolvedClient }) {
       <Header client={client} copy={copy} />
 
       <main>
-        {/* CANONICAL STRUCTURE v2 (owner's directive, 2026-08-13 — supersedes
-            v1): hero (banner + form + bouncing call link) → trust band → the
-            captioned reviews block → results caption over a symmetrical grid
-            → services → areas drift → remaining → footer. This template's
-            services are operator-filled placeholder slots, so the blurb-photo
-            treatment does not apply here (flagged). Placeholders untouched. */}
 
-        {/* 1 — banner, headline, proof points, form + call link */}
-        <Hero client={client} copy={copy} />
-        {/* 2 — trust band, near the top */}
-        <Trust copy={copy} />
-        {/* 3 — reviews, ONE block (its own SectionHead + the slider) */}
-        <Reviews client={client} copy={copy} />
-        {/* 4 — results: the gallery heading captions one symmetrical grid */}
-        <Gallery client={client} copy={copy} />
-        {/* 5 — what this business does */}
-        <Services copy={copy} />
-        {/* 6 — service areas, mid-page */}
-        <Areas client={client} copy={copy} />
-        {/* 7/8 — remaining sections, existing relative order */}
-        <Faq copy={copy} />
-        <FinalCta client={client} copy={copy} />
+        {renderSections(client, 'agnostic', {
+          hero: () => <Hero client={client} copy={copy} />,
+          trust: () => <Trust copy={copy} />,
+          reviews: () => <Reviews client={client} copy={copy} />,
+          gallery: () => <Gallery client={client} copy={copy} />,
+          services: () => <Services copy={copy} />,
+          areas: () => <Areas client={client} copy={copy} />,
+          faq: () => <Faq copy={copy} />,
+          'final-cta': () => <FinalCta client={client} copy={copy} />,
+
+        })}
       </main>
 
       <Footer client={client} copy={copy} />

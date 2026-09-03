@@ -48,6 +48,7 @@ import { FinalCta } from './sections/FinalCta';
 import { Footer } from './sections/Footer';
 
 import './removal-a.css';
+import { renderSections } from '../../lib/renderSections';
 
 /**
  * Only set a custom property when the record actually carries a value, so a
@@ -94,34 +95,22 @@ export function RemovalA({ client }: { client: ResolvedClient }) {
       <Header client={client} copy={copy} />
 
       <main>
-        {/* CANONICAL STRUCTURE v2 (owner's directive, 2026-08-13 — supersedes
-            v1): hero (+ brand lockup + bouncing call CTA) → offer band → the
-            captioned reviews block → results caption over a symmetrical grid
-            → services blurb with photo → areas drift (mid-page, OUT of the
-            footer zone) → process → remaining sections → footer. Copy
-            untouched; captions are each section's own existing lines. */}
 
-        {/* 1 — hero: brand lockup, badge, $300 headline, form + call */}
-        <Hero client={client} copy={copy} />
-        {/* 2 — offer band: the page's existing offer + trust badges */}
-        <Benefits client={client} copy={copy} />
-        {/* 3 — reviews, ONE block captioned by the page's own "Why … Choose …"
-            trust line (heading + prose + slider + CTA live in WhyChoose) */}
-        <WhyChoose client={client} copy={copy} />
-        {/* 4 — results: "Restoration Results Guaranteed" captions its grid */}
-        <Restoration client={client} copy={copy} />
-        {/* 5 — services blurb, two-column with a client photo on the right */}
-        <Longform client={client} copy={copy} />
-        {/* 6 — areas we serve, mid-page between the photo work and process */}
-        <Areas client={client} copy={copy} />
-        {/* 7 — how it works, four steps (captioned by its own heading) */}
-        <Process copy={copy} />
-        {/* 8 — remaining sections in their existing relative order */}
-        <Gallery client={client} />
-        <Services client={client} copy={copy} />
-        <MidCta client={client} copy={copy} />
-        <Faq copy={copy} />
-        <FinalCta client={client} copy={copy} />
+        {renderSections(client, 'removal-a', {
+          hero: () => <Hero client={client} copy={copy} />,
+          benefits: () => <Benefits client={client} copy={copy} />,
+          'why-choose': () => <WhyChoose client={client} copy={copy} />,
+          restoration: () => <Restoration client={client} copy={copy} />,
+          longform: () => <Longform client={client} copy={copy} />,
+          areas: () => <Areas client={client} copy={copy} />,
+          process: () => <Process copy={copy} />,
+          gallery: () => <Gallery client={client} />,
+          services: () => <Services client={client} copy={copy} />,
+          'mid-cta': () => <MidCta client={client} copy={copy} />,
+          faq: () => <Faq copy={copy} />,
+          'final-cta': () => <FinalCta client={client} copy={copy} />,
+
+        })}
       </main>
 
       {/* S13 — footer */}

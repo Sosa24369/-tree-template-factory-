@@ -21,6 +21,7 @@ import { ReviewsSlider } from '../../components/ReviewsSlider';
 import { ServiceAreasCarousel } from '../../components/ServiceAreasCarousel';
 import { photosFor, partitionMedia } from '../../lib/photos';
 import { GoogleAdsCallAsset } from '../../components/GoogleAdsCallAsset';
+import { renderSections } from '../../lib/renderSections';
 
 type Copy = (key: string) => string;
 
@@ -100,274 +101,295 @@ export function TrimmingCPage({
       </header>
 
       <main>
-        {/* ---- hero: the control's offer H1 in the variant's serif calm ---- */}
-        <section className="tc-hero">
-          <div className="tc-container tc-hero-grid">
-            <div className="tc-hero-copy">
-              <p className="tc-badge">
-                {ratingWord.trim() && (
-                  <span className="tc-badge-word" aria-label={ratingWord}>
-                    {[...ratingWord].map((letter, i) => (
-                      <span key={i} aria-hidden="true" className="tc-badge-letter">
-                        {letter}
+        {renderSections(client, 'trimming-c', {
+          hero: () => (
+            <>
+            <section className="tc-hero">
+              <div className="tc-container tc-hero-grid">
+                <div className="tc-hero-copy">
+                  <p className="tc-badge">
+                    {ratingWord.trim() && (
+                      <span className="tc-badge-word" aria-label={ratingWord}>
+                        {[...ratingWord].map((letter, i) => (
+                          <span key={i} aria-hidden="true" className="tc-badge-letter">
+                            {letter}
+                          </span>
+                        ))}
                       </span>
+                    )}
+                    <SafeText as="span" className="tc-badge-stars" value={copy('ratingBadge.stars')} />
+                    <SafeText as="strong" className="tc-badge-rating" value={copy('ratingBadge.rating')} />
+                    <SafeText as="span" className="tc-badge-caption" value={copy('ratingBadge.caption')} />
+                  </p>
+
+                  <Split as="h1" className="tc-display" a={copy('hero.h1a')} b={copy('hero.h1b')} />
+                  <SafeText as="p" className="tc-hero-sub" value={copy('hero.h2')} />
+                  <SafeText as="p" className="tc-hero-body" value={copy('hero.body')} />
+
+                  <div className="tc-hero-ctas">
+                    {/* v2: gentle periodic bounce on the primary tap-to-call. */}
+                    <span className="cta-bounce tc-bounce">
+                      <PhoneLink client={client} placement="hero" className="tc-call tc-call--solid" subLabel={copy('cta.callSubLabel')}>
+                        {copy('cta.callLabelPrefix')}
+                        {client.phoneDisplay}
+                      </PhoneLink>
+                    </span>
+                  </div>
+
+                  {/* Trust strip — record facts + one verbatim control line. */}
+                  <ul className="tc-trust">
+                    {client.serviceArea?.trim() && <li className="tc-trust-chip">{client.serviceArea}</li>}
+                    {reviewCount > 0 && (
+                      <li className="tc-trust-chip">
+                        <span className="tc-trust-stars" aria-hidden="true">
+                          ★★★★★
+                        </span>
+                        {reviewCount} Google reviews
+                      </li>
+                    )}
+                    {copy('benefits.item3').trim() && <li className="tc-trust-chip">{copy('benefits.item3')}</li>}
+                  </ul>
+                </div>
+
+                {/* Form card — beside the display block on desktop, directly under
+                    it on mobile (dominant above the fold). Mobile shows the
+                    control's MOBILE form heading, desktop its desktop heading —
+                    both are real control copy, at their own breakpoints, exactly
+                    as the control ships them. */}
+                <div className="tc-form-card" id={FORM_ANCHOR}>
+                  <Split as="h2" className="tc-form-h tc-form-h--desktop" a={copy('form.headingA')} b={copy('form.headingB')} />
+                  <Split as="h2" className="tc-form-h tc-form-h--mobile" a={copy('form.headingMobileA')} b={copy('form.headingMobileB')} />
+                  <SafeText as="p" className="tc-form-sub" value={copy('form.subline')} />
+                  <LeadForm
+                    client={client}
+                    className="tc-leadform"
+                    labels={{
+                      firstName: copy('form.label.firstName'),
+                      lastName: copy('form.label.lastName'),
+                      phone: copy('form.label.phone'),
+                      email: copy('form.label.email'),
+                      submit: copy('form.submit'),
+                    }}
+                  />
+                </div>
+              </div>
+            </section>
+            </>
+          ),
+          benefits: () => (
+            <>
+            <section className="tc-section tc-benefits">
+              <div className="tc-container">
+                <ul className="tc-benefit-ledger">
+                  {[1, 2, 3, 4]
+                    .map((n) => copy(`benefits.item${n}`))
+                    .filter((b) => b.trim())
+                    .map((b, i) => (
+                      <li className="tc-benefit" key={i}>
+                        {b}
+                      </li>
                     ))}
-                  </span>
-                )}
-                <SafeText as="span" className="tc-badge-stars" value={copy('ratingBadge.stars')} />
-                <SafeText as="strong" className="tc-badge-rating" value={copy('ratingBadge.rating')} />
-                <SafeText as="span" className="tc-badge-caption" value={copy('ratingBadge.caption')} />
-              </p>
-
-              <Split as="h1" className="tc-display" a={copy('hero.h1a')} b={copy('hero.h1b')} />
-              <SafeText as="p" className="tc-hero-sub" value={copy('hero.h2')} />
-              <SafeText as="p" className="tc-hero-body" value={copy('hero.body')} />
-
-              <div className="tc-hero-ctas">
-                {/* v2: gentle periodic bounce on the primary tap-to-call. */}
-                <span className="cta-bounce tc-bounce">
-                  <PhoneLink client={client} placement="hero" className="tc-call tc-call--solid" subLabel={copy('cta.callSubLabel')}>
+                </ul>
+              </div>
+            </section>
+            </>
+          ),
+          why: () => (
+            <>
+            <section className="tc-section tc-section--deep tc-why">
+              <div className="tc-container">
+                <Split as="h2" className="tc-h2" a={copy('why.h1a')} b={copy('why.h1b')} stacked />
+                <SafeText as="p" className="tc-lede tc-lede--onink" value={copy('why.body')} />
+                <ReviewsSlider client={client} />
+                <div className="tc-cta-row">
+                  <PhoneLink client={client} placement="reviews" className="tc-call tc-call--onink" subLabel={copy('cta.callSubLabel')}>
                     {copy('cta.callLabelPrefix')}
                     {client.phoneDisplay}
                   </PhoneLink>
-                </span>
+                </div>
               </div>
-
-              {/* Trust strip — record facts + one verbatim control line. */}
-              <ul className="tc-trust">
-                {client.serviceArea?.trim() && <li className="tc-trust-chip">{client.serviceArea}</li>}
-                {reviewCount > 0 && (
-                  <li className="tc-trust-chip">
-                    <span className="tc-trust-stars" aria-hidden="true">
-                      ★★★★★
-                    </span>
-                    {reviewCount} Google reviews
-                  </li>
-                )}
-                {copy('benefits.item3').trim() && <li className="tc-trust-chip">{copy('benefits.item3')}</li>}
-              </ul>
-            </div>
-
-            {/* Form card — beside the display block on desktop, directly under
-                it on mobile (dominant above the fold). Mobile shows the
-                control's MOBILE form heading, desktop its desktop heading —
-                both are real control copy, at their own breakpoints, exactly
-                as the control ships them. */}
-            <div className="tc-form-card" id={FORM_ANCHOR}>
-              <Split as="h2" className="tc-form-h tc-form-h--desktop" a={copy('form.headingA')} b={copy('form.headingB')} />
-              <Split as="h2" className="tc-form-h tc-form-h--mobile" a={copy('form.headingMobileA')} b={copy('form.headingMobileB')} />
-              <SafeText as="p" className="tc-form-sub" value={copy('form.subline')} />
-              <LeadForm
-                client={client}
-                className="tc-leadform"
-                labels={{
-                  firstName: copy('form.label.firstName'),
-                  lastName: copy('form.label.lastName'),
-                  phone: copy('form.label.phone'),
-                  email: copy('form.label.email'),
-                  submit: copy('form.submit'),
-                }}
-              />
-            </div>
-          </div>
-        </section>
-
-        {/* CANONICAL STRUCTURE v2 (owner's directive, 2026-08-13 — supersedes
-            v1): offer band → captioned reviews block → results caption over
-            one symmetrical grid → services blurb with photo → areas drift →
-            process → remaining → footer. Copy untouched. */}
-
-        {/* 2 — offer band: the control's own offer + trust badges */}
-        <section className="tc-section tc-benefits">
-          <div className="tc-container">
-            <ul className="tc-benefit-ledger">
-              {[1, 2, 3, 4]
-                .map((n) => copy(`benefits.item${n}`))
-                .filter((b) => b.trim())
-                .map((b, i) => (
-                  <li className="tc-benefit" key={i}>
-                    {b}
-                  </li>
-                ))}
-            </ul>
-          </div>
-        </section>
-
-        {/* 3 — reviews, ONE block captioned by the control's own trust line */}
-        <section className="tc-section tc-section--deep tc-why">
-          <div className="tc-container">
-            <Split as="h2" className="tc-h2" a={copy('why.h1a')} b={copy('why.h1b')} stacked />
-            <SafeText as="p" className="tc-lede tc-lede--onink" value={copy('why.body')} />
-            <ReviewsSlider client={client} />
-            <div className="tc-cta-row">
-              <PhoneLink client={client} placement="reviews" className="tc-call tc-call--onink" subLabel={copy('cta.callSubLabel')}>
-                {copy('cta.callLabelPrefix')}
-                {client.phoneDisplay}
-              </PhoneLink>
-            </div>
-          </div>
-        </section>
-
-        {/* 4 — results: "Done Clean, Done Right" captions ONE symmetrical
-            grid of the client's own trimming work */}
-        <section className="tc-section tc-doneright">
-          <div className="tc-container tc-measure">
-            <Split as="h2" className="tc-h2" a={copy('doneRight.h1a')} b={copy('doneRight.h1b')} />
-            <SafeText as="p" className="tc-body" value={copy('doneRight.body')} />
-          </div>
-          {gallery.length > 0 && (
-            <div className="tc-container">
-              <ul className="tc-work-grid">
-                {gallery.map((photo, i) => (
-                  <li key={i} className="tc-work-cell">
-                    <DeferredImage photo={photo} wrapperClassName="tc-work-frame" className="tc-work-img" />
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-        </section>
-
-        {/* 5 — services blurb, two-column with a client photo on the right */}
-        <section className="tc-section tc-longform">
-          <div className="tc-container tc-longform-grid">
-            <div className="tc-longform-main tc-measure">
-              <SafeText as="p" className="tc-ribbon" value={copy('longform.badge')} />
-              <Split as="h2" className="tc-h2" a={copy('longform.h1a')} b={copy('longform.h1b')} />
-              <SafeText as="p" className="tc-lede" value={copy('longform.lede')} />
-              <SafeText as="p" className="tc-body" value={copy('longform.p1')} />
-              <SafeText as="p" className="tc-body" value={copy('longform.p2')} />
-              <Split as="h2" className="tc-h3" a={copy('longform.requestsH1a')} b={copy('longform.requestsH1b')} />
-              {requests.length > 0 && (
-                <ul className="tc-request-list">
-                  {requests.map((r, i) => (
-                    <li key={i}>{r}</li>
-                  ))}
-                </ul>
+            </section>
+            </>
+          ),
+          'done-right': () => (
+            <>
+            <section className="tc-section tc-doneright">
+              <div className="tc-container tc-measure">
+                <Split as="h2" className="tc-h2" a={copy('doneRight.h1a')} b={copy('doneRight.h1b')} />
+                <SafeText as="p" className="tc-body" value={copy('doneRight.body')} />
+              </div>
+              {gallery.length > 0 && (
+                <div className="tc-container">
+                  <ul className="tc-work-grid">
+                    {gallery.map((photo, i) => (
+                      <li key={i} className="tc-work-cell">
+                        <DeferredImage photo={photo} wrapperClassName="tc-work-frame" className="tc-work-img" />
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               )}
-            </div>
-            {gallery[1] && (
-              <div className="tc-longform-photo">
-                <DeferredImage
-                  photo={gallery[1]}
-                  wrapperClassName="tc-longform-photo-box"
-                  className="tc-longform-photo-img"
-                  sizes="(max-width: 979px) 92vw, 38vw"
-                />
-              </div>
-            )}
-          </div>
-        </section>
-
-        {/* 6 — service areas, mid-page between the photo work and process */}
-        {cities.length > 0 && (
-          <section className="tc-section tc-areas">
-            <div className="tc-container">
-              <Split as="h2" className="tc-h2" a={copy('areas.h1a')} b={copy('areas.h1b')} />
-              <SafeText as="p" className="tc-lede" value={copy('areas.h2')} />
-            </div>
-            <ServiceAreasCarousel client={client} />
-          </section>
-        )}
-
-        {/* 7 — process (captioned by its own heading) */}
-        <section className="tc-section tc-section--tint tc-process">
-          <div className="tc-container">
-            <Split as="h2" className="tc-h2" a={copy('process.h1a')} b={copy('process.h1b')} stacked />
-            {steps.length > 0 && (
-              <ol className="tc-steps">
-                {steps.map((step, i) => (
-                  <li className="tc-step" key={i}>
-                    <SafeText as="span" className="tc-step-label" value={step.label} />
-                    <SafeText as="h3" className="tc-step-h" value={step.h} />
-                    <SafeText as="p" className="tc-step-body" value={step.body} />
-                  </li>
-                ))}
-              </ol>
-            )}
-          </div>
-        </section>
-
-        {/* 8 — remaining sections, existing relative order */}
-        <section className="tc-section tc-section--tint tc-services">
-          <div className="tc-container">
-            <Split as="h2" className="tc-h2" a={copy('services.h1a')} b={copy('services.h1b')} />
-            <SafeText as="p" className="tc-lede tc-measure" value={copy('services.body')} />
-            {services.length > 0 && (
-              <ul className="tc-service-grid">
-                {services.map((s, i) => (
-                  <li className="tc-service" key={i}>
-                    {s}
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
-        </section>
-
-        {/* ---- mid CTA (scroll to form, as in the control) ---- */}
-        <section className="tc-section tc-section--tint tc-mid">
-          <div className="tc-container tc-measure">
-            <SafeText as="h2" className="tc-h2" value={copy('midCta.h2')} />
-            <SafeText as="p" className="tc-offer" value={copy('midCta.offer')} />
-            <SafeText as="p" className="tc-body" value={copy('midCta.body')} />
-            <a className="tc-jump" href={`#${FORM_ANCHOR}`}>
-              <SafeText as="span" className="tc-jump-main" value={copy('midCta.button')} />
-              <SafeText as="span" className="tc-jump-sub" value={copy('midCta.buttonSub')} />
-            </a>
-          </div>
-        </section>
-
-        {/* ---- ready band ---- */}
-        <section className="tc-section tc-section--deep tc-ready">
-          <div className="tc-container">
-            <Split as="h2" className="tc-h2" a={copy('readyCta.h1a')} b={copy('readyCta.h1b')} />
-            <div className="tc-cta-row">
-              <PhoneLink client={client} placement="ready" className="tc-call tc-call--onink" subLabel={copy('cta.callSubLabel')}>
-                {copy('cta.callLabelPrefix')}
-                {client.phoneDisplay}
-              </PhoneLink>
-            </div>
-          </div>
-        </section>
-
-        {/* ---- FAQ ---- */}
-        {faqs.length > 0 && (
-          <section className="tc-section tc-faq">
-            <div className="tc-container tc-measure">
-              <Split as="h2" className="tc-h2" a={copy('faq.h1a')} b={copy('faq.h1b')} c={copy('faq.h1c')} />
-              <div className="tc-faq-list">
-                {faqs.map((f, i) =>
-                  f.q.trim() ? (
-                    <details className="tc-faq-item" key={i}>
-                      <summary className="tc-faq-q">
-                        <span>{f.q}</span>
-                        <span className="tc-faq-mark" aria-hidden="true" />
-                      </summary>
-                      <SafeText as="p" className="tc-faq-a" value={f.a} />
-                    </details>
-                  ) : (
-                    <div className="tc-faq-item tc-faq-item--orphan" key={i}>
-                      <SafeText as="p" className="tc-faq-a" value={f.a} />
-                    </div>
-                  )
+            </section>
+            </>
+          ),
+          longform: () => (
+            <>
+            <section className="tc-section tc-longform">
+              <div className="tc-container tc-longform-grid">
+                <div className="tc-longform-main tc-measure">
+                  <SafeText as="p" className="tc-ribbon" value={copy('longform.badge')} />
+                  <Split as="h2" className="tc-h2" a={copy('longform.h1a')} b={copy('longform.h1b')} />
+                  <SafeText as="p" className="tc-lede" value={copy('longform.lede')} />
+                  <SafeText as="p" className="tc-body" value={copy('longform.p1')} />
+                  <SafeText as="p" className="tc-body" value={copy('longform.p2')} />
+                  <Split as="h2" className="tc-h3" a={copy('longform.requestsH1a')} b={copy('longform.requestsH1b')} />
+                  {requests.length > 0 && (
+                    <ul className="tc-request-list">
+                      {requests.map((r, i) => (
+                        <li key={i}>{r}</li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+                {gallery[1] && (
+                  <div className="tc-longform-photo">
+                    <DeferredImage
+                      photo={gallery[1]}
+                      wrapperClassName="tc-longform-photo-box"
+                      className="tc-longform-photo-img"
+                      sizes="(max-width: 979px) 92vw, 38vw"
+                    />
+                  </div>
                 )}
               </div>
-            </div>
-          </section>
-        )}
-
-        {/* ---- final CTA — a scroll-to-form action in the control, kept ---- */}
-        <section className="tc-section tc-section--tint tc-final">
-          <div className="tc-container tc-measure">
-            <Split as="h2" className="tc-h2" a={copy('finalCta.h1a')} b={copy('finalCta.h1b')} />
-            <SafeText as="p" className="tc-body" value={copy('finalCta.body')} />
-            <a className="tc-jump" href={`#${FORM_ANCHOR}`}>
-              <SafeText as="span" className="tc-jump-main" value={copy('finalCta.button')} />
-              <SafeText as="span" className="tc-jump-sub" value={copy('finalCta.buttonSub')} />
-            </a>
-          </div>
-        </section>
+            </section>
+            </>
+          ),
+          areas: () => (
+            <>
+            {cities.length > 0 && (
+              <section className="tc-section tc-areas">
+                <div className="tc-container">
+                  <Split as="h2" className="tc-h2" a={copy('areas.h1a')} b={copy('areas.h1b')} />
+                  <SafeText as="p" className="tc-lede" value={copy('areas.h2')} />
+                </div>
+                <ServiceAreasCarousel client={client} />
+              </section>
+            )}
+            </>
+          ),
+          process: () => (
+            <>
+            <section className="tc-section tc-section--tint tc-process">
+              <div className="tc-container">
+                <Split as="h2" className="tc-h2" a={copy('process.h1a')} b={copy('process.h1b')} stacked />
+                {steps.length > 0 && (
+                  <ol className="tc-steps">
+                    {steps.map((step, i) => (
+                      <li className="tc-step" key={i}>
+                        <SafeText as="span" className="tc-step-label" value={step.label} />
+                        <SafeText as="h3" className="tc-step-h" value={step.h} />
+                        <SafeText as="p" className="tc-step-body" value={step.body} />
+                      </li>
+                    ))}
+                  </ol>
+                )}
+              </div>
+            </section>
+            </>
+          ),
+          services: () => (
+            <>
+            <section className="tc-section tc-section--tint tc-services">
+              <div className="tc-container">
+                <Split as="h2" className="tc-h2" a={copy('services.h1a')} b={copy('services.h1b')} />
+                <SafeText as="p" className="tc-lede tc-measure" value={copy('services.body')} />
+                {services.length > 0 && (
+                  <ul className="tc-service-grid">
+                    {services.map((s, i) => (
+                      <li className="tc-service" key={i}>
+                        {s}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            </section>
+            </>
+          ),
+          mid: () => (
+            <>
+            <section className="tc-section tc-section--tint tc-mid">
+              <div className="tc-container tc-measure">
+                <SafeText as="h2" className="tc-h2" value={copy('midCta.h2')} />
+                <SafeText as="p" className="tc-offer" value={copy('midCta.offer')} />
+                <SafeText as="p" className="tc-body" value={copy('midCta.body')} />
+                <a className="tc-jump" href={`#${FORM_ANCHOR}`}>
+                  <SafeText as="span" className="tc-jump-main" value={copy('midCta.button')} />
+                  <SafeText as="span" className="tc-jump-sub" value={copy('midCta.buttonSub')} />
+                </a>
+              </div>
+            </section>
+            </>
+          ),
+          ready: () => (
+            <>
+            <section className="tc-section tc-section--deep tc-ready">
+              <div className="tc-container">
+                <Split as="h2" className="tc-h2" a={copy('readyCta.h1a')} b={copy('readyCta.h1b')} />
+                <div className="tc-cta-row">
+                  <PhoneLink client={client} placement="ready" className="tc-call tc-call--onink" subLabel={copy('cta.callSubLabel')}>
+                    {copy('cta.callLabelPrefix')}
+                    {client.phoneDisplay}
+                  </PhoneLink>
+                </div>
+              </div>
+            </section>
+            </>
+          ),
+          faq: () => (
+            <>
+            {faqs.length > 0 && (
+              <section className="tc-section tc-faq">
+                <div className="tc-container tc-measure">
+                  <Split as="h2" className="tc-h2" a={copy('faq.h1a')} b={copy('faq.h1b')} c={copy('faq.h1c')} />
+                  <div className="tc-faq-list">
+                    {faqs.map((f, i) =>
+                      f.q.trim() ? (
+                        <details className="tc-faq-item" key={i}>
+                          <summary className="tc-faq-q">
+                            <span>{f.q}</span>
+                            <span className="tc-faq-mark" aria-hidden="true" />
+                          </summary>
+                          <SafeText as="p" className="tc-faq-a" value={f.a} />
+                        </details>
+                      ) : (
+                        <div className="tc-faq-item tc-faq-item--orphan" key={i}>
+                          <SafeText as="p" className="tc-faq-a" value={f.a} />
+                        </div>
+                      )
+                    )}
+                  </div>
+                </div>
+              </section>
+            )}
+            </>
+          ),
+          final: () => (
+            <>
+            <section className="tc-section tc-section--tint tc-final">
+              <div className="tc-container tc-measure">
+                <Split as="h2" className="tc-h2" a={copy('finalCta.h1a')} b={copy('finalCta.h1b')} />
+                <SafeText as="p" className="tc-body" value={copy('finalCta.body')} />
+                <a className="tc-jump" href={`#${FORM_ANCHOR}`}>
+                  <SafeText as="span" className="tc-jump-main" value={copy('finalCta.button')} />
+                  <SafeText as="span" className="tc-jump-sub" value={copy('finalCta.buttonSub')} />
+                </a>
+              </div>
+            </section>
+            </>
+          ),
+        })}
 
       </main>
 

@@ -33,6 +33,7 @@ import { Faq } from './sections/Faq';
 import { FinalCta } from './sections/FinalCta';
 import { Footer } from './sections/Footer';
 import { StickyBar } from './sections/StickyBar';
+import { renderSections } from '../../lib/renderSections';
 
 export function StormPage({
   client,
@@ -50,50 +51,29 @@ export function StormPage({
       <Header client={client} copy={copy} />
 
       <main>
-        {/* CANONICAL STRUCTURE v2 (owner's directive, 2026-08-13 — supersedes
-            v1): hero (form + call + brand lockup + bouncing call CTA) →
-            trust/offer band → captioned reviews block → results caption over a
-            symmetrical photo grid → what-we-handle blurb with a photo → the
-            service-areas drift → process → remaining sections → footer.
-            Copy untouched; sections moved; captions promoted from each
-            section's own existing copy. */}
 
-        {/* 1 — hero: brand lockup, emergency premise, 911 line, call + form */}
-        <Hero client={client} copy={copy} formPanel={<EstimatePanel client={client} copy={copy} />} />
+        {renderSections(client, 'storm-a', {
+          hero: () => <Hero client={client} copy={copy} formPanel={<EstimatePanel client={client} copy={copy} />} />,
+          trust: () => <Trust copy={copy} />,
+          reviews: () => (
+            (client.reviews ?? []).some((r) => (r?.body ?? '').trim()) && (
+              <section className="st-section st-section--tint st-reviews">
+                <div className="st-container">
+                  <SafeText as="h2" className="st-h2 st-reviews-h" value={copy('reviews.h2')} />
+                  <ReviewsSlider client={client} />
+                </div>
+              </section>
+            )
+          ),
+          work: () => <Work client={client} copy={copy} />,
+          handle: () => <Handle client={client} copy={copy} />,
+          areas: () => <Areas client={client} copy={copy} />,
+          process: () => <Process copy={copy} />,
+          insurance: () => <Insurance copy={copy} />,
+          faq: () => <Faq copy={copy} />,
+          'final-cta': () => <FinalCta client={client} copy={copy} />,
 
-        {/* 2 — trust band, directly under the hero (storm's badges; the storm
-            offer is the free assessment, already in the hero copy) */}
-        <Trust copy={copy} />
-
-        {/* 3 — reviews, ONE captioned block (plain descriptive header — storm
-            has no trust-line copy and none gets invented). R5: no reviews,
-            no block. */}
-        {(client.reviews ?? []).some((r) => (r?.body ?? '').trim()) && (
-          <section className="st-section st-section--tint st-reviews">
-            <div className="st-container">
-              <SafeText as="h2" className="st-h2 st-reviews-h" value={copy('reviews.h2')} />
-              <ReviewsSlider client={client} />
-            </div>
-          </section>
-        )}
-
-        {/* 4 — results: the section's own heading captions ONE symmetrical
-            grid of the client's storm shots (hides when none) */}
-        <Work client={client} copy={copy} />
-
-        {/* 5 — what we handle, two-column with a client photo on the right */}
-        <Handle client={client} copy={copy} />
-
-        {/* 6 — service areas, mid-page between the photo work and process */}
-        <Areas client={client} copy={copy} />
-
-        {/* 7 — how storm response works (captioned by its own heading) */}
-        <Process copy={copy} />
-
-        {/* 8 — the rest, in their existing relative order */}
-        <Insurance copy={copy} />
-        <Faq copy={copy} />
-        <FinalCta client={client} copy={copy} />
+        })}
       </main>
 
       <Footer client={client} copy={copy} />

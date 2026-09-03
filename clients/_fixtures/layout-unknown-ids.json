@@ -1,0 +1,19 @@
+{
+  "_comment": "R5 LAYOUT FIXTURE — never deployed (isFixture). Exercises one malformed-layout case; the resolver must warn and fall back to template defaults, never crash.",
+  "isFixture": true,
+  "slug": "layout-unknown-ids",
+  "name": "Layout Fixture",
+  "serviceArea": "",
+  "serviceAreaList": [],
+  "brand": { "logoUrl": null, "primaryColor": "#2b2b2b", "accentColor": "#767676", "onPrimaryColor": null },
+  "phone": { "e164": "+15550000001", "kind": "direct", "displayOverride": null, "googleAdsCallAsset": null },
+  "leadDestination": { "thankYouUrl": "/thank-you", "isExternalAllowed": false },
+  "consent": { "smsCopy": "", "required": false, "privacyPolicyUrl": "", "termsOfServiceUrl": "" },
+  "crm": { "ghlLocationId": "", "adClickIdFieldId": null, "leadTags": [], "leadSource": "" },
+  "tracking": { "gtmContainerId": null, "callRailSwapScriptUrl": null },
+  "photos": {},
+  "reviews": [],
+  "copyOverrides": {},
+  "layout": { "trimming-b": { "sections": [ { "id": "not-a-real-section", "hidden": false }, { "id": "faq", "hidden": true }, { "id": "hero", "hidden": false } ], "sizes": { "faq": "XL", "nope": "S", "work": "L" } } }
+}
+

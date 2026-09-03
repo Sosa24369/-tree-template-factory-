@@ -67,6 +67,7 @@ import { EstimatePanel } from './sections/Estimate';
 import { Footer } from './sections/Footer';
 
 import './trimming-b.css';
+import { renderSections } from '../../lib/renderSections';
 
 /**
  * Only set a custom property when the record actually carries a value, so a
@@ -114,31 +115,19 @@ export function TrimmingB({ client }: { client: ResolvedClient }) {
       <Header client={client} copy={copy} />
 
       <main>
-        {/* CANONICAL STRUCTURE v2 (owner's directive, 2026-08-13 — supersedes
-            v1): hero (+ brand lockup + bouncing call line + form panel) →
-            offer band (this page's own offer, near the top per the
-            badges-live-near-the-top rule) → the captioned reviews block →
-            results caption over a symmetrical grid → what-is-included blurb
-            with photo → areas drift → remaining sections → footer. This page
-            has no process section, so v2 position 7 collapses. Copy untouched. */}
 
-        {/* 1 — the premise, the call line, the brand lockup, the form panel */}
-        <Hero client={client} copy={copy} formPanel={<EstimatePanel client={client} copy={copy} />} />
-        {/* 2 — the page's own offer, relocated to the top band */}
-        <Offer copy={copy} />
-        {/* 3 — reviews, ONE block (its own eyebrow/heading + the slider) */}
-        <Reviews client={client} copy={copy} />
-        {/* 4 — results: the work heading captions one symmetrical grid */}
-        <Work client={client} copy={copy} />
-        {/* 5 — what every trim includes, two-column with a client photo */}
-        <Standard client={client} copy={copy} />
-        {/* 6 — service areas, mid-page */}
-        <Areas client={client} copy={copy} />
-        {/* 7 — (no process section on this page) */}
-        {/* 8 — remaining sections in their existing relative order */}
-        <Testimony client={client} copy={copy} />
-        <Restraint copy={copy} />
-        <Faq copy={copy} />
+        {renderSections(client, 'trimming-b', {
+          hero: () => <Hero client={client} copy={copy} formPanel={<EstimatePanel client={client} copy={copy} />} />,
+          offer: () => <Offer copy={copy} />,
+          reviews: () => <Reviews client={client} copy={copy} />,
+          work: () => <Work client={client} copy={copy} />,
+          standard: () => <Standard client={client} copy={copy} />,
+          areas: () => <Areas client={client} copy={copy} />,
+          testimony: () => <Testimony client={client} copy={copy} />,
+          restraint: () => <Restraint copy={copy} />,
+          faq: () => <Faq copy={copy} />,
+
+        })}
       </main>
 
       {/* 11 — footer */}

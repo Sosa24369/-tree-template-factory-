@@ -33,6 +33,34 @@ export const TEMPLATE_IDS: TemplateId[] = [
 ];
 
 /* ------------------------------------------------------------------ *
+ * Layout — LAYOUT IS DATA
+ *
+ * Each template exports a section manifest (src/templates/manifests.mjs). A client
+ * may reorder, hide or resize the NON-required sections of a template by setting
+ * `layout[templateId]`. Resolution lives in src/schema/layout.mjs and is shared with
+ * the Node verifier so there is one implementation of the rules.
+ *
+ * Controls (-a templates) ignore `layout` entirely so the A/B test stays valid (R2).
+ * ------------------------------------------------------------------ */
+
+/** Section size. A token, never pixels — the template maps it to its own CSS. */
+export type SizeToken = 'S' | 'M' | 'L' | 'full';
+
+export interface SectionLayout {
+  /** A section id from that template's manifest. Unknown ids are ignored. */
+  id: string;
+  /** Required sections (header, footer, sticky bar) can never be hidden; the flag is ignored. */
+  hidden: boolean;
+}
+
+export interface TemplateLayout {
+  /** Full render order. Omitted manifest ids are appended in manifest order. */
+  sections: SectionLayout[];
+  /** sectionId -> size. Absent = the manifest's defaultSize. */
+  sizes: Record<string, SizeToken>;
+}
+
+/* ------------------------------------------------------------------ *
  * Phone — FIX 3
  *
  * ONE source of truth per client. Display text and the tel: href are BOTH derived
@@ -182,6 +210,14 @@ export interface ClientBrand {
   logoWidth?: number;
   logoHeight?: number;
   logoSrcset?: string;
+  /**
+   * Typography pairing. Three pairings ship self-hosted under app/public/fonts/
+   * (Latin subset, font-display: swap). `system` loads no font file at all.
+   * Absent = system.
+   */
+  fontPairing?: 'system' | 'editorial' | 'grotesk';
+  /** Vertical rhythm scale applied through CSS custom properties. Absent = default. */
+  spacingScale?: 'compact' | 'default' | 'roomy';
 }
 
 export interface PhotoSet {
@@ -193,6 +229,11 @@ export interface PhotoSet {
    */
   srcset?: string;
   alt: string;
+  /**
+   * Focal point for cropping, each axis 0–1 (0.5/0.5 = centre). Rendered as
+   * `object-position`. Absent = browser default (centre). Set by dragging in the editor.
+   */
+  focal?: { x: number; y: number };
   /** null wherever the source does not state a dimension. Null over guess. */
   width: number | null;
   height: number | null;
@@ -249,6 +290,13 @@ export interface ClientRecord {
    * Shape: copyOverrides['removal-a']['hero.h1'] = "..."
    */
   copyOverrides: Partial<Record<TemplateId, Record<string, string>>>;
+
+  /**
+   * Per-template layout overrides. Missing, empty or malformed values resolve to the
+   * template's manifest defaults with a warning — never an error (R5). Ignored on
+   * every -a template (R2); the editor refuses to write one there.
+   */
+  layout?: Partial<Record<TemplateId, TemplateLayout>>;
 
   /**
    * Templates that do NOT apply to this client — a service they do not sell.
