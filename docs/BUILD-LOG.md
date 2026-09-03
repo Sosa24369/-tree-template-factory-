@@ -1737,3 +1737,98 @@ and three edit scripts had missed their anchors because I copied indentation fro
 
 All probe clients (`rt-probe`, `rt-probe2`, `rt-probe3`, `rt-probe4`) were removed and
 the deployable build rebuilt; none exist in `clients/` or `dist/`.
+
+---
+
+# VISUAL EDITOR — P2: THE SERVER, RUNNING LOCALLY — 2026-08-14
+
+## What now works
+
+`server/` — a Hono-on-Node service, separate from the landing pages:
+
+- **Shared core.** The dashboard's backend logic moved from the Vite plugin into
+  `app/dashboard-core.mjs`; `app/dashboard-server.mjs` (dev, `apply:'serve'`) and
+  `server/index.mjs` (Railway) are thin adapters over it. One implementation of
+  validation, the sharp pipeline, R4 write confinement and the R2 layout lock.
+- **Auth.** One admin password, stored as an scrypt hash (Node built-in — no native
+  dependency to fail on Railway). Constant-time compare. Signed session cookie:
+  httpOnly, SameSite=Lax, 12 h, Secure (dropped only with
+  `DASHBOARD_INSECURE_COOKIE=1` for local http). Login limited to 5 attempts per IP
+  per 15 minutes → 429. **Every route except `/healthz` and `/login` answers an
+  unauthenticated request with 401 (API) or a redirect to `/login` (HTML).** The
+  server refuses to start at all without the hash and the session secret.
+- **Persistence keeps git as the source of truth.** Working clone at `REPO_DIR`;
+  clone or `pull --ff-only` on boot; a save commits through the core then pushes; a
+  failed push returns `502 push_failed` with git's stderr.
+- **Publish** state machine: `idle → pulling → building → deploying → live | failed`,
+  polled by the UI, last 40 lines shown verbatim; `INCLUDE_FIXTURES` unset so fixtures
+  never ship; a missing Cloudflare token fails at `deploying` BEFORE wrangler runs;
+  `live` only on wrangler exit 0.
+- **UI**: `npm run build:dashboard` (separate Vite config) emits the dashboard as
+  static files; the server serves them from its own checkout behind the login, and
+  photos from the volume clone. Publish button + live state panel added.
+- `.env.example` (names only), `railway.json`, `nixpacks.toml`, R3 scan now covers
+  `server/` and the dashboard modules.
+
+## Decisions the brief did not cover
+
+- **scrypt instead of bcrypt.** Equivalent-or-stronger, built into Node, no native
+  module to compile on Railway. (`N=2^15,r=8` needs exactly Node's default 32 MiB
+  `maxmem`; raised to 64 MiB or it throws.)
+- **Rate-limit IP = rightmost `x-forwarded-for`.** Found while designing the test:
+  the first entry is client-controlled, so using it would let anyone bypass the
+  limiter by sending a fresh fake IP per attempt. Verified: a left-side spoof is still
+  429.
+- **UI from the service checkout, photos from the volume.** The dashboard bundle is
+  built at Railway build time and served from the service's own files; only
+  `/assets` comes from `REPO_DIR`, because that is where uploads land.
+- **`c.redirect()` in Hono takes no headers** — the cookie is set with `c.header()`
+  first. (First run returned 303 with no `Set-Cookie`; every downstream test failed
+  on that alone.)
+
+## DoD — evidence
+
+**1. Gate.** `/healthz` → 200, body exactly `ok`. Unauthenticated: `/` → 302 `/login`
+(0 client strings in body) · `/api/dash/clients` → `401 {"error":"unauthorized"}` ·
+`/api/publish` → 401 · `/assets/…` → 302 `/login`. `/login` → 200 with the form and
+`noindex`.
+
+**2. Login.** Wrong ×6 from an isolated IP: 303, 303, 303, 303, 303, **429**. Right
+password from that IP: 429 (window is 15 min). Spoof `x-forwarded-for: 1.2.3.4, <real>`:
+429. Right password from a clean IP: 303 → `/` with
+`dash_session=…; HttpOnly; SameSite=Lax; Path=/; Max-Age=43200`. With the cookie:
+`/` 200 (built dashboard, 2 bundle refs) · `/api/dash/clients` 200 · `/assets/…` 200
+`image/webp`.
+
+**3. Save is a real, pushed commit.** Through the server: `new-client p2-probe` 200 →
+save `{"ok":true,"commit":"24f3e31"}` → local HEAD `24f3e31` == `origin/main` (pushed
+by the server) → `gh api repos/…/commits/24f3e31` → **HTTP 200**. Probe removed
+in `4397493`.
+
+**4. Real publish — NOT RUN.** Needs `CLOUDFLARE_API_TOKEN` (Pages:Edit), which only
+the owner can mint in the Cloudflare dashboard; wrangler's local OAuth login cannot be
+used by a server. Everything up to the wrangler call is exercised by item 5.
+
+**5. Publish failure is loud.** With no token: `POST /api/publish` 202 → `building`
+(real `npm run build` in the clone) → **`failed`, stage `deploying`, exit 2, tail:
+"CLOUDFLARE_API_TOKEN is not set — wrangler was not invoked."** Live site untouched
+(200).
+
+**6. R3** with `server/` and the dashboard modules in scope: pass, 196 files.
+
+Vite adapter re-checked after the extraction: clients 200; forged `trimming-a` layout
+→ `422 {"error":"layout_locked","templateId":"trimming-a"}`; file untouched.
+
+## Limitations
+
+- Item 4 and all of P3 need two secrets only the owner can create: a **Cloudflare API
+  token** (Pages:Edit) and a **GitHub token** with `contents:write` on the repo (a
+  fine-grained PAT is the right shape; the private repo cannot be cloned without one).
+- The login limiter is in-memory: fine for one instance, reset on restart.
+- `server/.env` holds a throwaway local password; gitignored, never committed
+  (verified: 0 scrypt hashes in tracked files).
+
+## What P3 adds
+
+Railway: the service, a volume at `/data`, the env vars by name, and the full loop from
+the Railway URL — edit → save (commit on GitHub) → publish (live on pages.dev).
