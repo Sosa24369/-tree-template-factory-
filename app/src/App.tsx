@@ -4,6 +4,7 @@ import { captureAttribution } from './lib/attribution';
 import { ensureCallRail, swapCallRail } from './lib/callrail';
 import { getClient, listClients } from './lib/clientRegistry';
 import { TEMPLATE_META, isTemplateApplicable, isTemplateId, renderTemplate } from './templates/registry';
+import { modeFor, pagePath, type PageMode } from './lib/pagePath';
 import { ThankYou } from './routes/ThankYou';
 import './styles/base.css';
 
@@ -12,7 +13,7 @@ import './styles/base.css';
  * factory property: the same template component, a different :clientSlug, a
  * different-looking page, with no code change.
  */
-function TemplateRoute() {
+function TemplateRoute({ mode }: { mode: PageMode }) {
   const { clientSlug, templateId } = useParams();
   const entry = getClient(clientSlug);
 
@@ -24,6 +25,10 @@ function TemplateRoute() {
   }, [entry]);
 
   if (!entry) return <Missing what={`client "${clientSlug}"`} />;
+  // A client lives under exactly ONE prefix: real clients under /p/, the demo
+  // account under /demo/. Hitting the other prefix is not-found, so there is
+  // never a second copy of a page at an address the robots rules do not cover.
+  if (entry && modeFor(entry.client) !== mode) return <Missing what={`client "${clientSlug}" at this address`} />;
   if (!isTemplateId(templateId)) return <Missing what={`template "${templateId}"`} />;
 
   const { client, issues } = entry;
@@ -117,7 +122,7 @@ function Index() {
               return (
                 <li key={t.id}>
                   {applicable ? (
-                    <Link to={`/p/${client.slug}/${t.id}`} className={t.built ? 'built' : 'unbuilt'}>
+                    <Link to={pagePath(client, t.id)} className={t.built ? 'built' : 'unbuilt'}>
                       {t.label}
                     </Link>
                   ) : (
@@ -164,8 +169,12 @@ export function AppRoutes() {
             redirecting — the server side pairs this with a real 404.html so
             the status code is honest too (see scripts/prerender.mjs). */}
         <Route path="/" element={import.meta.env.DEV ? <Index /> : <PublicRoot />} />
-        <Route path="/p/:clientSlug/:templateId" element={<TemplateRoute />} />
-        <Route path="/p/:clientSlug/:templateId/thank-you" element={<ThankYou />} />
+        <Route path="/p/:clientSlug/:templateId" element={<TemplateRoute mode="live" />} />
+        <Route path="/p/:clientSlug/:templateId/thank-you" element={<ThankYou mode="live" />} />
+        {/* The demo account. Same components, same records, different prefix —
+            which is what lets one _headers rule noindex the whole showcase. */}
+        <Route path="/demo/:clientSlug/:templateId" element={<TemplateRoute mode="demo" />} />
+        <Route path="/demo/:clientSlug/:templateId/thank-you" element={<ThankYou mode="demo" />} />
         <Route path="/thank-you" element={<ThankYou />} />
         <Route path="*" element={<NotFound />} />
       </Routes>

@@ -251,6 +251,29 @@ export interface ClientRecord {
    */
   isFixture?: boolean;
 
+  /**
+   * DEMO CLIENT — a neutral showcase account, not a paying client.
+   *
+   * A demo client exists so the ten templates can be shown to a sales prospect
+   * without duplicating a paying client's content or competing with them in
+   * search. Three consequences, each enforced somewhere mechanical rather than
+   * by convention:
+   *
+   *   1. It is prerendered under /demo/<slug>/<template>, never /p/ — see
+   *      scripts/prerender.mjs and the route table in src/App.tsx, which also
+   *      refuse the wrong prefix so one client can never be reached at both.
+   *   2. Every demo page carries `noindex, nofollow` AND a matching
+   *      X-Robots-Tag from app/public/_headers, so it cannot rank against the
+   *      real clients whose copy it echoes.
+   *   3. The lead Function refuses a demo slug BEFORE it reads any token
+   *      (app/functions/api/_core.mjs), so a demo submit can never reach GHL.
+   *      A demo record therefore carries no ghlLocationId, no GTM container and
+   *      no Google Ads call asset — there is nothing for it to be wired to.
+   *
+   * Unlike `isFixture`, a demo client IS deployed: showing it is the point.
+   */
+  isDemo?: boolean;
+
   /** Stable key. Also the filename: /clients/<slug>.json */
   slug: string;
   name: string;

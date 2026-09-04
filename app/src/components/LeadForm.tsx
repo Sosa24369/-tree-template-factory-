@@ -19,6 +19,7 @@ import { getAttribution } from '../lib/attribution';
 import { getSubmissionId } from '../lib/submissionId';
 import { fetchSiteKey, loadTurnstile } from '../lib/turnstile';
 import { submitLead, type LeadPayload } from '../lib/leads';
+import { basePathFor } from '../lib/pagePath';
 import { PhoneLink } from './PhoneLink';
 
 export interface LeadFormLabels {
@@ -97,7 +98,9 @@ export function LeadForm({ client, labels, className }: Props) {
   function destination(): string {
     const url = client.safeThankYouUrl;
     if (/^[a-z][a-z0-9+.-]*:\/\//i.test(url)) return url;
-    return clientSlug && templateId ? `/p/${clientSlug}/${templateId}${url}` : url;
+    // The prefix follows the client, not the route, so a demo page's thank-you
+    // link stays inside /demo/ instead of pointing at a /p/ page that 404s.
+    return clientSlug && templateId ? `${basePathFor(client)}/${clientSlug}/${templateId}${url}` : url;
   }
 
   function validate(v: typeof EMPTY): Record<string, string> {

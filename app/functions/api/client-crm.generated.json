@@ -37,22 +37,6 @@
         "storm-c"
       ]
     },
-    "p2-probe": {
-      "name": "P2 Probe",
-      "ghlLocationId": "FaHof000UZrAJUKORVCj",
-      "adClickIdFieldId": "DTlYvWAb5Y0M3iXyWfcH",
-      "attributionFieldIds": {},
-      "leadTags": [
-        "google-ads",
-        "landing-page"
-      ],
-      "leadSource": "Google Ads — Landing Page",
-      "excludedTemplates": [
-        "storm-a",
-        "storm-b",
-        "storm-c"
-      ]
-    },
     "texas-tree-tops": {
       "name": "Texas Tree Tops",
       "ghlLocationId": "zfoeYpKrqshgdFr4gG3b",

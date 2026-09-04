@@ -114,7 +114,10 @@ function pageHead(client, template) {
   const bits = [
     `<title>${escapeHtml(title)}</title>`,
     `<meta name="description" content="${escapeHtml(`${template.label} in ${client.serviceArea || 'your area'} from ${client.name}.`)}">`,
-    `<meta name="robots" content="noindex">`,
+    // A demo page echoes real-client copy shapes, so it must not compete with
+    // them in search: nofollow as well as noindex, matched by the X-Robots-Tag
+    // header in app/public/_headers so the rule survives a stripped <head>.
+    `<meta name="robots" content="${client.isDemo ? 'noindex, nofollow' : 'noindex'}">`,
   ];
   if (PHOTO_LCP_TEMPLATES.has(template.id)) {
     const lcp = lcpImage(client);
@@ -166,8 +169,13 @@ for (const { client } of listClients()) {
     // A client opts out of templates for services it does not sell — never generate
     // a page that implies a service the client does not offer (would also be photo-less).
     if ((client.excludedTemplates ?? []).includes(template.id)) continue;
-    routes.push({ url: `/p/${client.slug}/${template.id}`, client, template });
-    routes.push({ url: `/p/${client.slug}/${template.id}/thank-you`, client, template, isThankYou: true });
+    // Demo clients live under /demo/, real clients under /p/. One prefix per
+    // client, decided by the record — which is what lets app/public/_headers
+    // put X-Robots-Tag on the whole showcase with a single /demo/* rule, and
+    // what stops a demo page from ever existing at a /p/ address.
+    const base = client.isDemo ? '/demo' : '/p';
+    routes.push({ url: `${base}/${client.slug}/${template.id}`, client, template });
+    routes.push({ url: `${base}/${client.slug}/${template.id}/thank-you`, client, template, isThankYou: true });
   }
 }
 // The bare root prerenders PublicRoot (the roster is dev-only — see App.tsx):

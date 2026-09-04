@@ -1,0 +1,17 @@
+# Cloudflare Pages response headers.
+#
+# Rules are matched against the request path, most specific first. Everything not
+# listed here keeps Pages' defaults — this file exists for one rule only.
+
+# THE DEMO ACCOUNT — never indexed.
+#
+# Every demo page also carries <meta name="robots" content="noindex, nofollow">
+# (scripts/prerender.mjs). This header is the belt to that braces: it applies to
+# the response itself, so it holds for a crawler that never parses the <head>,
+# for a cached or proxied copy, and for the /demo/ thank-you pages.
+#
+# The demo exists to be shown to sales prospects, and its copy is deliberately
+# shaped like the real clients' copy. It must not rank against the clients who
+# are paying for the ads.
+/demo/*
+  X-Robots-Tag: noindex, nofollow

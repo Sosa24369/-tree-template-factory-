@@ -14,12 +14,17 @@ import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { ensureCallRail } from '../lib/callrail';
 import { getClient } from '../lib/clientRegistry';
+import { modeFor, type PageMode } from '../lib/pagePath';
 import { PhoneLink } from '../components/PhoneLink';
 import { SafeLogo, SafeText } from '../components/Safe';
 
-export function ThankYou() {
+export function ThankYou({ mode }: { mode?: PageMode } = {}) {
   const { clientSlug } = useParams();
-  const entry = getClient(clientSlug);
+  const found = getClient(clientSlug);
+  // Same prefix rule as the landing page: a demo client is only ever reachable
+  // under /demo/, a real one only under /p/. The bare /thank-you route passes no
+  // mode and keeps its client-less fallback.
+  const entry = found && mode && modeFor(found.client) !== mode ? undefined : found;
 
   // This page can be a direct landing (ad destination / refresh), so it must
   // be able to load the per-client swap script itself — the phone number here
