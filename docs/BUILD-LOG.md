@@ -1882,3 +1882,179 @@ the full loop (sign in → edit → save → commit visible on GitHub → publis
   first or it silently does nothing (first attempt).
 - The first publish on a fresh volume runs `npm ci` twice in the clone; expect a few
   minutes. Later publishes are ~1 minute.
+
+---
+
+# DEMO CLIENT — `summit-tree`, ALL 10 TEMPLATES UNDER `/demo/` — 2026-09-03 (deployed)
+
+Directive: one neutral demo company with all ten templates deployed, so the
+factory can be shown to a sales prospect without duplicating a paying client's
+content or competing with them in search.
+
+## What shipped
+
+**The record.** `clients/summit-tree.json`, name **Summit Tree Co**,
+`"isDemo": true`. Nothing in it is transcribed from a real business:
+
+- **Logo** generated from geometry only (`scripts/generate-demo-logo.mjs` — a
+  rounded tile, three canopy tiers, a trunk; no lettering, no baked-in number),
+  192px webp under `/assets/summit-tree/`, same one-file contract as the real
+  clients' header logos.
+- **Palette** `#1c3f4a` / `#7ba05b`, deliberately unlike either real client's
+  green-and-gold, and `fontPairing: "grotesk"` — the demo is the first client to
+  use a font pairing at all.
+- **Photos** are the three shared placeholders in `/assets/_shared/`. No Texas
+  Tree Tops or J Valdez photography (see the CSS finding below — that took work).
+- **Reviews stay EMPTY**, permanently, and the rating badge is emptied with them.
+  A fabricated review, or a 4.9 for a company that does not exist, is a legal
+  problem rather than a copy choice. Both sections self-hide (R5).
+- **Phone `+1 555 555 0100`** — 555 is not an assignable NANP area code and
+  555-01XX is the reserved fictional exchange, so it cannot ring anyone.
+- **No** `ghlLocationId`, **no** GTM container, **no** Google Ads call asset.
+- **38 copy overrides** across removal-a, trimming-a, storm-a, removal-b,
+  trimming-b and storm-b, replacing every string that carried a real client's
+  commercial claim: the `$300` and `10% off` offers, the `August 31` deadline,
+  the `$2 million` insurance figure, the `4.9` Google rating and its stars. The
+  -c hybrids inherit their control's overrides through `makeCopy`'s
+  `inheritOverridesFrom`, so a→c parity is unaffected. Grepped after the build:
+  0 pages contain `$300`, `$2 million`, `$2M`, `10% off`, `★`, `August 31`,
+  `Summer Special`, `verified reviews`, `Google rating` or `Rated 4`.
+
+**Routing.** `isDemo` puts a client under `/demo/<slug>/<template>` instead of
+`/p/`, in the prerenderer and in the route table, and the route table refuses the
+*other* prefix in both directions — so a client can never be reached at two
+addresses. `/p/summit-tree/removal-a/` and `/demo/texas-tree-tops/removal-a/` are
+both a real 404 live.
+
+**Robots.** Demo pages carry `<meta name="robots" content="noindex, nofollow">`
+(live clients keep their existing plain `noindex`, unchanged), and the new
+`app/public/_headers` adds `X-Robots-Tag: noindex, nofollow` on `/demo/*`. The
+header is the belt to the meta's braces: it holds for a crawler that never parses
+the head, and it covers the thank-you pages.
+
+**Leads.** The lead Function refuses a demo slug in `buildLead`, which runs
+BEFORE `handleLead` reads `env[GHL_PIT_*]` — the same place an excluded template
+is refused. It answers `403 {"error":"demo mode — not submitted","demo":true}`,
+and the form turns that flag into a neutral note instead of its failure state
+("Demo mode — this form was not submitted. On a live account this request would
+go straight to the CRM."). 10 new tests, 52/52 — including one that puts a token
+in env for the demo slug, runs the real handler NOT in dry-run, and asserts
+**zero outbound fetches**.
+
+## The finding this session actually turned up
+
+A demo page was fetching five `/assets/texas-tree-tops/bg-*.webp` files. It was
+found by reading the demo page's **Lighthouse network log**, not its markup.
+
+`removal-a.css` hard-codes those five decorative section plates because the
+extracted source page paints them there (`removal-a/assets.ts` says so). The
+stylesheet is shared by every page, so **every removal-a page has painted the
+control client's photographs since P1 — including J Valdez's LIVE removal-a
+page.** R4 never saw it: the URLs live in the bundled CSS, not in any page's HTML.
+
+**The underlying leak is NOT fixed here.** Fixing it properly means moving
+section artwork into the client record, and that changes pages carrying ad spend.
+It is the owner's call. What *is* fixed: `brandAttrs` emits `data-demo="true"`
+for a demo client, and `removal-a.css` repeats those five plates under
+`[data-demo]` with the shared placeholders. A real client emits no such
+attribute, so its computed styles are untouched. Measured after the fix: the demo
+removal-a page makes **0** requests to another client's asset folder.
+
+## Guards
+
+R4 now reads a page's owner from `/p/<slug>/` **and** `/demo/<slug>/`, and adds
+the demo record's `copyOverrides` (≥ 24 chars) as needles — so demo copy on a
+paying client's page fails, and a client's name/phone/assets on a demo page
+fails. Both directions proven with planted strings (caught, exit 1).
+
+Two guards the log has been reporting for weeks that had **no committed script**,
+now written:
+
+- `scripts/verify-copy-parity.mjs` — a→c, at two levels: the -c copy object must
+  *be* the -a object (`===`), and every text run on the -a page must appear on
+  the -c page. It found one **pre-existing** difference it deliberately does not
+  fix: the -c hybrids drop the phone field's required marker (`Phone *` vs
+  `Phone`, `removal-c/page.tsx:217`, `trimming-c/page.tsx:170`). Listed on every
+  run rather than silently allowed.
+- `scripts/verify-demo-isolation.mjs` — D1–D10: record shape, prefix confinement
+  both ways, robots meta, the `_headers` rule, sitemaps, inbound links, GTM,
+  the lead registry, and D10 (no CSS rule may paint a live client's assets onto a
+  demo page without a `[data-demo]` override). D10 proven by renaming one
+  override in the built CSS: caught, exit 1.
+
+## Numbers
+
+| | before | after |
+|---|---|---|
+| prerendered pages | 36 | 56 |
+| live `/p/` pages | 34 | 34 |
+| demo `/demo/` pages | 0 | 20 |
+| neutral (root + 404) | 2 | 2 |
+
+All 36 pre-existing pages are **content-identical** — diffed with the
+content-hashed bundle filename normalised, which necessarily changed because the
+demo route, the demo form state and one CSS rule are in the shared bundle. Those
+additions are inert on a live page: the demo routes match no live slug, the demo
+form branch needs a `demo: true` the Function only sends for a demo slug, and the
+CSS rule needs a `[data-demo]` attribute a real client never emits.
+
+**Guards, measured:** R4 PASS (56 pages, 38 demo needles, both directions) ·
+factory rules PASS (R1 138 files / 56 needles; R3 203 files; R5 blank-co intact;
+SCHEMA 3 records) · a→c parity PASS (1192 control text runs, 6 tolerated
+required-marker notes) · demo isolation PASS (D1–D10) · FAQ a11y PASS (55 pages,
+204 summaries) · layout lock PASS · tracking 88/88 · lead Function 52/52 · `tsc -b`
+clean.
+
+**Lighthouse** — `vite preview` (never `python3 -m http.server`), mobile, applied
+devtools throttling, warm run:
+
+| page | perf | FCP | LCP | CLS |
+|---|---|---|---|---|
+| demo/summit-tree/removal-a | 99 | 1.8s | 1.8s | 0.015 |
+| demo/summit-tree/trimming-b | 99 | 1.6s | 1.6s | 0.014 |
+| p/texas-tree-tops/removal-a (reference) | 95 | 1.9s | 1.9s | 0 |
+| p/texas-tree-tops/trimming-b (reference) | 96 | — | 1.7s | 0 |
+
+**New, measured, and worth knowing: a font pairing costs ~0.015 CLS.** The demo
+is the first client to set one. Same template, same build: `grotesk` demo pages
+read 0.014–0.015, `system` client pages read 0. Well inside the 0.1 "good"
+threshold, but it is not free, and any client the studio switches to a pairing
+will pay it. The demo pages score *higher* than the live ones only because they
+carry no GTM.
+
+## Deployed
+
+Direct upload, `wrangler pages deploy dist --project-name tree-template-factory`
+→ `0c3b649c`. Verified on `tree-template-factory.pages.dev`:
+
+- all **10 demo URLs 200**, each with both `X-Robots-Tag: noindex, nofollow` and
+  the matching robots meta; the demo thank-you pages too (308 → slash → 200,
+  header present)
+- the **four live campaign URLs 200**, byte-identical to the local `dist`, no
+  `X-Robots-Tag`, robots meta still plain `noindex`
+- `POST /api/lead` with the demo slug → **403 `demo mode — not submitted`**
+- `/p/summit-tree/removal-a/` → 404 · `/demo/texas-tree-tops/removal-a/` → 404
+- **no sitemap exists to appear in**: `/sitemap.xml`, `/sitemap_index.xml`,
+  `/sitemap.txt` all 404. `/robots.txt` is 200 but it is Cloudflare's
+  auto-injected content-signals boilerplate — no `Sitemap:` directive, no
+  `User-agent`, no `Disallow`, and no mention of `/demo/`.
+- root still `Nothing to see here`
+
+## Standing flags for the owner
+
+1. **J Valdez's live removal-a page paints Texas Tree Tops photographs** (the
+   five CSS plates above). Real, pre-existing, and not fixed because the fix
+   touches a page carrying ad spend.
+2. The **`Phone *` a→c difference** — one character, listed on every parity run.
+3. The demo has **no reviews and no rating badge**, and there is nothing to be
+   done about that without fabricating one. A prospect sees the layout with those
+   sections absent.
+4. The demo has **no Privacy Policy or Terms URL** — it has no legal entity, and
+   nothing is submitted from its pages, so there is no A2P obligation. Real
+   clients still need theirs.
+5. `_template/removal-a/benefit-strip-art-*.webp` is shared template artwork
+   rendered on every client's removal-a page, demo included. It is not in a
+   client folder, so it was left alone — but it is a photograph of a real job.
+6. **"Summit Tree Co" was not checked against a business registry.** One web
+   search for a DFW tree service by that name returned none; that is not proof.
+
