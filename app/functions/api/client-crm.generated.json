@@ -14,6 +14,7 @@
   "clients": {
     "blank-co": {
       "name": "Blank Co",
+      "isDemo": false,
       "ghlLocationId": "",
       "adClickIdFieldId": null,
       "attributionFieldIds": {},
@@ -23,6 +24,7 @@
     },
     "j-valdez": {
       "name": "J Valdez Tree Services",
+      "isDemo": false,
       "ghlLocationId": "FaHof000UZrAJUKORVCj",
       "adClickIdFieldId": "DTlYvWAb5Y0M3iXyWfcH",
       "attributionFieldIds": {},
@@ -37,8 +39,19 @@
         "storm-c"
       ]
     },
+    "summit-tree": {
+      "name": "Summit Tree Co",
+      "isDemo": true,
+      "ghlLocationId": "",
+      "adClickIdFieldId": null,
+      "attributionFieldIds": {},
+      "leadTags": [],
+      "leadSource": "",
+      "excludedTemplates": []
+    },
     "texas-tree-tops": {
       "name": "Texas Tree Tops",
+      "isDemo": false,
       "ghlLocationId": "zfoeYpKrqshgdFr4gG3b",
       "adClickIdFieldId": null,
       "attributionFieldIds": {},

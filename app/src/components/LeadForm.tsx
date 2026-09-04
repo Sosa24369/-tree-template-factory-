@@ -18,7 +18,7 @@ import type { ResolvedClient } from '../schema/resolve';
 import { getAttribution } from '../lib/attribution';
 import { getSubmissionId } from '../lib/submissionId';
 import { fetchSiteKey, loadTurnstile } from '../lib/turnstile';
-import { submitLead, type LeadPayload } from '../lib/leads';
+import { LeadSubmitError, submitLead, type LeadPayload } from '../lib/leads';
 import { basePathFor } from '../lib/pagePath';
 import { PhoneLink } from './PhoneLink';
 
@@ -36,7 +36,9 @@ interface Props {
   className?: string;
 }
 
-type Status = 'idle' | 'submitting' | 'error';
+// 'demo' is a success-shaped dead end: the demo account's slug is refused by the
+// Function before it reads any token, so nothing was sent and nothing failed.
+type Status = 'idle' | 'submitting' | 'error' | 'demo';
 
 const EMPTY = { firstName: '', lastName: '', phone: '', email: '', consent: false, company_website: '' };
 
@@ -175,7 +177,7 @@ export function LeadForm({ client, labels, className }: Props) {
       const to = destination();
       if (/^[a-z][a-z0-9+.-]*:\/\//i.test(to)) window.location.assign(to);
       else navigate(to);
-    } catch {
+    } catch (err) {
       // A failed submit must not look like a success. The error state renders the
       // client's phone number as a "call us" fallback, so the lead is not lost.
       // Release the latch so a genuine retry is possible; a retry reuses the
@@ -184,7 +186,10 @@ export function LeadForm({ client, labels, className }: Props) {
       // The Turnstile token is single-use — a retry with the spent token would
       // 403. Reset the widget so the next attempt gets a fresh one.
       resetTurnstile();
-      setStatus('error');
+      // The demo account is refused by design. Say so plainly instead of showing
+      // the "something went wrong, please call us" state, which would be untrue
+      // AND would point a prospect at a number that cannot ring.
+      setStatus(err instanceof LeadSubmitError && err.demo ? 'demo' : 'error');
     }
     // On success the latch stays closed: navigation is imminent and no second
     // submit from this mounted form should ever fire.
@@ -301,6 +306,13 @@ export function LeadForm({ client, labels, className }: Props) {
       <button type="submit" className="btn btn-primary" disabled={status === 'submitting'}>
         {status === 'submitting' ? 'Sending…' : labels.submit}
       </button>
+
+      {status === 'demo' && (
+        <p className="form-demo-note" role="status">
+          Demo mode — this form was not submitted. On a live account this request would go
+          straight to the CRM.
+        </p>
+      )}
 
       {status === 'error' && (
         <p className="form-error" role="alert">

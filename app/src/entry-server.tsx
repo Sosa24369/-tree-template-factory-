@@ -23,4 +23,8 @@ export function render(url: string): string {
 }
 
 export { listClients } from './lib/clientRegistry';
-export { TEMPLATE_META } from './templates/registry';
+export { TEMPLATE_META, COPY_DEFAULTS } from './templates/registry';
+// COPY_DEFAULTS is re-exported so Node-side tooling (the a->c copy-parity guard,
+// the demo-copy audit) can read the real shipped strings from the built bundle
+// rather than re-parsing TypeScript. It is data the client bundle already
+// contains; exporting it here adds nothing to any page.

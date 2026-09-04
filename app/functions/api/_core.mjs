@@ -10,10 +10,19 @@
  *   env secret named GHL_PIT_<SLUG>. There is no code path where the location id or
  *   the token comes from the request body. An unknown slug is rejected before any
  *   token is read. A slug the client has opted out of (excludedTemplates) is rejected
- *   too, so a form can't post from a page that client does not run.
+ *   too, so a form can't post from a page that client does not run. A DEMO slug is
+ *   rejected in the same place and for the same reason: the demo account exists to be
+ *   shown to prospects, it has no GHL location and no token, and a submit from one of
+ *   its pages must never become a contact anywhere.
  */
 
 import registryData from './client-crm.generated.json' with { type: 'json' };
+
+/**
+ * The exact refusal a demo submit gets. Exported so the browser form and the
+ * tests both compare against ONE string rather than two copies that can drift.
+ */
+export const DEMO_REFUSAL = 'demo mode — not submitted';
 
 const GHL_API = 'https://services.leadconnectorhq.com';
 const GHL_VERSION = '2021-07-28';
@@ -108,6 +117,12 @@ export function buildLead(body) {
   const slug = String(body.clientSlug ?? '');
   const client = lookupClient(slug);
   if (!client) return { error: 'unknown client', status: 400 };
+
+  // DEMO ACCOUNT — refuse here, which is BEFORE any token is read (the token
+  // lookup happens in handleLead, only once buildLead has returned a payload).
+  // The `demo` flag on the response is what lets the form show a friendly
+  // "demo mode — not submitted" state instead of its generic failure state.
+  if (client.isDemo) return { error: DEMO_REFUSAL, status: 403, demo: true };
 
   // A non-string templateId (array, object, number) is malformed input, not a
   // page. Reject it rather than String()-coercing — an array like
@@ -234,7 +249,7 @@ export async function handleLead(request, env) {
   const built = buildLead(body);
 
   if (built.drop) return json(200, { ok: true, contactId: null, dropped: built.drop });
-  if (built.error) return json(built.status, { error: built.error });
+  if (built.error) return json(built.status, { error: built.error, ...(built.demo ? { demo: true } : {}) });
 
   const { ghlBody, meta } = built;
 

@@ -1,0 +1,228 @@
+{
+  "_comment": "DEMO CLIENT — a neutral showcase account, not a paying client and not a real business. It exists so all ten templates can be shown to a sales prospect without duplicating a paying client's content or competing with them in search. isDemo:true puts it under /demo/<slug>/<template> with noindex,nofollow (+ the X-Robots-Tag rule in app/public/_headers) and makes the lead Function refuse its slug before any token read. Nothing here is transcribed from a real company: the photos are the shared template placeholders, the reviews list is empty because inventing a review is forbidden, the phone is in the reserved fictional 555-01XX range on a non-assignable 555 area code, and there is no address, no GHL location, no GTM container and no Google Ads call asset.",
+  "isDemo": true,
+  "slug": "summit-tree",
+  "name": "Summit Tree Co",
+  "serviceArea": "Your City, TX",
+  "serviceAreaList": [
+    "Downtown",
+    "Midtown",
+    "Uptown",
+    "North Side",
+    "South Side",
+    "East Side",
+    "West Side",
+    "Riverside",
+    "Lakeside",
+    "Hillside",
+    "Parkside",
+    "Westgate"
+  ],
+  "brand": {
+    "logoUrl": "/assets/summit-tree/logo-header-d60dddea.webp",
+    "primaryColor": "#1c3f4a",
+    "accentColor": "#7ba05b",
+    "onPrimaryColor": "#ffffff",
+    "fontPairing": "grotesk",
+    "spacingScale": "default",
+    "logoWidth": 192,
+    "logoHeight": 192
+  },
+  "phone": {
+    "e164": "+15555550100",
+    "kind": "direct",
+    "displayOverride": null,
+    "googleAdsCallAsset": null
+  },
+  "leadDestination": {
+    "thankYouUrl": "/thank-you",
+    "isExternalAllowed": false
+  },
+  "consent": {
+    "smsCopy": "By checking this box you agree to receive text messages from Summit Tree Co about your estimate and service. Message frequency varies. Message and data rates may apply. Reply STOP to opt out or HELP for help.",
+    "required": false,
+    "privacyPolicyUrl": "",
+    "termsOfServiceUrl": "",
+    "legalUrlsPending": "A demo account has no legal entity, so there is no Privacy Policy or Terms to link. Nothing is submitted from these pages — the lead Function refuses the slug — so there is no A2P obligation to meet."
+  },
+  "crm": {
+    "ghlLocationId": "",
+    "adClickIdFieldId": null,
+    "attributionFieldIds": {},
+    "leadTags": [],
+    "leadSource": ""
+  },
+  "tracking": {
+    "gtmContainerId": null,
+    "callRailSwapScriptUrl": null
+  },
+  "photos": {
+    "removal": [
+      {
+        "src": "/assets/_shared/services-card-photo-2-a6cb4660.webp",
+        "srcset": "/assets/_shared/services-card-photo-2-a6cb4660-400w.webp 400w, /assets/_shared/services-card-photo-2-a6cb4660-800w.webp 800w, /assets/_shared/services-card-photo-2-a6cb4660.webp 1000w",
+        "alt": "Cut stump left at ground level after a tree was taken down",
+        "width": 1000,
+        "height": 572
+      },
+      {
+        "src": "/assets/_shared/services-card-photo-3-1290bfcd.webp",
+        "srcset": "/assets/_shared/services-card-photo-3-1290bfcd-400w.webp 400w, /assets/_shared/services-card-photo-3-1290bfcd-800w.webp 800w, /assets/_shared/services-card-photo-3-1290bfcd.webp 1000w",
+        "alt": "Sectioned trunk lying on the grass beside fresh sawdust",
+        "width": 1000,
+        "height": 572
+      },
+      {
+        "src": "/assets/_shared/services-card-photo-1-ecd55f38.webp",
+        "srcset": "/assets/_shared/services-card-photo-1-ecd55f38-400w.webp 400w, /assets/_shared/services-card-photo-1-ecd55f38-800w.webp 800w, /assets/_shared/services-card-photo-1-ecd55f38.webp 1000w",
+        "alt": "Gloved hand pruning a small branch with bypass loppers",
+        "width": 1000,
+        "height": 572
+      }
+    ],
+    "trimming": [
+      {
+        "src": "/assets/_shared/services-card-photo-1-ecd55f38.webp",
+        "srcset": "/assets/_shared/services-card-photo-1-ecd55f38-400w.webp 400w, /assets/_shared/services-card-photo-1-ecd55f38-800w.webp 800w, /assets/_shared/services-card-photo-1-ecd55f38.webp 1000w",
+        "alt": "Gloved hand pruning a small branch with bypass loppers",
+        "width": 1000,
+        "height": 572
+      },
+      {
+        "src": "/assets/_shared/services-card-photo-3-1290bfcd.webp",
+        "srcset": "/assets/_shared/services-card-photo-3-1290bfcd-400w.webp 400w, /assets/_shared/services-card-photo-3-1290bfcd-800w.webp 800w, /assets/_shared/services-card-photo-3-1290bfcd.webp 1000w",
+        "alt": "Sectioned trunk lying on the grass beside fresh sawdust",
+        "width": 1000,
+        "height": 572
+      },
+      {
+        "src": "/assets/_shared/services-card-photo-2-a6cb4660.webp",
+        "srcset": "/assets/_shared/services-card-photo-2-a6cb4660-400w.webp 400w, /assets/_shared/services-card-photo-2-a6cb4660-800w.webp 800w, /assets/_shared/services-card-photo-2-a6cb4660.webp 1000w",
+        "alt": "Cut stump left at ground level after a tree was taken down",
+        "width": 1000,
+        "height": 572
+      }
+    ],
+    "storm": [
+      {
+        "src": "/assets/_shared/services-card-photo-3-1290bfcd.webp",
+        "srcset": "/assets/_shared/services-card-photo-3-1290bfcd-400w.webp 400w, /assets/_shared/services-card-photo-3-1290bfcd-800w.webp 800w, /assets/_shared/services-card-photo-3-1290bfcd.webp 1000w",
+        "alt": "Sectioned trunk lying on the grass beside fresh sawdust",
+        "width": 1000,
+        "height": 572
+      },
+      {
+        "src": "/assets/_shared/services-card-photo-2-a6cb4660.webp",
+        "srcset": "/assets/_shared/services-card-photo-2-a6cb4660-400w.webp 400w, /assets/_shared/services-card-photo-2-a6cb4660-800w.webp 800w, /assets/_shared/services-card-photo-2-a6cb4660.webp 1000w",
+        "alt": "Cut stump left at ground level after a tree was taken down",
+        "width": 1000,
+        "height": 572
+      },
+      {
+        "src": "/assets/_shared/services-card-photo-1-ecd55f38.webp",
+        "srcset": "/assets/_shared/services-card-photo-1-ecd55f38-400w.webp 400w, /assets/_shared/services-card-photo-1-ecd55f38-800w.webp 800w, /assets/_shared/services-card-photo-1-ecd55f38.webp 1000w",
+        "alt": "Gloved hand pruning a small branch with bypass loppers",
+        "width": 1000,
+        "height": 572
+      }
+    ],
+    "generic": [
+      {
+        "src": "/assets/_shared/services-card-photo-1-ecd55f38.webp",
+        "srcset": "/assets/_shared/services-card-photo-1-ecd55f38-400w.webp 400w, /assets/_shared/services-card-photo-1-ecd55f38-800w.webp 800w, /assets/_shared/services-card-photo-1-ecd55f38.webp 1000w",
+        "alt": "Gloved hand pruning a small branch with bypass loppers",
+        "width": 1000,
+        "height": 572
+      },
+      {
+        "src": "/assets/_shared/services-card-photo-2-a6cb4660.webp",
+        "srcset": "/assets/_shared/services-card-photo-2-a6cb4660-400w.webp 400w, /assets/_shared/services-card-photo-2-a6cb4660-800w.webp 800w, /assets/_shared/services-card-photo-2-a6cb4660.webp 1000w",
+        "alt": "Cut stump left at ground level after a tree was taken down",
+        "width": 1000,
+        "height": 572
+      },
+      {
+        "src": "/assets/_shared/services-card-photo-3-1290bfcd.webp",
+        "srcset": "/assets/_shared/services-card-photo-3-1290bfcd-400w.webp 400w, /assets/_shared/services-card-photo-3-1290bfcd-800w.webp 800w, /assets/_shared/services-card-photo-3-1290bfcd.webp 1000w",
+        "alt": "Sectioned trunk lying on the grass beside fresh sawdust",
+        "width": 1000,
+        "height": 572
+      }
+    ]
+  },
+  "reviews": [],
+  "copyOverrides": {
+    "removal-a": {
+      "ratingBadge.logoText": "",
+      "ratingBadge.stars": "",
+      "ratingBadge.rating": "",
+      "ratingBadge.caption": "",
+      "hero.h1a": "Tree Removal, Handled Start To Finish",
+      "hero.h1b": " For {{areaName|Local}} Homeowners",
+      "hero.h2": "Free Estimates And Clear Pricing Before Any Work Begins.",
+      "hero.body": "Whether the tree is dead, overgrown, blocking your yard, or sitting too close to the house, our crew can inspect it, explain your options, and handle the removal from start to finish. Ask for a free estimate and we will call you back with the next steps.",
+      "benefits.item1": "Free, No-Obligation Removal Estimates",
+      "benefits.item3": "Licensed & Insured Crews",
+      "faq.a6": "Yes. {{name}} is licensed and insured. Tree removal can be dangerous work, especially around homes, fences, roofs, and driveways, so you want a crew that knows how to handle the job safely."
+    },
+    "trimming-a": {
+      "ratingBadge.logoText": "",
+      "ratingBadge.stars": "",
+      "ratingBadge.rating": "",
+      "ratingBadge.caption": "",
+      "hero.h1a": "{{areaName|Local}} Tree Trimming With ",
+      "hero.h2": "Same-Week Appointments Available — Book A Free Estimate Today. ",
+      "hero.body": "Need a tree trimming service near you? Our {{areaName|local}} crew includes roof and gutter branch clearance with every trim. Whether it's a curb-appeal shape-up, full tree pruning, or overgrown limbs hanging over your roofline, we inspect every branch, walk you through your options upfront, and handle the trim and cleanup start to finish. No surprises on price. No debris left behind.",
+      "benefits.item1": "Roof & Gutter Branch Clearance Included With Every Trim",
+      "benefits.item3": "Licensed & Insured Crews",
+      "midCta.offer": "Request your free tree trimming estimate today.",
+      "faq.a5": "Yes. {{name}} is licensed and insured. Tree trimming can be dangerous work, especially around homes, fences, roofs, and driveways, so you want a crew that knows how to handle the job safely."
+    },
+    "storm-a": {
+      "hero.artBadgeStars": "",
+      "trust.item3": "Licensed and insured — proof on request"
+    },
+    "removal-b": {
+      "hero.chip1": "Licensed & insured crews",
+      "hero.chip2": "A written estimate before any work",
+      "hero.artBadgeValue": "Free",
+      "hero.artBadgeLabel": "On-site estimates",
+      "hero.artBadgeStars": "",
+      "trust.item1": "Licensed & insured crews",
+      "proof.eyebrow": "What the work looks like",
+      "proof.h2a": "Judge the crew ",
+      "proof.h2b": "on the jobs it finishes",
+      "proof.lede": "We would rather be judged on the work than on a discount. Every removal ends the same way: debris hauled off, and a walk round the yard with you before the crew leaves.",
+      "proof.stat1.value": "Free",
+      "proof.stat1.label": "On-site estimates",
+      "proof.stat2.value": "Insured",
+      "proof.stat2.label": "Licensed and insured crews",
+      "estimate.ribbon": "Free estimate",
+      "estimate.h2a": "Now the practical part: ",
+      "estimate.h2b": "a free, no-obligation estimate",
+      "estimate.lede": "Tell us about the tree and we will call you back with a real number. We price the job the same whether you book today or next month, and the crew will tell you honestly what it does and does not need.",
+      "estimate.formFootnote": "Free estimate, no obligation. Pricing is confirmed on site.",
+      "faq.a4": "Yes — licensed and insured. Ask every crew you get a quote from for the same thing, and be careful with anyone who cannot produce it.",
+      "finalCta.body": "One call, a free estimate, and a crew that leaves the yard tidier than it found it. Nothing comes off the tree before you have seen the number.",
+      "finalCta.callSub": "Free estimate · nothing cut before you agree",
+      "footer.disclaimer": "Estimates are free and carry no obligation. Pricing is confirmed on site before any work begins."
+    },
+    "trimming-b": {
+      "offer.eyebrow": "What is included",
+      "offer.h2a": "Included",
+      "offer.h2b": "with every trim.",
+      "offer.body": "The two things people usually get billed for separately are not extras here, and the price is agreed before anything is cut.",
+      "offer.term1.h": "A written estimate first",
+      "offer.term1.body": "Price and plan are agreed at the walk-through, before the first limb comes off.",
+      "offer.note": "Mention every tree you are thinking about when you call, and we will price them together.",
+      "faq.a5": "Multiple trees are quoted as one bundled job rather than several separate ones, because the crew and equipment are already on site. It is worth mentioning every tree you are thinking about at the walk-through, even the ones you are unsure about.",
+      "meta.title": "Tree Trimming — Roof & Gutter Clearance Included",
+      "meta.description": "Careful tree trimming: deadwood out, roof and gutter lines cleared, cleanup included, with bundle pricing on multiple trees."
+    },
+    "storm-b": {
+      "hero.artBadgeStars": "",
+      "trust.item3": "Licensed and insured — proof on request"
+    }
+  },
+  "excludedTemplates": []
+}

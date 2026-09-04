@@ -7,7 +7,7 @@
  *
  * Usage: node scripts/test-lead-function.mjs   (exit 1 on any failed assertion)
  */
-import { handleLead, buildLead, toE164, envKeyForSlug, verifyTurnstile } from '../app/functions/api/_core.mjs';
+import { handleLead, buildLead, toE164, envKeyForSlug, verifyTurnstile, DEMO_REFUSAL } from '../app/functions/api/_core.mjs';
 
 let pass = 0;
 const fails = [];
@@ -196,6 +196,51 @@ console.log('\nturnstile — handleLead gate (mocked network)');
   // No secret in env: existing behavior is preserved (fail-open) — no token needed.
   const r = await call({ ...base, clientSlug: 'j-valdez', templateId: 'trimming-a' });
   ok('unconfigured env still accepts a tokenless lead (fail-open)', r.status === 200 && r.json.dryRun === true);
+}
+
+console.log('\ndemo account — refused before any token is read');
+{
+  // The demo slug is refused with a machine-readable `demo: true`, which is what
+  // the browser form keys its "demo mode — not submitted" state off.
+  const r = await call({ ...base, clientSlug: 'summit-tree', templateId: 'removal-a' });
+  ok('demo slug -> 403', r.status === 403, JSON.stringify(r.json));
+  ok('demo slug -> demo:true in body', r.json.demo === true, JSON.stringify(r.json));
+  ok('demo refusal text is the shared constant', r.json.error === DEMO_REFUSAL, JSON.stringify(r.json));
+  ok('demo submit never dry-runs a GHL payload', r.json.dryRun === undefined && r.json.ok === undefined);
+  ok('demo submit logs no [GHL_DRY_RUN] record', !r.logs.some((l) => l.includes('GHL_DRY_RUN')), r.logs.join('|'));
+}
+{
+  // buildLead is the layer that refuses; handleLead only reads env[envKey] AFTER
+  // buildLead returns a payload, so a refusal here is structurally before the token.
+  const built = buildLead({ ...base, clientSlug: 'summit-tree', templateId: 'removal-a' });
+  ok('buildLead refuses the demo slug', built.error === DEMO_REFUSAL && built.status === 403);
+  ok('buildLead returns no ghlBody for a demo slug', built.ghlBody === undefined && built.meta === undefined);
+}
+{
+  // THE POINT OF THE WHOLE THING: even with a real-looking token in env for the
+  // demo slug, and NOT in dry-run, no outbound request is made. Any fetch at all
+  // here is a failure — the demo must never reach GHL.
+  const origFetch = globalThis.fetch;
+  let fetched = 0;
+  globalThis.fetch = async (...a) => { fetched++; return origFetch(...a); };
+  try {
+    const req = new Request('http://x/api/lead', {
+      method: 'POST', headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ ...base, clientSlug: 'summit-tree', templateId: 'storm-a' }),
+    });
+    // 'stand-in' is deliberately NOT credential-shaped: R3 scans this file for
+    // pit-* strings, and a realistic-looking fake would trip it.
+    const res = await handleLead(req, { GHL_PIT_SUMMIT_TREE: 'stand-in' });
+    ok('demo slug with a token present in env -> still 403', res.status === 403);
+    ok('demo slug made ZERO outbound requests', fetched === 0, `fetch called ${fetched}x`);
+  } finally {
+    globalThis.fetch = origFetch;
+  }
+}
+{
+  // The refusal is per-slug, not a blanket change: a real client still works.
+  const r = await call({ ...base, clientSlug: 'texas-tree-tops', templateId: 'removal-a' });
+  ok('a real client is unaffected by the demo rule', r.status === 200 && r.json.dryRun === true);
 }
 
 console.log(`\n${pass} passed, ${fails.length} failed`);

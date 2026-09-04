@@ -104,6 +104,17 @@ a:focus-visible {
 }
 .form-error { margin-top: var(--space-3); }
 
+/* Demo account: the Function refuses the slug, so nothing was sent and nothing
+   broke. Neutral, not red — this is an expected outcome, not a failure. */
+.form-demo-note {
+  margin: var(--space-3) 0 0;
+  padding: var(--space-2) var(--space-3);
+  border: 1px dashed currentColor;
+  border-radius: 6px;
+  font-size: 0.8125rem;
+  opacity: 0.85;
+}
+
 /* ---- consent (FIX 4) ---- */
 
 .consent-field { margin: var(--space-3) 0; }

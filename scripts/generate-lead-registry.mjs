@@ -36,6 +36,11 @@ for (const file of readdirSync(CLIENTS).filter((f) => f.endsWith('.json'))) {
   const d = JSON.parse(readFileSync(join(CLIENTS, file), 'utf8'));
   clients[slug] = {
     name: d.name ?? '',
+    // DEMO ACCOUNT. The Function refuses this slug outright, before it reads any
+    // token — a demo form must never reach a real GHL location. Carried here (not
+    // inferred from an empty ghlLocationId) so the refusal is an explicit, tested
+    // decision rather than a side effect of a half-filled record.
+    isDemo: d.isDemo === true,
     ghlLocationId: d.crm?.ghlLocationId ?? '',
     adClickIdFieldId: d.crm?.adClickIdFieldId ?? null,
     // Optional map of attribution key -> GHL custom field id, e.g.

@@ -45,6 +45,21 @@ export interface LeadResult {
 }
 
 /**
+ * Thrown when the Function refused the submit. `demo` is set when the refusal was
+ * "this is the demo account" (HTTP 403 + `demo: true`), which is a normal, expected
+ * outcome on a /demo/ page and not a failure the visitor should be alarmed by — the
+ * form renders its own "demo mode" state for it. Every other refusal is a real error.
+ */
+export class LeadSubmitError extends Error {
+  readonly demo: boolean;
+  constructor(message: string, demo = false) {
+    super(message);
+    this.name = 'LeadSubmitError';
+    this.demo = demo;
+  }
+}
+
+/**
  * POSTs the lead to the same-origin Pages Function at /api/lead, which does the GHL
  * mapping server-side (slug -> location id -> per-client token). The browser never
  * sees a token or a location id: the seam is a fetch, and everything sensitive is on
@@ -70,12 +85,15 @@ export async function submitLead(payload: LeadPayload, client: ResolvedClient): 
 
   if (!res.ok) {
     let detail = '';
+    let demo = false;
     try {
-      detail = ((await res.json()) as { error?: string })?.error ?? '';
+      const body = (await res.json()) as { error?: string; demo?: boolean };
+      detail = body?.error ?? '';
+      demo = body?.demo === true;
     } catch {
       /* non-JSON error body */
     }
-    throw new Error(detail || `lead submit failed (${res.status})`);
+    throw new LeadSubmitError(detail || `lead submit failed (${res.status})`, demo);
   }
 
   const data = (await res.json().catch(() => ({}))) as { contactId?: string | null };
