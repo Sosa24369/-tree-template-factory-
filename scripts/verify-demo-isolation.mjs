@@ -20,6 +20,16 @@
  *   D7  nothing links into /demo/ from a live or neutral page
  *   D8  no demo page carries a GTM container
  *   D9  the lead Function's generated registry marks the demo slug isDemo
+ *   D10 no CSS rule can paint a live client's photography onto a demo page
+ *
+ * D10 is the one that is not obvious from reading the HTML. removal-a paints five
+ * decorative section backgrounds from the CONTROL CLIENT's own photograph files,
+ * hard-coded in removal-a.css because the extracted source page paints them there.
+ * The stylesheet is shared by every page, so those five URLs are reachable from a
+ * demo page even though the demo's HTML never names them — which is exactly the
+ * kind of leak R4's HTML grep cannot see, and it was found by reading the demo
+ * page's network log, not the markup. Each such rule must be paired with a
+ * `[data-demo]` rule that overrides it.
  *
  * Usage: node scripts/verify-demo-isolation.mjs   (run AFTER a build; exit 1 on failure)
  */
@@ -174,6 +184,46 @@ for (const file of walk(DIST)) {
     else if (overreach.length) violations.push(`D9  the lead registry marks non-demo slug(s) as demo: ${overreach.map(([s]) => s).join(', ')}`);
     else pass.push(`D9  the lead registry marks exactly the demo slug(s) as isDemo: ${[...demoSlugs].join(', ') || '(none)'}`);
   }
+}
+
+/* ---------------- D10 CSS-painted photography ---------------- */
+{
+  const cssDir = join(DIST, 'assets');
+  const cssFiles = existsSync(cssDir) ? readdirSync(cssDir).filter((f) => f.endsWith('.css')) : [];
+  const liveAssetRe = new RegExp(`/assets/(${[...liveSlugs].map((s) => s.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\\\$&')).join('|')})/`);
+  const unpaired = [];
+  let ruleHits = 0;
+
+  for (const file of cssFiles) {
+    const css = readFileSync(join(cssDir, file), 'utf8');
+    // Flat top-level rules only — enough for this check, and the bundler emits
+    // these five as flat rules. Selector text is not mangled, so it compares.
+    const rules = [...css.matchAll(/([^{}@]+)\{([^{}]*)\}/g)].map((m) => ({
+      selector: m[1].trim(),
+      body: m[2],
+    }));
+    const demoSelectors = new Set(
+      rules.filter((r) => r.selector.includes('[data-demo]')).map((r) => r.selector.replaceAll('[data-demo]', '').replace(/\s+/g, ' ').trim())
+    );
+    for (const r of rules) {
+      if (r.selector.includes('[data-demo]')) continue;
+      if (!liveAssetRe.test(r.body)) continue;
+      ruleHits++;
+      const key = r.selector.replace(/\s+/g, ' ').trim();
+      if (!demoSelectors.has(key)) unpaired.push(`${file}  ${key}  ->  ${r.body.match(liveAssetRe)[0]}…`);
+    }
+  }
+
+  if (!cssFiles.length) violations.push('D10  no CSS found in the build — cannot check what a demo page would paint');
+  else if (unpaired.length)
+    violations.push(
+      `D10  ${unpaired.length} CSS rule(s) paint a live client's assets with no [data-demo] override: ` +
+        unpaired.slice(0, 5).join(' | ')
+    );
+  else
+    pass.push(
+      `D10  ${ruleHits} CSS rule(s) reference a live client's asset folder; every one has a [data-demo] override, so a demo page paints none of them`
+    );
 }
 
 for (const p of pass) console.log(`PASS  ${p}`);

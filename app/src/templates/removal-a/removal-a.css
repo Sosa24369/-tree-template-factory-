@@ -1398,3 +1398,48 @@
     grid-column: 1 / -1;
   }
 }
+
+/* ---------------------------------------------------------------- *
+ * DEMO ACCOUNT — do not paint a paying client's photographs.
+ *
+ * The five background plates above are the CONTROL CLIENT's own photographs.
+ * They are hard-coded here because the extracted source page paints them here
+ * (removal-a/assets.ts says the same), and every removal-a page has inherited
+ * them since P1 — including other clients'. That is a real, pre-existing
+ * cross-client asset reference and it is flagged in docs/BUILD-LOG.md; fixing
+ * it properly means moving section artwork into the client record, which would
+ * change pages that are currently carrying ad spend, so it is NOT done here.
+ *
+ * What IS done here: the demo account never shows that photography. These rules
+ * repeat each plate with the shared placeholder in place of the client file, and
+ * apply only under [data-demo] — a real client emits no such attribute, so its
+ * computed styles are unchanged.
+ * ---------------------------------------------------------------- */
+
+.removal-a[data-demo] .ra-why {
+  background-image:
+    linear-gradient(color-mix(in srgb, var(--ra-tint) 88%, transparent), color-mix(in srgb, var(--ra-tint) 94%, transparent)),
+    url('/assets/_shared/services-card-photo-2-a6cb4660-800w.webp');
+}
+
+.removal-a[data-demo] .ra-services {
+  background-image:
+    linear-gradient(color-mix(in srgb, var(--ra-tint) 90%, transparent), color-mix(in srgb, var(--ra-tint) 94%, transparent)),
+    url('/assets/_shared/services-card-photo-1-ecd55f38-800w.webp');
+}
+
+.removal-a[data-demo] .ra-marquee {
+  background-image: url('/assets/_shared/services-card-photo-3-1290bfcd-800w.webp');
+}
+
+.removal-a[data-demo] .ra-ready {
+  background-image:
+    linear-gradient(color-mix(in srgb, var(--ra-deep) 84%, transparent), color-mix(in srgb, var(--ra-deeper) 90%, transparent)),
+    url('/assets/_shared/services-card-photo-1-ecd55f38-800w.webp');
+}
+
+.removal-a[data-demo] .ra-final {
+  background-image:
+    linear-gradient(color-mix(in srgb, var(--ra-deep) 86%, transparent), color-mix(in srgb, var(--ra-deeper) 92%, transparent)),
+    url('/assets/_shared/services-card-photo-2-a6cb4660-800w.webp');
+}
