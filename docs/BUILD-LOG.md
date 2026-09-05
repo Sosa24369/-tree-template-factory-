@@ -2058,3 +2058,186 @@ Direct upload, `wrangler pages deploy dist --project-name tree-template-factory`
 6. **"Summit Tree Co" was not checked against a business registry.** One web
    search for a DFW tree service by that name returned none; that is not proof.
 
+
+---
+
+# TEMPLATE STUDIO (PART 2) — 2026-09-05
+
+Directive: a private web app to create a client, fill in their content, preview it and
+publish to Cloudflare, from any machine — and it must never serve a public client page.
+
+## The conflict, and the answer
+
+The brief asked for a new `studio/` directory. **Most of it already existed**: `server/`
+(Hono, scrypt login, git-backed persistence, publish state machine) and
+`app/src/dashboard/` (form, live preview, photo pipeline, layout panel), staged on
+Railway since P3 and held at `railway up` on two owner-minted tokens. Building a second
+copy would have meant two login gates, two publish paths and two Railway targets over
+one set of records. Reported and asked. **Owner: extend the existing `server/`.** The
+name "Template Studio" is now the UI's, and `docs/STUDIO.md` documents it under that
+name.
+
+## What was missing, and is now there
+
+### Publish was not gated at all
+
+It was pull → build → wrangler. From a phone, by someone who has not read this log,
+that ships a cross-client leak. Now:
+
+```
+pulling → checking (pre) → building → checking (post) → protected
+                                                            ↓
+                                      blocked ← ── ── ── ── ─┘
+                                          ↓ explicit confirmation
+                                      deploying → live | failed
+```
+
+**`server/guards.mjs`** — all ten committed guards, each with a label and a plain
+sentence saying what a failure means. Source-only guards run before the build (a type
+error should not cost two minutes); the six that read `app/dist` run after. **No
+override.** `allPassed` is fail-closed: an empty result set is not a pass, and a guard
+that cannot run counts as FAILED — a guard that did not run has cleared nothing.
+Measured: pre 3.3s (tsc is nearly all of it), post 0.35s.
+
+**`server/protected.mjs` + `/protected-routes.json`** — the four ad-carrying pages are
+compared, after the build and before wrangler, against the pages that are **live right
+now**, fetched over HTTPS. Live is the only thing that is actually true: it catches a
+change that arrived through a commit nobody in this session made. Any difference →
+`blocked`, nothing uploaded. It proceeds only when the request is repeated with a token
+naming that exact route set.
+
+Three calls, all tested: an **unreachable** live page blocks ("the network was flaky" is
+not a reason to overwrite an ad destination); a route **missing from the build** blocks
+(that is a 404 on an ad destination); the content-hashed bundle filename is normalised
+away (it changes on any shared edit, so counting it would block every publish and make
+the confirmation a reflex click).
+
+Proven end to end against a real server and a working clone, with the live site as the
+comparison target:
+
+| run | result |
+|---|---|
+| clean | 10/10 guards pass · protected 4/4 unchanged · stops at `deploying`: "CLOUDFLARE_API_TOKEN is not set" |
+| planted cross-client leak | `failed` at `checking (post)`, `failedGuards: ['r4-leakage']`, every other guard still reported, **protected check never ran**, nothing deployed |
+| changed live page | `blocked`, route + diff, nothing deployed |
+| wrong confirmation token | still `blocked` |
+| right token | past the gate to `deploying`, logged as "protected routes confirmed by the caller" |
+
+The blocked screen's diff was useless at first — a prerendered page is one enormous
+line, so a line diff printed two identical 160-char prefixes and hid the real change
+9,000 characters in. It is a character diff now:
+
+```
+context: …exas Tree Tops for Tree Removal
+- live: Texas Tree Tops provides fast, reliable tree removal service for…
++ new:  STUDIO GATE PROBE — this sentence was changed in the working clone…
+(283 char length change; first difference at offset 9179 of 76704)
+```
+
+`scripts/test-publish-gate.mjs` — 31 assertions, no network, no build; itself a `pre`
+guard, so a broken gate stops a publish before anything is built.
+
+### The editor could not reach most of the content
+
+- **Copy.** `Copy.tsx` lists EVERY copy key a template ships (132 on removal-a), in page
+  order, grouped, searchable, beside its default. Editing writes an override; typing the
+  default back removes it. Before, copy could only be edited by someone who knew the key
+  or by clicking a leaf text node in the preview — which cannot reach a heading split
+  across two styled spans, i.e. most headlines.
+- **Logo upload**, its own endpoint and pipeline: one 192px webp, transparent, never
+  upscaled, no srcset (a srcset here makes React SSR preload a file the browser then
+  does not use — the documented storm 99→96).
+- **`phone.googleAdsCallAsset`**, **`excludedTemplates`** as a positive template grid,
+  **`isDemo`** behind a confirmation that spells out that every page changes prefix.
+- The preview picker walks `TEMPLATE_META`, so all ten are reachable. It was seven, and
+  the missing three were the `-c` hybrids.
+- **Readiness checklist** — blockers, warnings, and the steps the studio deliberately
+  cannot do, naming the exact `GHL_PIT_<SLUG>` secret. A token the studio could write is
+  a token the studio could leak.
+
+`TEMPLATE_META` moved to `templates/meta.ts` (data only; `registry.tsx` re-exports it)
+so the studio can import it without dragging every template's CSS in.
+`generate-lead-registry.mjs` reads it there instead of regex-parsing `registry.tsx`;
+output byte-identical.
+
+### A live defect in the new-client flow
+
+It **duplicated an existing client**, carrying that client's `crm.ghlLocationId` and
+`tracking.gtmContainerId` into the new record — leads into the wrong GHL sub-account,
+conversions into the wrong ad account, and an SMS consent line reading "text messages
+from Texas Tree Tops". **No guard caught it**: the location id never reaches any HTML,
+so R4 is structurally unable to see it. The flow now builds a neutral record, and
+`verify-factory-rules.mjs` refuses a build where two records share either identifier
+(proven with a planted duplicate: caught, exit 1).
+
+### Section backgrounds — the Part 1 finding, fixed properly
+
+Part 1 found that removal-a's five decorative plates are hard-coded to the control
+client's own photograph files, so **every removal-a page paints them, including J
+Valdez's live one**, and R4 cannot see it because the URLs are in the shared CSS. Part 1
+worked around it for the demo with a `[data-demo]` block.
+
+Each plate is now `var(--ra-art-<slot>, url(<the original file>))`, and a client paints
+its own from `sectionArt['removal-a'][slot]` (`templates/sectionArt.ts`). The demo sets
+all five as data; the CSS hack is gone. The var lives **inside** the `background:`
+shorthand rather than splitting it into longhands — splitting would also stop the
+shorthand resetting background-color/attachment/origin/clip, a silent change to pages
+carrying ad spend.
+
+**Verified, not asserted:** computed styles for the five elements on
+`/p/texas-tree-tops/removal-a`, across nine background properties, hash to
+`feb11ab891cd926b` at 2523 chars **before and after** the refactor.
+
+`D10` was rewritten and is stricter: it parses the built CSS for rules painting a live
+client's asset and requires every one to be behind an overridable `var()` **and** every
+demo page carrying that rule's selector to define the var inline in its HTML — so a
+record that looks right but does not render cannot pass. Both failure shapes proven
+(removed slot; un-var'd rule), both exit 1.
+
+**The underlying leak is still there for J Valdez**, deliberately: setting a different
+default would change a page carrying ad spend. It is now one upload in the studio.
+
+## Verified
+
+**The studio serves no public client page.** Authenticated, on a running server:
+`/`, `/dashboard.html`, `/dashboard-preview.html`, `/api/dash/*` and `/assets/<slug>/…`
+are 200; **`/p/texas-tree-tops/removal-a/`, `/demo/summit-tree/removal-a/`,
+`/clients/texas-tree-tops.json` and `/api/lead` are all 404**. Unauthenticated: 401
+(API) / 302 to `/login` (HTML); `/healthz` 200 `ok`.
+
+**In the browser, against the real records:** 132 copy rows for removal-a, edit →
+preview updates → revert removes the override; template toggle disables the preview
+option; demo toggle confirms and cancels; a client created through the flow wrote a
+record with empty CRM/tracking and built exactly its 7 non-storm pages; a canvas PNG
+uploaded as a 192×192 webp with alpha into that client's folder only. Probe client and
+assets removed, 0 residue.
+
+**Guards:** R4 (56 pages) · factory rules · a→c parity · demo isolation D1–D10 · FAQ
+a11y · layout lock · tracking 88 · lead 52 · publish gate 31 · `tsc -b` — all pass. All
+36 pre-Part-1 pages remain content-identical.
+
+## Not verified — and why
+
+**Nothing has run on Railway.** P3's two blockers are unchanged and only the account
+owner can clear them:
+
+- **`GITHUB_TOKEN`** — fine-grained PAT, Contents: read+write, this repo only. Without
+  it the service cannot clone the private repo on boot and exits.
+- **`CLOUDFLARE_API_TOKEN`** — Account · Cloudflare Pages · Edit. Without it publish
+  fails loudly at `deploying`, which is exactly what was exercised above.
+
+So: everything up to the wrangler call is proven against a real server and a real
+working clone, with the real live site as the comparison target. **A real deploy from
+the studio, and the round trip from a Railway URL, are not proven.** Set the two
+variables, `railway up`, and the runbook in `docs/DEPLOY-EDITOR.md` picks up from there.
+
+Also unverified: the git **push** path in this session (P2 proved it with a real commit
+on GitHub; this session's local clone has no writable remote).
+
+## Trap worth knowing
+
+`DASHBOARD_PASSWORD_HASH` contains two literal `$`. Railway is fine, but
+`set -a; . .env` expands them away and you get a silent "Wrong password." against a hash
+that still looks right in the file. Cost one of the five login attempts to find.
+Documented in `.env.example`, `docs/DEPLOY-EDITOR.md` and `docs/STUDIO.md`.
+

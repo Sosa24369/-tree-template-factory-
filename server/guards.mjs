@@ -94,6 +94,17 @@ export const GUARDS = [
     args: ['scripts/test-lead-function.mjs'],
   },
   {
+    id: 'publish-gate',
+    label: 'Publish gate self-test',
+    phase: 'pre',
+    // The gate checking itself is not circular: this exercises the modules with
+    // fixtures and a mocked network, and it runs in the `pre` phase, so a broken
+    // gate stops the publish before anything is built or compared.
+    why: 'The publish gate itself is broken — the guard runner or the live-campaign check no longer behaves as tested. Nothing may deploy while the thing that decides what may deploy is untrustworthy.',
+    cmd: 'node',
+    args: ['scripts/test-publish-gate.mjs'],
+  },
+  {
     id: 'faq-a11y',
     label: 'FAQ accessibility',
     phase: 'post',
