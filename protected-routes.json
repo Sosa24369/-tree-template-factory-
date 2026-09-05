@@ -1,0 +1,12 @@
+{
+  "_comment": "PAGES THAT CARRY LIVE AD SPEND. The studio refuses to deploy a build that changes any of these until someone explicitly confirms it, route by route (server/protected.mjs). This file is the list — edit it here, in a commit, not in the studio UI, so adding or removing a protected page is a reviewable change rather than a click. A route is the path as served, without a trailing slash.",
+
+  "routes": [
+    "/p/texas-tree-tops/removal-a",
+    "/p/texas-tree-tops/storm-a",
+    "/p/j-valdez/removal-a",
+    "/p/j-valdez/trimming-a"
+  ],
+
+  "_note_on_comparison": "The comparison ignores the content-hashed bundle filenames (index-<hash>.js / .css). Those change whenever ANY shared code changes, so treating them as a difference would make every publish require a confirmation and the confirmation would stop meaning anything. Everything else in the HTML — copy, phone numbers, photos, GTM, the robots meta — is compared byte for byte."
+}

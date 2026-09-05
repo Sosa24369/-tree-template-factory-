@@ -9,13 +9,17 @@
  *   everything else          401 (JSON) / redirect to /login (HTML) unless a valid
  *                            session cookie is present
  *   /api/dash/*              dashboard-core (shared with the Vite dev plugin)
- *   POST /api/publish        start a publish; GET /api/publish returns the state
+ *   POST /api/publish        start a publish; GET /api/publish returns the state.
+ *                            A publish runs the full guard suite and refuses to
+ *                            deploy if any guard fails, and stops at `blocked` if the
+ *                            build would change a live campaign page until the caller
+ *                            confirms that exact set of routes.
  *   /assets/*                the clone's app/public/assets (photos for the preview)
  *   /*                       the built dashboard UI (app/dist-dashboard)
  *
  * Env (names in /.env.example; values never in the repo):
  *   DASHBOARD_PASSWORD_HASH SESSION_SECRET GITHUB_TOKEN GITHUB_REPO REPO_DIR
- *   CLOUDFLARE_API_TOKEN CLOUDFLARE_ACCOUNT_ID CF_PAGES_PROJECT PORT
+ *   CLOUDFLARE_API_TOKEN CLOUDFLARE_ACCOUNT_ID CF_PAGES_PROJECT PUBLIC_BASE_URL PORT
  */
 
 import { Hono } from 'hono';
@@ -52,9 +56,14 @@ const core = dashboardCore({
   repoRoot: REPO_DIR,
   afterCommit: async () => { git.push(); }, // throws push_failed -> 502 below
 });
+const CF_PROJECT = env('CF_PAGES_PROJECT', 'tree-template-factory');
 const publisher = makePublisher({
   repoDir: REPO_DIR, git,
-  cfToken: env('CLOUDFLARE_API_TOKEN', ''), cfAccountId: env('CLOUDFLARE_ACCOUNT_ID', ''), cfProject: env('CF_PAGES_PROJECT', 'tree-template-factory'),
+  cfToken: env('CLOUDFLARE_API_TOKEN', ''), cfAccountId: env('CLOUDFLARE_ACCOUNT_ID', ''), cfProject: CF_PROJECT,
+  // The origin the live campaign pages are compared against before a deploy.
+  // Defaults to the project's pages.dev; set PUBLIC_BASE_URL if a custom domain is
+  // the real one, because that is the URL the ads actually point at.
+  baseUrl: env('PUBLIC_BASE_URL', `https://${CF_PROJECT}.pages.dev`),
 });
 const limiter = makeLimiter();
 // The dashboard UI is served from THIS service's own checkout, built at deploy time
@@ -110,12 +119,18 @@ app.all('/api/dash/*', async (c) => {
 });
 
 /* ---- publish ---- */
-app.get('/api/publish', (c) => c.json(publisher.status));
+app.get('/api/publish', (c) => c.json({ ...publisher.status, suite: publisher.guards }));
 app.post('/api/publish', async (c) => {
-  if (publisher.status.state !== 'idle' && !['live', 'failed'].includes(publisher.status.state)) return c.json(publisher.status, 202);
-  publisher.run(); // runs in the background; the client polls GET
+  const st = publisher.status;
+  // 'blocked' is a finished state, not a running one — it must be re-startable with
+  // a confirmation. So are 'live' and 'failed'.
+  if (st.state !== 'idle' && !['live', 'failed', 'blocked'].includes(st.state)) return c.json({ ...st, suite: publisher.guards }, 202);
+  // The confirmation names the exact set of live campaign pages the caller was shown.
+  // A token for a different set (or no token) leaves the publish blocked.
+  const body = await c.req.json().catch(() => ({}));
+  publisher.run({ confirmProtected: typeof body?.confirmProtected === 'string' ? body.confirmProtected : undefined });
   await new Promise((r) => setTimeout(r, 50));
-  return c.json(publisher.status, 202);
+  return c.json({ ...publisher.status, suite: publisher.guards }, 202);
 });
 
 /* ---- static: photos for the preview, then the built UI ---- */
