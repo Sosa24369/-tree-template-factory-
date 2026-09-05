@@ -67,7 +67,14 @@ async function j<T>(res: Response): Promise<T> {
 
 export const api = {
   publishStatus: () => fetch('/api/publish').then((r) => j<any>(r)),
-  publish: () => fetch('/api/publish', { method: 'POST' }).then((r) => j<any>(r)),
+  // `confirmProtected` is the token the studio was shown when a publish was blocked
+  // for touching a live campaign page. It names that exact route set.
+  publish: (confirmProtected?: string) =>
+    fetch('/api/publish', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify(confirmProtected ? { confirmProtected } : {}),
+    }).then((r) => j<any>(r)),
   clients: () => fetch('/api/dash/clients').then((r) => j<{ clients: { slug: string; name: string }[] }>(r)),
   client: (slug: string) => fetch(`/api/dash/client/${slug}`).then((r) => j<{ record: Json }>(r)),
   assets: (slug: string) => fetch(`/api/dash/assets/${slug}`).then((r) => j<{ files: { name: string; src: string }[] }>(r)),
@@ -75,10 +82,26 @@ export const api = {
     fetch('/api/dash/diff', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ slug, record }) }).then((r) => j<{ diff: string }>(r)),
   upload: (payload: { slug: string; filename: string; dataBase64: string; focal?: { x: number; y: number }; aspect?: number }) =>
     fetch('/api/dash/upload', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(payload) }).then((r) => j<{ photo: Json }>(r)),
+  // A logo is NOT a photo: separate endpoint, separate pipeline, no srcset.
+  uploadLogo: (payload: { slug: string; filename: string; dataBase64: string }) =>
+    fetch('/api/dash/upload-logo', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(payload) })
+      .then((r) => j<{ logo: { src: string; width: number; height: number; sourceLongestEdge: number } }>(r)),
   save: (slug: string, record: Json, message: string) =>
     fetch('/api/dash/save', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ slug, record, message }) }).then((r) => j<{ ok: boolean; commit: string | null; warnings: string[] }>(r)),
-  newClient: (slug: string, fromSlug: string) =>
-    fetch('/api/dash/new-client', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ slug, fromSlug }) }).then((r) => j<{ ok: boolean; record: Json; emptyPhotoSlots: string[] }>(r)),
+  // Builds a NEUTRAL record. It deliberately takes no source client to copy from:
+  // duplicating one carried its GHL location id and GTM container into the new
+  // record, which routes leads and conversions to the wrong account.
+  newClient: (payload: {
+    slug: string;
+    name: string;
+    serviceArea?: string;
+    serviceAreaList?: string[];
+    phoneE164?: string;
+    brand?: Record<string, string>;
+    excludedTemplates?: string[];
+    isDemo?: boolean;
+  }) =>
+    fetch('/api/dash/new-client', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(payload) }).then((r) => j<{ ok: boolean; record: Json; emptyPhotoSlots: string[] }>(r)),
 };
 
 /** Client-side mirror of the server's validation, for live feedback. */

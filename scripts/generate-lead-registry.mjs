@@ -19,16 +19,19 @@ const ROOT = new URL('..', import.meta.url).pathname;
 const CLIENTS = join(ROOT, 'clients');
 const OUT = join(ROOT, 'app', 'functions', 'api', 'client-crm.generated.json');
 
-// Canonical template ids, read from the ONE source of truth (registry.tsx's
-// TEMPLATE_META) so the Function can validate an incoming templateId against
-// the real set — not just the per-client exclusion list. Without this, an
-// attacker could post an arbitrary templateId and have it reflected into a
-// GHL tag (`lp-<anything>`). Parsed rather than hardcoded so it cannot drift
-// from the template registry.
-const REGISTRY_TSX = readFileSync(join(ROOT, 'app', 'src', 'templates', 'registry.tsx'), 'utf8');
-const metaBlock = REGISTRY_TSX.slice(REGISTRY_TSX.indexOf('TEMPLATE_META'));
+// Canonical template ids, read from the ONE source of truth (TEMPLATE_META) so the
+// Function can validate an incoming templateId against the real set — not just the
+// per-client exclusion list. Without this, an attacker could post an arbitrary
+// templateId and have it reflected into a GHL tag (`lp-<anything>`). Parsed rather
+// than hardcoded so it cannot drift from the template registry.
+//
+// TEMPLATE_META lives in templates/meta.ts (data only). It used to be parsed out of
+// registry.tsx, which also imports every template component and stylesheet; the split
+// exists so the studio can import the metadata without dragging the CSS in with it.
+const META_TS = readFileSync(join(ROOT, 'app', 'src', 'templates', 'meta.ts'), 'utf8');
+const metaBlock = META_TS.slice(META_TS.indexOf('export const TEMPLATE_META'));
 const knownTemplates = [...metaBlock.matchAll(/id:\s*'([a-z0-9-]+)'/g)].map((m) => m[1]);
-if (knownTemplates.length === 0) throw new Error('could not parse TEMPLATE_META ids from registry.tsx');
+if (knownTemplates.length === 0) throw new Error('could not parse TEMPLATE_META ids from templates/meta.ts');
 
 const clients = {};
 for (const file of readdirSync(CLIENTS).filter((f) => f.endsWith('.json'))) {

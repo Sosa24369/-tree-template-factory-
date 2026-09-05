@@ -126,12 +126,14 @@ function Preview() {
   if (!msg) return <p style={{ padding: 24, fontFamily: 'system-ui', color: '#667' }}>Waiting for the dashboard…</p>;
 
   // MemoryRouter at the template's own route so LeadForm's useParams/useNavigate
-  // resolve exactly as they do on the live site.
+  // resolve exactly as they do on the live site — including the PREFIX, because a
+  // demo client's pages live under /demo/ and its thank-you link has to follow.
   const slug = msg.record.slug || 'preview';
+  const base = msg.record.isDemo ? 'demo' : 'p';
   return (
-    <MemoryRouter initialEntries={[`/p/${slug}/${msg.templateId}`]} key={`${slug}/${msg.templateId}`}>
+    <MemoryRouter initialEntries={[`/${base}/${slug}/${msg.templateId}`]} key={`${base}/${slug}/${msg.templateId}`}>
       <Routes>
-        <Route path="/p/:clientSlug/:templateId" element={<Rendered record={msg.record} templateId={msg.templateId} />} />
+        <Route path={`/${base}/:clientSlug/:templateId`} element={<Rendered record={msg.record} templateId={msg.templateId} />} />
       </Routes>
     </MemoryRouter>
   );

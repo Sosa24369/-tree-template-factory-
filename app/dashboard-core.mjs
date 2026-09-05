@@ -145,6 +145,39 @@ export function dashboardCore(opts) {
   return { src, srcset: parts.join(', '), width: outMeta.width ?? null, height: outMeta.height ?? null, alt: '' };
         }
 
+        /* ---- logo pipeline: ONE file, no srcset (see generate-logo-variants.mjs) ----
+         * A logo is not a photo and must not go through the srcset path above. The
+         * header renders it large enough to be the mobile LCP on the text-hero
+         * templates, and React 19's SSR float hoists a preload for the fallback `src`
+         * of any <img srcSet> — which never matches the candidate the browser then
+         * picks, so every logo would download twice on the LCP path (measured:
+         * storm 99 -> 96). One 192px file, sized for the largest the header ever shows
+         * at 2x, is small AND crisp AND floats nothing. Never upscaled: a smaller
+         * source keeps its own size rather than being blown up.
+         */
+        async function processLogo(slug, buffer) {
+  const { default: sharp } = await import('sharp');
+  mkdirSync(assetDir(slug), { recursive: true });
+
+  const LOGO_PX = 192;
+  const meta = await sharp(buffer).metadata();
+  const longest = Math.max(meta.width ?? 0, meta.height ?? 0);
+  const box = longest > 0 ? Math.min(LOGO_PX, longest) : LOGO_PX;
+
+  const buf = await sharp(buffer)
+    // `contain` on a TRANSPARENT background keeps a non-square mark intact without
+    // inventing a white plate behind a logo that was designed to sit on the brand
+    // colour. The header lockup centres whatever it is given.
+    .resize({ width: box, height: box, fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 }, withoutEnlargement: true })
+    .webp({ quality: 90 })
+    .toBuffer();
+  const out = await sharp(buf).metadata();
+  const hash = createHash('sha1').update(buf).digest('hex').slice(0, 8);
+  const name = `logo-header-${hash}.webp`;
+  writeFileSync(join(assetDir(slug), name), buf);
+  return { src: `/assets/${slug}/${name}`, width: out.width ?? box, height: out.height ?? box, sourceLongestEdge: longest };
+        }
+
         /* ---- routes ---- */
         return async function handle(req, res) {
   const url = req.url || '';
@@ -211,6 +244,16 @@ export function dashboardCore(opts) {
       return send(res, 200, { photo });
     }
 
+    // POST /api/dash/upload-logo  { slug, filename, dataBase64 }
+    if (req.method === 'POST' && url === '/api/dash/upload-logo') {
+      const { slug, dataBase64 } = await readBody(req);
+      if (!okSlug(slug)) return send(res, 400, { error: 'bad slug' });
+      const b64 = String(dataBase64 || '').replace(/^data:[^,]+,/, '');
+      if (!b64) return send(res, 400, { error: 'no image data' });
+      const logo = await processLogo(slug, Buffer.from(b64, 'base64'));
+      return send(res, 200, { logo });
+    }
+
     // POST /api/dash/save  { slug, record, message }
     if (req.method === 'POST' && url === '/api/dash/save') {
       const { slug, record, message } = await readBody(req);
@@ -240,26 +283,67 @@ export function dashboardCore(opts) {
       return send(res, 200, { ok: true, commit, warnings });
     }
 
-    // POST /api/dash/new-client  { slug, fromSlug }
+    // POST /api/dash/new-client
+    //   { slug, name, serviceArea?, serviceAreaList?, phoneE164?, brand?, excludedTemplates?, isDemo? }
+    //
+    // BUILDS A NEUTRAL RECORD. It used to DUPLICATE an existing client, which carried
+    // that client's `crm.ghlLocationId` and `tracking.gtmContainerId` into the new
+    // record — so a new client created from Texas Tree Tops would have routed its
+    // leads into TTT's GHL sub-account and fired its conversions into TTT's ad
+    // account, and its SMS consent line would have read "text messages from Texas
+    // Tree Tops". None of the existing guards catch that: the location id never
+    // reaches any HTML, so R4 (which greps built pages) cannot see it.
+    //
+    // Nothing identifying is inherited now. Every CRM and tracking field starts
+    // EMPTY, and the readiness checklist in the studio lists them as blockers.
     if (req.method === 'POST' && url === '/api/dash/new-client') {
-      const { slug, fromSlug } = await readBody(req);
+      const body = await readBody(req);
+      const slug = body.slug;
       if (!okSlug(slug)) return send(res, 400, { error: 'slug must be lowercase letters, numbers and hyphens' });
       if (existsSync(clientFile(slug))) return send(res, 409, { error: `client "${slug}" already exists` });
-      if (!okSlug(fromSlug) || !existsSync(clientFile(fromSlug))) return send(res, 400, { error: 'no template client to duplicate' });
 
-      const base = JSON.parse(readFileSync(clientFile(fromSlug), 'utf8'));
-      // Start empty on everything client-identifying and, crucially, on IMAGES:
-      // never deep-copy another client's photos (R4). Slots are flagged empty.
+      const name = String(body.name ?? '').trim();
+      if (!name) return send(res, 400, { error: 'company name is required' });
+
+      const e164 = String(body.phoneE164 ?? '').trim();
+      if (e164 && !/^\+\d{10,15}$/.test(e164)) return send(res, 400, { error: `phone "${e164}" is not E.164 (+1XXXXXXXXXX)` });
+
+      const brand = body.brand ?? {};
+      const isDemo = body.isDemo === true;
+
       const record = {
-        ...base,
+        _comment: `Created in the studio. CRM and tracking start EMPTY on purpose — nothing is inherited from another client. See the readiness checklist for what is still needed before this client can take a real lead.`,
+        ...(isDemo ? { isDemo: true } : {}),
         slug,
-        name: '',
-        brand: { ...base.brand, logoUrl: null },
+        name,
+        serviceArea: String(body.serviceArea ?? '').trim(),
+        serviceAreaList: Array.isArray(body.serviceAreaList) ? body.serviceAreaList.map((c) => String(c).trim()).filter(Boolean) : [],
+        brand: {
+          logoUrl: null,
+          primaryColor: typeof brand.primaryColor === 'string' ? brand.primaryColor : '#1f3d2b',
+          accentColor: typeof brand.accentColor === 'string' ? brand.accentColor : '#c8952b',
+          onPrimaryColor: typeof brand.onPrimaryColor === 'string' ? brand.onPrimaryColor : '#ffffff',
+          ...(brand.fontPairing ? { fontPairing: brand.fontPairing } : {}),
+          ...(brand.spacingScale ? { spacingScale: brand.spacingScale } : {}),
+        },
+        phone: { e164, kind: 'direct', displayOverride: null, googleAdsCallAsset: null },
+        leadDestination: { thankYouUrl: '/thank-you', isExternalAllowed: false },
+        consent: {
+          // Composed with THIS client's name. A2P expects the sender to be named.
+          smsCopy: `By checking this box you agree to receive text messages from ${name} about your estimate and service. Message frequency varies. Message and data rates may apply. Reply STOP to opt out or HELP for help.`,
+          required: false,
+          privacyPolicyUrl: '',
+          termsOfServiceUrl: '',
+        },
+        // Empty, always. Filled in by hand once the GHL sub-account exists.
+        crm: { ghlLocationId: '', adClickIdFieldId: null, attributionFieldIds: {}, leadTags: [], leadSource: '' },
+        tracking: { gtmContainerId: null, callRailSwapScriptUrl: null },
         photos: {},
         reviews: [],
         copyOverrides: {},
-        _comment: `Duplicated from ${fromSlug} as a starting point. Fill name/phone/area, add this client's OWN photos (none copied), and set legal URLs before running SMS.`,
+        excludedTemplates: Array.isArray(body.excludedTemplates) ? body.excludedTemplates.filter((t) => typeof t === 'string') : [],
       };
+
       mkdirSync(assetDir(slug), { recursive: true });
       // .gitkeep so the empty asset folder is tracked and obviously belongs to this client.
       writeFileSync(join(assetDir(slug), '.gitkeep'), '');

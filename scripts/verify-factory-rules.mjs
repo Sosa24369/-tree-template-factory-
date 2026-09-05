@@ -156,6 +156,40 @@ const sourceFiles = walk(
   }
 }
 
+/* ---------------- CRM/tracking identifiers are never shared ---------------- *
+ * Two clients sharing a GHL location id means one client's leads land in the other's
+ * sub-account. Two sharing a GTM container means one client's conversions are counted
+ * in the other's ad account. Neither identifier ever reaches a built page — the
+ * location id is read server-side only — so R4, which greps built HTML, is
+ * structurally unable to see this. It is caught here, in the records.
+ *
+ * The way it actually happens is not malice: it is duplicating an existing client
+ * record to start a new one. The studio's "new client" flow used to do exactly that.
+ * ------------------------------------------------------------------ */
+{
+  const SHARED = [
+    { field: 'crm.ghlLocationId', get: (d) => d.crm?.ghlLocationId, what: "one client's leads would land in another's GHL sub-account" },
+    { field: 'tracking.gtmContainerId', get: (d) => d.tracking?.gtmContainerId, what: "one client's conversions would be counted in another's ad account" },
+  ];
+  let hits = 0;
+  for (const { field, get, what } of SHARED) {
+    const byValue = new Map();
+    for (const { file, data } of clients) {
+      const value = (get(data) ?? '').toString().trim();
+      if (!value) continue; // blank is the correct state for a demo or an unwired client
+      if (!byValue.has(value)) byValue.set(value, []);
+      byValue.get(value).push(file);
+    }
+    for (const [value, files] of byValue) {
+      if (files.length > 1) {
+        violations.push(`CRM  ${field} "${value}" is shared by ${files.join(' and ')} — ${what}`);
+        hits++;
+      }
+    }
+  }
+  if (!hits) pass.push(`CRM  no two client records share a GHL location id or a GTM container`);
+}
+
 /* ---------------- client records parse and carry required fields ---------------- */
 {
   for (const { file, data } of clients) {

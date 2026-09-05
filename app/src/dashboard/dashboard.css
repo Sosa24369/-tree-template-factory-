@@ -164,3 +164,89 @@ body { margin: 0; background: var(--d-bg); color: var(--d-ink); font-family: ui-
 .dash-publish--live .dash-publish-head { background: #ecfdf3; }
 .dash-publish--failed .dash-publish-head { background: #fde8e8; }
 .dash-publish--pulling .dash-publish-head, .dash-publish--building .dash-publish-head, .dash-publish--deploying .dash-publish-head { background: #fff7e6; }
+
+/* ====================================================================== *
+ * STUDIO ADDITIONS — the guard suite, the live-page gate, the readiness
+ * checklist, the copy editor, the logo and template pickers.
+ * Same plain, utilitarian register as the rest: this is an internal tool.
+ * ====================================================================== */
+
+.dash-pill--ok { background: #e2f3e9; color: var(--d-accent); }
+.dash-btn--danger { background: var(--d-err); color: #fff; border-color: var(--d-err); }
+.dash-btn--danger:hover { filter: brightness(1.08); }
+
+/* ---- readiness checklist ---- */
+.dash-readiness {
+  background: var(--d-panel);
+  border: 1px solid var(--d-line);
+  border-radius: 12px;
+  padding: 12px 16px;
+  margin: 0 0 16px;
+}
+.dash-readiness > summary { cursor: pointer; font-weight: 700; font-size: 0.9rem; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.dash-readiness-list { list-style: none; margin: 12px 0 0; padding: 0; display: grid; gap: 8px; }
+.dash-ready { display: grid; grid-template-columns: 18px minmax(0, 1fr); gap: 8px; align-items: start; font-size: 0.84rem; }
+.dash-ready-icon { font-weight: 800; line-height: 1.4; }
+.dash-ready-body { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.dash-ready-detail { color: var(--d-muted); font-size: 0.8rem; overflow-wrap: anywhere; }
+.dash-ready--ok .dash-ready-icon { color: var(--d-accent); }
+.dash-ready--blocker .dash-ready-icon { color: var(--d-err); }
+.dash-ready--warning .dash-ready-icon { color: var(--d-warn); }
+.dash-ready--manual .dash-ready-icon { color: var(--d-muted); }
+.dash-ready--blocker strong { color: var(--d-err); }
+
+/* ---- logo field ---- */
+.dash-logo-row { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+.dash-logo-preview {
+  width: 84px; height: 84px; border-radius: 12px; border: 1px solid var(--d-line);
+  display: grid; place-items: center; overflow: hidden; flex: none;
+}
+.dash-logo-preview img { width: 64px; height: 64px; object-fit: contain; }
+.dash-logo-preview em { color: #fff; font-size: 0.7rem; text-align: center; padding: 4px; font-style: normal; }
+.dash-logo-actions { display: flex; flex-direction: column; gap: 6px; align-items: flex-start; }
+.dash-logo-path { font-size: 0.7rem; color: var(--d-muted); overflow-wrap: anywhere; }
+/* the file input is hidden inside the label, which is styled as the button */
+.dash-logo-actions label.dash-btn { cursor: pointer; }
+
+/* ---- template picker ---- */
+.dash-tpl-list { list-style: none; margin: 8px 0 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 4px; }
+.dash-tpl-list li { padding: 4px 6px; border-radius: 7px; }
+.dash-tpl-list li.is-off { opacity: 0.45; background: #f7f8fa; }
+.dash-tpl-label { font-size: 0.83rem; }
+.dash-tpl-list code { font-size: 0.7rem; color: var(--d-muted); margin-left: 4px; }
+
+/* ---- demo switch ---- */
+.dash-demo { border: 1px solid var(--d-line); border-radius: 10px; padding: 12px 14px; }
+.dash-demo.is-demo { border-color: #b8a24a; background: #fffdf3; }
+.dash-confirm { border-top: 1px dashed var(--d-line); margin-top: 10px; padding-top: 10px; }
+
+/* ---- copy editor ---- */
+.dash-copy { border: 1px solid var(--d-line); border-radius: 12px; padding: 16px 18px; background: var(--d-panel); margin-bottom: 16px; }
+.dash-copy-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.dash-copy-note { font-size: 0.8rem; color: var(--d-warn); background: #fdf7e3; border-radius: 8px; padding: 8px 10px; margin: 8px 0; }
+.dash-copy-tools { display: flex; align-items: center; gap: 12px; margin: 10px 0 4px; }
+.dash-copy-tools .dash-input { flex: 1; }
+.dash-copy-group { margin-top: 14px; }
+.dash-copy-group-title { margin: 0 0 6px; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--d-muted); }
+.dash-copy-row { border-left: 3px solid transparent; padding: 6px 0 6px 10px; margin-bottom: 6px; display: flex; flex-direction: column; gap: 3px; }
+.dash-copy-row.is-overridden { border-left-color: var(--d-accent); background: #f6fbf8; }
+.dash-copy-row-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.dash-copy-default { font-size: 0.72rem; color: var(--d-muted); overflow-wrap: anywhere; }
+
+/* ---- publish: the guard suite ---- */
+.dash-guards { list-style: none; margin: 10px 0; padding: 0; display: grid; gap: 5px; }
+.dash-guard { display: grid; grid-template-columns: 16px minmax(0, 1fr); gap: 8px; align-items: start; font-size: 0.82rem; }
+.dash-guard-icon { font-weight: 800; }
+.dash-guard-body { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.dash-guard-why { color: var(--d-err); font-size: 0.78rem; }
+.dash-guard-ms { color: var(--d-muted); font-size: 0.72rem; }
+.dash-guard--ok .dash-guard-icon { color: var(--d-accent); }
+.dash-guard--fail .dash-guard-icon { color: var(--d-err); }
+.dash-guard--pending { opacity: 0.5; }
+.dash-guard--running .dash-guard-icon { color: var(--d-warn); }
+
+/* ---- publish: the live-campaign gate ---- */
+.dash-publish--blocked { border-color: var(--d-warn); }
+.dash-blocked { border: 1px solid var(--d-warn); border-radius: 10px; padding: 10px 12px; margin: 8px 0; background: #fffdf3; }
+.dash-blocked-list { list-style: none; margin: 8px 0; padding: 0; display: grid; gap: 8px; font-size: 0.82rem; }
+.dash-blocked-list code { font-weight: 700; }
