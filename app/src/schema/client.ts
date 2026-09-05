@@ -315,6 +315,16 @@ export interface ClientRecord {
   copyOverrides: Partial<Record<TemplateId, Record<string, string>>>;
 
   /**
+   * Decorative CSS background plates, per template, keyed by that template's slot
+   * ids (see templates/sectionArt.ts). Absent means the template's own default,
+   * which is what every client rendered before this field existed.
+   *
+   * These are the bands painted as `background-image` behind a tint scrim, not
+   * content images: they have no alt because they are announced to nobody.
+   */
+  sectionArt?: Partial<Record<TemplateId, Record<string, PhotoSet>>>;
+
+  /**
    * Per-template layout overrides. Missing, empty or malformed values resolve to the
    * template's manifest defaults with a warning — never an error (R5). Ignored on
    * every -a template (R2); the editor refuses to write one there.

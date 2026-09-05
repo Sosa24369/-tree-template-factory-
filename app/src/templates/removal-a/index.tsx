@@ -29,6 +29,7 @@
 
 import { useEffect, type CSSProperties } from 'react';
 import { makeCopy, type ResolvedClient } from '../../schema/resolve';
+import { sectionArtVars } from '../sectionArt';
 import { removalACopy } from './copy.defaults';
 import { PhoneLink } from '../../components/PhoneLink';
 
@@ -91,7 +92,7 @@ export function RemovalA({ client }: { client: ResolvedClient }) {
   }, [title, description]);
 
   return (
-    <div className="removal-a" style={brandVars(client)} {...brandAttrs(client)}>
+    <div className="removal-a" style={{ ...brandVars(client), ...sectionArtVars(client, 'removal-a') } as CSSProperties} {...brandAttrs(client)}>
       {/* S1 — header bar */}
       <Header client={client} copy={copy} />
 

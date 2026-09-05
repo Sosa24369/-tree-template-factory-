@@ -17,6 +17,7 @@ import { Form } from './Form';
 import './dashboard.css';
 import { Layout } from './Layout';
 import { Copy } from './Copy';
+import { SectionArt } from './SectionArt';
 import { Readiness } from './Readiness';
 import { TEMPLATE_META } from '../templates/meta';
 import type { TemplateId } from '../schema/client';
@@ -187,6 +188,7 @@ export function App() {
             <Readiness record={record} />
             <Layout record={record} templateId={previewTpl} onChange={onChange} />
             <Form record={record} onChange={onChange} slug={slug!} />
+            <SectionArt record={record} templateId={previewTpl} slug={slug!} onChange={onChange} />
             <Copy record={record} templateId={previewTpl} onChange={onChange} onPickTemplate={setPreviewTpl} />
           </>
         )}

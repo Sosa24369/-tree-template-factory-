@@ -24,12 +24,19 @@
  *
  * D10 is the one that is not obvious from reading the HTML. removal-a paints five
  * decorative section backgrounds from the CONTROL CLIENT's own photograph files,
- * hard-coded in removal-a.css because the extracted source page paints them there.
- * The stylesheet is shared by every page, so those five URLs are reachable from a
- * demo page even though the demo's HTML never names them — which is exactly the
- * kind of leak R4's HTML grep cannot see, and it was found by reading the demo
- * page's network log, not the markup. Each such rule must be paired with a
- * `[data-demo]` rule that overrides it.
+ * because the extracted source page paints them there. The stylesheet is shared by
+ * every page, so those URLs are reachable from a demo page even though the demo's
+ * HTML never names them — exactly the kind of leak R4's HTML grep cannot see. It was
+ * found by reading the demo page's network log, not its markup.
+ *
+ * Each such URL is now the FALLBACK of a `var(--slot, url(...))`, and a client paints
+ * its own by setting that custom property inline on the template root
+ * (templates/sectionArt.ts). So the check is two-part, and both halves matter:
+ *   a) a live client's asset URL that is NOT behind a var() is unconditional — every
+ *      page paints it, and nothing can override it. Straight failure.
+ *   b) a URL that IS behind `var(--X, …)` is only safe for a demo page that actually
+ *      DEFINES --X inline. This reads the built HTML, so it cannot be fooled by a
+ *      record that looks right but does not render.
  *
  * Usage: node scripts/verify-demo-isolation.mjs   (run AFTER a build; exit 1 on failure)
  */
@@ -190,40 +197,60 @@ for (const file of walk(DIST)) {
 {
   const cssDir = join(DIST, 'assets');
   const cssFiles = existsSync(cssDir) ? readdirSync(cssDir).filter((f) => f.endsWith('.css')) : [];
-  const liveAssetRe = new RegExp(`/assets/(${[...liveSlugs].map((s) => s.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\\\$&')).join('|')})/`);
-  const unpaired = [];
-  let ruleHits = 0;
+  const esc = (x) => x.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const liveSlugAlt = [...liveSlugs].map(esc).join('|');
+  const liveAssetRe = new RegExp(`/assets/(?:${liveSlugAlt})/`);
+  const guardedRe = new RegExp(`var\\(\\s*(--[A-Za-z0-9_-]+)\\s*,\\s*url\\(['"]?/assets/(?:${liveSlugAlt})/`);
 
+  /** Rules that paint a live client's asset: { selector, cssVar|null, classes }. */
+  const painting = [];
   for (const file of cssFiles) {
     const css = readFileSync(join(cssDir, file), 'utf8');
-    // Flat top-level rules only — enough for this check, and the bundler emits
-    // these five as flat rules. Selector text is not mangled, so it compares.
-    const rules = [...css.matchAll(/([^{}@]+)\{([^{}]*)\}/g)].map((m) => ({
-      selector: m[1].trim(),
-      body: m[2],
-    }));
-    const demoSelectors = new Set(
-      rules.filter((r) => r.selector.includes('[data-demo]')).map((r) => r.selector.replaceAll('[data-demo]', '').replace(/\s+/g, ' ').trim())
-    );
-    for (const r of rules) {
-      if (r.selector.includes('[data-demo]')) continue;
-      if (!liveAssetRe.test(r.body)) continue;
-      ruleHits++;
-      const key = r.selector.replace(/\s+/g, ' ').trim();
-      if (!demoSelectors.has(key)) unpaired.push(`${file}  ${key}  ->  ${r.body.match(liveAssetRe)[0]}…`);
+    for (const m of css.matchAll(/([^{}@]+)\{([^{}]*)\}/g)) {
+      const [, selector, body] = m;
+      if (!liveAssetRe.test(body)) continue;
+      const guard = body.match(guardedRe);
+      painting.push({
+        file,
+        selector: selector.replace(/\s+/g, ' ').trim(),
+        cssVar: guard ? guard[1] : null,
+        // Every class the selector mentions; a page carrying any of them is subject
+        // to this rule. Coarse on purpose — it over-includes rather than missing one.
+        classes: [...selector.matchAll(/\.([A-Za-z0-9_-]+)/g)].map((c) => c[1]),
+      });
     }
   }
 
-  if (!cssFiles.length) violations.push('D10  no CSS found in the build — cannot check what a demo page would paint');
-  else if (unpaired.length)
+  const unguarded = painting.filter((r) => !r.cssVar);
+  const missing = [];
+  for (const rule of painting.filter((r) => r.cssVar)) {
+    for (const page of demoPages) {
+      // Does this page actually carry the element the rule paints?
+      const carries = rule.classes.some((c) => page.html.includes(`class="${c}`) || page.html.includes(` ${c}"`) || page.html.includes(` ${c} `));
+      if (!carries) continue;
+      if (!page.html.includes(`${rule.cssVar}:`)) missing.push(`${page.rel} carries ${rule.selector} but does not set ${rule.cssVar}`);
+    }
+  }
+
+  if (!cssFiles.length) {
+    violations.push('D10  no CSS found in the build — cannot check what a demo page would paint');
+  } else if (unguarded.length) {
     violations.push(
-      `D10  ${unpaired.length} CSS rule(s) paint a live client's assets with no [data-demo] override: ` +
-        unpaired.slice(0, 5).join(' | ')
+      `D10  ${unguarded.length} CSS rule(s) paint a live client's asset unconditionally (no var() a client can override): ` +
+        unguarded.slice(0, 4).map((r) => `${r.file} ${r.selector}`).join(' | ')
     );
-  else
+  } else if (!painting.length) {
+    pass.push("D10  no CSS rule references a live client's asset folder");
+  } else if (missing.length) {
+    violations.push(`D10  ${missing.length} demo page/slot pair(s) fall back to a live client's photograph: ${missing.slice(0, 4).join('; ')}`);
+  } else {
+    const vars = new Set(painting.map((r) => r.cssVar));
+    const carrying = demoPages.filter((p) => painting.some((r) => r.classes.some((c) => p.html.includes(`class="${c}`)))).length;
     pass.push(
-      `D10  ${ruleHits} CSS rule(s) reference a live client's asset folder; every one has a [data-demo] override, so a demo page paints none of them`
+      `D10  ${painting.length} CSS rule(s) fall back to a live client's asset, all behind ${vars.size} overridable slot(s); ` +
+        `each of the ${carrying} demo page(s) that carries them overrides every slot inline`
     );
+  }
 }
 
 for (const p of pass) console.log(`PASS  ${p}`);

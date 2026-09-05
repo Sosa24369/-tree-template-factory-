@@ -250,3 +250,16 @@ body { margin: 0; background: var(--d-bg); color: var(--d-ink); font-family: ui-
 .dash-blocked { border: 1px solid var(--d-warn); border-radius: 10px; padding: 10px 12px; margin: 8px 0; background: #fffdf3; }
 .dash-blocked-list { list-style: none; margin: 8px 0; padding: 0; display: grid; gap: 8px; font-size: 0.82rem; }
 .dash-blocked-list code { font-weight: 700; }
+
+/* ---- section background plates ---- */
+.dash-art { border: 1px solid var(--d-line); border-radius: 12px; padding: 16px 18px; background: var(--d-panel); margin-bottom: 16px; }
+.dash-art-slot { margin-top: 10px; }
+.dash-art-head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
+.dash-art-head code { font-size: 0.7rem; color: var(--d-muted); }
+.dash-art-row { display: flex; align-items: center; gap: 14px; margin-top: 8px; flex-wrap: wrap; }
+.dash-art-preview { width: 160px; height: 90px; border-radius: 8px; border: 1px solid var(--d-line); overflow: hidden; display: grid; place-items: center; background: #eef1f4; flex: none; }
+.dash-art-preview img { width: 100%; height: 100%; object-fit: cover; }
+.dash-art-preview em { font-size: 0.72rem; color: var(--d-muted); font-style: normal; }
+.dash-art-actions { display: flex; flex-direction: column; gap: 6px; align-items: flex-start; }
+.dash-art-actions label.dash-btn { cursor: pointer; }
+.dash-art-unset { color: var(--d-warn); }
