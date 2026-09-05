@@ -55,20 +55,47 @@ const distFileFor = (repoDir, route) => join(repoDir, 'app', 'dist', route.repla
 
 /**
  * A short, human summary of what changed — enough to decide, not a full diff.
- * Line-level, first few differing lines, each truncated.
+ *
+ * CHARACTER-level, not line-level. A prerendered page is one enormous line: the
+ * whole <body> is a single string, so a line diff prints two 160-character prefixes
+ * that are identical and hides the actual change ten thousand characters in. That is
+ * worse than useless on the one screen where someone is deciding whether to overwrite
+ * a page carrying ad spend.
+ *
+ * So: trim the common prefix and suffix, and show the middle that differs, with a
+ * little context on each side. Tags are stripped from the excerpt because what a
+ * person needs to see is the words — a changed phone number, a changed headline.
  */
 function describeDiff(liveHtml, nextHtml) {
-  const a = normalise(liveHtml).split('\n');
-  const b = normalise(nextHtml).split('\n');
-  const out = [];
-  const max = Math.max(a.length, b.length);
-  for (let i = 0; i < max && out.length < 6; i += 1) {
-    if (a[i] === b[i]) continue;
-    if (a[i] !== undefined) out.push(`- ${a[i].trim().slice(0, 160)}`);
-    if (b[i] !== undefined) out.push(`+ ${b[i].trim().slice(0, 160)}`);
-  }
-  if (!out.length) out.push('(differs only in whitespace or line count)');
-  return out;
+  const a = normalise(liveHtml);
+  const b = normalise(nextHtml);
+  if (a === b) return ['(no textual difference)'];
+
+  let p = 0;
+  const maxP = Math.min(a.length, b.length);
+  while (p < maxP && a[p] === b[p]) p += 1;
+
+  let s = 0;
+  while (s < maxP - p && a[a.length - 1 - s] === b[b.length - 1 - s]) s += 1;
+
+  const CONTEXT = 70;
+  const EXCERPT = 260;
+  const readable = (str) => str.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+
+  const before = readable(a.slice(Math.max(0, p - CONTEXT), p));
+  const after = readable(a.slice(a.length - s, Math.min(a.length, a.length - s + CONTEXT)));
+  const liveMiddle = readable(a.slice(p, a.length - s));
+  const nextMiddle = readable(b.slice(p, b.length - s));
+
+  const clip = (str) => (str.length > EXCERPT ? `${str.slice(0, EXCERPT)}… (+${str.length - EXCERPT} more chars)` : str || '(nothing)');
+
+  return [
+    `context: …${before}`,
+    `- live: ${clip(liveMiddle)}`,
+    `+ new:  ${clip(nextMiddle)}`,
+    `context: ${after}…`,
+    `(${Math.abs(b.length - a.length)} char length change; first difference at offset ${p} of ${a.length})`,
+  ];
 }
 
 /**

@@ -35,7 +35,14 @@ REPO_DIR                  /data/repo
 CLOUDFLARE_API_TOKEN      minted above
 CLOUDFLARE_ACCOUNT_ID     ef07a2f57e930a4d6499a45560b78d9f
 CF_PAGES_PROJECT          tree-template-factory
+PUBLIC_BASE_URL           https://tree-template-factory.pages.dev
 ```
+
+`PUBLIC_BASE_URL` is the origin the ads actually point at. Before every deploy the
+studio fetches the routes in `/protected-routes.json` from there and compares them
+against the build, and it REFUSES to deploy if it cannot reach them — so if a custom
+domain becomes the real destination, change this at the same time. Unset, it falls
+back to `https://<CF_PAGES_PROJECT>.pages.dev`.
 
 `PORT` is set by Railway. Never set `DASHBOARD_INSECURE_COOKIE` on Railway.
 
@@ -47,7 +54,8 @@ From the repo root, linked to the `tree-template-editor` project:
 railway variables set DASHBOARD_PASSWORD_HASH='…' SESSION_SECRET='…' GITHUB_TOKEN='…' \
   GITHUB_REPO='Sosa24369/-tree-template-factory-' REPO_DIR='/data/repo' \
   CLOUDFLARE_API_TOKEN='…' CLOUDFLARE_ACCOUNT_ID='ef07a2f57e930a4d6499a45560b78d9f' \
-  CF_PAGES_PROJECT='tree-template-factory'
+  CF_PAGES_PROJECT='tree-template-factory' \
+  PUBLIC_BASE_URL='https://tree-template-factory.pages.dev'
 railway volume add --mount-path /data      # ⚠️ verify flag names against `railway volume add --help`
 railway up --detach
 railway domain                              # prints the public URL
@@ -78,3 +86,19 @@ the health check. Railway has deprecated `railway.json` in favour of
   with the git error in the log — fix the branch, redeploy.
 - The login limiter is in-memory: 5 wrong attempts per IP per 15 minutes, reset on
   restart.
+
+## One trap worth knowing
+
+`DASHBOARD_PASSWORD_HASH` contains two literal `$` characters (`scrypt$<salt>$<key>`).
+Railway stores it verbatim and this is a non-issue there — but a **shell will eat it**.
+Sourcing a local `.env` with `set -a; . .env` expands `$<salt>` to nothing, and you get
+a silent "Wrong password." against a hash that still looks correct in the file. Quote it
+in any local env file:
+
+```
+DASHBOARD_PASSWORD_HASH='scrypt$…$…'
+```
+
+(Cost an attempt of the 5-per-15-minutes login limiter to find, which is its own hint:
+if the password is right and you are still rejected, check the quoting before you
+assume the hash is wrong.)
