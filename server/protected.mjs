@@ -129,14 +129,17 @@ export async function checkProtectedRoutes({ repoDir, baseUrl, fetchImpl = fetch
     const next = readFileSync(file, 'utf8');
 
     let liveHtml = null;
+    const ctrl = new AbortController();
+    // Cleared in `finally`, not after the await: if fetch THROWS, a timer left
+    // armed keeps the event loop alive until it fires. In the server that is
+    // invisible; in the publish-gate self-test it was 15 s of dead time on every
+    // publish, because one case deliberately makes fetch throw.
+    const timer = setTimeout(() => ctrl.abort(), timeoutMs);
     try {
-      const ctrl = new AbortController();
-      const timer = setTimeout(() => ctrl.abort(), timeoutMs);
       const res = await fetchImpl(`${baseUrl.replace(/\/$/, '')}${route}/`, {
         signal: ctrl.signal,
         headers: { 'cache-control': 'no-cache' },
       });
-      clearTimeout(timer);
       if (!res.ok) {
         unreachable.push({ route, reason: `live page returned HTTP ${res.status}` });
         continue;
@@ -145,6 +148,8 @@ export async function checkProtectedRoutes({ repoDir, baseUrl, fetchImpl = fetch
     } catch (e) {
       unreachable.push({ route, reason: `could not fetch the live page: ${String(e?.message || e)}` });
       continue;
+    } finally {
+      clearTimeout(timer);
     }
 
     if (normalise(liveHtml) === normalise(next)) {
