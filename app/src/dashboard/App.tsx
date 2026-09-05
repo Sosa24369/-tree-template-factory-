@@ -120,9 +120,14 @@ export function App() {
     }
   }
 
+  // A failed save is a persistent error INSIDE the dialog, not a toast that fades
+  // while the dialog sits there looking like it is still waiting for a click.
+  const [saveError, setSaveError] = useState<{ title: string; detail: string; rolledBack: boolean } | null>(null);
+
   async function confirmSave() {
     if (!slug || !record) return;
     setBusy(true);
+    setSaveError(null);
     try {
       const res = await api.save(slug, record, commitMsg);
       setDiff(null);
@@ -130,8 +135,18 @@ export function App() {
       setToast(res.commit ? `Saved & committed ${res.commit}` : 'Saved (no net change to commit)');
       await loadClients();
     } catch (e: any) {
-      const errs = e.body?.errors ? e.body.errors.join(' ') : e.message;
-      setToast('Save failed: ' + errs);
+      const b = e.body ?? {};
+      if (b.errors) {
+        setSaveError({ title: 'The record failed validation', detail: b.errors.join('\n'), rolledBack: true });
+      } else if (b.error === 'commit_failed') {
+        setSaveError({ title: 'git commit failed — nothing was saved', detail: b.detail || e.message, rolledBack: b.rolledBack === true });
+      } else if (b.error === 'push_failed') {
+        setSaveError({ title: 'Committed locally, but the push to GitHub failed', detail: (b.detail || e.message) + '\n\nThe commit exists in the studio\'s clone and will be pushed with the next successful save. Nothing is lost.', rolledBack: false });
+      } else if (b.error === 'layout_locked') {
+        setSaveError({ title: `Layout on ${b.templateId} is locked`, detail: 'Controls (-a) never accept a layout — the A/B test depends on it.', rolledBack: true });
+      } else {
+        setSaveError({ title: 'Save failed', detail: b.detail || b.error || e.message, rolledBack: false });
+      }
     } finally {
       setBusy(false);
     }
@@ -277,9 +292,20 @@ export function App() {
               <span className="dash-label">Commit message</span>
               <input className="dash-input" value={commitMsg} onChange={(e) => setCommitMsg(e.target.value)} />
             </label>
+            {saveError && (
+              <div className="dash-save-error" role="alert">
+                <strong>✗ {saveError.title}</strong>
+                <pre>{saveError.detail}</pre>
+                <span className="dash-help">
+                  {saveError.rolledBack
+                    ? 'The record on disk is unchanged — it was rolled back to the last commit. Your edits are still here in the editor; fix the cause and try again.'
+                    : 'Your edits are still here in the editor.'}
+                </span>
+              </div>
+            )}
             <div className="dash-modal-actions">
-              <button className="dash-btn dash-btn--ghost" type="button" onClick={() => setDiff(null)}>Cancel</button>
-              <button className="dash-btn" type="button" disabled={busy} onClick={confirmSave}>Write &amp; commit</button>
+              <button className="dash-btn dash-btn--ghost" type="button" onClick={() => { setDiff(null); setSaveError(null); }}>Cancel</button>
+              <button className="dash-btn" type="button" disabled={busy} onClick={confirmSave}>{saveError ? 'Try again' : busy ? 'Saving…' : 'Write & commit'}</button>
             </div>
           </div>
         </div>

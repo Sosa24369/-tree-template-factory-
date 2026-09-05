@@ -94,6 +94,14 @@ export const GUARDS = [
     args: ['scripts/test-lead-function.mjs'],
   },
   {
+    id: 'studio-save',
+    label: 'Studio save (identity · atomic · no trailer)',
+    phase: 'pre',
+    why: 'A studio save would fail to commit in a clone with no git identity, or would leave a written-but-uncommitted record behind on failure, or would sign the operator\'s edit with a trailer that is not theirs.',
+    cmd: 'node',
+    args: ['scripts/test-studio-save.mjs'],
+  },
+  {
     id: 'publish-gate',
     label: 'Publish gate self-test',
     phase: 'pre',

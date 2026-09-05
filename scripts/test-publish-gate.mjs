@@ -18,6 +18,7 @@ import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 import { GUARDS, allPassed, failedIds, runGuards } from '../server/guards.mjs';
 import { checkProtectedRoutes, confirmationTokenFor, loadProtectedRoutes } from '../server/protected.mjs';
+import { makePublisher } from '../server/publish.mjs';
 
 let pass = 0;
 const fails = [];
@@ -166,6 +167,34 @@ console.log('\nprotected routes — the confirmation names the exact set');
   ok('a token for a SMALLER set does not match', confirmationTokenFor(['/p/a/x']) !== a);
   ok('a token for a LARGER set does not match', confirmationTokenFor(['/p/a/x', '/p/b/y', '/p/c/z']) !== a);
   ok('a token for a DIFFERENT set does not match', confirmationTokenFor(['/p/a/x', '/p/b/z']) !== a);
+}
+
+console.log('\npublish refuses a clone with uncommitted tracked changes');
+{
+  // The residue of a failed save is a written-but-uncommitted record. A publish must
+  // stop at `pulling`, name the file, and never reach sync/guards/build/wrangler.
+  const calls = [];
+  const git = {
+    dirtyTracked: () => ['M  clients/acme.json'],
+    sync: () => { calls.push('sync'); return 'pulled'; },
+    head: () => { calls.push('head'); return 'abc1234'; },
+  };
+  const pub = makePublisher({ repoDir: '/nonexistent-on-purpose', git, cfToken: 'x', cfAccountId: 'x', cfProject: 'x', baseUrl: 'https://x.test', log: () => {} });
+  const st = await pub.run();
+  ok('dirty clone -> state failed', st.state === 'failed', st.state);
+  ok('dirty clone -> stage pulling', st.stage === 'pulling', st.stage);
+  ok('dirty clone -> names the file', st.tail.some((l) => l.includes('clients/acme.json')), JSON.stringify(st.tail));
+  ok('dirty clone -> says nothing was deployed', st.tail.some((l) => /Nothing has been deployed/.test(l)));
+  ok('dirty clone -> git.sync() was never called', !calls.includes('sync'), JSON.stringify(calls));
+  ok('dirty clone -> no guard ran', (st.guards ?? []).length === 0);
+}
+{
+  // And a CLEAN clone gets past that check (it then fails on the fake repoDir, which
+  // is fine — the point is that the refusal is specific to dirtiness).
+  const git = { dirtyTracked: () => [], sync: () => 'pulled', head: () => 'abc1234' };
+  const pub = makePublisher({ repoDir: '/nonexistent-on-purpose', git, cfToken: 'x', cfAccountId: 'x', cfProject: 'x', baseUrl: 'https://x.test', log: () => {} });
+  const st = await pub.run();
+  ok('clean clone -> gets past pulling', !(st.stage === 'pulling' && st.tail.some((l) => /uncommitted/.test(l))), `${st.stage}: ${st.tail[0]}`);
 }
 
 console.log(`\n${pass} passed, ${fails.length} failed`);

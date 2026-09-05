@@ -28,7 +28,7 @@ import { serveStatic } from '@hono/node-server/serve-static';
 import { existsSync, readFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { dashboardCore } from '../app/dashboard-core.mjs';
+import { dashboardCore, STUDIO_IDENTITY } from '../app/dashboard-core.mjs';
 import { verifyPassword, makeSessionCookie, clearSessionCookie, readSession, makeLimiter, loginPage } from './auth.mjs';
 import { makeGit } from './gitsync.mjs';
 import { makePublisher } from './publish.mjs';
@@ -48,12 +48,24 @@ for (const [k, v] of [['DASHBOARD_PASSWORD_HASH', PASSWORD_HASH], ['SESSION_SECR
   if (!v) { console.error(`FATAL: ${k} is not set. Refusing to start an unauthenticated editor.`); process.exit(1); }
 }
 
+/* ---- git identity: one for pull/push AND for every studio commit ---- */
+// Overridable by env for a rename; never read from the clone's config, which a fresh
+// volume does not have.
+const IDENTITY = { name: env('STUDIO_GIT_NAME', STUDIO_IDENTITY.name), email: env('STUDIO_GIT_EMAIL', STUDIO_IDENTITY.email) };
+
 /* ---- git-backed persistence: clone or pull on boot ---- */
-const git = makeGit({ repoDir: REPO_DIR, repo: GITHUB_REPO, token: GITHUB_TOKEN });
+const git = makeGit({ repoDir: REPO_DIR, repo: GITHUB_REPO, token: GITHUB_TOKEN, identity: IDENTITY });
 try { console.log('[git] ' + git.sync()); } catch (e) { console.error('[git] sync failed:', String(e.stderr || e.message || e)); process.exit(1); }
+{
+  // Uncommitted TRACKED changes in the clone can only be the residue of a failed save.
+  // Say so at boot, loudly, with the file names: a publish will refuse while they exist.
+  const dirty = git.dirtyTracked();
+  if (dirty.length) console.warn(`[git] WORKING CLONE HAS UNCOMMITTED CHANGES (${dirty.length}): ${dirty.join(', ')} — publish will refuse until a save commits them or they are discarded`);
+}
 
 const core = dashboardCore({
   repoRoot: REPO_DIR,
+  identity: IDENTITY,
   afterCommit: async () => { git.push(); }, // throws push_failed -> 502 below
 });
 const CF_PROJECT = env('CF_PAGES_PROJECT', 'tree-template-factory');

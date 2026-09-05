@@ -23,7 +23,7 @@
  * the request (any /api/dash/* path) and false otherwise.
  */
 
-import { readFileSync, writeFileSync, readdirSync, existsSync, mkdirSync } from 'node:fs';
+import { readFileSync, writeFileSync, readdirSync, existsSync, mkdirSync, rmSync } from 'node:fs';
 import { join } from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { createHash, randomBytes } from 'node:crypto';
@@ -32,14 +32,32 @@ import { tmpdir } from 'node:os';
 const SLUG_RE = /^[a-z0-9][a-z0-9-]*$/;
 const WIDTHS = [400, 800, 1200];
 
-/** @param {{ repoRoot: string, afterCommit?: (commit: string) => Promise<void> | void }} opts */
+/**
+ * The identity every studio save is committed under. Deliberately NOT a person: a
+ * studio commit is an edit made through the tool, and the tool is what signs it. Passed
+ * as `-c` flags on every invocation rather than written into the clone's config, so it
+ * survives a redeploy, a recreated volume, and a fresh clone — none of which ever has a
+ * global git identity, which is exactly how the first real save on Railway died:
+ *   fatal: unable to auto-detect email address (got 'root@<container>.(none)')
+ */
+export const STUDIO_IDENTITY = { name: 'Template Studio', email: 'studio@leedscompany.local' };
+
+/**
+ * @param {{
+ *   repoRoot: string,
+ *   afterCommit?: (commit: string) => Promise<void> | void,
+ *   identity?: { name: string, email: string },
+ * }} opts
+ */
 export function dashboardCore(opts) {
         const ROOT = opts.repoRoot;
         const CLIENTS = join(ROOT, 'clients');
         const PUB = join(ROOT, 'app', 'public');
         const ASSETS = join(PUB, 'assets');
 
-        const git = (args) => execFileSync('git', args, { cwd: ROOT, encoding: 'utf8' });
+        const identity = opts.identity ?? STUDIO_IDENTITY;
+        const GIT_BASE = ['-c', `user.name=${identity.name}`, '-c', `user.email=${identity.email}`];
+        const git = (args) => execFileSync('git', [...GIT_BASE, ...args], { cwd: ROOT, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] });
         const afterCommit = opts.afterCommit ?? (() => {});
         const clientFile = (slug) => join(CLIENTS, `${slug}.json`);
         const assetDir = (slug) => join(ASSETS, slug);
@@ -266,19 +284,54 @@ export function dashboardCore(opts) {
       if (errors.length) return send(res, 422, { error: 'validation failed', errors, warnings });
 
       const clean = { ...record, slug };
-      writeFileSync(clientFile(slug), JSON.stringify(clean, null, 2) + '\n', 'utf8');
+      const file = clientFile(slug);
+      const next = JSON.stringify(clean, null, 2) + '\n';
 
-      git(['add', '--', clientFile(slug)]);
+      // ATOMIC: the record on disk is either the last commit or the new commit — never
+      // a written-but-uncommitted state. The first real save on Railway wrote and
+      // STAGED the file, then `git commit` died for want of an identity, and the clone
+      // was left holding the edit with nothing in history to show for it. A later
+      // publish would have built and shipped it. So: remember what was there, and if
+      // the commit fails for any reason other than "nothing changed", put it back and
+      // unstage everything this save staged.
+      const previous = existsSync(file) ? readFileSync(file, 'utf8') : null;
+      const rollback = () => {
+        try { git(['reset', '-q', '--', file]); } catch {}
+        if (existsSync(assetDir(slug))) { try { git(['reset', '-q', '--', assetDir(slug)]); } catch {} }
+        if (previous === null) { try { rmSync(file, { force: true }); } catch {} }
+        else writeFileSync(file, previous, 'utf8');
+      };
+
+      writeFileSync(file, next, 'utf8');
+      git(['add', '--', file]);
       if (existsSync(assetDir(slug))) git(['add', '--', assetDir(slug)]);
-      const msg = (message && String(message).trim()) || `dashboard: update ${slug}`;
+
+      // The message is the operator's. No trailer: a studio save is Faizan's edit,
+      // made through the tool — it is not co-authored by anything.
+      const msg = (message && String(message).trim()) || `studio: update ${slug}`;
       let commit = null;
       try {
-        git(['commit', '-m', `${msg}\n\nCo-Authored-By: Claude Opus 4.8 (1M context) <noreply@anthropic.com>`]);
+        git(['commit', '-m', msg]);
         commit = git(['rev-parse', '--short', 'HEAD']).trim();
+      } catch (e) {
+        const out = `${e.stdout || ''}${e.stderr || ''}`;
+        // Nothing staged (no net change) is not a failure — and nothing to roll back.
+        if (/nothing to commit|no changes added to commit/i.test(out)) {
+          return send(res, 200, { ok: true, commit: null, warnings });
+        }
+        rollback();
+        const detail = (e.stderr || e.stdout || String(e)).toString().trim().split('\n').slice(-6).join('\n');
+        return send(res, 500, { error: 'commit_failed', detail, rolledBack: true });
+      }
+      // The commit exists locally. A failed push is NOT rolled back — the record on
+      // disk matches history, and the next successful save pushes both commits. It is
+      // reported here, with git's stderr, rather than left to propagate: the handler's
+      // outer catch would flatten it to a bare 500 with no detail.
+      try {
         await afterCommit(commit);
       } catch (e) {
-        // Nothing staged (no net change) is not a failure.
-        if (!/nothing to commit/i.test(e.stdout || '')) throw e;
+        if (e?.message === 'push_failed') return send(res, 502, { error: 'push_failed', detail: e.detail ?? '', commit, warnings });
+        throw e;
       }
       return send(res, 200, { ok: true, commit, warnings });
     }

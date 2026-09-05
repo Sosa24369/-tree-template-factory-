@@ -95,6 +95,21 @@ export function makePublisher({ repoDir, git, cfToken, cfAccountId, cfProject, b
 
     try {
       /* ---- pulling ---- */
+      // A publish ships COMMITTED records only. Uncommitted tracked changes in the clone
+      // are the residue of a failed save (the record was written, the commit died); a
+      // build would include them with nothing in history to show for it. Refuse, and
+      // name the files — the fix is to re-save that client, which overwrites and
+      // commits the same file.
+      {
+        const dirty = git.dirtyTracked();
+        if (dirty.length) {
+          return fail('pulling', 1, [
+            `The working clone has ${dirty.length} uncommitted change(s) — a publish only ships committed records:`,
+            ...dirty.map((d) => `  ${d}`),
+            'Open that client in the studio and save it again; a successful save commits the file. Nothing has been deployed.',
+          ]);
+        }
+      }
       try { const line = git.sync(); status.tail = [line]; status.commit = git.head(); }
       catch (e) { return fail('pulling', 1, [String(e.stderr || e.message || e)]); }
 

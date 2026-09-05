@@ -263,3 +263,8 @@ body { margin: 0; background: var(--d-bg); color: var(--d-ink); font-family: ui-
 .dash-art-actions { display: flex; flex-direction: column; gap: 6px; align-items: flex-start; }
 .dash-art-actions label.dash-btn { cursor: pointer; }
 .dash-art-unset { color: var(--d-warn); }
+
+/* ---- a failed save: persistent, inside the dialog ---- */
+.dash-save-error { border: 1px solid var(--d-err); background: #fdf1f1; border-radius: 10px; padding: 10px 12px; margin: 10px 0; display: flex; flex-direction: column; gap: 6px; }
+.dash-save-error strong { color: var(--d-err); }
+.dash-save-error pre { margin: 0; white-space: pre-wrap; font-size: 0.78rem; max-height: 180px; overflow: auto; }
