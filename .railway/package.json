@@ -1,0 +1,4 @@
+{
+  "//": "The IaC authoring file is ESM. The repo root is \"type\": \"commonjs\" and every script here is an explicit .mjs, so scoping the module type to this directory is the contained fix — the alternative is flipping the root package and re-testing every script that depends on it.",
+  "type": "module"
+}

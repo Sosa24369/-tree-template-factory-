@@ -1,4 +1,14 @@
-# Railway (Nixpacks) — the editor service needs git for the volume clone/push and the
-# build tools sharp compiles against. Node itself is detected from package.json.
-[phases.setup]
-nixPkgs = ["nodejs_22", "git", "python3", "gcc", "gnumake"]
+# IGNORED BY RAILWAY AS OF 2026-09-05 — the builder is Railpack, not Nixpacks.
+#
+# This file is why git used to be present at runtime. It no longer is: the first
+# correct Railpack build started and immediately failed every boot with
+#   [git] sync failed: spawnSync git ENOENT
+# because the service clones the records repo on boot and pushes every save.
+# git is now installed via RAILPACK_DEPLOY_APT_PACKAGES in .railway/railway.ts.
+#
+# Editing this file has no effect. Kept as a record.
+#
+# # Railway (Nixpacks) — the editor service needs git for the volume clone/push and the
+# # build tools sharp compiles against. Node itself is detected from package.json.
+# [phases.setup]
+# nixPkgs = ["nodejs_22", "git", "python3", "gcc", "gnumake"]
