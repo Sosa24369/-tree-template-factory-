@@ -2241,3 +2241,78 @@ on GitHub; this session's local clone has no writable remote).
 that still looks right in the file. Cost one of the five login attempts to find.
 Documented in `.env.example`, `docs/DEPLOY-EDITOR.md` and `docs/STUDIO.md`.
 
+
+---
+
+# STUDIO v2 · PHASE 0 — THE PUBLISH PATH, PROVEN FROM RAILWAY — 2026-09-05
+
+Directive: prove a real publish from the Railway studio end to end — ten guards →
+live-campaign gate → wrangler — on the Summit Tree demo only, i.e. the only content
+allowed to differ is demo content and the four ad pages must come back unchanged.
+
+## Attempt 1 — failed at `deploying`, and it was the token itself
+
+All ten guards passed; the gate came back 4/4 unchanged; wrangler failed 0.4 s in:
+
+```
+✘ A request to the Cloudflare API (/accounts/ef07a2…/pages/projects/tree-template-factory) failed.
+  Authentication error [code: 10000]
+Getting User settings...
+✘ A request to the Cloudflare API (/accounts) failed.
+  Invalid access token [code: 9109]
+```
+
+Diagnosis, in order of what was ruled out: `CLOUDFLARE_ACCOUNT_ID` was set and correct
+(wrangler used it — it is in the failing URL). The token was not mangled in storage
+(shape-checked without printing: 53 chars, clean charset, no whitespace or quotes —
+the length of what was minted). Scope was not the cause: an under-scoped token gives
+`10000` on the Pages endpoint and stops; **`9109 Invalid access token` on `/accounts`**
+is Cloudflare rejecting the bearer token outright. The owner had rotated the token
+after it appeared in a chat transcript; Railway still held the old one. Replaced by the
+owner, service redeployed.
+
+Nothing reached Cloudflare on this attempt — wrangler failed at authentication before
+any upload. The four ad pages were fetched and `cmp`'d against local `dist`: byte-
+identical, still deployment `82ec34f0`.
+
+Found in the pre-run prediction and fixed first (`6d707b8`, pushed): the
+`publish-gate` guard took 15.2 s because `protected.mjs` left its 15 s abort timer
+armed on the fetch-throws path. Cleared in `finally`: 0.23 s.
+
+## Attempt 2 — green
+
+Triggered by the owner from the studio UI; watched from `railway logs`. Timestamps are
+Railway's log ingestion, which batches lines, so they are coarse:
+
+| stage | |
+|---|---|
+| `checking (pre)` — tsc · factory-rules · layout-lock · publish-gate | first lines 08:56:00.36 |
+| `building` | `prerendered 56 page(s)` at 08:56:04.14 |
+| `checking (post)` — r4 · copy-parity · demo-isolation · tracking · lead-function · faq-a11y | 08:56:04.22 → 08:56:04.47 |
+| **`protected`** | **4/4 unchanged**, 08:56:04.61 → 08:56:04.65 |
+| `deploying` — wrangler 4.121.0 | started 08:56:06.08 |
+| | `✨ Success! Uploaded 0 files (212 already uploaded) (0.36 sec)` |
+| | `✨ Deployment complete! https://6d174f7b.tree-template-factory.pages.dev` at 08:56:09.46 |
+
+**All ten guards passed. Gate 4/4 unchanged. Wrangler deployment `6d174f7b`.** First
+guard output to deployment complete: 9.1 s (the `pulling` stage precedes the first log
+line and is not timed here). Per-guard millisecond timings are in the studio's publish
+panel behind the login; the log does not carry them.
+
+"Uploaded 0 files (212 already uploaded)" is Cloudflare's own content-addressed
+statement that the build differed from the live site in nothing — independent of the
+gate, and consistent with it.
+
+## Verified from outside, after
+
+- Cloudflare deployment list (owner's OAuth wrangler): `6d174f7b-33c1-4070-9555-bad6ac7d7fbf` ·
+  **Production** · branch `main` · source commit **`6d707b8`** — the first deployment
+  of this project made from Railway rather than a local direct upload.
+- The four ad pages, fetched live and `cmp`'d against local `dist`: all four
+  **byte-identical** (76,850 / 46,781 / 59,615 / 56,560 bytes).
+- Ten demo URLs: all 200, all `x-robots-tag: noindex, nofollow`.
+- `POST /api/lead` with the demo slug on the re-uploaded Functions bundle: `403
+  {"error":"demo mode — not submitted","demo":true}`.
+
+**The publish path is proven.** Phase 1 may proceed on a "go".
+
