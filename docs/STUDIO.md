@@ -97,7 +97,7 @@ fake IP with every attempt.
 | **Which templates this client gets** (`excludedTemplates`) | Templates |
 | **Demo account switch** (`isDemo`) | Templates |
 | Reviews (author, attribution, body) | Reviews |
-| Photos per service — upload, reorder, focal point, crop preset, alt | Photos |
+| Photos per service — upload, reorder, **Frame** (focal point + three-crop preview), alt | Photos |
 | **Section background plates** — upload, replace, crop preset, clear | Section backgrounds |
 | SMS consent copy, Privacy / Terms URLs | Consent & legal |
 | GHL location, ad-click field, tags, source, GTM, CallRail | CRM & tracking |
@@ -115,6 +115,48 @@ only carries what actually differs. It flags two things rather than hiding them:
 composes from the client record and replacing it with literal text stops that, and
 editing a control also changes its `-c` hybrid — which is the constant the A/B test
 holds fixed.
+
+### Images — the contract
+
+Every place a client image renders is declared once, in
+`app/src/templates/imageSlots.mjs`: 35 slots across the ten templates plus the two
+shared logo slots, each with its **measured** render box at 390 / 820 / 1440 CSS px
+(headless Chrome over the DevTools protocol against the built pages), the policy it
+crops by, which set position feeds it, and the master minimum. `docs/IMAGE-SPEC.md` is
+generated from it (`node scripts/generate-image-spec.mjs`) — hand that to a client.
+
+Four policies, because the templates crop four ways: **cover** (a fixed box crops the
+photo; the focal point drives `object-position`, so it needs one), **frame** (the box
+takes the photo's own shape and shows all of it, so grids are only even when every
+master is 4:3), **contain** (logos) and **plate** (decorative, under a tint).
+
+Photos are uploaded as **sets** per service and templates take them **by position**
+among the stills (the first removal photo is removal-a's hero plate; the last three are
+its service strip). The upload pipeline auto-rotates from EXIF, drops metadata, refuses
+iPhone HEIC with export instructions (never converts), crops to 4:3 around the clicked
+focal point, refuses anything under the minimum for the slots that position feeds —
+with the number: "1080 px wide, a 4:3 tile needs 1200" — and emits WebP at
+400/800/1200/1600. The original is never written. No JPEG fallback is emitted: the
+frozen templates render `<img srcset>` with no `<picture>`, and every browser the
+pages are sold into has decoded WebP since 2020.
+
+**Frame** on any photo shows the real crops at mobile, tablet and desktop for the cover
+slots that position feeds, around the focal point, before saving. The removal set's lead
+photo can **measure the headline contrast** on removal-a (tablet and desktop; mobile
+paints no plate) with the template's scrim composited over the pixels behind the
+headline block, and apply the extra darkening that lifts it to 4.5:1 — rendered as
+`--ra-hero-scrim`, transparent when unset (pixel-diff verified). The Logo field trims
+transparent padding, detects a baked-in background box, and reports the share of the
+mark that clears 3:1 against the light headers and storm's dark one. Text in the logo
+that is not the company name is **not** checked — there is no OCR on the studio server.
+
+The `image-spec` guard (pre phase) fails a publish on a referenced file that does not
+exist, and on any studio-uploaded photo under its slot minimum or cover-cropped on a
+real client without a focal point. **Legacy imports** — every photo on Texas Tree Tops
+and J Valdez today — are reported with counts and do not fail: failing them would block
+every publish for both live clients until 36 photographs were replaced. That is a
+deliberate, visible decision (the script header says so; `--strict` previews the other
+choice).
 
 **Section background plates** are not photos and the panel says so. They are painted as
 `background-image` behind a ~90% tint scrim and are announced to nobody, so they carry
@@ -183,7 +225,7 @@ pulling → checking (pre) → building → checking (post) → protected
                                       deploying → live | failed
 ```
 
-**The guard suite is the gate.** Eleven guards; a failure at either phase ends the publish
+**The guard suite is the gate.** Twelve guards; a failure at either phase ends the publish
 with `failedGuards` naming which, and the UI shows the guard's label, a plain sentence
 about what it means, and its own output. **There is no override.** `allPassed` is
 fail-closed: an empty result set is not a pass, and a guard that cannot run (missing
@@ -191,7 +233,7 @@ script, crashed node) counts as failed.
 
 | phase | guards |
 |---|---|
-| pre (source only) | `tsc` · factory rules (R1/R3/R5/schema/CRM) · layout lock · studio save · publish-gate self-test |
+| pre (source only) | `tsc` · factory rules (R1/R3/R5/schema/CRM) · layout lock · studio save · image spec · publish-gate self-test |
 | post (reads `app/dist`) | R4 leakage · a→c copy parity · demo isolation (D1–D10) · tracking · lead Function · FAQ a11y |
 
 Measured on this repo: pre ≈ 3.3 s (`tsc` is nearly all of it), post ≈ 0.4 s.
@@ -355,8 +397,11 @@ railway domain
 | `server/protected.mjs` | the live-campaign comparison and its confirmation token |
 | `server/publish.mjs` | the publish state machine |
 | `server/receipt.mjs` | the receipt: every built page against the live site, wrangler's count, the last-deploy route list |
-| `app/dashboard-core.mjs` | record API, validation, sharp pipelines, R4 write confinement, R2 layout lock — shared by the service and the Vite dev plugin |
+| `app/dashboard-core.mjs` | record API, validation, the image pipeline, R4 write confinement, R2 layout lock — shared by the service and the Vite dev plugin |
+| `app/image-checks.mjs` | cover-crop geometry, WCAG contrast, the removal-a hero legibility composite, the logo checks |
+| `app/src/templates/imageSlots.mjs` | the image contract: every slot, measured; `docs/IMAGE-SPEC.md` is generated from it |
+| `scripts/verify-image-spec.mjs` | the `image-spec` guard |
 | `app/dashboard-server.mjs` | the dev-only Vite adapter |
 | `app/src/dashboard/` | the UI |
 | `protected-routes.json` | the pages a publish will not change without confirmation |
-| `scripts/test-publish-gate.mjs` | 61 assertions over the gate and the receipt, no network, no build |
+| `scripts/test-publish-gate.mjs` | 62 assertions over the gate and the receipt, no network, no build |

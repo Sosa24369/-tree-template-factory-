@@ -2417,3 +2417,153 @@ local-only commit giving J Valdez Texas Tree Tops' GHL location id, which
 redeployed, and a publish from the studio. On the first such publish the "removed" list
 is unknown (no `studio-last-deploy.json` on the volume yet) and the receipt says nothing
 about removals; from the second on it does.
+
+
+---
+
+# STUDIO v3 · PHASE 1 — IMAGES THAT NEVER LOOK WRONG — 2026-09-07
+
+Also shipped between phases: the receipt's deployment pill lands on the selected client +
+template under that deployment's hash, and a "View live page" link for the same page on
+production sits beside it whether or not anything changed (`29eba01`). Railway
+deployment `e0266a42` (SUCCESS, build 1 m 42 s) served the first real receipt: the owner's
+publish reported `deployment 16450431 · 18.1 s · Nothing changed — the live site already
+matched`, and from outside that deployment's root is the gate page, its demo page is
+byte-identical to production, and the four ad pages are unchanged.
+
+## What was measured before anything was designed
+
+Headless Chrome, driven over the DevTools protocol (the browser extension timed out on the
+preview origin), rendered the built pages for Texas Tree Tops (removal, storm, agnostic)
+and J Valdez (trimming) at 390, 820 and 1440 CSS px, scrolled every deferred image into
+view, and read each image's box, `object-fit`, `object-position` and the hero geometry.
+35 client slots across the ten templates, plus the header (64 / 96 / 96) and footer
+(52 / 50 / 40 / 34) logo boxes. Three findings that shaped the contract:
+
+- **Tile shape is the photo's shape.** Every `<DeferredImage>` reserves an aspect-ratio
+  box from the record's width/height, so a grid of them is only even when the masters
+  are one shape. Texas Tree Tops' storm grid renders 4:3, 3:4 **and** 1:1 cells today
+  (800 × 600, 382 × 510 and 1200 × 1200 photos). That is the "one tile is a different
+  shape" failure, and no CSS change fixes it — the masters have to match. So the pipeline
+  makes 4:3 masters.
+- **Cover crops swing per breakpoint.** removal-a's proof strip is 2.19:1 on a phone,
+  1.38:1 on a tablet and 1.92:1 on desktop; its service strip is 3.87:1 on a tablet (a
+  quarter of a 4:3 master's height). The focal point has to survive all three, which is
+  what the three-crop preview is for.
+- **Only one hero puts text on a photograph.** removal-a's plate (tablet 820 × 1656,
+  desktop 1440 × 1192; none on a phone — mobile leads with the brand colour). removal-b,
+  removal-c and storm paint a 14–16% wash on the right half, masked, desktop only, with
+  the headline in the left half; trimming and agnostic have no hero photo. So the
+  legibility measurement is removal-a's, and "mobile" is reported as not applicable with
+  the reason rather than as a number.
+
+## The contract
+
+`app/src/templates/imageSlots.mjs` — data only, imported by the studio, the guard and the
+spec generator, never by the public bundle. Four policies: **cover** (fixed box, crops,
+focal required), **frame** (the master's shape, nothing cropped), **contain** (logos),
+**plate** (decorative under a tint). Masters: 4:3, recommended 1600 × 1200, minimum
+1200 × 900 (the largest 4:3 tile renders 1094 px wide on desktop); the removal set's
+first photo — removal-a's plate — minimum 1600. Logos: SVG or transparent PNG, 192 px
+floor (96 px at 2×). `docs/IMAGE-SPEC.md` is generated: one table per template, exact
+pixels, 37 rows.
+
+## The pipeline (`app/dashboard-core.mjs`, `app/image-checks.mjs`)
+
+Proven against scratch files, no server:
+
+| input | result |
+|---|---|
+| 1080 × 1080 into trimming | `422 too_small` — "1080 px wide, a 4:3 tile needs 1200. Send a larger original — the pipeline never upscales." |
+| 1400 × 1050 as the first removal photo | `422 too_small` — "1400 px wide, the removal-a hero plate needs 1600." |
+| an HEIC container | `415 heic` — the export instructions; not converted |
+| 2400 × 1600, focal (0.8, 0.3), first removal photo | 1600 × 1200 master + 400/800/1200 variants, focal mapped to (0.775, 0.30) in master coordinates, `pipeline: { version: 2, source: 2400 × 1600 jpeg }`, lands in 7 slots |
+
+EXIF auto-orient and metadata stripping are one sharp pass. **JPEG fallback deliberately
+not emitted** — the templates are frozen at `<img srcset>` (no `<picture>`), every
+supported browser decodes WebP, and an unreferenced JPEG per size would only add weight
+to every deploy; three lines if that changes.
+
+**Logo checks** on the real files: J Valdez's SVG badge — no baked-in box, but only **15%**
+of the mark clears 3:1 against the light header (a white disc with a thin ring; the disc
+melts into the paper, the ring and lettering survive; 87% against storm's ink). Texas Tree
+Tops' badge — a **solid #ffffff box baked in** (it shows as a white square on storm's
+dark header), 60% readable on paper. Text-in-logo (the (817) number on the TTT badge) is
+**reported as unchecked**: no OCR on the studio server, no vision model until Phase 5
+brings an API key; the UI says so rather than showing a tick.
+
+**Hero legibility**, measured on the pixels behind the headline block with the
+template's scrim composited (radial brand wash 45% at the top-left + linear deep tone
+72→88%):
+
+| plate | tablet | desktop | extra scrim |
+|---|---|---|---|
+| Summit Tree (demo) removal[0] | 10.6:1 | 11.0:1 | 0 |
+| Texas Tree Tops removal[0] (first still) | 11.5:1 | 11.9:1 | 0 |
+| J Valdez (trimming[0], via fallback) | 12.6:1 | 12.9:1 | 0 |
+| a pure white plate, dark brand | 7.5:1 | 7.7:1 | 0 |
+| a pale sage plate with a pale brand (#8fb98a) | 2.6:1 | 2.8:1 | **0.50 → 4.53:1** |
+
+The template's scrim is heavy enough that a real photograph never fails with a dark
+brand; the failure mode is a **pale brand colour**, because the scrim is brand-derived.
+The studio measures, suggests, and applies the extra layer as `PhotoSet.scrim`, rendered
+by removal-a as `--ra-hero-scrim`. **The layer defaults to transparent**: a pixel diff of
+the hero on Texas Tree Tops, J Valdez and the demo at 820 and 1440, before and after the
+CSS change, is **0 of 2,263,600 pixels**. Mobile is reported as n/a (no plate).
+
+## The guard, and the decision in it
+
+`image-spec` joined the pre phase (twelve guards now; the gate self-test asserts it is in
+the suite, 62 assertions). A referenced file that does not exist **always** fails. A
+studio-uploaded photo (`pipeline.version >= 2`) under its slot minimum, or cover-cropped
+on a real client without a focal point, **fails**. A legacy import — every photo on both
+live clients today — is **reported, not failed**: 85 warnings on the current records, 0
+failures; `--strict` would produce 70 failures and block every publish, including
+demo-only ones, until 36 photographs were replaced. The instruction said "publish
+blocker for real clients"; applied literally to the existing imagery it would have
+blocked the studio the moment it shipped. The two tiers are stated in the script header,
+in `docs/STUDIO.md`, and here. The readiness checklist shows the same split (warning for
+legacy, blocker for studio uploads).
+
+## The studio
+
+Each photo card: position, where it lands (`slotsForPhoto`, counting among the stills —
+Texas Tree Tops' removal set opens with an .mp4), `focal ✓` / `no focal · cropped by N`,
+size against the slot minimum, `legacy`. **Frame** shows the real crops at mobile, tablet
+and desktop around the focal point (`object-fit: cover` + `object-position`, exactly the
+template's rule). Uploads pass their set position; a refusal is inline with the number.
+The removal set's lead photo measures the headline contrast and can apply the suggested
+scrim. The Logo field runs the checks. Screenshots taken headless against the local
+service: the Frame dialog on J Valdez's first photo shows the seam of the stacked
+composite in the mobile and desktop hero-band crops — the audit's finding, on screen.
+
+## J Valdez audit — `docs/JV-IMAGE-AUDIT.md`, proposal only
+
+Twelve 1080 × 1080 squares, all under the 1200 tile minimum (the removal-a plate wants
+1600), no focal points, **four before/after composites** that every wide cover slot
+cuts through the seam, and a phone number **214-985-7697** printed on the truck (#2) and a
+yard sign (#7) on both live pages while the tracked number is +1 469 402 1196. Per photo:
+the slots it lands in, what the crop does today, and a proposed focal point or
+replacement. Nothing applied; each focal point is one Frame click and the gate shows the
+diff.
+
+## Measured
+
+| | before | after |
+|---|---|---|
+| public `index-*.css` | 162,074 B | 162,159 B (+85, the scrim layer) |
+| public `index-*.js` | 469,395 B | 469,505 B (+110, `scrimStyle` in Hero.tsx) |
+| other 211 public files | identical | identical |
+| Lighthouse mobile perf, TTT removal-a (vite preview) | 91 | 90 (LCP 3.3 → 3.3 s) |
+| Lighthouse mobile perf, demo removal-a | 84 | 84 |
+| studio UI bundle | 66.7 kB | 94.1 kB (not public) |
+| guards | 11/11 | 12/12; gate self-test 62/62; image-spec 0 failures, 85 legacy warnings |
+
+## Not verified
+
+- A real upload through the Railway studio (the pipeline ran locally against scratch
+  files and the local service; the volume clone's `sharp` is the same package).
+- The scrim on a real page: no client carries one yet, so `--ra-hero-scrim` has only
+  been proven transparent. It is exercised by the arithmetic and by the studio's apply
+  button, not by a deploy.
+- Text in logos: not checked at all, by design, until there is OCR.
