@@ -28,9 +28,19 @@ import { join } from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { createHash, randomBytes } from 'node:crypto';
 import { tmpdir } from 'node:os';
+import { sniffHeic, heroLegibility, logoChecks } from './image-checks.mjs';
+import { MASTERS, slotsForPhoto } from './src/templates/imageSlots.mjs';
 
 const SLUG_RE = /^[a-z0-9][a-z0-9-]*$/;
-const WIDTHS = [400, 800, 1200];
+/** Every width a slot renders at 2×, from the contract; the master itself (≤1600) is the last candidate. */
+const WIDTHS = [400, 800, 1200, 1600];
+const MASTER_MAX = 1600;
+const PIPELINE_VERSION = 2;
+
+/** An upload the pipeline refuses, with the sentence the UI shows. */
+class UploadRefused extends Error {
+  constructor(code, status, message) { super(message); this.code = code; this.status = status; }
+}
 
 /**
  * The identity every studio save is committed under. Deliberately NOT a person: a
@@ -110,35 +120,84 @@ export function dashboardCore(opts) {
   return { errors, warnings };
         }
 
-        /* ---- sharp pipeline: optimise + responsive variants ---- */
-        async function processImage(slug, filename, buffer, focal, aspect) {
+        /* ---- the photo pipeline (image contract, v2) ----
+         *
+         * In:  any raster (JPEG, PNG, WebP, TIFF, GIF) — HEIC is refused with a message
+         *      (see image-checks.sniffHeic), never converted.
+         * Then: auto-rotate from EXIF, drop every byte of metadata, crop to the master
+         *      aspect (4:3 by default) around the focal point the operator clicked,
+         *      refuse anything under the minimum for the slots it will land in — with
+         *      the number — and emit WebP at 400 / 800 / 1200 / 1600 wide plus the
+         *      master itself (never upscaled, never above 1600). The original is never
+         *      written to disk.
+         * Out: a PhotoSet with srcset, the focal point mapped into the master's own
+         *      coordinates (so cover slots keep the subject), and a `pipeline` block
+         *      recording what came in.
+         *
+         * JPEG fallback: not emitted, deliberately. The templates render <img srcset>
+         * and are frozen (no <picture>), every browser the pages are sold into has
+         * decoded WebP since 2020, and an unreferenced JPEG per size would only add
+         * weight to every deploy. Three lines here if that ever changes.
+         */
+        async function processImage(slug, filename, buffer, focal, aspect, placement = {}) {
   const { default: sharp } = await import('sharp');
   mkdirSync(assetDir(slug), { recursive: true });
 
-  let pipe = sharp(buffer);
-  let meta = await pipe.metadata();
+  if (sniffHeic(buffer)) {
+    throw new UploadRefused('heic', 415, 'This is an iPhone HEIC file. Export it as JPEG or PNG first (Photos → File → Export → JPEG, or Settings → Camera → Formats → Most Compatible) and upload that. The studio does not convert HEIC: the image library here has no HEVC decoder, and a silently broken photo is worse than this message.');
+  }
 
-  // Optional focal-point cover-crop to a target aspect, baked into the file so no
-  // template change is needed to fix a bad crop.
-  if (focal && aspect && meta.width && meta.height) {
+  // Auto-orient from EXIF and drop the metadata in the same pass (sharp writes no
+  // metadata unless asked to). Everything after this works on the oriented pixels.
+  let source;
+  try { source = await sharp(buffer, { failOn: 'none' }).rotate().toBuffer({ resolveWithObject: true }); }
+  catch (e) { throw new UploadRefused('unreadable', 415, `This file could not be read as an image (${String(e?.message || e).split('\n')[0]}). Upload a JPEG or PNG.`); }
+  const srcMeta = { width: source.info.width ?? null, height: source.info.height ?? null, format: source.info.format ?? null, bytes: buffer.length };
+  buffer = source.data;
+  let meta = source.info;
+  const warnings = [];
+
+  // The master aspect. 4:3 unless the operator chose "original" (aspect === null).
+  const target = aspect === null ? null : (typeof aspect === 'number' && aspect > 0 ? aspect : MASTERS.photo.aspect[0] / MASTERS.photo.aspect[1]);
+  let masterFocal = focal ? { x: Math.min(1, Math.max(0, focal.x ?? 0.5)), y: Math.min(1, Math.max(0, focal.y ?? 0.5)) } : null;
+  if (target && meta.width && meta.height) {
     const iw = meta.width, ih = meta.height;
-    const target = aspect; // width/height
     let cw = iw, ch = Math.round(iw / target);
     if (ch > ih) { ch = ih; cw = Math.round(ih * target); }
-    const fx = Math.min(1, Math.max(0, focal.x ?? 0.5));
-    const fy = Math.min(1, Math.max(0, focal.y ?? 0.5));
+    const fx = masterFocal?.x ?? 0.5, fy = masterFocal?.y ?? 0.5;
     let left = Math.round(fx * iw - cw / 2);
     let top = Math.round(fy * ih - ch / 2);
     left = Math.min(Math.max(0, left), iw - cw);
     top = Math.min(Math.max(0, top), ih - ch);
-    buffer = await sharp(buffer).extract({ left, top, width: cw, height: ch }).toBuffer();
-    pipe = sharp(buffer);
-    meta = await pipe.metadata();
+    if (cw !== iw || ch !== ih) {
+      buffer = await sharp(buffer).extract({ left, top, width: cw, height: ch }).toBuffer();
+      meta = await sharp(buffer).metadata();
+      // The subject's position inside the MASTER, which is what object-position needs.
+      if (masterFocal) masterFocal = { x: +(((fx * iw) - left) / cw).toFixed(3), y: +(((fy * ih) - top) / ch).toFixed(3) };
+    }
+  } else if (target === null && meta.width && meta.height) {
+    const r = meta.width / meta.height;
+    warnings.push(`Kept at its original shape (${r >= 1 ? `${r.toFixed(2)}:1` : `1:${(1 / r).toFixed(2)}`}). Grids of frame slots take each photo's own shape, so a set of mixed shapes renders an uneven grid; 4:3 keeps it even.`);
   }
 
-  // Base (optimised) file: cap 1600w, WebP q80 — the optimize-assets settings.
-  let base = pipe;
-  if (meta.width && meta.width > 1600) base = base.resize({ width: 1600, withoutEnlargement: true });
+  // The minimum for the slots this photo lands in. The caller says which set and
+  // position (an append lands at index = count); the hero plate wants 1600.
+  const set = placement.set, count = Number(placement.count ?? 0), index = Number(placement.index ?? count);
+  const slots = set ? slotsForPhoto(set, index, Math.max(count, index + 1)) : [];
+  let need = MASTERS.photo.min, needWhy = 'a 4:3 tile';
+  for (const s of slots) if (MASTERS[s.master].min[0] > need[0]) { need = MASTERS[s.master].min; needWhy = `the ${s.template} ${s.label.split(' — ')[0].toLowerCase()}`; }
+  const mw = meta.width ?? 0, mh = meta.height ?? 0;
+  if (mw < need[0] || mh < need[1]) {
+    const dim = mw < need[0] ? `${mw} px wide` : `${mh} px tall`;
+    const needDim = mw < need[0] ? `${need[0]}` : `${need[1]}`;
+    const cropped = srcMeta.width && mw < srcMeta.width ? ` (${srcMeta.width} × ${srcMeta.height} before the 4:3 crop)` : '';
+    throw new UploadRefused('too_small', 422, `${dim}${cropped}, ${needWhy} needs ${needDim}. Send a larger original — the pipeline never upscales.`);
+  }
+  if (set === 'removal' && index !== 0 && mw < MASTERS.heroPlate.min[0]) warnings.push(`Fine for tiles, but at ${mw} px wide it cannot lead the removal set: the removal-a hero plate needs ${MASTERS.heroPlate.min[0]}.`);
+
+  // Master: ≤1600 wide, WebP q80.
+  let base = sharp(buffer);
+  if (mw > MASTER_MAX) base = base.resize({ width: MASTER_MAX, withoutEnlargement: true });
   const baseBuf = await base.webp({ quality: 80 }).toBuffer();
   const outMeta = await sharp(baseBuf).metadata();
 
@@ -147,7 +206,7 @@ export function dashboardCore(opts) {
   const name = `${safeBase}-${hash}.webp`;
   writeFileSync(join(assetDir(slug), name), baseBuf);
 
-  // Responsive variants — generate-srcset settings (q78), never upscale.
+  // Every rendered width, never upscaled; q78 like generate-srcset.
   const intrinsic = outMeta.width ?? 0;
   const parts = [];
   for (const w of WIDTHS) {
@@ -160,7 +219,16 @@ export function dashboardCore(opts) {
   const src = `/assets/${slug}/${name}`;
   parts.push(`${src} ${intrinsic}w`);
 
-  return { src, srcset: parts.join(', '), width: outMeta.width ?? null, height: outMeta.height ?? null, alt: '' };
+  const aspectLabel = target === null ? 'original' : Math.abs(target - 4 / 3) < 0.01 ? '4:3' : `${target.toFixed(3)}:1`;
+  return {
+    photo: {
+      src, srcset: parts.join(', '), width: outMeta.width ?? null, height: outMeta.height ?? null, alt: '',
+      ...(masterFocal ? { focal: masterFocal } : {}),
+      pipeline: { version: PIPELINE_VERSION, at: new Date().toISOString(), source: srcMeta, master: [outMeta.width ?? 0, outMeta.height ?? 0], aspect: aspectLabel },
+    },
+    warnings,
+    slots: slots.map((s) => ({ template: s.template, id: s.id, label: s.label, policy: s.policy })),
+  };
         }
 
         /* ---- logo pipeline: ONE file, no srcset (see generate-logo-variants.mjs) ----
@@ -173,16 +241,26 @@ export function dashboardCore(opts) {
          * at 2x, is small AND crisp AND floats nothing. Never upscaled: a smaller
          * source keeps its own size rather than being blown up.
          */
-        async function processLogo(slug, buffer) {
+        async function processLogo(slug, buffer, filename = '') {
   const { default: sharp } = await import('sharp');
   mkdirSync(assetDir(slug), { recursive: true });
+  if (sniffHeic(buffer)) throw new UploadRefused('heic', 415, 'This is an iPhone HEIC file. Export the logo as SVG or PNG and upload that.');
+
+  // Image contract: accept SVG and transparent PNG (and any raster), trim the
+  // transparent padding so the mark fills its box, and run the checks — a baked-in
+  // background box, contrast against the header papers and ink. Findings come back
+  // to the UI as warnings; nothing here refuses a logo, because the fallback (the
+  // company name as a wordmark) is worse than a logo with a warning.
+  let checks;
+  try { checks = await logoChecks(buffer, { filename }); }
+  catch (e) { throw new UploadRefused('unreadable', 415, `This file could not be read as an image (${String(e?.message || e).split('\n')[0]}). Upload an SVG, PNG or JPEG.`); }
 
   const LOGO_PX = 192;
-  const meta = await sharp(buffer).metadata();
-  const longest = Math.max(meta.width ?? 0, meta.height ?? 0);
+  const longest = Math.max(checks.trimmedTo.width ?? 0, checks.trimmedTo.height ?? 0);
   const box = longest > 0 ? Math.min(LOGO_PX, longest) : LOGO_PX;
+  if (longest < MASTERS.logo.min) checks.warnings.push(`After trimming, the mark is ${longest} px on its longest edge; the header shows it at 96 px, so ${MASTERS.logo.min} px is the floor for a sharp 2× render. It was NOT upscaled.`);
 
-  const buf = await sharp(buffer)
+  const buf = await sharp(checks.trimmed)
     // `contain` on a TRANSPARENT background keeps a non-square mark intact without
     // inventing a white plate behind a logo that was designed to sit on the brand
     // colour. The header lockup centres whatever it is given.
@@ -193,7 +271,8 @@ export function dashboardCore(opts) {
   const hash = createHash('sha1').update(buf).digest('hex').slice(0, 8);
   const name = `logo-header-${hash}.webp`;
   writeFileSync(join(assetDir(slug), name), buf);
-  return { src: `/assets/${slug}/${name}`, width: out.width ?? box, height: out.height ?? box, sourceLongestEdge: longest };
+  const { trimmed: _t, ...report } = checks;
+  return { src: `/assets/${slug}/${name}`, width: out.width ?? box, height: out.height ?? box, sourceLongestEdge: longest, checks: report };
         }
 
         /* ---- routes ---- */
@@ -251,25 +330,65 @@ export function dashboardCore(opts) {
       return send(res, 200, { diff: diff.replace(new RegExp(tmp, 'g'), `clients/${slug}.json`) });
     }
 
-    // POST /api/dash/upload  { slug, filename, dataBase64, focal?, aspect? }
+    // POST /api/dash/upload  { slug, filename, dataBase64, focal?, aspect?, set?, index?, count? }
+    //   aspect: a number (width/height) crops to it; null keeps the original; absent = 4:3.
+    //   set/index/count say where the photo will land so the minimum is the right one.
     if (req.method === 'POST' && url === '/api/dash/upload') {
-      const { slug, filename, dataBase64, focal, aspect } = await readBody(req);
+      const { slug, filename, dataBase64, focal, aspect, set, index, count } = await readBody(req);
       if (!okSlug(slug)) return send(res, 400, { error: 'bad slug' });
       const b64 = String(dataBase64 || '').replace(/^data:[^,]+,/, '');
       if (!b64) return send(res, 400, { error: 'no image data' });
       const buffer = Buffer.from(b64, 'base64');
-      const photo = await processImage(slug, filename, buffer, focal, aspect);
-      return send(res, 200, { photo });
+      try {
+        const result = await processImage(slug, filename, buffer, focal, aspect, { set, index, count });
+        return send(res, 200, result);
+      } catch (e) {
+        if (e instanceof UploadRefused) return send(res, e.status, { error: e.code, message: e.message });
+        throw e;
+      }
     }
 
     // POST /api/dash/upload-logo  { slug, filename, dataBase64 }
     if (req.method === 'POST' && url === '/api/dash/upload-logo') {
-      const { slug, dataBase64 } = await readBody(req);
+      const { slug, filename, dataBase64 } = await readBody(req);
       if (!okSlug(slug)) return send(res, 400, { error: 'bad slug' });
       const b64 = String(dataBase64 || '').replace(/^data:[^,]+,/, '');
       if (!b64) return send(res, 400, { error: 'no image data' });
-      const logo = await processLogo(slug, Buffer.from(b64, 'base64'));
-      return send(res, 200, { logo });
+      try {
+        const logo = await processLogo(slug, Buffer.from(b64, 'base64'), filename);
+        return send(res, 200, { logo });
+      } catch (e) {
+        if (e instanceof UploadRefused) return send(res, e.status, { error: e.code, message: e.message });
+        throw e;
+      }
+    }
+
+    // POST /api/dash/hero-check  { slug, src, focal?, primaryColor? }
+    //   The contrast of the white removal-a headline over this photo as the hero
+    //   plate, at tablet and desktop, with the template's scrim composited; and the
+    //   extra scrim that would lift it to 4.5:1. Mobile paints no plate.
+    if (req.method === 'POST' && url === '/api/dash/hero-check') {
+      const { slug, src, focal, primaryColor } = await readBody(req);
+      if (!okSlug(slug)) return send(res, 400, { error: 'bad slug' });
+      const rel = String(src || '');
+      if (!rel.startsWith(`/assets/${slug}/`) || rel.includes('..')) return send(res, 400, { error: 'src must be one of this client\'s own assets' });
+      const file = join(PUB, rel.replace(/^\//, ''));
+      if (!existsSync(file)) return send(res, 404, { error: 'no such file' });
+      const result = await heroLegibility(file, focal ?? null, { primaryColor });
+      return send(res, 200, result);
+    }
+
+    // POST /api/dash/logo-check  { slug }  — the checks, on the logo the record has now.
+    if (req.method === 'POST' && url === '/api/dash/logo-check') {
+      const { slug } = await readBody(req);
+      if (!okSlug(slug) || !existsSync(clientFile(slug))) return send(res, 404, { error: 'no such client' });
+      const record = JSON.parse(readFileSync(clientFile(slug), 'utf8'));
+      const rel = String(record.brand?.logoUrl || '');
+      if (!rel) return send(res, 200, { logo: null });
+      const file = join(PUB, rel.replace(/^\//, ''));
+      if (!existsSync(file)) return send(res, 200, { logo: rel, missing: true });
+      const { trimmed: _t, ...report } = await logoChecks(readFileSync(file), { filename: rel });
+      return send(res, 200, { logo: rel, ...report });
     }
 
     // POST /api/dash/save  { slug, record, message }
