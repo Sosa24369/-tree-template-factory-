@@ -131,18 +131,18 @@ app.all('/api/dash/*', async (c) => {
 });
 
 /* ---- publish ---- */
-app.get('/api/publish', (c) => c.json({ ...publisher.status, suite: publisher.guards }));
+app.get('/api/publish', (c) => c.json({ ...publisher.status, suite: publisher.guards, baseUrl: publisher.baseUrl }));
 app.post('/api/publish', async (c) => {
   const st = publisher.status;
   // 'blocked' is a finished state, not a running one — it must be re-startable with
   // a confirmation. So are 'live' and 'failed'.
-  if (st.state !== 'idle' && !['live', 'failed', 'blocked'].includes(st.state)) return c.json({ ...st, suite: publisher.guards }, 202);
+  if (st.state !== 'idle' && !['live', 'failed', 'blocked'].includes(st.state)) return c.json({ ...st, suite: publisher.guards, baseUrl: publisher.baseUrl }, 202);
   // The confirmation names the exact set of live campaign pages the caller was shown.
   // A token for a different set (or no token) leaves the publish blocked.
   const body = await c.req.json().catch(() => ({}));
   publisher.run({ confirmProtected: typeof body?.confirmProtected === 'string' ? body.confirmProtected : undefined });
   await new Promise((r) => setTimeout(r, 50));
-  return c.json({ ...publisher.status, suite: publisher.guards }, 202);
+  return c.json({ ...publisher.status, suite: publisher.guards, baseUrl: publisher.baseUrl }, 202);
 });
 
 /* ---- static: photos for the preview, then the built UI ---- */

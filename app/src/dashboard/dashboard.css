@@ -321,3 +321,6 @@ body { margin: 0; background: var(--d-bg); color: var(--d-ink); font-family: ui-
 .dash-publish { margin: 0 0 16px; }
 .dash-receipt-list .dash-badge { flex: none; white-space: nowrap; }
 .dash-receipt-list a { overflow-wrap: anywhere; }
+.dash-live-link { font-size: 12px; color: var(--d-accent); font-weight: 640; text-decoration: none; border: 1px solid transparent; border-radius: 99px; padding: 2px 8px; }
+.dash-live-link:hover { border-color: var(--d-accent); }
+.dash-receipt-none a { font-weight: 500; color: var(--d-accent); margin-left: 6px; }

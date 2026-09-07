@@ -121,8 +121,14 @@ export function App() {
 
   // Rendered in the editor column (full width, under the header), whether or not a
   // client is open: a failed or blocked publish must stay visible until it is dealt with.
+  // The page currently on screen, as a route: the deployment pill and the "View live
+  // page" link both land there, because the deployment ROOT is the neutral gate page
+  // and always reads as "nothing to see here".
+  const selected = record && slug
+    ? { route: `/${record.isDemo ? 'demo' : 'p'}/${slug}/${previewTpl}`, templateId: previewTpl, built: !(record.excludedTemplates ?? []).includes(previewTpl) }
+    : null;
   const publishPanel = (pubOpen || pub.state === 'failed' || pub.state === 'blocked') && pub.state !== 'idle'
-    ? <PublishPanel pub={pub} onHide={() => setPubOpen(false)} onConfirm={(token) => startPublish(token)} />
+    ? <PublishPanel pub={pub} selected={selected} onHide={() => setPubOpen(false)} onConfirm={(token) => startPublish(token)} />
     : null;
 
   async function reviewSave() {
@@ -324,7 +330,12 @@ export function App() {
  *   - the panel's height is capped and it scrolls internally, so a long tail never
  *     grows the page.
  */
-function PublishPanel({ pub, onHide, onConfirm }: { pub: any; onHide: () => void; onConfirm: (token: string) => void }) {
+type SelectedPage = { route: string; templateId: string; built: boolean } | null;
+
+/** origin + route + the trailing slash Cloudflare serves pages at. */
+const pageUrl = (origin: string | null | undefined, route: string) => (origin ? `${origin.replace(/\/$/, '')}${route}/` : null);
+
+function PublishPanel({ pub, selected, onHide, onConfirm }: { pub: any; selected: SelectedPage; onHide: () => void; onConfirm: (token: string) => void }) {
   const suite: any[] = pub.suite ?? [];
   const results: any[] = pub.guards ?? [];
   const failed = pub.state === 'failed';
@@ -338,6 +349,9 @@ function PublishPanel({ pub, onHide, onConfirm }: { pub: any; onHide: () => void
   const summary = `${okCount}/${suite.length} guards${prot ? ` · ${gateOk}/${prot.checked} gate unchanged` : ''}${ms != null ? ` · ${(ms / 1000).toFixed(1)} s` : ''}`;
   const title = live ? 'Published' : failed ? 'Publish failed' : blocked ? 'Publish stopped' : `Publishing… ${pub.stage ?? pub.state}`;
   const r = pub.receipt;
+  // Where the links land: the selected page, never the deployment root.
+  const deployHref = r?.deploymentUrl ? (selected?.built ? pageUrl(r.deploymentUrl, selected.route) : r.deploymentUrl) : null;
+  const liveHref = selected?.built ? pageUrl(pub.baseUrl, selected.route) : null;
 
   return (
     <section className={`dash-publish dash-publish--${pub.state}`} aria-live="polite">
@@ -345,9 +359,15 @@ function PublishPanel({ pub, onHide, onConfirm }: { pub: any; onHide: () => void
         <strong>{title}</strong>
         {failed && failedGuards.length > 0 && <span className="dash-publish-fail">at {pub.stage}: {failedGuards.join(', ')}</span>}
         {failed && failedGuards.length === 0 && <span className="dash-publish-fail">at {pub.stage}{pub.exitCode != null ? ` (exit ${pub.exitCode})` : ''}</span>}
-        {live && r?.deploymentId && (
-          <a className="dash-deploy-id" href={r.deploymentUrl} target="_blank" rel="noreferrer" title="this deployment's own address">deployment {r.deploymentId}</a>
+        {live && r?.deploymentId && deployHref && (
+          <a className="dash-deploy-id" href={deployHref} target="_blank" rel="noreferrer" title={selected?.built ? `${selected.templateId} as served by this deployment` : "this deployment's own address"}>
+            deployment {r.deploymentId}{selected?.built ? ` · ${selected.templateId}` : ''}
+          </a>
         )}
+        {liveHref && (
+          <a className="dash-live-link" href={liveHref} target="_blank" rel="noreferrer" title={liveHref}>View live page ↗</a>
+        )}
+        {selected && !selected.built && <span className="dash-help">{selected.templateId} is not built for this client</span>}
         <button className="dash-btn dash-btn--ghost dash-btn--sm" type="button" onClick={onHide}>Hide</button>
       </div>
 
@@ -365,7 +385,7 @@ function PublishPanel({ pub, onHide, onConfirm }: { pub: any; onHide: () => void
           </p>
         )}
 
-        {live && <Receipt r={r} />}
+        {live && <Receipt r={r} liveHref={liveHref} />}
 
         {/* The guard suite, live. Every guard is listed before it runs, so it is
             visible that a publish is gated on all of them rather than on whichever
@@ -430,12 +450,17 @@ function PublishPanel({ pub, onHide, onConfirm }: { pub: any; onHide: () => void
  * removed pages (a template switched off) struck through; the counts, with wrangler's
  * own count beside them and a warning if the two disagree.
  */
-function Receipt({ r }: { r: any }) {
+function Receipt({ r, liveHref }: { r: any; liveHref: string | null }) {
   if (!r) return <p className="dash-help">Live, but no receipt was recorded for this publish.</p>;
   const extra = r.uploaded != null ? r.uploaded - r.changed.length : 0;
   return (
     <div className="dash-receipt">
-      {r.nothingChanged && <p className="dash-receipt-none">Nothing changed — the live site already matched.</p>}
+      {r.nothingChanged && (
+        <p className="dash-receipt-none">
+          Nothing changed — the live site already matched.
+          {liveHref && <> <a href={liveHref} target="_blank" rel="noreferrer">View live page ↗</a></>}
+        </p>
+      )}
       {(r.changed.length > 0 || r.removed.length > 0) && (
         <ul className="dash-receipt-list">
           {r.changed.map((p: any) => (
