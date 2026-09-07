@@ -93,7 +93,7 @@ export function Copy({
   const affectedHybrid = TEMPLATE_META.find((t) => INHERITS_OVERRIDES_FROM[t.id] === templateId);
 
   return (
-    <div className="dash-field dash-copy">
+    <div className="dash-field dash-copy" id="copy">
       <div className="dash-copy-head">
         <span className="dash-label">Copy — every text field on this template</span>
         <select className="dash-input dash-input--xs" value={templateId} onChange={(e) => onPickTemplate(e.target.value as TemplateId)}>
@@ -121,12 +121,25 @@ export function Copy({
         </p>
       )}
 
+      {/* Labelled and sticky: the panel is 132 rows long and sits at the bottom of the
+          editor column, and an unlabelled input with a placeholder was not found by the
+          first person who needed it. */}
       <div className="dash-copy-tools">
-        <input className="dash-input" placeholder="Search keys and text…" value={q} onChange={(e) => setQ(e.target.value)} />
+        <label className="dash-copy-search">
+          <span className="dash-label">Find a field</span>
+          <input
+            className="dash-input"
+            type="search"
+            placeholder="by key (hero.h1a) or by the words on the page"
+            value={q}
+            onChange={(e) => setQ(e.target.value)}
+          />
+        </label>
         <label className="dash-check">
           <input type="checkbox" checked={onlyOverridden} onChange={(e) => setOnlyOverridden(e.target.checked)} />
           only overridden
         </label>
+        <span className="dash-copy-count">{rows.length} of {totalKeys}</span>
       </div>
 
       {grouped.length === 0 && <p className="dash-empty">No copy field matches “{q}”.</p>}

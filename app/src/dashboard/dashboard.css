@@ -268,3 +268,56 @@ body { margin: 0; background: var(--d-bg); color: var(--d-ink); font-family: ui-
 .dash-save-error { border: 1px solid var(--d-err); background: #fdf1f1; border-radius: 10px; padding: 10px 12px; margin: 10px 0; display: flex; flex-direction: column; gap: 6px; }
 .dash-save-error strong { color: var(--d-err); }
 .dash-save-error pre { margin: 0; white-space: pre-wrap; font-size: 0.78rem; max-height: 180px; overflow: auto; }
+
+/* ====================================================================== *
+ * STUDIO v3 · Phase A — the publish receipt, capped panel, collapsed guards,
+ * a dismissable status toast, the session banner, section nav, copy search.
+ * ====================================================================== */
+
+/* ---- publish panel: capped height, scrolls internally; failure sits at the top ---- */
+.dash-publish { max-height: 62vh; display: flex; flex-direction: column; }
+.dash-publish-head { flex: none; flex-wrap: wrap; }
+.dash-publish-body { overflow: auto; min-height: 0; padding: 0 12px 10px; }
+.dash-publish-verdict { margin: 10px 0 4px; font-size: 0.9rem; }
+.dash-publish-fail { color: var(--d-err); font-size: 12px; }
+.dash-publish--checking .dash-publish-head, .dash-publish--protected .dash-publish-head { background: #fff7e6; }
+.dash-deploy-id { font-family: ui-monospace, Menlo, monospace; font-size: 12px; color: var(--d-muted); border: 1px solid var(--d-line); border-radius: 99px; padding: 2px 8px; text-decoration: none; }
+.dash-deploy-id:hover { color: var(--d-accent); border-color: var(--d-accent); }
+.dash-guards-summary { margin: 8px 0; font-size: 0.84rem; }
+.dash-guards-summary > summary { cursor: pointer; color: var(--d-accent); font-weight: 640; }
+.dash-publish-log { margin: 8px 0 0; font-size: 0.8rem; }
+.dash-publish-log > summary { cursor: pointer; color: var(--d-muted); }
+.dash-publish-log .dash-publish-tail { margin-top: 6px; border-radius: 6px; }
+
+/* ---- the receipt ---- */
+.dash-receipt { margin: 10px 0 6px; }
+.dash-receipt-none { margin: 0; font-size: 0.92rem; font-weight: 640; }
+.dash-receipt-list { list-style: none; margin: 0 0 6px; padding: 0; display: grid; gap: 4px; }
+.dash-receipt-list li { display: flex; align-items: center; gap: 10px; font-size: 0.86rem; overflow-wrap: anywhere; }
+.dash-receipt-list a { color: var(--d-accent); }
+.dash-receipt-list .is-removed span:first-child { color: var(--d-muted); text-decoration: line-through; }
+.dash-receipt-meta { margin: 0; }
+.dash-receipt-unreachable { font-size: 0.8rem; color: var(--d-muted); }
+.dash-receipt-unreachable ul { margin: 4px 0 0; padding-left: 18px; }
+
+/* ---- toast: a status line with a real dismiss control, not a clickable blob ---- */
+.dash-toast { cursor: default; display: flex; align-items: center; gap: 12px; }
+.dash-toast-x { background: transparent; border: 0; color: #fff; font-size: 18px; line-height: 1; cursor: pointer; padding: 0 2px; opacity: 0.8; }
+.dash-toast-x:hover { opacity: 1; }
+
+/* ---- session expiry ---- */
+.dash-session { border: 1px solid var(--d-err); background: #fdf1f1; color: var(--d-ink); border-radius: 10px; padding: 10px 14px; margin: 0 0 14px; font-size: 0.88rem; }
+.dash-session a { color: var(--d-err); font-weight: 640; }
+
+/* ---- section nav for the editor column ---- */
+.dash-sections { display: flex; gap: 4px; flex-wrap: wrap; margin: 0 0 14px; }
+.dash-sections a { font-size: 0.78rem; color: var(--d-muted); text-decoration: none; border: 1px solid var(--d-line); border-radius: 99px; padding: 3px 10px; background: var(--d-panel); }
+.dash-sections a:hover { color: var(--d-accent); border-color: var(--d-accent); }
+
+/* ---- copy search: labelled, sticky at the top of the panel ---- */
+.dash-copy-tools { position: sticky; top: 0; z-index: 1; background: var(--d-panel); padding: 8px 0; align-items: flex-end; border-bottom: 1px solid var(--d-line); }
+.dash-copy-search { flex: 1; display: flex; flex-direction: column; gap: 4px; }
+.dash-copy-count { font-size: 0.75rem; color: var(--d-muted); white-space: nowrap; padding-bottom: 9px; }
+.dash-publish { margin: 0 0 16px; }
+.dash-receipt-list .dash-badge { flex: none; white-space: nowrap; }
+.dash-receipt-list a { overflow-wrap: anywhere; }

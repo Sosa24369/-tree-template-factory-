@@ -61,6 +61,14 @@ export function unlabelledLeaves(record: Json): string[] {
 
 async function j<T>(res: Response): Promise<T> {
   const body = await res.json().catch(() => ({}));
+  if (res.status === 401) {
+    // The session cookie lasts 12 hours. When it lapses mid-edit the answer is a banner
+    // that says what to do — never a raw "unauthorized" toast — and the edits stay on
+    // screen. The App listens for this; a later successful request clears it.
+    window.dispatchEvent(new CustomEvent('dash-session', { detail: 'signed-out' }));
+    throw Object.assign(new Error('signed out — sign in again'), { body, signedOut: true });
+  }
+  if (res.ok) window.dispatchEvent(new CustomEvent('dash-session', { detail: 'ok' }));
   if (!res.ok) throw Object.assign(new Error((body as any).error || res.statusText), { body });
   return body as T;
 }

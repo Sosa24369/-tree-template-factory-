@@ -26,6 +26,9 @@ import type { TemplateId } from '../schema/client';
 // hardcoded list was seven: the three -c hybrids could not be previewed at all, which
 // is exactly where a layout or copy mistake hides.
 
+/** The publish states during which the button is disabled and the panel is "running". */
+const PUBLISH_RUNNING = ['pulling', 'checking', 'building', 'protected', 'deploying'];
+
 export function App() {
   const [clients, setClients] = useState<{ slug: string; name: string }[]>([]);
   const [slug, setSlug] = useState<string | null>(null);
@@ -76,6 +79,17 @@ export function App() {
     const tick = async () => { try { const s = await api.publishStatus(); if (!stop) setPub(s); } catch { /* dev plugin: no endpoint */ } };
     tick(); const t = setInterval(tick, 2500); return () => { stop = true; clearInterval(t); };
   }, []);
+  // Session expiry. lib.ts announces a 401 on any request; the banner says what to do
+  // and the edits stay on screen. It clears itself the moment a request succeeds again
+  // (the publish poller ticks every 2.5 s), so signing in from another tab is enough.
+  const [signedOut, setSignedOut] = useState(false);
+  useEffect(() => {
+    const onSession = (e: Event) => setSignedOut((e as CustomEvent).detail === 'signed-out');
+    window.addEventListener('dash-session', onSession);
+    return () => window.removeEventListener('dash-session', onSession);
+  }, []);
+  // A toast is a status line: it dismisses itself, and has a real close control.
+  useEffect(() => { if (!toast) return; const t = setTimeout(() => setToast(null), 8000); return () => clearTimeout(t); }, [toast]);
   /**
    * `confirmProtected` is only ever passed after the server has BLOCKED a publish and
    * told us which live campaign pages would change. The token names that exact set,
@@ -84,7 +98,7 @@ export function App() {
   async function startPublish(confirmProtected?: string) {
     if (dirty) { setToast('Save first — publish deploys what is committed, not what is on screen.'); return; }
     setPubOpen(true);
-    try { setPub(await api.publish(confirmProtected)); } catch (e: any) { setToast('Publish request failed: ' + e.message); }
+    try { setPub(await api.publish(confirmProtected)); } catch (e: any) { if (!e.signedOut) setToast('Publish request failed: ' + e.message); }
   }
   useEffect(() => {
     const onEdit = (e: MessageEvent) => {
@@ -104,6 +118,12 @@ export function App() {
   }, []);
 
   const onChange = (r: Json) => { setRecord(r); setDirty(true); };
+
+  // Rendered in the editor column (full width, under the header), whether or not a
+  // client is open: a failed or blocked publish must stay visible until it is dealt with.
+  const publishPanel = (pubOpen || pub.state === 'failed' || pub.state === 'blocked') && pub.state !== 'idle'
+    ? <PublishPanel pub={pub} onHide={() => setPubOpen(false)} onConfirm={(token) => startPublish(token)} />
+    : null;
 
   async function reviewSave() {
     if (!slug || !record) return;
@@ -136,7 +156,9 @@ export function App() {
       await loadClients();
     } catch (e: any) {
       const b = e.body ?? {};
-      if (b.errors) {
+      if (e.signedOut) {
+        setSaveError({ title: 'Signed out — sign in again', detail: 'Your session expired before the save reached the server. Nothing was written. Sign in from another tab, then click Try again.', rolledBack: false });
+      } else if (b.errors) {
         setSaveError({ title: 'The record failed validation', detail: b.errors.join('\n'), rolledBack: true });
       } else if (b.error === 'commit_failed') {
         setSaveError({ title: 'git commit failed — nothing was saved', detail: b.detail || e.message, rolledBack: b.rolledBack === true });
@@ -165,7 +187,15 @@ export function App() {
         <ul className="dash-clients">
           {clients.map((c) => (
             <li key={c.slug}>
-              <button className={`dash-client ${slug === c.slug ? 'is-active' : ''}`} type="button" onClick={() => selectClient(c.slug)}>
+              <button
+                className={`dash-client ${slug === c.slug ? 'is-active' : ''}`}
+                type="button"
+                onClick={() => {
+                  // The record is one file; switching client replaces it wholesale.
+                  if (dirty && c.slug !== slug && !window.confirm(`Unsaved edits on ${record?.name || slug} will be lost. Switch anyway?`)) return;
+                  selectClient(c.slug);
+                }}
+              >
                 <span className="dash-client-name">{c.name}</span>
                 <code>{c.slug}</code>
               </button>
@@ -175,6 +205,13 @@ export function App() {
       </aside>
 
       <main className="dash-main">
+        {signedOut && (
+          <div className="dash-session" role="alert">
+            <strong>Signed out — sign in again.</strong> The session expired.{' '}
+            <a href="/login" target="_blank" rel="noreferrer">Sign in</a> in a new tab, then carry on here — unsaved edits are still on screen.
+          </div>
+        )}
+        {!record && publishPanel}
         {!record && <div className="dash-placeholder">Pick a client to edit, or create one.</div>}
         {record && (
           <>
@@ -189,9 +226,11 @@ export function App() {
                 <button className="dash-btn" type="button" disabled={busy || !dirty || validation.errors.length > 0} onClick={reviewSave}>
                   Review &amp; save
                 </button>
-                <button className="dash-btn dash-btn--ghost" type="button" disabled={busy || ['pulling','building','deploying'].includes(pub.state)} onClick={() => startPublish()} title="Commit + push, build, and deploy the landing pages">{['pulling','building','deploying'].includes(pub.state) ? `Publishing… (${pub.state})` : pub.state === 'live' ? 'Publish again' : pub.state === 'failed' ? 'Publish (last failed)' : 'Publish'}</button>
+                <button className="dash-btn dash-btn--ghost" type="button" disabled={busy || PUBLISH_RUNNING.includes(pub.state)} onClick={() => startPublish()} title="Build and deploy every committed record to Cloudflare, behind the guard suite">{PUBLISH_RUNNING.includes(pub.state) ? `Publishing… (${pub.stage || pub.state})` : pub.state === 'live' ? 'Publish again' : pub.state === 'failed' ? 'Publish (last failed)' : 'Publish'}</button>
               </div>
             </header>
+
+            {publishPanel}
 
             {(validation.errors.length > 0 || validation.warnings.length > 0) && (
               <div className="dash-validation">
@@ -200,10 +239,17 @@ export function App() {
               </div>
             )}
 
-            <Readiness record={record} />
-            <Layout record={record} templateId={previewTpl} onChange={onChange} />
-            <Form record={record} onChange={onChange} slug={slug!} />
-            <SectionArt record={record} templateId={previewTpl} slug={slug!} onChange={onChange} />
+            <nav className="dash-sections" aria-label="Panels">
+              <a href="#readiness">Readiness</a>
+              <a href="#layout">Layout</a>
+              <a href="#business">Business &amp; contact</a>
+              <a href="#backgrounds">Backgrounds</a>
+              <a href="#copy">Copy — every text field</a>
+            </nav>
+            <div id="readiness"><Readiness record={record} /></div>
+            <div id="layout"><Layout record={record} templateId={previewTpl} onChange={onChange} /></div>
+            <div id="business"><Form record={record} onChange={onChange} slug={slug!} /></div>
+            <div id="backgrounds"><SectionArt record={record} templateId={previewTpl} slug={slug!} onChange={onChange} /></div>
             <Copy record={record} templateId={previewTpl} onChange={onChange} onPickTemplate={setPreviewTpl} />
           </>
         )}
@@ -223,64 +269,12 @@ export function App() {
         <iframe ref={iframeRef} className="dash-frame" src="/dashboard-preview.html" title="Live preview" />
       </section>
 
-      {(pubOpen || pub.state === 'failed' || pub.state === 'blocked') && pub.state !== 'idle' && (
-        <div className={`dash-publish dash-publish--${pub.state}`}>
-          <div className="dash-publish-head">
-            <strong>Publish: {pub.state}{pub.stage && pub.stage !== pub.state ? ` (${pub.stage})` : ''}</strong>
-            {pub.url && <a href={pub.url} target="_blank" rel="noreferrer">{pub.url}</a>}
-            {pub.exitCode != null && pub.state === 'failed' && <code>exit {pub.exitCode} at {pub.stage}</code>}
-            <button className="dash-btn dash-btn--ghost dash-btn--sm" type="button" onClick={() => setPubOpen(false)}>Hide</button>
-          </div>
-
-          {/* The guard suite, live. Every guard is listed before it runs, so it is
-              visible that a publish is gated on all of them rather than on whichever
-              happened to be checked. A failure names the guard AND what it means. */}
-          <GuardList suite={pub.suite ?? []} results={pub.guards ?? []} running={pub.runningGuard} />
-
-          {pub.state === 'failed' && (pub.failedGuards ?? []).length > 0 && (
-            <p className="dash-v-err">
-              ✗ Nothing was deployed. {pub.failedGuards.length} guard{pub.failedGuards.length === 1 ? '' : 's'} failed:{' '}
-              <strong>{pub.failedGuards.join(', ')}</strong>. Fix the cause and publish again — there is no override.
-            </p>
-          )}
-
-          {/* The live-campaign gate. This is the only confirmation in the studio that
-              can put a change onto a page carrying ad spend, so it names every route
-              and shows what differs before it will accept a click. */}
-          {pub.state === 'blocked' && (
-            <div className="dash-blocked">
-              <p className="dash-v-warn">
-                ⚠ Stopped before deploying. This build would change {pub.protectedRoutes?.changed?.length ?? 0} live
-                campaign page{(pub.protectedRoutes?.changed?.length ?? 0) === 1 ? '' : 's'}
-                {(pub.protectedRoutes?.unreachable?.length ?? 0) > 0 && `, and ${pub.protectedRoutes.unreachable.length} could not be verified`}.
-                Nothing has been uploaded.
-              </p>
-              <ul className="dash-blocked-list">
-                {(pub.protectedRoutes?.changed ?? []).map((c: any) => (
-                  <li key={c.route}>
-                    <code>{c.route}</code> — {c.reason}
-                    {c.diff?.length > 0 && <pre className="dash-publish-tail">{c.diff.join('\n')}</pre>}
-                  </li>
-                ))}
-                {(pub.protectedRoutes?.unreachable ?? []).map((u: any) => (
-                  <li key={u.route}>
-                    <code>{u.route}</code> — {u.reason}. Treated as unsafe: an unreachable page is not a page proven unchanged.
-                  </li>
-                ))}
-              </ul>
-              <div className="dash-modal-actions">
-                <button className="dash-btn dash-btn--ghost" type="button" onClick={() => setPubOpen(false)}>Cancel — do not deploy</button>
-                <button className="dash-btn dash-btn--danger" type="button" onClick={() => startPublish(pub.confirmToken)}>
-                  I have checked these {(pub.protectedRoutes?.changed?.length ?? 0) + (pub.protectedRoutes?.unreachable?.length ?? 0)} page(s) — deploy anyway
-                </button>
-              </div>
-            </div>
-          )}
-
-          <pre className="dash-publish-tail">{(pub.tail ?? []).join('\n') || '…'}</pre>
+      {toast && (
+        <div className="dash-toast" role="status">
+          <span>{toast}</span>
+          <button type="button" className="dash-toast-x" aria-label="Dismiss" onClick={() => setToast(null)}>×</button>
         </div>
       )}
-      {toast && <div className="dash-toast" onClick={() => setToast(null)}>{toast}</div>}
 
       {diff !== null && (
         <div className="dash-modal" role="dialog" aria-modal="true">
@@ -317,15 +311,184 @@ export function App() {
 }
 
 /**
- * The guard suite as a live list. `suite` is what WILL run (from the server, so the
- * UI cannot drift from the real gate); `results` is what has run so far.
+ * THE PUBLISH PANEL — running, failed, blocked, or live with the receipt.
+ *
+ * Three rules it keeps:
+ *   - while running, and on failure, the guard list is fully expanded, and a failure is
+ *     the FIRST thing in the panel: the verdict line sits directly under the header and
+ *     the failing guards are sorted to the top of the list, so the reason can never be
+ *     below the fold;
+ *   - on success the guard list collapses to one summary row with the breakdown behind
+ *     a disclosure, and the body is the RECEIPT: one row per page this deployment
+ *     changed, each linking to its production address, and the deployment id;
+ *   - the panel's height is capped and it scrolls internally, so a long tail never
+ *     grows the page.
  */
-function GuardList({ suite, results, running }: { suite: any[]; results: any[]; running: string | null }) {
+function PublishPanel({ pub, onHide, onConfirm }: { pub: any; onHide: () => void; onConfirm: (token: string) => void }) {
+  const suite: any[] = pub.suite ?? [];
+  const results: any[] = pub.guards ?? [];
+  const failed = pub.state === 'failed';
+  const live = pub.state === 'live';
+  const blocked = pub.state === 'blocked';
+  const failedGuards: string[] = pub.failedGuards ?? [];
+  const prot = pub.protectedRoutes;
+  const gateOk = prot ? prot.checked - (prot.changed?.length ?? 0) - (prot.unreachable?.length ?? 0) : null;
+  const okCount = results.filter((g) => g.ok).length;
+  const ms = pub.startedAt && pub.finishedAt ? new Date(pub.finishedAt).getTime() - new Date(pub.startedAt).getTime() : null;
+  const summary = `${okCount}/${suite.length} guards${prot ? ` · ${gateOk}/${prot.checked} gate unchanged` : ''}${ms != null ? ` · ${(ms / 1000).toFixed(1)} s` : ''}`;
+  const title = live ? 'Published' : failed ? 'Publish failed' : blocked ? 'Publish stopped' : `Publishing… ${pub.stage ?? pub.state}`;
+  const r = pub.receipt;
+
+  return (
+    <section className={`dash-publish dash-publish--${pub.state}`} aria-live="polite">
+      <div className="dash-publish-head">
+        <strong>{title}</strong>
+        {failed && failedGuards.length > 0 && <span className="dash-publish-fail">at {pub.stage}: {failedGuards.join(', ')}</span>}
+        {failed && failedGuards.length === 0 && <span className="dash-publish-fail">at {pub.stage}{pub.exitCode != null ? ` (exit ${pub.exitCode})` : ''}</span>}
+        {live && r?.deploymentId && (
+          <a className="dash-deploy-id" href={r.deploymentUrl} target="_blank" rel="noreferrer" title="this deployment's own address">deployment {r.deploymentId}</a>
+        )}
+        <button className="dash-btn dash-btn--ghost dash-btn--sm" type="button" onClick={onHide}>Hide</button>
+      </div>
+
+      <div className="dash-publish-body">
+        {/* A failure is the first thing in the panel, always. */}
+        {failed && failedGuards.length > 0 && (
+          <p className="dash-v-err dash-publish-verdict">
+            ✗ Nothing was deployed. {failedGuards.length} guard{failedGuards.length === 1 ? '' : 's'} failed:{' '}
+            <strong>{failedGuards.join(', ')}</strong>. Fix the cause and publish again — there is no override.
+          </p>
+        )}
+        {failed && failedGuards.length === 0 && (
+          <p className="dash-v-err dash-publish-verdict">
+            ✗ Nothing was deployed. The <strong>{pub.stage}</strong> step failed{pub.exitCode != null ? ` (exit ${pub.exitCode})` : ''}. Its output is below.
+          </p>
+        )}
+
+        {live && <Receipt r={r} />}
+
+        {/* The guard suite, live. Every guard is listed before it runs, so it is
+            visible that a publish is gated on all of them rather than on whichever
+            happened to be checked. On success it is one row; the breakdown is a click. */}
+        {live ? (
+          <details className="dash-guards-summary">
+            <summary>✓ {summary}</summary>
+            <GuardList suite={suite} results={results} running={pub.runningGuard} />
+          </details>
+        ) : (
+          <GuardList suite={suite} results={results} running={pub.runningGuard} failedFirst={failed} />
+        )}
+
+        {/* The live-campaign gate. This is the only confirmation in the studio that
+            can put a change onto a page carrying ad spend, so it names every route
+            and shows what differs before it will accept a click. */}
+        {blocked && (
+          <div className="dash-blocked">
+            <p className="dash-v-warn">
+              ⚠ Stopped before deploying. This build would change {prot?.changed?.length ?? 0} live
+              campaign page{(prot?.changed?.length ?? 0) === 1 ? '' : 's'}
+              {(prot?.unreachable?.length ?? 0) > 0 && `, and ${prot.unreachable.length} could not be verified`}.
+              Nothing has been uploaded.
+            </p>
+            <ul className="dash-blocked-list">
+              {(prot?.changed ?? []).map((c: any) => (
+                <li key={c.route}>
+                  <code>{c.route}</code> — {c.reason}
+                  {c.diff?.length > 0 && <pre className="dash-publish-tail">{c.diff.join('\n')}</pre>}
+                </li>
+              ))}
+              {(prot?.unreachable ?? []).map((u: any) => (
+                <li key={u.route}>
+                  <code>{u.route}</code> — {u.reason}. Treated as unsafe: an unreachable page is not a page proven unchanged.
+                </li>
+              ))}
+            </ul>
+            <div className="dash-modal-actions">
+              <button className="dash-btn dash-btn--ghost" type="button" onClick={onHide}>Cancel — do not deploy</button>
+              <button className="dash-btn dash-btn--danger" type="button" onClick={() => onConfirm(pub.confirmToken)}>
+                I have checked these {(prot?.changed?.length ?? 0) + (prot?.unreachable?.length ?? 0)} page(s) — deploy anyway
+              </button>
+            </div>
+          </div>
+        )}
+
+        {live ? (
+          <details className="dash-publish-log">
+            <summary>wrangler output</summary>
+            <pre className="dash-publish-tail">{(pub.tail ?? []).join('\n') || '…'}</pre>
+          </details>
+        ) : (
+          <pre className="dash-publish-tail">{(pub.tail ?? []).join('\n') || '…'}</pre>
+        )}
+      </div>
+    </section>
+  );
+}
+
+/**
+ * THE RECEIPT. One row per page this deployment changed, at its production address;
+ * removed pages (a template switched off) struck through; the counts, with wrangler's
+ * own count beside them and a warning if the two disagree.
+ */
+function Receipt({ r }: { r: any }) {
+  if (!r) return <p className="dash-help">Live, but no receipt was recorded for this publish.</p>;
+  const extra = r.uploaded != null ? r.uploaded - r.changed.length : 0;
+  return (
+    <div className="dash-receipt">
+      {r.nothingChanged && <p className="dash-receipt-none">Nothing changed — the live site already matched.</p>}
+      {(r.changed.length > 0 || r.removed.length > 0) && (
+        <ul className="dash-receipt-list">
+          {r.changed.map((p: any) => (
+            <li key={p.route}>
+              <a href={p.url} target="_blank" rel="noreferrer">{p.url}</a>
+              <span className="dash-badge">{p.reason === 'new' ? 'new page' : 'changed'}</span>
+            </li>
+          ))}
+          {r.removed.map((p: any) => (
+            <li key={p.route} className="is-removed">
+              <span>{p.url}</span>
+              <span className="dash-badge dash-badge--warn">removed — now 404</span>
+            </li>
+          ))}
+        </ul>
+      )}
+      <p className="dash-help dash-receipt-meta">
+        {r.changed.length} of {r.checked} page{r.checked === 1 ? '' : 's'} changed
+        {r.removed.length > 0 && `, ${r.removed.length} removed`}
+        {r.unreachable.length > 0 && `, ${r.unreachable.length} could not be compared`}
+        {r.uploaded != null && ` · wrangler uploaded ${r.uploaded} file${r.uploaded === 1 ? '' : 's'}${r.alreadyUploaded != null ? ` (${r.alreadyUploaded} already uploaded)` : ''}`}
+        {extra > 0 && ` — ${extra} of them not pages (photo variants, shared assets, the Functions bundle)`}
+        .
+      </p>
+      {r.countDisagrees && (
+        <p className="dash-v-warn">
+          ⚠ wrangler uploaded fewer files than the number of pages that differ from the live site. The list above comes
+          from comparing the build against the live pages; open the deployment address before trusting either count.
+        </p>
+      )}
+      {r.unreachable.length > 0 && (
+        <details className="dash-receipt-unreachable">
+          <summary>{r.unreachable.length} page{r.unreachable.length === 1 ? '' : 's'} could not be compared</summary>
+          <ul>{r.unreachable.map((u: any) => <li key={u.route}><code>{u.route}</code> — {u.reason}</li>)}</ul>
+        </details>
+      )}
+    </div>
+  );
+}
+
+/**
+ * The guard suite as a live list. `suite` is what WILL run (from the server, so the
+ * UI cannot drift from the real gate); `results` is what has run so far. With
+ * `failedFirst` the failed guards sort to the top — a failure must never be below the fold.
+ */
+function GuardList({ suite, results, running, failedFirst = false }: { suite: any[]; results: any[]; running: string | null; failedFirst?: boolean }) {
   if (!suite.length) return null;
   const byId = new Map(results.map((r) => [r.id, r]));
+  const isFail = (g: any) => byId.get(g.id)?.ok === false;
+  const ordered = failedFirst ? [...suite].sort((a, b) => Number(isFail(b)) - Number(isFail(a))) : suite;
   return (
     <ul className="dash-guards">
-      {suite.map((g) => {
+      {ordered.map((g) => {
         const r = byId.get(g.id);
         const state = r ? (r.ok ? 'ok' : 'fail') : running === g.id ? 'running' : 'pending';
         return (
