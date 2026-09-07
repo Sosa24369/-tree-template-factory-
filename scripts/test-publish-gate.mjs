@@ -40,7 +40,7 @@ console.log('guard suite — shape');
   const ids = new Set(GUARDS.map((g) => g.id));
   // The five the brief names by hand must all be in there. R5 lives inside
   // verify-factory-rules.mjs, which is why it is not its own id.
-  for (const id of ['r4-leakage', 'factory-rules', 'copy-parity', 'tsc', 'tracking']) {
+  for (const id of ['r4-leakage', 'factory-rules', 'copy-parity', 'tsc', 'tracking', 'image-spec']) {
     ok(`suite includes ${id}`, ids.has(id));
   }
   ok('both phases are populated', GUARDS.some((g) => g.phase === 'pre') && GUARDS.some((g) => g.phase === 'post'));

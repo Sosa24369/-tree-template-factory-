@@ -102,6 +102,14 @@ export const GUARDS = [
     args: ['scripts/test-studio-save.mjs'],
   },
   {
+    id: 'image-spec',
+    label: 'Image spec (exists · minimum · focal point)',
+    phase: 'pre',
+    why: 'A client record references an image file that does not exist, or a photo uploaded through the studio is below the minimum for the slot it lands in, or a real client\'s photo is cover-cropped by a template without a focal point — a missing image or a cropped-off subject on a live page.',
+    cmd: 'node',
+    args: ['scripts/verify-image-spec.mjs'],
+  },
+  {
     id: 'publish-gate',
     label: 'Publish gate self-test',
     phase: 'pre',
