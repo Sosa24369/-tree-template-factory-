@@ -352,12 +352,17 @@
   object-position: center 35%;
 }
 
+/* The first layer is the per-image scrim the studio sets from the measured headline
+   contrast (--ra-hero-scrim, an rgba). It defaults to transparent, so a client that
+   has not set one renders exactly as before the layer existed — verified by a pixel
+   diff of the hero, not by assertion (BUILD-LOG, Studio v3 Phase 1). */
 .removal-a .ra-hero::after {
   content: '';
   position: absolute;
   inset: 0;
   z-index: -1;
   background:
+    linear-gradient(var(--ra-hero-scrim, transparent), var(--ra-hero-scrim, transparent)),
     radial-gradient(120% 90% at 15% 0%, color-mix(in srgb, var(--brand-primary) 45%, transparent) 0%, transparent 62%),
     linear-gradient(180deg, color-mix(in srgb, var(--ra-deep) 72%, transparent) 0%, color-mix(in srgb, var(--ra-deeper) 88%, transparent) 100%);
 }

@@ -230,10 +230,25 @@ export interface PhotoSet {
   srcset?: string;
   alt: string;
   /**
-   * Focal point for cropping, each axis 0–1 (0.5/0.5 = centre). Rendered as
-   * `object-position`. Absent = browser default (centre). Set by dragging in the editor.
+   * Focal point — the subject — each axis 0–1 (0.5/0.5 = centre). Rendered as
+   * `object-position` (and background-position on the desktop hero washes), so
+   * every cover-cropped slot keeps the subject. Required by the image-spec guard for
+   * a real client wherever the photo is cover-cropped; see templates/imageSlots.mjs.
    */
   focal?: { x: number; y: number };
+  /**
+   * Extra flat darkening under the removal-a headline when THIS photo is the hero
+   * plate, 0–0.9, set by the studio from the measured contrast (see
+   * image-checks.mjs heroLegibility). Rendered as `--ra-hero-scrim`; absent renders
+   * exactly as before the property existed.
+   */
+  scrim?: number;
+  /**
+   * Written by the studio's upload pipeline (version 2 = the image contract):
+   * what came in, what was made of it. Photos without this are legacy imports,
+   * which the image-spec guard reports on rather than fails.
+   */
+  pipeline?: { version: number; at: string; source: { width: number | null; height: number | null; format: string | null; bytes: number }; master: [number, number]; aspect: string };
   /** null wherever the source does not state a dimension. Null over guess. */
   width: number | null;
   height: number | null;

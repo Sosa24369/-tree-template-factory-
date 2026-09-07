@@ -11,6 +11,7 @@
  * and whether it is visible is a design decision — this template shows it.
  */
 
+import type { CSSProperties } from 'react';
 import type { ResolvedClient } from '../../../schema/resolve';
 import { SafeImage, SafeText } from '../../../components/Safe';
 import { LeadForm } from '../../../components/LeadForm';
@@ -28,9 +29,13 @@ export function Hero({ client, copy }: { client: ResolvedClient; copy: Copy }) {
   // The hero plate is the LCP element; get the request in flight during render.
   preloadLcpImage(heroStills[0]?.src);
   const ratingLetters = [...copy('ratingBadge.logoText')];
+  // The plate photo's own scrim (set by the studio from the measured headline
+  // contrast). Emitted only when set, so every existing page renders byte-identically.
+  const scrim = heroStills[0]?.scrim;
+  const scrimStyle = typeof scrim === 'number' && scrim > 0 ? ({ '--ra-hero-scrim': `rgba(0, 0, 0, ${Math.min(0.9, scrim)})` } as CSSProperties) : undefined;
 
   return (
-    <section className="ra-hero">
+    <section className="ra-hero" style={scrimStyle}>
       {/* LCP element: eager + fetchPriority high, with its measured dimensions on
           the tag. It is absolutely positioned, so it can never shift the layout. */}
       <div className="ra-hero-plate" aria-hidden="true">
