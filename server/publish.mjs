@@ -19,6 +19,11 @@
  *            proceeds when the caller repeats the request confirming that exact set.
  * deploying  `wrangler pages deploy dist --project-name=$CF_PAGES_PROJECT`.
  *
+ * Between `protected` and `deploying` every built page is compared against the live
+ * site (server/receipt.mjs) so that `live` can carry a RECEIPT: which pages this
+ * deployment changed, each with its production address, and the deployment id.
+ * wrangler prints only a count, never the file list — see receipt.mjs.
+ *
  * Any stage failure → { state:'failed', stage, exitCode, tail } where tail is the last
  * 40 lines of output, shown verbatim. A missing CLOUDFLARE_API_TOKEN fails at
  * `deploying` BEFORE wrangler is invoked. `live` is set only when wrangler exited 0.
@@ -30,6 +35,7 @@ import { existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { runGuards, allPassed, failedIds, GUARDS } from './guards.mjs';
 import { checkProtectedRoutes, confirmationTokenFor } from './protected.mjs';
+import { diffPagesAgainstLive, parseWranglerOutput, listBuiltPages, readLastDeploy, writeLastDeploy, buildReceipt } from './receipt.mjs';
 
 const IDLE = {
   state: 'idle',
@@ -45,6 +51,8 @@ const IDLE = {
   failedGuards: [],
   protectedRoutes: null,
   confirmToken: null,
+  pages: null,
+  receipt: null,
 };
 
 export function makePublisher({ repoDir, git, cfToken, cfAccountId, cfProject, baseUrl, log = console.log }) {
@@ -170,6 +178,14 @@ export function makePublisher({ repoDir, git, cfToken, cfAccountId, cfProject, b
         log(`[publish] protected routes confirmed by the caller: ${blocking.join(', ')}`);
       }
 
+      /* ---- the receipt's evidence: every built page against the live site ---- */
+      // Before wrangler, because "changed" means "differs from what is live NOW". An
+      // unreachable page here is reported on the receipt, not treated as a stop: only
+      // the four protected routes have the power to block a publish.
+      status = { ...status, tail: ['Comparing every built page against the live site…'] };
+      const pages = await diffPagesAgainstLive({ repoDir, baseUrl, log });
+      status = { ...status, pages };
+
       /* ---- deploying ---- */
       status = { ...status, state: 'deploying', stage: 'deploying', tail: [] };
       if (!cfToken) return fail('deploying', 2, ['CLOUDFLARE_API_TOKEN is not set — wrangler was not invoked.']);
@@ -178,9 +194,14 @@ export function makePublisher({ repoDir, git, cfToken, cfAccountId, cfProject, b
         cwd: appDir, env: { CLOUDFLARE_API_TOKEN: cfToken, ...(cfAccountId ? { CLOUDFLARE_ACCOUNT_ID: cfAccountId } : {}) },
       });
       if (d.code !== 0) return fail('deploying', d.code, d.lines);
-      const urlLine = d.lines.find((l) => /https:\/\/\S+\.pages\.dev/.test(l));
-      const url = urlLine ? urlLine.match(/https:\/\/\S+\.pages\.dev/)[0] : null;
-      status = { ...status, state: 'live', stage: 'live', exitCode: 0, tail: tailOf(d.lines), url, finishedAt: new Date().toISOString() };
+      const wr = parseWranglerOutput(d.lines);
+      const finishedAt = new Date().toISOString();
+      const routes = listBuiltPages(repoDir);
+      const previous = readLastDeploy(repoDir);
+      const receipt = buildReceipt({ pages, wrangler: wr, previous, routes, baseUrl, startedAt: status.startedAt, finishedAt });
+      try { writeLastDeploy(repoDir, { deploymentId: wr.deploymentId, url: wr.url, routes }); }
+      catch (e) { log(`[receipt] could not record this deploy's route list: ${String(e?.message || e)}`); }
+      status = { ...status, state: 'live', stage: 'live', exitCode: 0, tail: tailOf(d.lines), url: wr.url, receipt, finishedAt };
       return status;
     } finally {
       running = false;

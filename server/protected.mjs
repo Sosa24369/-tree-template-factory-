@@ -48,7 +48,7 @@ export function loadProtectedRoutes(repoDir) {
 }
 
 /** Bundle filenames are content-hashed; a hash change is not a content change. */
-const normalise = (html) => html.replace(/index-[A-Za-z0-9_-]+\.(js|css)/g, 'index-HASH.$1');
+export const normalise = (html) => html.replace(/index-[A-Za-z0-9_-]+\.(js|css)/g, 'index-HASH.$1');
 
 /** Where the built HTML for a route lives inside dist. */
 const distFileFor = (repoDir, route) => join(repoDir, 'app', 'dist', route.replace(/^\//, ''), 'index.html');
