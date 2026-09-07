@@ -106,9 +106,12 @@ fake IP with every attempt.
 | Any record field with no schema entry yet | "Unlabelled fields" |
 
 **The Copy panel** lists every copy key a template ships (132 on `removal-a`), in page
-order, grouped by namespace, searchable, each beside its shipped default. Editing writes
-an override; typing the default back in removes it, so a record only carries what
-actually differs. It flags two things rather than hiding them: a `{{token}}` default
+order, grouped by namespace, each beside its shipped default. **Find a field**, the
+labelled search at the top of the panel, matches the key (`hero.h1a`) or the words on
+the page; it stays pinned while the list scrolls, and the pill row under the client name
+(Readiness · Layout · Business & contact · Backgrounds · Copy) jumps straight to the
+panel. Editing writes an override; typing the default back in removes it, so a record
+only carries what actually differs. It flags two things rather than hiding them: a `{{token}}` default
 composes from the client record and replacing it with literal text stops that, and
 editing a control also changes its `-c` hybrid — which is the constant the A/B test
 holds fixed.
@@ -117,6 +120,30 @@ holds fixed.
 `background-image` behind a ~90% tint scrim and are announced to nobody, so they carry
 no alt text. Unset means the template's built-in file, which was extracted from one
 particular client's page — the panel states that instead of leaving it implicit.
+
+### Editing several templates on one client
+
+One client is one file, `clients/<slug>.json`. Everything template-specific — copy
+overrides, layout, section backgrounds — is keyed by template id **inside that one
+record**. So the workflow is:
+
+1. Pick the template in the preview dropdown (the Copy panel's own picker is the same
+   selection).
+2. Edit. Switching to another template does **not** discard the edits; they accumulate
+   in the record on screen. The filename in the header shows `•` while anything is
+   unsaved.
+3. Repeat for as many templates as needed.
+4. **Review & save** once. The diff shows every template's changes together, as one
+   commit.
+5. **Publish** once. A publish does not know which template was touched: it rebuilds all
+   56 pages for every client from the **committed** records and uploads whatever differs
+   from the live site. That includes changes saved earlier and never published. The
+   receipt lists every page that changed, across every template and every client.
+
+Two things to know. Editing a control's copy (`removal-a`) also changes its hybrid
+(`removal-c`), which renders the control's copy byte for byte — the panel says so and
+the receipt shows both pages. And switching **client** replaces the record on screen, so
+the studio asks before discarding unsaved edits.
 
 ### Deliberately not built
 
@@ -156,7 +183,7 @@ pulling → checking (pre) → building → checking (post) → protected
                                       deploying → live | failed
 ```
 
-**The guard suite is the gate.** Ten guards; a failure at either phase ends the publish
+**The guard suite is the gate.** Eleven guards; a failure at either phase ends the publish
 with `failedGuards` naming which, and the UI shows the guard's label, a plain sentence
 about what it means, and its own output. **There is no override.** `allPassed` is
 fail-closed: an empty result set is not a pass, and a guard that cannot run (missing
@@ -164,7 +191,7 @@ script, crashed node) counts as failed.
 
 | phase | guards |
 |---|---|
-| pre (source only) | `tsc` · factory rules (R1/R3/R5/schema/CRM) · layout lock · publish-gate self-test |
+| pre (source only) | `tsc` · factory rules (R1/R3/R5/schema/CRM) · layout lock · studio save · publish-gate self-test |
 | post (reads `app/dist`) | R4 leakage · a→c copy parity · demo isolation (D1–D10) · tracking · lead Function · FAQ a11y |
 
 Measured on this repo: pre ≈ 3.3 s (`tsc` is nearly all of it), post ≈ 0.4 s.
@@ -188,6 +215,43 @@ Three deliberate calls:
 
 To change which pages are protected, edit `protected-routes.json` in a commit. It is
 deliberately not editable from the studio.
+
+### The receipt
+
+A successful publish ends with a receipt, not a link to the deployment root (which is
+the neutral gate page and reads as "nothing to see here"):
+
+- **one row per page that changed**, each linking to its production address —
+  `/demo/<slug>/<template>/` for a demo client, `/p/<slug>/<template>/` for a real one —
+  marked `changed` or `new page`; pages that were in the last deploy but not this build
+  are listed as `removed — now 404`;
+- the **deployment id** (`deployment 6d174f7b`) linking to that deployment's own
+  hash-specific address;
+- "**Nothing changed — the live site already matched**" when no page differed and
+  wrangler uploaded nothing;
+- the guard checklist collapsed to one row — `✓ 11/11 guards · 4/4 gate unchanged ·
+  9.1 s` — with the per-guard breakdown behind a disclosure, and wrangler's output behind
+  another.
+
+Where "which pages changed" comes from: **wrangler does not say.** Its `pages deploy`
+prints only a count (`Uploaded 2 files (210 already uploaded)`); the per-file list is
+computed from the API's check-missing response and never logged, at any log level
+(checked in 4.121.0). So `server/receipt.mjs` compares every built page against the
+page that is live right now — the same comparison the live-campaign gate makes for the
+four ad pages — in the window between the gate and wrangler. Fifty-five fetches, eight
+at a time, about a second. A page that differs is a page this deployment changes; a page
+the live site 404s on is new. wrangler's count is printed beside the list and, if it is
+ever *lower* than the number of pages that differ, the receipt says the two disagree
+rather than picking one. Removed pages come from the route list of the last successful
+deploy, kept at `<volume>/studio-last-deploy.json`; the first receipt after this shipped
+had no such list and said nothing about removals.
+
+While a publish runs, and when it fails, the checklist is fully expanded and **the
+failure is the first thing in the panel**: the verdict line sits under the header and the
+failing guards sort to the top of the list with their own output. The panel's height is
+capped and it scrolls internally. A session that expires mid-edit shows "Signed out —
+sign in again" with a link that opens the login in a new tab; the unsaved edits stay on
+screen and the banner clears itself once a request succeeds.
 
 ---
 
@@ -290,8 +354,9 @@ railway domain
 | `server/guards.mjs` | the guard suite and its fail-closed runner |
 | `server/protected.mjs` | the live-campaign comparison and its confirmation token |
 | `server/publish.mjs` | the publish state machine |
+| `server/receipt.mjs` | the receipt: every built page against the live site, wrangler's count, the last-deploy route list |
 | `app/dashboard-core.mjs` | record API, validation, sharp pipelines, R4 write confinement, R2 layout lock — shared by the service and the Vite dev plugin |
 | `app/dashboard-server.mjs` | the dev-only Vite adapter |
 | `app/src/dashboard/` | the UI |
 | `protected-routes.json` | the pages a publish will not change without confirmation |
-| `scripts/test-publish-gate.mjs` | 31 assertions over the gate, no network, no build |
+| `scripts/test-publish-gate.mjs` | 61 assertions over the gate and the receipt, no network, no build |

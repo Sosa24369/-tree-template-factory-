@@ -2316,3 +2316,104 @@ gate, and consistent with it.
 
 **The publish path is proven.** Phase 1 may proceed on a "go".
 
+
+
+---
+
+# STUDIO v3 · PHASE 0 CLOSE-OUT + PHASE A — THE PUBLISH RECEIPT — 2026-09-07
+
+## Phase 0 close-out — the probe revert
+
+The live demo H1 on `/demo/summit-tree/removal-a` and `/removal-c` read
+`Tree Removal, Handled Start To Finish (probe 0956)` (0956, not 0957). It was a studio
+save, commit `b140a13` by Template Studio, one line in `clients/summit-tree.json`. The
+owner typed the baseline back in through the Copy panel — not "revert to default", whose
+default is the template's `$300 Off Your Tree Removal` offer — saved as `acde863`, and
+published. Verified from outside afterwards: both H1s read
+`Tree Removal, Handled Start To Finish`; `grep -c probe` over all ten demo pages: 0.
+
+Three things the owner reported from doing it by hand, and what was done:
+
+1. **"I couldn't find the 'Search keys and text…' box."** It existed — `Copy.tsx` has
+   shipped it since `fe30461`, and the Railway build (deployment `20dccd01`, 16:34 on
+   Sept 5, three minutes after `a8d20f8`) includes it. It was an unlabelled input with a
+   placeholder, at the top of a 132-row panel that sits at the bottom of a long editor
+   column. It is now a labelled field, **Find a field**, pinned while the panel scrolls,
+   with a `132 of 132` count, and a pill row under the client name jumps to each panel.
+2. **The "Saved & committed" toast was clickable.** Clicking it dismissed it, and that was
+   all. It is now a `role="status"` line with an explicit × control, no pointer cursor,
+   and it dismisses itself after 8 s. (Linking the SHA to the commit needs the repo name
+   in the UI; that lands with Phase 4's "saved with commit SHA" state.)
+3. **Editing several templates on one client** — written up in `docs/STUDIO.md`. Short
+   version: one record, edits accumulate across templates, one save, one publish that
+   rebuilds everything and uploads whatever differs.
+
+Also fixed on the way: the Publish button was enabled during `checking` and `protected`
+(only `pulling`/`building`/`deploying` disabled it), and switching client with unsaved
+edits silently replaced the record — it asks now.
+
+## Phase A — the receipt
+
+**wrangler does not print which files it uploaded.** Checked in 4.121.0's `pages deploy`
+path: the upload set comes from the API's check-missing response and is never logged at
+any level; the only line is `✨ Success! Uploaded N files (M already uploaded)`. So the
+receipt names changed pages the way the live-campaign gate proves the ad pages unchanged:
+`server/receipt.mjs` compares **every** built page against the page that is live right
+now, in the window between the gate and wrangler. 55 pages, 8 at a time, ≈1 s on the
+local run. A page that differs is a page this deployment changes; a live 404 is a new
+page. Removed pages come from the route list of the last successful deploy, written to
+`<volume>/studio-last-deploy.json` after each one.
+
+The mapping from a built file to its production address is the route itself:
+`app/dist/demo/summit-tree/removal-a/index.html` → `PUBLIC_BASE_URL/demo/summit-tree/removal-a/`,
+`app/dist/p/j-valdez/removal-a/index.html` → `PUBLIC_BASE_URL/p/j-valdez/removal-a/`
+(`productionUrl()` in `receipt.mjs`; `404.html` is not a page). wrangler's count is shown
+beside the list; if it is ever lower than the number of pages that differ, the receipt
+says the two disagree instead of choosing.
+
+`scripts/test-publish-gate.mjs` grew from 31 to **61 assertions** — route mapping, the
+five comparison outcomes (identical, hash-only, changed, new, unreachable), wrangler
+parsing against the real Phase 0 output, the alias-URL trap, and the assembled receipt's
+`nothingChanged`, `countDisagrees`, `removed`, `removalsKnown`. It is still the
+`publish-gate` pre guard, so a broken receipt stops a publish before anything is built.
+
+**The panel.** On success: `✓ 11/11 guards · 4/4 gate unchanged · 9.1 s` as one row,
+breakdown behind a disclosure, wrangler output behind another, the receipt as the body,
+`deployment <id>` as a pill linking to the hash-specific address. Running and failed:
+fully expanded, the verdict line directly under the header, failing guards sorted to the
+top with their own output. Height capped at 62 vh, scrolls internally. Session expiry is a
+banner — "Signed out — sign in again", login opens in a new tab, edits stay on screen,
+clears itself when a request succeeds — never a raw `unauthorized` toast.
+
+Found while screenshotting: the panel was rendered as a **fourth child of the three-column
+grid**, so it wrapped into the 240 px sidebar column under the client list — every URL
+broke across three lines and the badges rendered one letter per line. It now renders in
+the editor column under the header, whether or not a client is open.
+
+## Measured
+
+| | |
+|---|---|
+| public bundle, `app/dist`, before → after | **213 files, byte-identical** (`cmp` on every file) |
+| Lighthouse mobile perf, `vite preview`, `/p/texas-tree-tops/removal-a` | 91 → 88 (LCP 3.3 → 3.5 s, TBT 120 → 170 ms) — run-to-run noise on identical bytes |
+| Lighthouse mobile perf, `/demo/summit-tree/removal-a` | 84 → 84 (LCP 4.2 → 4.2 s, CLS 0.017 → 0.017) |
+| studio UI bundle | `dashboard-*.js` 66.7 kB; not served to the public |
+| gate self-test | 61/61 |
+| local publish, 11 guards + gate + 55-page comparison + (simulated) wrangler | 9.1 s |
+
+## How the screenshots were made — and what is not verified
+
+The service was run locally (`server/index.mjs`, the real auth, a throwaway password,
+`REPO_DIR` a clone in scratch, `PUBLIC_BASE_URL` the real pages.dev so the gate and the
+receipt compared against the real live site). Because there is no Cloudflare token here,
+a shim `npx` on the PATH intercepted only `wrangler pages deploy` and printed wrangler's
+two success lines with a fake id, `deadbeef`; every other `npx` call (the `tsc` guard)
+passed through. **Nothing was deployed.** The two receipt rows came from a local-only
+commit in the clone changing the demo `hero.h2`; the failed publish came from a
+local-only commit giving J Valdez Texas Tree Tops' GHL location id, which
+`factory-rules` caught in `pre`. Both commits were reset; nothing was pushed.
+
+**Not verified: a real receipt from Railway.** That needs this branch pushed, Railway
+redeployed, and a publish from the studio. On the first such publish the "removed" list
+is unknown (no `studio-last-deploy.json` on the volume yet) and the receipt says nothing
+about removals; from the second on it does.
