@@ -7,6 +7,16 @@ import { IGNORED_PATHS, SCHEMA_PATHS } from './schema';
 
 export type Json = any;
 
+export interface LogoChecks {
+  source: { width: number | null; height: number | null; format: string | null; hasAlpha: boolean };
+  trimmedTo: { width: number; height: number };
+  backgroundBox: string | null;
+  markColor: string;
+  contrast: { paperReadablePct: number; inkReadablePct: number; meanVsPaper: number; meanVsInk: number };
+  textCheck: { status: string; reason: string };
+  warnings: string[];
+}
+
 export function getPath(obj: Json, path: string): Json {
   return path.split('.').reduce((o, k) => (o == null ? undefined : o[k]), obj);
 }
@@ -88,12 +98,22 @@ export const api = {
   assets: (slug: string) => fetch(`/api/dash/assets/${slug}`).then((r) => j<{ files: { name: string; src: string }[] }>(r)),
   diff: (slug: string, record: Json) =>
     fetch('/api/dash/diff', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ slug, record }) }).then((r) => j<{ diff: string }>(r)),
-  upload: (payload: { slug: string; filename: string; dataBase64: string; focal?: { x: number; y: number }; aspect?: number }) =>
-    fetch('/api/dash/upload', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(payload) }).then((r) => j<{ photo: Json }>(r)),
-  // A logo is NOT a photo: separate endpoint, separate pipeline, no srcset.
+  // The image contract's pipeline: aspect null keeps the original shape, absent = 4:3;
+  // set/index/count say where the photo lands so the minimum is the slot's own. A
+  // refusal comes back as { error: 'too_small' | 'heic' | 'unreadable', message }.
+  upload: (payload: { slug: string; filename: string; dataBase64: string; focal?: { x: number; y: number }; aspect?: number | null; set?: string; index?: number; count?: number }) =>
+    fetch('/api/dash/upload', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(payload) })
+      .then((r) => j<{ photo: Json; warnings: string[]; slots: { template: string; id: string; label: string; policy: string }[] }>(r)),
+  // A logo is NOT a photo: separate endpoint, separate pipeline, no srcset. Comes back
+  // with the contract's checks (trim, baked-in box, header contrast).
   uploadLogo: (payload: { slug: string; filename: string; dataBase64: string }) =>
     fetch('/api/dash/upload-logo', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(payload) })
-      .then((r) => j<{ logo: { src: string; width: number; height: number; sourceLongestEdge: number } }>(r)),
+      .then((r) => j<{ logo: { src: string; width: number; height: number; sourceLongestEdge: number; checks: LogoChecks } }>(r)),
+  logoCheck: (slug: string) =>
+    fetch('/api/dash/logo-check', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ slug }) }).then((r) => j<({ logo: string | null; missing?: boolean } & Partial<LogoChecks>)>(r)),
+  // The measured contrast of the removal-a headline over a photo as the hero plate.
+  heroCheck: (payload: { slug: string; src: string; focal?: { x: number; y: number } | null; primaryColor?: string }) =>
+    fetch('/api/dash/hero-check', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(payload) }).then((r) => j<any>(r)),
   save: (slug: string, record: Json, message: string) =>
     fetch('/api/dash/save', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ slug, record, message }) }).then((r) => j<{ ok: boolean; commit: string | null; warnings: string[] }>(r)),
   // Builds a NEUTRAL record. It deliberately takes no source client to copy from:

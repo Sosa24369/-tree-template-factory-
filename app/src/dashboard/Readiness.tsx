@@ -17,6 +17,7 @@
  */
 
 import type { Json } from './lib';
+import { MASTERS, minWidth, slotsForPhoto, stillCount, stillIndex } from '../templates/imageSlots.mjs';
 
 type Level = 'blocker' | 'warning' | 'manual' | 'ok';
 
@@ -102,6 +103,26 @@ export function readiness(record: Json): Item[] {
   const photoCount = Object.values(record.photos ?? {}).reduce((n: number, list: any) => n + (list?.length ?? 0), 0);
   if (!photoCount) push('warning', 'Photos', 'No photos on record. Every gallery and results grid self-hides (R5), so the pages render — but they render thin.');
   else push('ok', 'Photos', `${photoCount} across ${Object.keys(record.photos ?? {}).length} service set(s)`);
+
+  /* ---- the image contract ---- */
+  {
+    const excluded = new Set<string>(record.excludedTemplates ?? []);
+    let noFocal = 0, noFocalStudio = 0, small = 0, smallStudio = 0;
+    for (const [set, list] of Object.entries(record.photos ?? {}) as [string, any[]][]) {
+      (list ?? []).forEach((p, i) => {
+        if (!p?.src || p.kind === 'video') return;
+        const studio = p.pipeline && Number(p.pipeline.version) >= 2;
+        const slots = slotsForPhoto(set as any, stillIndex(list, i), stillCount(list)).filter((s) => !excluded.has(s.template));
+        if (slots.some((s) => s.policy === 'cover' && s.focal === 'required') && !p.focal) { noFocal++; if (studio) noFocalStudio++; }
+        let need = MASTERS.photo.min[0];
+        for (const s of slots) need = Math.max(need, minWidth(s.master));
+        if (typeof p.width === 'number' && p.width < need) { small++; if (studio) smallStudio++; }
+      });
+    }
+    if (noFocal) push(noFocalStudio ? 'blocker' : 'warning', 'Focal points', `${noFocal} photo${noFocal === 1 ? '' : 's'} ${noFocal === 1 ? 'is' : 'are'} cover-cropped by a template with no focal point set, so the browser crops to the centre. Open each in Frame and click the subject. ${noFocalStudio ? `${noFocalStudio} came through the studio pipeline and block a publish (image-spec guard).` : 'These are legacy imports: the image-spec guard reports them and does not block.'}`);
+    else if (photoCount) push('ok', 'Focal points', 'every cover-cropped photo has one');
+    if (small) push(smallStudio ? 'blocker' : 'warning', 'Photo sizes', `${small} photo${small === 1 ? '' : 's'} ${small === 1 ? 'is' : 'are'} under the minimum for the slots ${small === 1 ? 'it lands' : 'they land'} in (${MASTERS.photo.min[0]} px wide for a tile, ${MASTERS.heroPlate.min[0]} for the removal-a hero plate) and will be upscaled on a retina screen. Replace with larger originals — see docs/IMAGE-SPEC.md. ${smallStudio ? 'Studio uploads under the minimum are refused, so these were re-slotted by reordering.' : 'Legacy imports: reported, not blocking.'}`);
+  }
 
   if (!(record.reviews ?? []).length) push('warning', 'Reviews', 'None transcribed, so every review block self-hides. Transcribe them VERBATIM from the client’s own profile — never write or tidy one.');
   else push('ok', 'Reviews', `${record.reviews.length} on record`);

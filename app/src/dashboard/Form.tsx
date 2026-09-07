@@ -6,7 +6,7 @@
  */
 
 import { useState } from 'react';
-import type { Json } from './lib';
+import type { Json, LogoChecks } from './lib';
 import { api, fileToBase64, getPath, setPath, unlabelledLeaves } from './lib';
 import { FIELDS, GROUPS, type FieldDef } from './schema';
 import { Photos } from './Photos';
@@ -190,26 +190,36 @@ function Reviews({ value, onChange, def }: { value: any[]; onChange: (v: any[]) 
 function Logo({ record, onChange, slug, def }: { record: Json; onChange: (r: Json) => void; slug: string; def: FieldDef }) {
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
+  const [checks, setChecks] = useState<LogoChecks | null>(null);
   const brand = record.brand ?? {};
   const src = brand.logoUrl ?? null;
 
   async function upload(file: File) {
     setBusy(true);
     setErr(null);
+    setChecks(null);
     try {
       const dataBase64 = await fileToBase64(file);
       const { logo } = await api.uploadLogo({ slug, filename: file.name, dataBase64 });
       const nextBrand = { ...brand, logoUrl: logo.src, logoWidth: logo.width, logoHeight: logo.height };
       delete nextBrand.logoSrcset;
       onChange({ ...record, brand: nextBrand });
-      if (logo.sourceLongestEdge && logo.sourceLongestEdge < 192) {
-        setErr(`Uploaded, but the source is only ${logo.sourceLongestEdge}px on its longest edge. It was NOT upscaled, so it will look soft in the header. A 384px+ original is better.`);
-      }
+      setChecks(logo.checks);
     } catch (e: any) {
-      setErr(e.message);
+      setErr(e.body?.message || e.message);
     } finally {
       setBusy(false);
     }
+  }
+
+  // The contract's checks on the logo the record already has (trim, baked-in box,
+  // header contrast). OCR for "text that is not the company name" is not available
+  // on the studio server; the result says so rather than showing a tick.
+  async function recheck() {
+    setBusy(true); setErr(null);
+    try { const r = await api.logoCheck(slug); if (r.warnings) setChecks(r as LogoChecks); else setErr(r.missing ? 'The logo file is missing from the asset folder.' : 'No logo on record.'); }
+    catch (e: any) { setErr(e.message); }
+    finally { setBusy(false); }
   }
 
   function clear() {
@@ -244,9 +254,21 @@ function Logo({ record, onChange, slug, def }: { record: Json; onChange: (r: Jso
             </button>
           )}
           {src && <code className="dash-logo-path">{src} · {brand.logoWidth}×{brand.logoHeight}</code>}
+          {src && <button className="dash-btn dash-btn--ghost dash-btn--xs" type="button" disabled={busy} onClick={recheck}>Run the logo checks</button>}
         </span>
       </div>
       {err && <p className="dash-v-warn">⚠ {err}</p>}
+      {checks && (
+        <div className="dash-logo-checks">
+          <span className="dash-help">
+            {checks.source.format ?? 'image'} {checks.source.width ?? '?'} × {checks.source.height ?? '?'}{checks.source.hasAlpha ? ', transparent' : ', opaque'} → trimmed to {checks.trimmedTo.width} × {checks.trimmedTo.height}.
+            {' '}Mark colour {checks.markColor}. Readable against the light header: {checks.contrast.paperReadablePct}% of the mark clears 3:1; against storm's dark header: {checks.contrast.inkReadablePct}%.
+          </span>
+          {checks.backgroundBox ? <p className="dash-v-warn">⚠ Solid {checks.backgroundBox} box baked in — it will show as a rectangle on storm's dark header.</p> : <span className="dash-help">✓ No baked-in background box.</span>}
+          {checks.warnings.filter((w) => !w.startsWith('The logo has a solid')).map((w, i) => <p className="dash-v-warn" key={i}>⚠ {w}</p>)}
+          <span className="dash-help">Text in the artwork (a phone number, a tagline): {checks.textCheck.status === 'unavailable' ? `not checked — ${checks.textCheck.reason}. Check by eye: the only text should be the company name.` : checks.textCheck.status}</span>
+        </div>
+      )}
       <span className="dash-help">{def.help}</span>
     </div>
   );

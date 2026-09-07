@@ -324,3 +324,28 @@ body { margin: 0; background: var(--d-bg); color: var(--d-ink); font-family: ui-
 .dash-live-link { font-size: 12px; color: var(--d-accent); font-weight: 640; text-decoration: none; border: 1px solid transparent; border-radius: 99px; padding: 2px 8px; }
 .dash-live-link:hover { border-color: var(--d-accent); }
 .dash-receipt-none a { font-weight: 500; color: var(--d-accent); margin-left: 6px; }
+
+/* ====================================================================== *
+ * STUDIO v3 · Phase 1 — the image contract in the editor: slot badges, the Frame
+ * dialog with its three-crop preview, inline upload refusals, logo checks.
+ * ====================================================================== */
+.dash-photo-badges { display: flex; flex-wrap: wrap; gap: 4px; }
+.dash-badge--hero { background: #e8e4f7; color: #4b3a8f; }
+.dash-photo-pos { position: absolute; right: 4px; top: 4px; font-size: 0.68rem; padding: 1px 6px; border-radius: 99px; background: rgba(16, 34, 27, 0.8); color: #fff; }
+.dash-photo-note { color: var(--d-warn); }
+.dash-photo-notice { margin: 8px 0 0; font-size: 0.84rem; border-radius: 8px; padding: 8px 10px; }
+.dash-photo-notice--error { background: #fdf1f1; color: var(--d-err); border: 1px solid var(--d-err); }
+.dash-photo-notice--warn { background: #fdf7e3; color: var(--d-warn); }
+.dash-photo-notice--ok { background: #e2f3e9; color: var(--d-accent); }
+.dash-hero-check { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 2px; }
+.dash-frame-grid { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(220px, 1fr); gap: 16px; align-items: start; }
+.dash-frame-side { display: flex; flex-direction: column; gap: 6px; }
+.dash-slot-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 3px; font-size: 0.8rem; }
+.dash-slot-list code { font-size: 0.72rem; }
+.dash-crops { margin-top: 12px; display: grid; gap: 10px; }
+.dash-crop-slot { border: 1px solid var(--d-line); border-radius: 10px; padding: 8px 10px; background: #fbfcfd; }
+.dash-crop-slot-head { font-size: 0.8rem; margin-bottom: 6px; }
+.dash-crop-row { display: flex; gap: 14px; flex-wrap: wrap; align-items: flex-start; }
+.dash-crop-cell { display: flex; flex-direction: column; gap: 4px; min-width: 120px; }
+.dash-logo-checks { margin-top: 8px; display: grid; gap: 4px; font-size: 0.8rem; }
+.dash-logo-checks .dash-v-warn { margin: 0; }
