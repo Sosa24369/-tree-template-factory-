@@ -67,12 +67,35 @@ function PhotoService({ svc, slug, record, excluded, list, onList }: { svc: Serv
   const [picking, setPicking] = useState(false);
   const [from, setFrom] = useState<number | null>(null);
   const [over, setOver] = useState<number | null>(null);
+  const gridRef = useRef<HTMLDivElement>(null);
   const [pending, setPending] = useState<{ dataUrl: string; file: File } | null>(null);
   const [framing, setFraming] = useState<number | null>(null);
   const [notice, setNotice] = useState<{ kind: 'error' | 'warn' | 'ok'; text: string } | null>(null);
 
   const setAt = (i: number, patch: any) => onList(list.map((p, n) => (n === i ? { ...p, ...patch } : p)));
   const remove = (i: number) => onList(list.filter((_, n) => n !== i));
+
+  // Reorder by dragging the handle. The handle takes pointer capture, so every move and
+  // the release are delivered even when the cursor leaves the card (and on touch, where
+  // capture is implicit and cannot be declined). Capture also means the OTHER cards never
+  // see pointerenter, so the drop target CANNOT be tracked by hovering them: it is hit-
+  // tested from the pointer's coordinates on every move instead.
+  const dropIndexAt = (x: number, y: number): number | null => {
+    const card = (document.elementFromPoint(x, y) as HTMLElement | null)?.closest('.dash-photo') as HTMLElement | null;
+    if (!card || !gridRef.current?.contains(card)) return null; // outside this service's grid
+    const n = Number(card.dataset.idx);
+    return Number.isInteger(n) ? n : null;
+  };
+  const endDrag = (commit: boolean) => {
+    if (commit && from !== null && over !== null && from !== over) {
+      const n = [...list];
+      const [it] = n.splice(from, 1);
+      n.splice(over, 0, it);
+      onList(n);
+    }
+    setFrom(null);
+    setOver(null);
+  };
   const templates = templatesFor(svc, excluded);
   const isDemo = record.isDemo === true;
 
@@ -85,7 +108,7 @@ function PhotoService({ svc, slug, record, excluded, list, onList }: { svc: Serv
         {list.length === 0 && <span className="dash-empty-slot">empty — the templates fall back to another set, then to nothing</span>}
       </div>
 
-      <div className="dash-photo-grid" onPointerLeave={() => setOver(null)}>
+      <div className="dash-photo-grid" ref={gridRef}>
         {list.map((p, i) => {
           const video = p.kind === 'video';
           const slots = slotsForPhoto(svc as SlotSet, stillIndex(list, i), stillCount(list)).filter((s) => !excluded.has(s.template));
@@ -99,8 +122,7 @@ function PhotoService({ svc, slug, record, excluded, list, onList }: { svc: Serv
             <div
               className={`dash-photo ${from === i ? 'is-dragging' : ''} ${over === i && from !== null && from !== i ? 'is-over' : ''}`}
               key={p.src ?? i}
-              onPointerEnter={() => from !== null && setOver(i)}
-              onPointerUp={() => { if (from !== null && over !== null && from !== over) { const n = [...list]; const [it] = n.splice(from, 1); n.splice(over, 0, it); onList(n); } setFrom(null); setOver(null); }}
+              data-idx={i}
             >
               <div className="dash-thumb-wrap">
                 <img
@@ -112,7 +134,14 @@ function PhotoService({ svc, slug, record, excluded, list, onList }: { svc: Serv
                   title="Open the Frame dialog: set the focal point and see every crop"
                 />
                 {p.focal && <span className="dash-focal" style={{ left: pct(p.focal.x), top: pct(p.focal.y) }} aria-hidden="true" />}
-                <span className="dash-handle dash-handle--photo" aria-label="Drag to reorder" onPointerDown={(e) => { (e.target as HTMLElement).setPointerCapture?.(e.pointerId); setFrom(i); setOver(i); }} onPointerUp={(e) => (e.target as HTMLElement).releasePointerCapture?.(e.pointerId)}>⠿</span>
+                <span
+                  className="dash-handle dash-handle--photo"
+                  aria-label="Drag to reorder"
+                  onPointerDown={(e) => { e.currentTarget.setPointerCapture?.(e.pointerId); setFrom(i); setOver(i); }}
+                  onPointerMove={(e) => { if (from === null) return; const t = dropIndexAt(e.clientX, e.clientY); if (t !== null) setOver(t); }}
+                  onPointerUp={(e) => { e.currentTarget.releasePointerCapture?.(e.pointerId); endDrag(true); }}
+                  onPointerCancel={() => endDrag(false)}
+                >⠿</span>
                 <span className="dash-photo-pos">#{i + 1}</span>
               </div>
               <div className="dash-photo-badges">
