@@ -77,7 +77,7 @@ export const SHARED_SLOTS = [
     template: '*', id: 'logo-header', label: 'Header logo', section: 'Header', element: '.hdbrand-logo',
     source: { set: 'logo', pick: 'brand.logoUrl' }, policy: 'contain', focal: 'none', master: 'logo',
     renders: { mobile: [[64, 64]], tablet: [[96, 96]], desktop: [[96, 96]] },
-    notes: 'The mobile LCP element on the text-hero templates. One 192 × 192 webp on a transparent background, no srcset (React SSR would preload a file the browser then ignores). Sits on the header paper (light) on nine templates and on ink (dark) on storm — the studio checks its contrast against both.',
+    notes: 'The mobile LCP element on the text-hero templates. One 192 × 192 webp on a transparent background, no srcset (React SSR would preload a file the browser then ignores). Sits on the header paper (light) on nine templates and on ink (dark) on storm — the studio checks its contrast against both. **The header clips it to a circle** (border-radius: 50% on a square box): nothing is scale-cropped, because the pipeline always writes a square canvas, but the four corners of that square are masked away. Keep the mark inside the circle inscribed in the square — a wordmark that runs corner to corner loses its ends. The footer does not clip.',
   },
   {
     template: '*', id: 'logo-footer', label: 'Footer logo', section: 'Footer', element: '.ra-footer-logo · .rb-footer-logo · .st-footer-logo · .ta-footer-logo · .tb-footer-logo',

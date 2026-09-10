@@ -35,7 +35,7 @@ shape, so a grid of them is only even when every photo is the same shape (4:3).
 
 | Slot | Where | Mobile | Tablet | Desktop | Policy | Send | Minimum | Notes |
 |---|---|---|---|---|---|---|---|---|
-| **Header logo** | Header | 64 × 64 | 96 × 96 | 96 × 96 | contain — never cropped | SVG, or a transparent PNG 512 px or more on its longest edge | 192 px longest edge | The mobile LCP element on the text-hero templates. One 192 × 192 webp on a transparent background, no srcset (React SSR would preload a file the browser then ignores). Sits on the header paper (light) on nine templates and on ink (dark) on storm — the studio checks its contrast against both. |
+| **Header logo** | Header | 64 × 64 | 96 × 96 | 96 × 96 | contain — never cropped | SVG, or a transparent PNG 512 px or more on its longest edge | 192 px longest edge | The mobile LCP element on the text-hero templates. One 192 × 192 webp on a transparent background, no srcset (React SSR would preload a file the browser then ignores). Sits on the header paper (light) on nine templates and on ink (dark) on storm — the studio checks its contrast against both. **The header clips it to a circle** (border-radius: 50% on a square box): nothing is scale-cropped, because the pipeline always writes a square canvas, but the four corners of that square are masked away. Keep the mark inside the circle inscribed in the square — a wordmark that runs corner to corner loses its ends. The footer does not clip. |
 | **Footer logo** | Footer | 52 × 52 | 52 × 52 | 52 × 52 | contain — never cropped | SVG, or a transparent PNG 512 px or more on its longest edge | 192 px longest edge | Same file as the header. 52 px on removal-a and trimming-a, 50 on removal-b, 40 on storm, 34 on trimming-b; the hybrids and agnostic render the name as text. |
 
 ## Tree Removal — Control (`removal-a`)
@@ -125,4 +125,4 @@ shape, so a grid of them is only even when every photo is the same shape (4:3).
 
 ---
 
-Measured 2026-09-07 with headless Chrome over the DevTools protocol against the built pages; 35 slots across 10 templates plus the two shared logo slots.
+Measured 2026-09-10 with headless Chrome over the DevTools protocol against the built pages; 35 slots across 10 templates plus the two shared logo slots.
