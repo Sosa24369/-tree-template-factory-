@@ -48,6 +48,14 @@ mkdirSync(join(repo, 'clients'), { recursive: true });
 mkdirSync(join(repo, 'app', 'public', 'assets', 'acme'), { recursive: true });
 const g = (args, opts = {}) => execFileSync('git', args, { cwd: repo, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'], ...opts });
 g(['init', '-q', '-b', 'main']);
+// Clearing HOME, GIT_CONFIG_GLOBAL, GIT_CONFIG_NOSYSTEM and the GIT_AUTHOR_*/EMAIL vars is
+// not enough to make the environment identity-less: with nothing configured, git falls back
+// to the OS — the gecos full name and user@FQDN — and commits happily. On a Mac with a
+// resolvable hostname that is exactly what happens, so step 1 below asserted nothing and
+// this guard silently tested a precondition it did not have. useConfigOnly makes git refuse
+// the auto-detected identity, so an identity must come from config (including `-c`) or the
+// commit fails, which is the condition the studio core is supposed to survive.
+g(['config', 'user.useConfigOnly', 'true']);
 
 const RECORD = {
   slug: 'acme', name: 'Acme Test Co', serviceArea: '', serviceAreaList: [],
