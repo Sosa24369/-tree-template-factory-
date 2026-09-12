@@ -255,6 +255,13 @@ export interface PhotoSet {
    * which the image-spec guard reports on rather than fails.
    */
   pipeline?: { version: number; at: string; source: { width: number | null; height: number | null; format: string | null; bytes: number }; master: [number, number]; aspect: string };
+  /**
+   * Whether this photograph is good enough for the slots it lands in — 'ok', 'under' or
+   * 'replace' (lib/photoStatus.ts). Written once by the upload pipeline; absent on every
+   * legacy import, where the studio computes the same answer from width/height so the
+   * panel and the guard still agree.
+   */
+  status?: 'ok' | 'under' | 'replace';
   /** null wherever the source does not state a dimension. Null over guess. */
   width: number | null;
   height: number | null;

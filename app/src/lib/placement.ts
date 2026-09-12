@@ -150,6 +150,15 @@ export const PLACEMENT: Record<string, PlacementSlot[]> = {
 PLACEMENT['storm-b'] = PLACEMENT['storm-a'];
 PLACEMENT['storm-c'] = PLACEMENT['storm-a'];
 
+/**
+ * Templates whose sections actually READ this resolver. Auto-fill matches what every
+ * template renders today, so the studio can show the slot list for all of them — but an
+ * EXPLICIT assignment only reaches the page for a template in this set. Until a template
+ * is wired, the studio says so and disables the controls rather than letting someone
+ * assign a photo, save, publish, and see nothing change.
+ */
+export const RESOLVES_FROM_MAP = new Set(['removal-a', 'trimming-a']);
+
 /** trimming-a's gallery/grid split: after the hero takes 2, halve the rest — but only
  *  when the rest is 6 or more, otherwise the gallery takes everything and the grid is
  *  empty and self-hides (R5). */
@@ -218,13 +227,56 @@ export function resolvePlacement(client: ResolvedClient, templateId: string): Ma
     const photos: (PhotoSet | null)[] = [];
     const source: ('explicit' | 'auto')[] = [];
     for (let i = 0; i < n; i++) {
-      const key = slot.cells === 1 ? slot.id : `${slot.id}.${i + 1}`;
+      const key = cellKey(slot, i);
       const explicit = slot.cells === 'all' ? undefined : assigned[key];
+      // An assignment of '' means DELIBERATELY EMPTY — "remove from slot" in the studio.
+      // Without it, clearing an assignment would just let auto-fill put the same photo
+      // straight back, and the slot could never be emptied.
+      if (explicit === '') { photos.push(null); source.push('explicit'); continue; }
       const hit = explicit ? byId.get(explicit) : undefined;
       photos.push(hit ?? auto[i] ?? null);
       source.push(hit ? 'explicit' : 'auto');
     }
     out.set(slot.id, { id: slot.id, photos, source });
+  }
+  return out;
+}
+
+/** The assignment key for one cell: `slotId` when the slot has one, else `slotId.N`. */
+export function cellKey(slot: PlacementSlot, i: number): string {
+  return slot.cells === 1 ? slot.id : `${slot.id}.${i + 1}`;
+}
+
+export interface Cell {
+  slotId: string;
+  /** 0-based index within the slot. */
+  index: number;
+  /** The assignment key, or null for a slot that takes no explicit assignment. */
+  key: string | null;
+  photo: PhotoSet | null;
+  source: 'explicit' | 'auto';
+}
+
+/**
+ * Every cell on one template, flattened into PAGE ORDER — which is the order the studio
+ * shows them in, and the order "move up" and "move down" walk. Slots that consume the
+ * whole set take no assignment keys: their order is the library's, reordered in place.
+ */
+export function templateCells(client: ResolvedClient, templateId: string): Cell[] {
+  const resolved = resolvePlacement(client, templateId);
+  const out: Cell[] = [];
+  for (const slot of PLACEMENT[templateId] ?? []) {
+    const r = resolved.get(slot.id);
+    if (!r) continue;
+    r.photos.forEach((photo, index) => {
+      out.push({
+        slotId: slot.id,
+        index,
+        key: slot.cells === 'all' ? null : cellKey(slot, index),
+        photo,
+        source: r.source[index],
+      });
+    });
   }
   return out;
 }

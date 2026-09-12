@@ -16,6 +16,7 @@ import { api, validate } from './lib';
 import { Form } from './Form';
 import './dashboard.css';
 import { Layout } from './Layout';
+import { Slots } from './Slots';
 import { Copy } from './Copy';
 import { SectionArt } from './SectionArt';
 import { Readiness } from './Readiness';
@@ -248,12 +249,19 @@ export function App() {
             <nav className="dash-sections" aria-label="Panels">
               <a href="#readiness">Readiness</a>
               <a href="#layout">Layout</a>
+              <a href="#photoslots">Photos on this page</a>
               <a href="#business">Business &amp; contact</a>
               <a href="#backgrounds">Backgrounds</a>
               <a href="#copy">Copy — every text field</a>
             </nav>
             <div id="readiness"><Readiness record={record} /></div>
             <div id="layout"><Layout record={record} templateId={previewTpl} onChange={onChange} /></div>
+            <div id="photoslots">
+              <section className="dash-group">
+                <h2 className="dash-group-head">Photos on this page</h2>
+                <Slots record={record} templateId={previewTpl} onChange={onChange} />
+              </section>
+            </div>
             <div id="business"><Form record={record} onChange={onChange} slug={slug!} /></div>
             <div id="backgrounds"><SectionArt record={record} templateId={previewTpl} slug={slug!} onChange={onChange} /></div>
             <Copy record={record} templateId={previewTpl} onChange={onChange} onPickTemplate={setPreviewTpl} />
