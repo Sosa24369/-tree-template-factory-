@@ -11,7 +11,7 @@ import type { ResolvedClient } from '../../../schema/resolve';
 import { SafeText } from '../../../components/Safe';
 import { DeferredImage } from '../../../components/DeferredImage';
 import { altFor, withAlt } from '../assets';
-import { photosFor } from '../../../lib/photos';
+import { slotPhotos } from '../../../lib/placement';
 import { CallCta, CheckIcon, Section, SplitHeading, type Copy } from './shared';
 
 const COLUMNS: Array<[number, number]> = [
@@ -21,6 +21,10 @@ const COLUMNS: Array<[number, number]> = [
 ];
 
 export function Services({ client, copy }: { client: ResolvedClient; copy: Copy }) {
+  // The last three of the set, one per column. Deliberately over the RAW list, videos
+  // included — that is what this slot did before lib/placement.ts, and the declared
+  // `lastN` pick reproduces it rather than quietly changing a live page.
+  const strip = slotPhotos(client, 'removal-a', 'service-photo');
   const columns = COLUMNS.map(([from, to]) => {
     const items: string[] = [];
     for (let n = from; n <= to; n += 1) {
@@ -42,7 +46,7 @@ export function Services({ client, copy }: { client: ResolvedClient; copy: Copy 
           items.length > 0 ? (
             <div className="ra-service-col" key={col}>
               <DeferredImage
-                photo={withAlt(photosFor(client, 'removal').slice(-3)[col] ?? null, altFor(client.name, col + 1))}
+                photo={strip[col] ? withAlt(strip[col], altFor(client.name, col + 1)) : null}
                 className="ra-service-photo"
               />
               <ul className="ra-service-list">

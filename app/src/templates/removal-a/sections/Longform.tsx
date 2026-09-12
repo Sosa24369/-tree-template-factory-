@@ -12,7 +12,7 @@ import type { ResolvedClient } from '../../../schema/resolve';
 import { SafeText } from '../../../components/Safe';
 import { DeferredImage } from '../../../components/DeferredImage';
 import { altFor, withAlt } from '../assets';
-import { partitionMedia, photosFor } from '../../../lib/photos';
+import { slotPhotos } from '../../../lib/placement';
 import { CheckIcon, Section, SplitHeading, type Copy } from './shared';
 
 /**
@@ -28,8 +28,7 @@ export function Longform({ client, copy }: { client: ResolvedClient; copy: Copy 
     if (text.trim()) requests.push(text);
   }
 
-  const { stills } = partitionMedia(photosFor(client, 'removal'));
-  const photo = stills[1] ?? stills[0] ?? null;
+  const photo = slotPhotos(client, 'removal-a', 'longform')[0] ?? null;
 
   return (
     <Section tone="light" className="ra-longform">

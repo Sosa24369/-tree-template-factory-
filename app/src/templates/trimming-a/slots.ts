@@ -24,15 +24,10 @@
 import type { PhotoSet } from '../../schema/client';
 import type { ResolvedClient } from '../../schema/resolve';
 import { partitionMedia, photosFor } from '../../lib/photos';
+import { resolvePlacement } from '../../lib/placement';
 
 /** The lead form's id. Both scroll-to-form CTAs link to it; the form owns it. */
 export const FORM_ANCHOR = 'ta-estimate-form';
-
-/** How many photographs the hero band takes before the rest are shared out. */
-const HERO_SLOTS = 2;
-
-/** Below this, the leftovers all go to the gallery and the grid stays empty. */
-const MIN_TO_SPLIT = 6;
 
 export interface PhotoSlots {
   hero: PhotoSet[];
@@ -43,16 +38,17 @@ export interface PhotoSlots {
 }
 
 export function photoSlots(client: ResolvedClient): PhotoSlots {
-  const { videos, stills } = partitionMedia(photosFor(client, 'trimming'));
-  const hero = stills.slice(0, HERO_SLOTS);
-  const rest = stills.slice(HERO_SLOTS);
-  const video = videos[0] ?? null;
-
-  if (rest.length >= MIN_TO_SPLIT) {
-    const half = Math.ceil(rest.length / 2);
-    return { hero, gallery: rest.slice(0, half), grid: rest.slice(half), video };
-  }
-  return { hero, gallery: rest, grid: [], video };
+  // Which photographs, and in what order, is placement (lib/placement.ts) — the hero band
+  // takes two, the gallery the first half of the rest, the grid the second half, and the
+  // grid stays empty below MIN_TO_SPLIT. The video is not placed by position.
+  const p = resolvePlacement(client, 'trimming-a');
+  const keep = (id: string) => (p.get(id)?.photos ?? []).filter((x): x is PhotoSet => x !== null);
+  return {
+    hero: keep('hero-band'),
+    gallery: keep('gallery'),
+    grid: keep('grid'),
+    video: partitionMedia(photosFor(client, 'trimming')).videos[0] ?? null,
+  };
 }
 
 /**

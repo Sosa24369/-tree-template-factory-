@@ -16,22 +16,24 @@ import type { ResolvedClient } from '../../../schema/resolve';
 import { SafeImage, SafeText } from '../../../components/Safe';
 import { LeadForm } from '../../../components/LeadForm';
 import { altFor, withAlt } from '../assets';
-import { partitionMedia, photosFor } from '../../../lib/photos';
+import { slotPhotos } from '../../../lib/placement';
 import { preloadLcpImage } from '../../../lib/preloadLcp';
 import { CallCta, SplitHeading, type Copy } from './shared';
 
 export const FORM_ANCHOR = 'ra-estimate-form';
 
 export function Hero({ client, copy }: { client: ResolvedClient; copy: Copy }) {
-  // Stills only — the client's photo set can include an .mp4 (the source gallery
-  // does), and an <img> pointed at a video renders as a broken image.
-  const { stills: heroStills } = partitionMedia(photosFor(client, 'removal'));
+  // Placement comes from lib/placement.ts — the one resolver. Stills only: the client's
+  // photo set can include an .mp4 (the source gallery does), and an <img> pointed at a
+  // video renders as a broken image.
+  const plate = slotPhotos(client, 'removal-a', 'hero-plate')[0] ?? null;
+  const proof = slotPhotos(client, 'removal-a', 'hero-proof').filter((p) => p !== null);
   // The hero plate is the LCP element; get the request in flight during render.
-  preloadLcpImage(heroStills[0]?.src);
+  preloadLcpImage(plate?.src);
   const ratingLetters = [...copy('ratingBadge.logoText')];
   // The plate photo's own scrim (set by the studio from the measured headline
   // contrast). Emitted only when set, so every existing page renders byte-identically.
-  const scrim = heroStills[0]?.scrim;
+  const scrim = plate?.scrim;
   const scrimStyle = typeof scrim === 'number' && scrim > 0 ? ({ '--ra-hero-scrim': `rgba(0, 0, 0, ${Math.min(0.9, scrim)})` } as CSSProperties) : undefined;
 
   return (
@@ -39,7 +41,7 @@ export function Hero({ client, copy }: { client: ResolvedClient; copy: Copy }) {
       {/* LCP element: eager + fetchPriority high, with its measured dimensions on
           the tag. It is absolutely positioned, so it can never shift the layout. */}
       <div className="ra-hero-plate" aria-hidden="true">
-        <SafeImage photo={heroStills[0] ?? null} className="ra-hero-plate-img" loading="eager" fetchPriority="high" sizes="(max-width: 767px) 100vw, 55vw" />
+        <SafeImage photo={plate} className="ra-hero-plate-img" loading="eager" fetchPriority="high" sizes="(max-width: 767px) 100vw, 55vw" />
       </div>
 
       <div className="ra-container ra-hero-grid">
@@ -102,7 +104,7 @@ export function Hero({ client, copy }: { client: ResolvedClient; copy: Copy }) {
 
       <div className="ra-container">
         <ul className="ra-hero-proof">
-          {heroStills.slice(1, 3).map((shot, i) => (
+          {proof.map((shot, i) => (
             <li key={shot.src}>
               <SafeImage photo={withAlt(shot, altFor(client.name, i + 1))} className="ra-hero-proof-img" />
             </li>

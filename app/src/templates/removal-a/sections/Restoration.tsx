@@ -10,16 +10,13 @@ import type { ResolvedClient } from '../../../schema/resolve';
 import { SafeSection, SafeText } from '../../../components/Safe';
 import { DeferredImage } from '../../../components/DeferredImage';
 import { altFor, withAlt } from '../assets';
-import { partitionMedia, photosFor } from '../../../lib/photos';
+import { slotPhotos } from '../../../lib/placement';
 import { CallCta, Section, SplitHeading, type Copy } from './shared';
 
 export function Restoration({ client, copy }: { client: ResolvedClient; copy: Copy }) {
-  // Client photographs only — see lib/photos.ts. STILLS only: this grid renders <img>,
-  // and the source "gallery" sets mix in .mp4 entries (Texas Tree Tops' removal set opens
-  // with one). Partition BEFORE taking five, or the video both occupies a cell as a broken
-  // image and pushes a real photograph out of the grid.
-  const supplied = partitionMedia(client.photos?.generic ?? []).stills;
-  const shots = supplied.length > 0 ? supplied : partitionMedia(photosFor(client, 'removal')).stills.slice(0, 5);
+  // Client photographs only. The mosaic's direct-then-cascade read — and the fact that a
+  // supplied generic set is NOT sliced to five — lives in lib/placement.ts, declared.
+  const shots = slotPhotos(client, 'removal-a', 'mosaic').filter((p) => p !== null);
   if (shots.length === 0) return null;
 
   return (

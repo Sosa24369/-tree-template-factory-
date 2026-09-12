@@ -16,6 +16,7 @@ import { SafeSection } from '../../../components/Safe';
 import { DeferredImage } from '../../../components/DeferredImage';
 import { altFor, withAlt } from '../assets';
 import { partitionMedia, photosFor } from '../../../lib/photos';
+import { slotPhotos } from '../../../lib/placement';
 
 /**
  * CANONICAL STRUCTURE (2026-08-12): the rail ships as TWO photo bands around
@@ -27,7 +28,10 @@ export function Gallery({ client, band }: { client: ResolvedClient; band?: 1 | 2
   // Photographs come from the CLIENT, never from the template's default artwork:
   // the control's slides are Texas Tree Tops' real job photos and must not appear
   // on another client's page. A client with no photography gets no gallery.
-  const { videos, stills: allStills } = partitionMedia(photosFor(client, 'removal'));
+  // Which photographs, and in what order, is placement (lib/placement.ts). Splitting them
+  // into two bands around the process section is layout, and stays here.
+  const allStills = slotPhotos(client, 'removal-a', 'rail').filter((p) => p !== null);
+  const { videos } = partitionMedia(photosFor(client, 'removal'));
   const split = Math.ceil(allStills.length / 2);
   const stills = band === 1 ? allStills.slice(0, split) : band === 2 ? allStills.slice(split) : allStills;
   const clientVideo = band === 2 ? null : (videos[0] ?? null);
