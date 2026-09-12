@@ -2567,3 +2567,235 @@ diff.
   been proven transparent. It is exercised by the arithmetic and by the studio's apply
   button, not by a deploy.
 - Text in logos: not checked at all, by design, until there is OCR.
+
+---
+
+# STUDIO v3 · PHASE 1b — PHOTO CONTROL: THE DIAGNOSIS — 2026-09-10
+
+Stage 1 of Phase 1b, read-only except one authorised fix. The complaint: photos cannot be
+reordered, and the size and framing on the page look wrong. What follows is the evidence,
+not the conclusions — the conclusions live in `docs/PHOTOS-DESIGN.md`.
+
+## Stage 0 — the complaint came from a build that had none of Phase 1
+
+The brief assumed the Railway CLI had switched to `faizanumer1111@gmail.com`. It had not:
+`whoami` read `fred@treeleads.io`, and `railway list` printed "sosa24369's Projects" with
+`tree-template-editor` in it. The real breakage was a **lost directory link** — "No linked
+project found" — fixed non-interactively with
+`railway link -w "sosa24369's Projects" -p tree-template-editor -e production`. No owner
+login was needed. Recorded so the next session does not send him chasing a login.
+
+The live deployment was `e0266a42`, created 2026-09-07T20:14:37Z. Timestamps put it between
+`5287a1c` (20:00:09Z) and `29eba01` (20:28:25Z), which is not proof, so the build was
+reproduced: a worktree at `5287a1c` built the dashboard and **every hashed asset matched the
+deployment's build log**.
+
+| asset | deployed | local build at `5287a1c` |
+|---|---|---|
+| `dashboard-Ccl-TWpH.js` | 66.73 kB | same hash, same size |
+| `dashboard-BEnEtUYn.css` | 17.61 kB | same hash, same size |
+| `preview-DCQTK7ME.css` | 162.07 kB | same hash, same size |
+| `preview-YrURmOb3.js` | 178.57 kB | same hash, same size |
+| `sectionArt-YxMEoliW.js` | 245.43 kB | same hash, same size |
+
+Five content-derived hashes pin the commit. The studio in use was **Phase A** — no Frame, no
+image contract, no pipeline v2, and missing `29eba01` as well. Phase 1 was deployed as
+`bbc19f0d` (`dashboard-Doc6hepL.js`, 94.44 kB) before diagnosis began.
+
+## 1a — "I can't reorder photos" was a dead control, not a missing one
+
+A drag handle (`⠿`, `aria-label="Drag to reorder"`) existed in **both** Phase A and Phase 1.
+It never moved anything. Driven headless against the real studio UI with synthesized mouse
+input, 12 move steps from card #1 across cards #2 and #3:
+
+```
+… enter:dash-handle  down:dash-handle  up:dash-handle  enter:dash-photo …
+order BEFORE: [photo-2, photo-3, photo-1]
+order AFTER : [photo-2, photo-3, photo-1]
+```
+
+Not one `pointerenter` on any other card between down and up. The handle took
+`setPointerCapture` on pointerdown while the drop target was tracked by `onPointerEnter` on
+the sibling cards; under capture the spec fires boundary events **only at the capture
+target**, so `over` stayed pinned to the grabbed index and the `from !== over` guard always
+failed.
+
+Fixed in `0e2f9f2`. Dropping `setPointerCapture` would not have worked — on touch, capture is
+implicit and cannot be declined — so the handle keeps capture and hit-tests the pointer with
+`elementFromPoint`, scoped to its own service grid via `data-idx`. Six assertions pass after;
+the two reorder assertions fail against the pre-fix code, so the suite is sensitive.
+
+### How a photo reaches a slot
+
+Every template does `partitionMedia(photosFor(client, service))` → `stills`, then indexes:
+
+| record field | index math | slot |
+|---|---|---|
+| `photos.removal[]` | `stills[0]` | removal-a hero plate |
+| | `stills.slice(1,3)` | removal-a proof strip |
+| | `stills[1] ?? stills[0]` | removal-a longform |
+| | `slice(-3)[col]` | removal-a service strip |
+| `photos.generic[]` | all of it, **unsliced** | removal-a mosaic |
+| | *(absent)* → `photosFor(removal, 5)` | same mosaic |
+| `photos.trimming[]` | `slice(0,2)` / middle share / the rest | trimming-a band, gallery, grid |
+| `photos.storm[]` | `slice(0,6)`, then `[6]` | storm-a tiles, "what we handle" |
+
+Array position is the only lever. There is no assignment map.
+
+### Three implementations of one rule, and they disagree
+
+Placement is decided in three places: each template's slicing, the contract's English
+`source.pick` strings, and `slotsForPhoto()`'s regexes over those strings. Four discrepancies:
+
+1. `IMAGE-SPEC.md` — the document handed to clients — says storm's hero "falls back to the
+   removal set, **never to trimming**". The cascade in `lib/photos.ts` is
+   `storm → generic → removal → trimming`. It does fall back to trimming.
+2. The mosaic renders **all** of `photos.generic`, not "first 5" as the contract states.
+3. The mosaic reads `client.photos.generic` directly, bypassing the cascade, using it only
+   as fallback.
+4. `Services.tsx` builds the service strip from `photosFor(...).slice(-3)` with **no
+   `partitionMedia`**. Latent: harmless only because the video sits at index 0.
+
+### Frame lists the wrong slots
+
+`slotsForPhoto()` filters `s.source.set !== set` and **does not model the cascade**. On J
+Valdez, whose photos live only in `photos.trimming`:
+
+```
+studio says trimming[0] feeds:  trimming-a/hero-band, trimming-b/work, trimming-c/work
+also true:                      removal-a/hero-plate, removal-a/rail, removal-b/…, removal-c/…
+```
+
+The built live page settles it: `<img src="/assets/j-valdez/hero-photo-1-223e4399.webp"
+class="ra-hero-plate-img">` — `hero-photo-1` **is** `photos.trimming[0]`. The studio hides
+the photograph behind the headline on a live ad page. `CropPreview` then truncates twice
+more: `slots.filter(policy === 'cover').slice(0, 4)`.
+
+## 1b — the hypotheses
+
+Measured with headless Chrome over CDP against the built pages: the four live routes at 390,
+820 and 1440, **269 image measurements at DPR 1 and 269 at DPR 2**. Deferred images needed a
+1200 ms hydration wait before scrolling — the IntersectionObservers do not exist until React
+mounts, and scrolling earlier reveals nothing.
+
+**H1 — double crop: REFUTED.** The pipeline already remaps the focal into master coordinates
+after its 4:3 crop: `masterFocal.x = ((fx·iw) − left) / cw`. Replicated: source 2400 × 1600,
+focal (0.8, 0.3) → crop 2133 × 1600 at (267, 0) → **(0.775, 0.300)**, matching the Phase 1
+figure exactly. No double crop. Also not applicable to either live client — all 36 photos are
+legacy imports with no focal point, none through pipeline v2.
+
+**H2 — the preview lies: CONFIRMED.** Not the crop maths — the default. The page carries
+`.ra-hero-plate-img { object-position: center 35% }`; `CropPreview` uses
+`focal ? … : '50% 50%'`. Every photo without a focal point — all 36 — previews somewhere it
+does not ship. On J Valdez's 1080 × 1080 hero at desktop (box 1440 × 1192, cover scale 1.333,
+scaled 1440 × 1440, vertical overflow 248 px): the page places it 86.8 px from the top, Frame
+shows 124 px. **A 37 CSS px error.** Zero at tablet (no vertical overflow) and zero for a true
+4:3 master. Computed from the measured `object-position` values, not from a pixel overlay.
+
+**H3 — boxes without a fixed ratio: REFUTED for client photo slots.** Every declared cover
+slot matched the contract at all three breakpoints: hero plate 820 × 1656 / 1440 × 1192,
+proof strip 350 × 160 / 361 × 262 / 537 × 280, service strip 348 × 150 / 736 × 190 /
+343 × 190, mosaic 1092 × 380 / 725 × 543. The `frame` slots take the photo's shape by design.
+The one content-driven box — `.ra-media-img`, `height: clamp(240px, 52vw, 520px)` — is
+template artwork, correctly outside the contract.
+
+**H4 — wrong srcset candidate: CONFIRMED, and it is the dominant cause of "the size looks
+wrong".** `sizes` on the hero plate is `(max-width: 767px) 100vw, 55vw`; the box renders at
+**100vw**. At DPR 2:
+
+| page | vp | slot | box (CSS) | needs (device px) | got | shortfall |
+|---|---|---|---|---|---|---|
+| texas-tree-tops/removal-a | 1440 | hero plate | 1440 | 2880 | 598 | **4.82×** |
+| texas-tree-tops/removal-a | 820 | hero plate | 820 | 1640 | 340 | **4.82×** |
+| j-valdez/removal-a | 1440 | hero plate | 1440 | 2880 | 792 | **3.64×** |
+| texas-tree-tops/removal-a | 820 | service strip | 736 | 1472 | 400 | 3.68× |
+| j-valdez/removal-a | 820 | service strip | 736 | 1472 | 400 | 3.68× |
+| j-valdez/trimming-a | 1440 | gallery lead | 717 | 1433 | 475 | 3.02× |
+| j-valdez/removal-a | 1440 | mosaic cell 1 | 1092 | 2184 | 800 | 2.73× |
+
+Two compounding causes: `sizes` understates the box (55vw vs 100vw; 22vw vs a real 736 px),
+and the masters are too small to offer a large candidate anyway.
+
+**H5 — source photographs structurally wrong: CONFIRMED, both clients.**
+
+*Texas Tree Tops, 24 removal + 6 storm.* 1 video · 12 at 382–680 px wide (**Replace**,
+1.8–4.2× upscaled) · 5 at 1200 × 1200 and 3 at 1080 × 618 (**Under spec**, wrong shape) · 5
+at 800 × 600 (**Under spec**, 1.5× upscaled). **Not one photograph meets the 1200 px tile
+minimum in 4:3.** This pass classified TTT by dimensions only; a later visual check of the
+five mosaic photographs found none are composites, but `gallery-03` and `gallery-04` carry
+**(682) 365-7478** printed on the truck while the record's tracked number is
+**+1 682 452 0735** (`kind: ghl-tracking`) — the J Valdez #2/#7 defect, on the other live
+client, legible on `/p/texas-tree-tops/removal-a`. The remaining 19 have not been viewed.
+
+*J Valdez, 12 trimming.* Already classified in `docs/JV-IMAGE-AUDIT.md`: all twelve
+1080 × 1080 (**Under spec**), four before/after composites (**Replace**), two carrying an
+untracked number (**Replace**).
+
+## 1c — nothing is stretched, but a live page shipped a broken image
+
+Every client photo slot computes `object-fit: cover`; no photograph is stretched. So "size
+looks wrong" is H4, not H3.
+
+Two logo findings were reported in the Stage 1 report and **both were wrong on the detail**;
+the corrections are the record:
+
+- `.hdbrand-logo` computes `object-fit: cover` where the contract declares `contain`. This is
+  immaterial — the pipeline always writes a square canvas into a square box, so cover and
+  contain are the same transform. What the contract genuinely never said is that the header
+  carries `border-radius: 50%`: **the badge is clipped to a circle**, verified by rendering
+  Texas Tree Tops' header at 1440. A wordmark running corner to corner loses its ends. Fixed
+  in the contract, not the stylesheet (`54712c3`).
+- `.st-footer-logo` computes `object-fit: fill`. **Not a defect.** The rule is
+  `height: 40px; width: auto`, so the used width follows the intrinsic ratio and `fill`
+  cannot distort. Reported from a computed value without checking the box was free.
+  Withdrawn, no change made.
+
+**The real defect, not in any hypothesis:** `/p/texas-tree-tops/removal-a` shipped
+`<img src="/assets/texas-tree-tops/gallery-01-16d71434.mp4" class="ra-mosaic-img">` — an MP4
+inside an `<img>`. Measured `naturalWidth 0 × 0`, `complete: true`, box **1092 × 380**: the
+largest cell in the results grid, an empty box showing only alt text, at all three
+breakpoints. `Restoration.tsx` called `photosFor(client, 'removal', 5)` without
+`partitionMedia`, and TTT's removal set opens with a video. Fixed in `78860a5` by
+partitioning **before** taking five — after would let the video still consume one of the
+five. The mosaic goes from `[gallery-01.mp4, 02, 03, 04, 05]` to `[02, 03, 04, 05, 07]`;
+`gallery-07` was checked and is a single photograph, not a composite, though it is Replace on
+size like every other cell.
+
+## The guard that tested nothing
+
+`studio-save` failed 5 of 26 assertions on a clean `33fe079` — pre-existing, unrelated to
+anything in flight. Its step 1 asserts "the environment is genuinely identity-less" after
+clearing `HOME`, `GIT_CONFIG_GLOBAL`, `GIT_CONFIG_NOSYSTEM` and the `GIT_AUTHOR_*`/`EMAIL`
+vars. That is not enough: with nothing configured git falls back to the OS — gecos full name
+plus `user@FQDN` — and commits happily, here as
+`Faizan Umer <faizanumer@Faizans-MBP.attlocal.net>`. The probe commit succeeded, `probe.txt`
+stayed committed, and four later "tree clean" assertions failed as a consequence. It passed
+on Railway only because a container hostname does not resolve the same way — an accident, not
+a test. `user.useConfigOnly=true` makes git refuse the auto-detected identity, so an identity
+must come from config (`-c` included, which is how the seed commits and the studio core
+supply theirs). **21 passed / 5 failed → 26 passed / 0 failed** (`9e60187`). The guard is
+strengthened; no rule relaxed.
+
+## Measured
+
+| | before | after |
+|---|---|---|
+| public `index-*.css` | 162,159 B | 162,159 B |
+| public `index-*.js` | 469,505 B | 469,505 B (unchanged by the reorder fix) |
+| four live pages, reorder + guard + contract commits | — | **byte-identical, all 213 files** |
+| four live pages, mosaic commit | — | TTT removal-a **+24 B**, mosaic block only; other three unchanged |
+| studio UI bundle | 94.44 kB | 94.72 kB (not public) |
+| guards | 11/12 (studio-save) | **12/12**, pre 6/6 · post 6/6 |
+
+## Not verified
+
+- **H2 was computed, not overlaid.** The 37 px figure comes from the measured
+  `object-position` values and standard cover arithmetic, not from screenshotting Frame's
+  preview and the page and diffing them.
+- **19 of Texas Tree Tops' 24 removal photographs have not been viewed.** The classification
+  above is by dimensions; only the five mosaic photographs were opened.
+- **The reorder fix has not been exercised by a human on the deployed studio** — only headless
+  against the local service, and confirmed present in the deployed bundle by hash
+  (`dashboard-DG1U0wcZ.js`, built locally to the same hash).
+- **No photo has been through pipeline v2 on a real client**, so the focal remap that refutes
+  H1 is proven by arithmetic and scratch files, not by a live upload.
