@@ -23,7 +23,7 @@
  * the request (any /api/dash/* path) and false otherwise.
  */
 
-import { readFileSync, writeFileSync, readdirSync, existsSync, mkdirSync, rmSync } from 'node:fs';
+import { readFileSync, writeFileSync, readdirSync, existsSync, mkdirSync, rmSync, renameSync } from 'node:fs';
 import { join } from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { createHash, randomBytes } from 'node:crypto';
@@ -72,7 +72,61 @@ export function dashboardCore(opts) {
         const afterCommit = opts.afterCommit ?? (() => {});
         const clientFile = (slug) => join(CLIENTS, `${slug}.json`);
         const assetDir = (slug) => join(ASSETS, slug);
+
+        /**
+         * STAGING — where an upload's files wait until a record refers to them.
+         *
+         * The pipeline used to write straight into app/public/assets/<slug>/, while the
+         * record was only updated in the browser and written on save. Upload a photo and
+         * then not save it — navigate away, save a different change, let a reorder replace
+         * the in-memory list — and the files stayed on disk with nothing pointing at them,
+         * and the next save's `git add -- <assetDir>` swept them into the commit. Observed
+         * in 84a5905: four orphaned derivatives, 159 KB, referenced by nothing.
+         *
+         * Now a photo lands here, is served from here so the studio can preview it, and is
+         * MOVED into assets/ only by the save that commits a record naming it. Anything
+         * still here when that save runs was abandoned, and is deleted. Outside app/public
+         * so it can never be published, and gitignored so it can never be committed.
+         */
+        const STAGING = join(ROOT, '.studio-staging');
+        const stageDir = (slug) => join(STAGING, slug);
         const okSlug = (slug) => typeof slug === 'string' && SLUG_RE.test(slug);
+
+        /** Every /assets/<slug>/<file> this record names, anywhere in it. */
+        const referencedAssets = (record, slug) => {
+          const out = new Set();
+          const re = new RegExp(`/assets/${slug}/([^"'\\s,)]+)`, 'g');
+          const blob = JSON.stringify(record ?? {});
+          for (const m of blob.matchAll(re)) out.add(m[1]);
+          return out;
+        };
+
+        /**
+         * Move the staged files this record names into assets/, and delete the rest.
+         * Returns the promoted filenames so the caller can stage exactly those in git
+         * rather than adding the whole folder — which is how orphans got committed.
+         */
+        const promoteStaged = (record, slug) => {
+          const from = stageDir(slug);
+          if (!existsSync(from)) return { promoted: [], discarded: [] };
+          const wanted = referencedAssets(record, slug);
+          const promoted = [];
+          const discarded = [];
+          mkdirSync(assetDir(slug), { recursive: true });
+          for (const f of readdirSync(from)) {
+            const src = join(from, f);
+            if (wanted.has(f)) {
+              renameSync(src, join(assetDir(slug), f));
+              promoted.push(f);
+            } else {
+              // Uploaded, then never referenced by the record being saved. Abandoned.
+              try { rmSync(src, { force: true }); } catch {}
+              discarded.push(f);
+            }
+          }
+          try { rmSync(from, { recursive: true, force: true }); } catch {}
+          return { promoted, discarded };
+        };
 
         const send = (res, code, body) => {
   res.statusCode = code;
@@ -142,7 +196,7 @@ export function dashboardCore(opts) {
          */
         async function processImage(slug, filename, buffer, focal, aspect, placement = {}) {
   const { default: sharp } = await import('sharp');
-  mkdirSync(assetDir(slug), { recursive: true });
+  mkdirSync(stageDir(slug), { recursive: true });
 
   if (sniffHeic(buffer)) {
     throw new UploadRefused('heic', 415, 'This is an iPhone HEIC file. Export it as JPEG or PNG first (Photos → File → Export → JPEG, or Settings → Camera → Formats → Most Compatible) and upload that. The studio does not convert HEIC: the image library here has no HEVC decoder, and a silently broken photo is worse than this message.');
@@ -206,7 +260,7 @@ export function dashboardCore(opts) {
   const hash = createHash('sha1').update(baseBuf).digest('hex').slice(0, 8);
   const safeBase = (filename || 'photo').replace(/\.[a-z0-9]+$/i, '').replace(/[^a-z0-9-]+/gi, '-').toLowerCase().slice(0, 40) || 'photo';
   const name = `${safeBase}-${hash}.webp`;
-  writeFileSync(join(assetDir(slug), name), baseBuf);
+  writeFileSync(join(stageDir(slug), name), baseBuf);
 
   // Every rendered width, never upscaled; q78 like generate-srcset.
   const intrinsic = outMeta.width ?? 0;
@@ -215,7 +269,7 @@ export function dashboardCore(opts) {
     if (!intrinsic || w >= intrinsic) continue;
     const vName = name.replace(/\.webp$/, `-${w}w.webp`);
     const vBuf = await sharp(baseBuf).resize({ width: w, withoutEnlargement: true }).webp({ quality: 78 }).toBuffer();
-    writeFileSync(join(assetDir(slug), vName), vBuf);
+    writeFileSync(join(stageDir(slug), vName), vBuf);
     parts.push(`/assets/${slug}/${vName} ${w}w`);
   }
   const src = `/assets/${slug}/${name}`;
@@ -245,7 +299,7 @@ export function dashboardCore(opts) {
          */
         async function processLogo(slug, buffer, filename = '') {
   const { default: sharp } = await import('sharp');
-  mkdirSync(assetDir(slug), { recursive: true });
+  mkdirSync(stageDir(slug), { recursive: true });
   if (sniffHeic(buffer)) throw new UploadRefused('heic', 415, 'This is an iPhone HEIC file. Export the logo as SVG or PNG and upload that.');
 
   // Image contract: accept SVG and transparent PNG (and any raster), trim the
@@ -272,7 +326,7 @@ export function dashboardCore(opts) {
   const out = await sharp(buf).metadata();
   const hash = createHash('sha1').update(buf).digest('hex').slice(0, 8);
   const name = `logo-header-${hash}.webp`;
-  writeFileSync(join(assetDir(slug), name), buf);
+  writeFileSync(join(stageDir(slug), name), buf);
   const { trimmed: _t, ...report } = checks;
   return { src: `/assets/${slug}/${name}`, width: out.width ?? box, height: out.height ?? box, sourceLongestEdge: longest, checks: report };
         }
@@ -425,6 +479,11 @@ export function dashboardCore(opts) {
 
       writeFileSync(file, next, 'utf8');
       git(['add', '--', file]);
+      // Files the record actually names move out of staging now; anything else uploaded
+      // and never referenced is dropped rather than committed. Only the promoted files
+      // are staged in git — adding the whole asset folder is what swept orphans in.
+      const staged = promoteStaged(clean, slug);
+      for (const f of staged.promoted) git(['add', '--', join(assetDir(slug), f)]);
       if (existsSync(assetDir(slug))) git(['add', '--', assetDir(slug)]);
 
       // The message is the operator's. No trailer: a studio save is Faizan's edit,
@@ -438,7 +497,7 @@ export function dashboardCore(opts) {
         const out = `${e.stdout || ''}${e.stderr || ''}`;
         // Nothing staged (no net change) is not a failure — and nothing to roll back.
         if (/nothing to commit|no changes added to commit/i.test(out)) {
-          return send(res, 200, { ok: true, commit: null, warnings });
+          return send(res, 200, { ok: true, commit: null, warnings, assets: staged });
         }
         rollback();
         const detail = (e.stderr || e.stdout || String(e)).toString().trim().split('\n').slice(-6).join('\n');
@@ -454,7 +513,7 @@ export function dashboardCore(opts) {
         if (e?.message === 'push_failed') return send(res, 502, { error: 'push_failed', detail: e.detail ?? '', commit, warnings });
         throw e;
       }
-      return send(res, 200, { ok: true, commit, warnings });
+      return send(res, 200, { ok: true, commit, warnings, assets: staged });
     }
 
     // POST /api/dash/new-client

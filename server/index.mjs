@@ -146,6 +146,21 @@ app.post('/api/publish', async (c) => {
 });
 
 /* ---- static: photos for the preview, then the built UI ---- */
+// A photo that has been uploaded but not yet saved lives in .studio-staging, not in
+// assets/ — it moves across only when a committed record names it (dashboard-core.mjs).
+// Serve it from there meanwhile, or the studio would show a broken image for every upload
+// until save. Tried only after the real asset folder misses, and the name is checked
+// rather than trusted: this reads a path the browser supplied.
+const SAFE_SEG = /^[a-zA-Z0-9._-]+$/;
+app.get('/assets/:slug/:file', async (c, next) => {
+  const { slug, file } = c.req.param();
+  if (!SAFE_SEG.test(slug) || !SAFE_SEG.test(file) || file.startsWith('.')) return next();
+  if (existsSync(join(ASSETS_DIR, 'assets', slug, file))) return next();
+  const staged = join(REPO_DIR, '.studio-staging', slug, file);
+  if (!existsSync(staged)) return next();
+  const type = file.endsWith('.webp') ? 'image/webp' : file.endsWith('.svg') ? 'image/svg+xml' : 'application/octet-stream';
+  return c.body(readFileSync(staged), 200, { 'content-type': type, 'cache-control': 'no-store' });
+});
 app.use('/assets/*', serveStatic({ root: ASSETS_DIR }));
 app.use('/*', serveStatic({ root: UI_DIR }));
 app.get('/', (c) => existsSync(join(UI_DIR, 'dashboard.html')) ? c.html(readFileSync(join(UI_DIR, 'dashboard.html'), 'utf8')) : c.text('Dashboard UI not built. Run `npm run build:dashboard` in app/ (Railway does this in its build command).', 503));

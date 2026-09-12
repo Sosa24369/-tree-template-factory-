@@ -30,3 +30,4 @@ app/dist-dashboard/
 # Local env for running server/ on this machine
 .env
 server/.env
+.studio-staging/
