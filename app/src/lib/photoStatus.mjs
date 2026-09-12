@@ -14,26 +14,18 @@
  * guard can agree today. A stored `status` always wins.
  */
 
-import type { PhotoSet } from '../schema/client';
+/** @typedef {import('../schema/client').PhotoSet} PhotoSet */
 
-export type StatusKind = 'ok' | 'under' | 'replace';
-export interface PhotoStatus {
-  kind: StatusKind;
-  /** Shown on the pill. */
-  label: string;
-  /** One line, with the number, for the tooltip and the audit docs. */
-  reason: string;
-}
 
 /** Below this fraction of the minimum, framing cannot save it — ask for another file. */
 const REPLACE_AT = 0.6;
 
-export function photoStatus(photo: PhotoSet | null | undefined, needWidth: number): PhotoStatus | null {
+export function photoStatus(photo, needWidth) {
   if (!photo) return null;
-  if ((photo as PhotoSet & { kind?: string }).kind === 'video') {
+  if (photo.kind === 'video') {
     return { kind: 'replace', label: 'Replace', reason: 'A video in a photo set. Photo slots render <img>, so it shows as a broken box.' };
   }
-  const stored = (photo as PhotoSet & { status?: StatusKind }).status;
+  const stored = photo.status;
   const w = photo.width, h = photo.height;
 
   if (w == null || h == null) {
@@ -62,6 +54,6 @@ export function photoStatus(photo: PhotoSet | null | undefined, needWidth: numbe
   return { kind: 'ok', label: 'OK', reason: `${w} × ${h}, 4:3, meets the ${needWidth} px minimum.` };
 }
 
-function withLabel(kind: StatusKind, reason: string): PhotoStatus {
+function withLabel(kind, reason) {
   return { kind, label: kind === 'ok' ? 'OK' : kind === 'under' ? 'Under spec' : 'Replace', reason };
 }

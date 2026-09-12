@@ -18,7 +18,8 @@
 
 import type { Json } from './lib';
 import { MASTERS, minWidth, slotById, stillCount, stillIndex } from '../templates/imageSlots.mjs';
-import { slotsForPosition } from '../lib/placement.mjs';
+import { PLACEMENT, landingsFor, photoId, slotsForPosition, templateCells } from '../lib/placement.mjs';
+import { photoStatus } from '../lib/photoStatus.mjs';
 
 type Level = 'blocker' | 'warning' | 'manual' | 'ok';
 
@@ -125,6 +126,50 @@ export function readiness(record: Json): Item[] {
     if (noFocal) push(noFocalStudio ? 'blocker' : 'warning', 'Focal points', `${noFocal} photo${noFocal === 1 ? '' : 's'} ${noFocal === 1 ? 'is' : 'are'} cover-cropped by a template with no focal point set, so the browser crops to the centre. Open each in Frame and click the subject. ${noFocalStudio ? `${noFocalStudio} came through the studio pipeline and block a publish (image-spec guard).` : 'These are legacy imports: the image-spec guard reports them and does not block.'}`);
     else if (photoCount) push('ok', 'Focal points', 'every cover-cropped photo has one');
     if (small) push(smallStudio ? 'blocker' : 'warning', 'Photo sizes', `${small} photo${small === 1 ? '' : 's'} ${small === 1 ? 'is' : 'are'} under the minimum for the slots ${small === 1 ? 'it lands' : 'they land'} in (${MASTERS.photo.min[0]} px wide for a tile, ${MASTERS.heroPlate.min[0]} for the removal-a hero plate) and will be upscaled on a retina screen. Replace with larger originals — see docs/IMAGE-SPEC.md. ${smallStudio ? 'Studio uploads under the minimum are refused, so these were re-slotted by reordering.' : 'Legacy imports: reported, not blocking.'}`);
+  }
+
+  /* ---- photo status, the three words the owner actually uses ---- */
+  {
+    const excluded = new Set<string>(record.excludedTemplates ?? []);
+    let ok = 0, under = 0, replace = 0;
+    const replaceInSlot = new Set<string>();
+    for (const list of Object.values(record.photos ?? {}) as any[][]) {
+      for (const p of list ?? []) {
+        if (!p?.src) continue;
+        let need = MASTERS.photo.min[0];
+        for (const l of landingsFor(record as never, photoId(p), excluded)) {
+          const s = slotById(l.templateId, l.slotId);
+          if (s) need = Math.max(need, minWidth(s.master));
+        }
+        const st = photoStatus(p, need);
+        if (!st) continue;
+        if (st.kind === 'ok') ok++; else if (st.kind === 'under') under++; else replace++;
+      }
+    }
+    // Which SLOTS a Replace photo currently fills — the thing worth chasing, because a
+    // Replace photo sitting in the library harms nothing until it is on a page.
+    for (const tpl of Object.keys(PLACEMENT)) {
+      if (excluded.has(tpl)) continue;
+      for (const cell of templateCells(record as never, tpl)) {
+        if (!cell.photo) continue;
+        const s = slotById(tpl, cell.slotId);
+        if (!s) continue;
+        const st = photoStatus(cell.photo, minWidth(s.master));
+        if (st?.kind === 'replace') replaceInSlot.add(`${tpl}/${cell.slotId}`);
+      }
+    }
+    if (photoCount) {
+      const counts = `${ok} OK · ${under} under spec · ${replace} replace`;
+      if (replaceInSlot.size) {
+        push('warning', 'Photo status', `${counts}. ${replaceInSlot.size} slot${replaceInSlot.size === 1 ? '' : 's'} on this client ${replaceInSlot.size === 1 ? 'is' : 'are'} currently filled by a photo that cannot be fixed by framing: ${[...replaceInSlot].sort().join(', ')}. Ask the client for replacements — see the audit in docs/.`);
+      } else if (replace) {
+        push('warning', 'Photo status', `${counts}. None of the Replace photos reach a page on the templates this client builds.`);
+      } else if (under) {
+        push('warning', 'Photo status', `${counts}. Nothing needs replacing, but the under-spec ones will look soft on a retina screen.`);
+      } else {
+        push('ok', 'Photo status', counts);
+      }
+    }
   }
 
   if (!(record.reviews ?? []).length) push('warning', 'Reviews', 'None transcribed, so every review block self-hides. Transcribe them VERBATIM from the client’s own profile — never write or tidy one.');

@@ -17,7 +17,7 @@ import { useState } from 'react';
 import type { Json } from './lib';
 import { api, fileToBase64 } from './lib';
 import { PLACEMENT, RESOLVES_FROM_MAP, templateCells, type Cell } from '../lib/placement.mjs';
-import { photoStatus } from '../lib/photoStatus';
+import { photoStatus } from '../lib/photoStatus.mjs';
 import { IMAGE_SLOTS, MASTERS, minWidth } from '../templates/imageSlots.mjs';
 import type { PhotoSet } from '../schema/client';
 

@@ -24,7 +24,8 @@ import { readdirSync, readFileSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
 import sharp from 'sharp';
 import { IMAGE_SLOTS, MASTERS, slotById, stillCount, stillIndex } from '../app/src/templates/imageSlots.mjs';
-import { slotsForPosition } from '../app/src/lib/placement.mjs';
+import { PLACEMENT, cellKey, photoId, slotsForPosition, templateCells } from '../app/src/lib/placement.mjs';
+import { photoStatus } from '../app/src/lib/photoStatus.mjs';
 
 const ROOT = new URL('..', import.meta.url).pathname;
 const PUB = join(ROOT, 'app', 'public');
@@ -88,6 +89,52 @@ for (const file of readdirSync(join(ROOT, 'clients')).filter((f) => f.endsWith('
       const coverSlots = slots.filter((s) => s.policy === 'cover' && s.focal === 'required');
       if (coverSlots.length && !p.focal && !demo) sink.push(`${slug}: photos.${set}[${i}] (${tag}) has no focal point but is cover-cropped by ${coverSlots.map((s) => `${s.template}/${s.id}`).join(', ')}`);
       if (coverSlots.length && !p.focal && demo) warns.push(`${slug} (demo): photos.${set}[${i}] has no focal point (${coverSlots.length} cover slot${coverSlots.length === 1 ? '' : 's'})`);
+    }
+  }
+
+  /* ---- explicit slot assignments (Phase 1b) ---- */
+  // Three things a record with `photoSlots` can get wrong that nothing else would catch:
+  // an assignment naming a photograph that is not in the library, a wired template whose
+  // slot resolves to nothing at all, and a live client with a Replace-grade photograph in
+  // a slot. The first is a broken record; the second hides a section; the third is what
+  // the audit exists to stop shipping.
+  const library = new Set();
+  for (const list of Object.values(record.photos ?? {})) for (const ph of list ?? []) if (ph?.src) library.add(photoId(ph));
+
+  for (const [tpl, map] of Object.entries(record.photoSlots ?? {})) {
+    if (excluded.has(tpl)) continue;
+    if (!PLACEMENT[tpl]) { fails.push(`${slug}: photoSlots.${tpl} is not a template that takes photographs`); continue; }
+    const keys = new Set();
+    for (const slot of PLACEMENT[tpl]) {
+      if (slot.cells === 'all') continue;
+      for (let i = 0; i < slot.cells; i++) keys.add(cellKey(slot, i));
+    }
+    for (const [key, id] of Object.entries(map ?? {})) {
+      if (!keys.has(key)) { fails.push(`${slug}: photoSlots.${tpl}.${key} is not a slot on ${tpl}`); continue; }
+      // '' is DELIBERATELY EMPTY — the studio's "Remove from slot". Not a dangling id.
+      if (id !== '' && !library.has(id)) fails.push(`${slug}: photoSlots.${tpl}.${key} points at ${id}, which is not in this client's photographs`);
+    }
+  }
+
+  /* ---- what every wired template actually resolves to ---- */
+  for (const tpl of Object.keys(PLACEMENT)) {
+    if (excluded.has(tpl)) continue;
+    for (const cell of templateCells(record, tpl)) {
+      if (!cell.photo) continue;
+      const slot = PLACEMENT[tpl].find((s) => s.id === cell.slotId);
+      const meta = slotById(tpl, cell.slotId);
+      if (!meta) continue;
+      const need = MASTERS[meta.master].min[0];
+      const st = photoStatus(cell.photo, need);
+      if (st && st.kind === 'replace') {
+        const where = `${tpl}/${cell.slotId}${slot && slot.cells !== 1 ? ` cell ${cell.index + 1}` : ''}`;
+        const legacyHere = !(cell.photo.pipeline && Number(cell.photo.pipeline.version) >= 2);
+        const msg = `${slug}: ${where} resolves to a Replace photo — ${st.reason}`;
+        // The existing legacy allowance holds: every photograph on both live clients
+        // predates the contract, and failing them would block every publish.
+        if (demo || (legacyHere && !STRICT_LEGACY)) warns.push(msg);
+        else fails.push(msg);
+      }
     }
   }
 
