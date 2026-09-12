@@ -23,8 +23,8 @@
 
 import type { PhotoSet } from '../../schema/client';
 import type { ResolvedClient } from '../../schema/resolve';
-import { partitionMedia, photosFor } from '../../lib/photos';
-import { resolvePlacement } from '../../lib/placement';
+import { partitionMedia, photosFor } from '../../lib/photos.mjs';
+import { resolvePlacement } from '../../lib/placement.mjs';
 
 /** The lead form's id. Both scroll-to-form CTAs link to it; the form owns it. */
 export const FORM_ANCHOR = 'ta-estimate-form';

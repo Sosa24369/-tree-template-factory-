@@ -10,7 +10,7 @@
 
 import type { PhotoSet } from '../../schema/client';
 import type { ResolvedClient } from '../../schema/resolve';
-import { partitionMedia } from '../../lib/photos';
+import { partitionMedia } from '../../lib/photos.mjs';
 
 /**
  * Storm imagery for this client, stills only, in record order.

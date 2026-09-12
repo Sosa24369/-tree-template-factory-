@@ -20,7 +20,7 @@
 import type { ResolvedClient } from '../../../schema/resolve';
 import { SafeText } from '../../../components/Safe';
 import { DeferredImage } from '../../../components/DeferredImage';
-import { partitionMedia, photosFor } from '../../../lib/photos';
+import { partitionMedia, photosFor } from '../../../lib/photos.mjs';
 import { altFor, withAlt } from '../support';
 import { Eyebrow, Heading, Section, type Copy } from './shared';
 

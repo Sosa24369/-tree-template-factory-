@@ -1,6 +1,15 @@
 /**
  * THE IMAGE SLOT CONTRACT — every place a client image renders, declared once.
  *
+ * PLACEMENT LIVES IN lib/placement.mjs, not here. This file is the documentation layer:
+ * human labels, measured boxes, policies, client-facing minimums, the generated spec.
+ * It once also carried slotsForPhoto(), which decided placement by running regexes over
+ * the English `source.pick` strings below — a second implementation that disagreed with
+ * the templates in four places and, because it matched only on the slot's declared set,
+ * hid removal-a's hero plate from every J Valdez photograph. Deleted in Phase 1b; ask
+ * lib/placement.mjs instead (slotsForPosition for an upload, landingsFor for a photo
+ * already on the record).
+ *
  * Every number here was MEASURED, not read off the CSS: headless Chrome rendered the
  * built pages for Texas Tree Tops (removal, storm, agnostic) and J Valdez (trimming)
  * at three viewports — 390, 820 and 1440 CSS px, device scale 2 — scrolled every
@@ -299,27 +308,6 @@ export function stillIndex(list, i) {
 }
 export const stillCount = (list) => (Array.isArray(list) ? list.filter((p) => p && p.kind !== 'video').length : 0);
 
-/** The slots one photo lands in, given its set and its index among the stills — for the Frame dialog. */
-export function slotsForPhoto(set, index, count) {
-  if (index < 0) return [];
-  const out = [];
-  for (const s of IMAGE_SLOTS) {
-    if (s.source.set !== set) continue;
-    const pick = s.source.pick;
-    let hit = false;
-    if (/^first$/.test(pick)) hit = index === 0;
-    else if (/^first (\d+)/.test(pick)) hit = index < Number(pick.match(/^first (\d+)/)[1]);
-    else if (/^2nd$/.test(pick)) hit = index === 1;
-    else if (/^2nd and 3rd/.test(pick)) hit = index === 1 || index === 2;
-    else if (/^last 3/.test(pick)) hit = index >= Math.max(0, count - 3);
-    else if (/^all/.test(pick)) hit = true;
-    else if (/^the middle share/.test(pick)) { const rest = count - 2; const half = rest >= 6 ? Math.ceil(rest / 2) : rest; hit = index >= 2 && index < 2 + half; }
-    else if (/^the rest/.test(pick)) { const rest = count - 2; const half = rest >= 6 ? Math.ceil(rest / 2) : rest; hit = rest >= 6 && index >= 2 + half; }
-    else if (/^the photo after the tiles/.test(pick)) hit = index === Math.min(6, count - 1);
-    if (hit) out.push(s);
-  }
-  return out;
-}
 
 /** Slot lookup. */
 export function slotById(template, id) {

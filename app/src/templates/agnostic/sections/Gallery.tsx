@@ -21,7 +21,7 @@
 
 import type { ResolvedClient } from '../../../schema/resolve';
 import { DeferredImage } from '../../../components/DeferredImage';
-import { partitionMedia, photosFor } from '../../../lib/photos';
+import { partitionMedia, photosFor } from '../../../lib/photos.mjs';
 import { galleryAlt } from '../copy.defaults';
 import { Section, SectionHead } from './shared';
 import { withAlt, type Copy } from '../text';

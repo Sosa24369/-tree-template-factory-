@@ -21,8 +21,22 @@
 import { useEffect, useRef, useState } from 'react';
 import type { Json } from './lib';
 import { api, fileToBase64 } from './lib';
-import { BREAKPOINTS, IMAGE_SLOTS, MASTERS, minWidth, slotsForPhoto, stillCount, stillIndex, type ImageSlot, type SlotSet } from '../templates/imageSlots.mjs';
-import { slotPosition } from '../lib/placement';
+import { BREAKPOINTS, IMAGE_SLOTS, MASTERS, minWidth, slotById, stillCount, type ImageSlot } from '../templates/imageSlots.mjs';
+import { landingsFor, photoId, slotPosition, slotsForPosition } from '../lib/placement.mjs';
+
+/**
+ * Every slot a photograph ACTUALLY lands in on this client, cascade and explicit
+ * assignments included. The old positional query matched a slot only when the slot's
+ * declared set equalled the photo's set, so on J Valdez — twelve photographs, all in
+ * photos.trimming — it listed the trimming slots and silently omitted removal-a's hero
+ * plate, the photograph behind the headline on a live ad page.
+ */
+function landedSlots(record: Json, photo: any, excluded: Set<string>): ImageSlot[] {
+  if (!photo?.src) return [];
+  return landingsFor(record as never, photoId(photo), excluded)
+    .map((l) => slotById(l.templateId, l.slotId))
+    .filter((s): s is ImageSlot => !!s);
+}
 
 const SERVICES = ['removal', 'trimming', 'storm', 'generic'] as const;
 type Service = (typeof SERVICES)[number];
@@ -112,7 +126,7 @@ function PhotoService({ svc, slug, record, excluded, list, onList }: { svc: Serv
       <div className="dash-photo-grid" ref={gridRef}>
         {list.map((p, i) => {
           const video = p.kind === 'video';
-          const slots = slotsForPhoto(svc as SlotSet, stillIndex(list, i), stillCount(list)).filter((s) => !excluded.has(s.template));
+          const slots = landedSlots(record, p, excluded);
           const cover = slots.filter((s) => s.policy === 'cover' && s.focal === 'required');
           const needsFocal = cover.length > 0 && !p.focal;
           const heroPlate = slots.find((s) => s.legibility);
@@ -222,7 +236,7 @@ function PhotoService({ svc, slug, record, excluded, list, onList }: { svc: Serv
       {framing !== null && list[framing] && (
         <FrameDialog
           photo={list[framing]}
-          slots={slotsForPhoto(svc as SlotSet, stillIndex(list, framing), stillCount(list)).filter((s) => !excluded.has(s.template))}
+          slots={landedSlots(record, list[framing], excluded)}
           position={framing + 1}
           onCancel={() => setFraming(null)}
           onSave={(focal) => { if (focal) setAt(framing, { focal }); else { const { focal: _f, ...rest } = list[framing]; onList(list.map((q, n) => (n === framing ? rest : q))); } setFraming(null); }}
@@ -383,7 +397,9 @@ function CropDialog({ dataUrl, set, index, count, excluded, onCancel, onConfirm 
   const [aspect, setAspect] = useState<number | null>(4 / 3);
   const [dims, setDims] = useState<{ w: number; h: number } | null>(null);
   const imgRef = useRef<HTMLImageElement>(null);
-  const slots = slotsForPhoto(set as SlotSet, index, Math.max(count, index + 1)).filter((s) => !excluded.has(s.template));
+  const slots = slotsForPosition(set as never, index, Math.max(count, index + 1))
+    .map((l) => slotById(l.templateId, l.slotId))
+    .filter((s): s is ImageSlot => !!s && !excluded.has(s.template));
   let need = MASTERS.photo.min[0];
   for (const s of slots) need = Math.max(need, minWidth(s.master));
   // What the 4:3 master will be, so the size warning appears before the upload is refused.

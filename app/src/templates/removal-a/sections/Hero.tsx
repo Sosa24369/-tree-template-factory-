@@ -16,7 +16,7 @@ import type { ResolvedClient } from '../../../schema/resolve';
 import { SafeImage, SafeText } from '../../../components/Safe';
 import { LeadForm } from '../../../components/LeadForm';
 import { altFor, withAlt } from '../assets';
-import { slotPhotos, slotPosition, slotSizes } from '../../../lib/placement';
+import { slotPhotos, slotPosition, slotSizes } from '../../../lib/placement.mjs';
 import { preloadLcpImage } from '../../../lib/preloadLcp';
 import { CallCta, SplitHeading, type Copy } from './shared';
 

@@ -23,7 +23,8 @@
 import { readdirSync, readFileSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
 import sharp from 'sharp';
-import { IMAGE_SLOTS, MASTERS, slotsForPhoto, stillCount, stillIndex } from '../app/src/templates/imageSlots.mjs';
+import { IMAGE_SLOTS, MASTERS, slotById, stillCount, stillIndex } from '../app/src/templates/imageSlots.mjs';
+import { slotsForPosition } from '../app/src/lib/placement.mjs';
 
 const ROOT = new URL('..', import.meta.url).pathname;
 const PUB = join(ROOT, 'app', 'public');
@@ -72,7 +73,8 @@ for (const file of readdirSync(join(ROOT, 'clients')).filter((f) => f.endsWith('
       const tag = legacy ? 'legacy' : 'studio';
 
       // Which slots this photo lands in, on the templates this client actually builds.
-      const slots = slotsForPhoto(set, stillIndex(photos, i), stillCount(photos)).filter((s) => !excluded.has(s.template));
+      const slots = slotsForPosition(set, stillIndex(photos, i), stillCount(photos))
+        .map((l) => slotById(l.templateId, l.slotId)).filter((s) => s && !excluded.has(s.template));
       const d = await dims(p.src);
       if (!d) { fails.push(`${slug}: photos.${set}[${i}] ${p.src} cannot be read as an image`); continue; }
 

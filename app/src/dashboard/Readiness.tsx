@@ -17,7 +17,8 @@
  */
 
 import type { Json } from './lib';
-import { MASTERS, minWidth, slotsForPhoto, stillCount, stillIndex } from '../templates/imageSlots.mjs';
+import { MASTERS, minWidth, slotById, stillCount, stillIndex } from '../templates/imageSlots.mjs';
+import { slotsForPosition } from '../lib/placement.mjs';
 
 type Level = 'blocker' | 'warning' | 'manual' | 'ok';
 
@@ -112,7 +113,9 @@ export function readiness(record: Json): Item[] {
       (list ?? []).forEach((p, i) => {
         if (!p?.src || p.kind === 'video') return;
         const studio = p.pipeline && Number(p.pipeline.version) >= 2;
-        const slots = slotsForPhoto(set as any, stillIndex(list, i), stillCount(list)).filter((s) => !excluded.has(s.template));
+        const slots = slotsForPosition(set as never, stillIndex(list, i), stillCount(list))
+          .map((l) => slotById(l.templateId, l.slotId))
+          .filter((s): s is NonNullable<typeof s> => !!s && !excluded.has(s.template));
         if (slots.some((s) => s.policy === 'cover' && s.focal === 'required') && !p.focal) { noFocal++; if (studio) noFocalStudio++; }
         let need = MASTERS.photo.min[0];
         for (const s of slots) need = Math.max(need, minWidth(s.master));

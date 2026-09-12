@@ -22,7 +22,7 @@ import { SafeText } from '../../../components/Safe';
 import { DeferredImage } from '../../../components/DeferredImage';
 import { altFor, photoSlots, withAlt } from '../slots';
 import { CheckIcon, Rule, Section, SplitHeading, type Copy } from './shared';
-import { slotSizes } from '../../../lib/placement';
+import { slotSizes } from '../../../lib/placement.mjs';
 
 const REQUESTS = [1, 2, 3, 4, 5, 6, 7];
 

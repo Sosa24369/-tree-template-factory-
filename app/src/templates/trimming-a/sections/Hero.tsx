@@ -28,7 +28,7 @@ import { DeferredImage } from '../../../components/DeferredImage';
 import { LeadForm } from '../../../components/LeadForm';
 import { FORM_ANCHOR, altFor, photoSlots, withAlt } from '../slots';
 import { CallRow, SplitHeading, type Copy } from './shared';
-import { slotSizes } from '../../../lib/placement';
+import { slotSizes } from '../../../lib/placement.mjs';
 
 export function Hero({ client, copy }: { client: ResolvedClient; copy: Copy }) {
   const { hero } = photoSlots(client);

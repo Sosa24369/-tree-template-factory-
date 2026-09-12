@@ -20,7 +20,7 @@ import { LeadForm } from '../../components/LeadForm';
 import { DeferredImage } from '../../components/DeferredImage';
 import { ReviewsSlider } from '../../components/ReviewsSlider';
 import { ServiceAreasCarousel } from '../../components/ServiceAreasCarousel';
-import { photosFor, partitionMedia } from '../../lib/photos';
+import { photosFor, partitionMedia } from '../../lib/photos.mjs';
 import { GoogleAdsCallAsset } from '../../components/GoogleAdsCallAsset';
 import { renderSections } from '../../lib/renderSections';
 import { brandAttrs } from '../../lib/brandAttrs';

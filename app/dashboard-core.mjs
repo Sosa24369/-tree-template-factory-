@@ -29,7 +29,8 @@ import { execFileSync } from 'node:child_process';
 import { createHash, randomBytes } from 'node:crypto';
 import { tmpdir } from 'node:os';
 import { sniffHeic, heroLegibility, logoChecks } from './image-checks.mjs';
-import { MASTERS, slotsForPhoto } from './src/templates/imageSlots.mjs';
+import { MASTERS, slotById } from './src/templates/imageSlots.mjs';
+import { slotsForPosition } from './src/lib/placement.mjs';
 
 const SLUG_RE = /^[a-z0-9][a-z0-9-]*$/;
 /** Every width a slot renders at 2×, from the contract; the master itself (≤1600) is the last candidate. */
@@ -183,7 +184,8 @@ export function dashboardCore(opts) {
   // The minimum for the slots this photo lands in. The caller says which set and
   // position (an append lands at index = count); the hero plate wants 1600.
   const set = placement.set, count = Number(placement.count ?? 0), index = Number(placement.index ?? count);
-  const slots = set ? slotsForPhoto(set, index, Math.max(count, index + 1)) : [];
+  const slots = (set ? slotsForPosition(set, index, Math.max(count, index + 1)) : [])
+    .map((l) => slotById(l.templateId, l.slotId)).filter(Boolean);
   let need = MASTERS.photo.min, needWhy = 'a 4:3 tile';
   for (const s of slots) if (MASTERS[s.master].min[0] > need[0]) { need = MASTERS[s.master].min; needWhy = `the ${s.template} ${s.label.split(' — ')[0].toLowerCase()}`; }
   const mw = meta.width ?? 0, mh = meta.height ?? 0;

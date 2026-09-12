@@ -25,7 +25,7 @@
 
 import type { ResolvedClient } from '../../../schema/resolve';
 import { DeferredImage } from '../../../components/DeferredImage';
-import { partitionMedia, photosFor } from '../../../lib/photos';
+import { partitionMedia, photosFor } from '../../../lib/photos.mjs';
 import { altFor, Eyebrow, Section, type Copy } from './shared';
 
 const MAX_PHOTOS = 6;

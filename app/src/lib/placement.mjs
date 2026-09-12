@@ -16,12 +16,13 @@
  * Placement resolves at prerender. Nothing here is a runtime decision.
  */
 
-import type { PhotoSet } from '../schema/client';
-import type { ResolvedClient } from '../schema/resolve';
-import { partitionMedia, photosFor, type ServiceKey } from './photos';
+/** @typedef {import('../schema/client').PhotoSet} PhotoSet */
+/** @typedef {import('../schema/resolve').ResolvedClient} ResolvedClient */
+/** @typedef {import('./photos').ServiceKey} ServiceKey */
+import { partitionMedia, photosFor } from './photos.mjs';
 
 /** A photo's stable identity. Every src already carries a content hash, so no migration. */
-export const photoId = (p: PhotoSet): string => p.id ?? p.src;
+export const photoId = (p) => p.id ?? p.src;
 
 /**
  * How a slot chooses from its set.
@@ -36,55 +37,13 @@ export const photoId = (p: PhotoSet): string => p.id ?? p.src;
  *  theRest      trimming-a's grid: the second half, only when the rest is 6 or more
  *  afterTiles   storm's side photo: index 6, or the last still if there are fewer
  */
-export type Pick =
-  | { kind: 'first' }
-  | { kind: 'nth'; n: number }
-  | { kind: 'range'; from: number; to: number }
-  | { kind: 'firstN'; n: number }
-  | { kind: 'lastN'; n: number }
-  | { kind: 'all' }
-  | { kind: 'middleShare' }
-  | { kind: 'theRest' }
-  | { kind: 'afterTiles' };
 
-export interface PlacementSlot {
-  /** Stable within a template. Matches templates/imageSlots.mjs. */
-  id: string;
-  set: ServiceKey;
-  pick: Pick;
-  /**
-   * `direct-then-cascade` reproduces removal-a's results mosaic exactly: it reads
-   * client.photos.generic DIRECTLY — bypassing the cascade, and unsliced, so a generic
-   * set of 23 renders 23 cells — and only falls back to the cascade with the pick applied.
-   * Declared rather than tidied: tidying it would change a live page.
-   */
-  mode?: 'direct-then-cascade';
-  /** How many cells the slot has, for explicit assignment keys. 'all' gets none. */
-  cells: number | 'all';
-  /**
-   * The `sizes` attribute for this slot, so the browser picks a candidate that fits the
-   * box it will actually be painted into. Stage 1 found these hand-written per template
-   * and understating the real box by up to 4.82x — the hero plate declared 55vw and
-   * renders at 100vw, so the browser fetched a quarter of the width it needed
-   * (docs/BUILD-LOG.md, Phase 1b, H4). Derived from the measured boxes in
-   * templates/imageSlots.mjs and rounded UP: overstating costs a slightly larger file,
-   * understating costs a soft photograph, and only one of those is visible.
-   */
-  sizes: string;
-  /**
-   * `object-position` when the photo has no focal point. Declared ONLY where the
-   * template's CSS differs from the 50% 50% initial value, so the studio's Frame preview
-   * and the page cannot disagree about where an unframed photo sits — Stage 1's H2, a
-   * 37 CSS px error on removal-a's desktop hero.
-   */
-  defaultPosition?: string;
-}
 
 /**
  * Every slot that draws a client PHOTOGRAPH, per template. Logos, section-art plates and
  * the desktop hero washes are not here: they are not fed from a photo set by position.
  */
-export const PLACEMENT: Record<string, PlacementSlot[]> = {
+export const PLACEMENT = {
   'removal-a': [
     { id: 'hero-plate', set: 'removal', pick: { kind: 'first' }, cells: 1,
       sizes: '100vw', defaultPosition: '50% 35%' },
@@ -162,12 +121,12 @@ export const RESOLVES_FROM_MAP = new Set(['removal-a', 'trimming-a']);
 /** trimming-a's gallery/grid split: after the hero takes 2, halve the rest — but only
  *  when the rest is 6 or more, otherwise the gallery takes everything and the grid is
  *  empty and self-hides (R5). */
-const share = (count: number) => {
+const share = (count) => {
   const rest = count - 2;
   return rest >= 6 ? Math.ceil(rest / 2) : rest;
 };
 
-function applyPick(pick: Pick, stills: PhotoSet[], raw: PhotoSet[]): PhotoSet[] {
+function applyPick(pick, stills, raw) {
   switch (pick.kind) {
     case 'first': return stills.slice(0, 1);
     case 'nth': return (stills[pick.n] ?? stills[0]) ? [stills[pick.n] ?? stills[0]] : [];
@@ -185,13 +144,6 @@ function applyPick(pick: Pick, stills: PhotoSet[], raw: PhotoSet[]): PhotoSet[] 
   }
 }
 
-export interface ResolvedSlot {
-  id: string;
-  /** One entry per cell, in page order. A hole is null — the section self-hides (R5). */
-  photos: (PhotoSet | null)[];
-  /** Per cell: was this an explicit assignment or auto-fill? */
-  source: ('explicit' | 'auto')[];
-}
 
 /**
  * Resolve one template's photo slots for one client.
@@ -201,15 +153,15 @@ export interface ResolvedSlot {
  * `client.photoSlots[templateId]` overrides a single cell, keyed `slotId` for a one-cell
  * slot and `slotId.N` (1-based) otherwise.
  */
-export function resolvePlacement(client: ResolvedClient, templateId: string): Map<string, ResolvedSlot> {
+export function resolvePlacement(client, templateId) {
   const slots = PLACEMENT[templateId] ?? [];
   const assigned = client.photoSlots?.[templateId] ?? {};
-  const byId = new Map<string, PhotoSet>();
+  const byId = new Map();
   for (const list of Object.values(client.photos ?? {})) for (const p of list ?? []) byId.set(photoId(p), p);
 
-  const out = new Map<string, ResolvedSlot>();
+  const out = new Map();
   for (const slot of slots) {
-    let auto: PhotoSet[];
+    let auto;
     if (slot.mode === 'direct-then-cascade') {
       // The mosaic's quirk, reproduced: the direct read is NOT sliced by the pick.
       const direct = partitionMedia(client.photos?.[slot.set] ?? []).stills;
@@ -224,8 +176,8 @@ export function resolvePlacement(client: ResolvedClient, templateId: string): Ma
     // mosaic's direct read is deliberately unsliced, so a generic set of 23 must still
     // render 23 cells even though only 5 of them can carry an explicit assignment.
     const n = slot.cells === 'all' ? auto.length : Math.max(slot.cells, auto.length);
-    const photos: (PhotoSet | null)[] = [];
-    const source: ('explicit' | 'auto')[] = [];
+    const photos = [];
+    const source = [];
     for (let i = 0; i < n; i++) {
       const key = cellKey(slot, i);
       const explicit = slot.cells === 'all' ? undefined : assigned[key];
@@ -243,28 +195,19 @@ export function resolvePlacement(client: ResolvedClient, templateId: string): Ma
 }
 
 /** The assignment key for one cell: `slotId` when the slot has one, else `slotId.N`. */
-export function cellKey(slot: PlacementSlot, i: number): string {
+export function cellKey(slot, i) {
   return slot.cells === 1 ? slot.id : `${slot.id}.${i + 1}`;
 }
 
-export interface Cell {
-  slotId: string;
-  /** 0-based index within the slot. */
-  index: number;
-  /** The assignment key, or null for a slot that takes no explicit assignment. */
-  key: string | null;
-  photo: PhotoSet | null;
-  source: 'explicit' | 'auto';
-}
 
 /**
  * Every cell on one template, flattened into PAGE ORDER — which is the order the studio
  * shows them in, and the order "move up" and "move down" walk. Slots that consume the
  * whole set take no assignment keys: their order is the library's, reordered in place.
  */
-export function templateCells(client: ResolvedClient, templateId: string): Cell[] {
+export function templateCells(client, templateId) {
   const resolved = resolvePlacement(client, templateId);
-  const out: Cell[] = [];
+  const out = [];
   for (const slot of PLACEMENT[templateId] ?? []) {
     const r = resolved.get(slot.id);
     if (!r) continue;
@@ -282,12 +225,12 @@ export function templateCells(client: ResolvedClient, templateId: string): Cell[
 }
 
 /** Convenience for a template that wants one slot's list without the map. */
-export function slotPhotos(client: ResolvedClient, templateId: string, slotId: string): (PhotoSet | null)[] {
+export function slotPhotos(client, templateId, slotId) {
   return resolvePlacement(client, templateId).get(slotId)?.photos ?? [];
 }
 
 /** The `sizes` attribute for a slot. One source of truth; templates carry no literals. */
-export function slotSizes(templateId: string, slotId: string): string | undefined {
+export function slotSizes(templateId, slotId) {
   return PLACEMENT[templateId]?.find((s) => s.id === slotId)?.sizes;
 }
 
@@ -296,6 +239,51 @@ export function slotSizes(templateId: string, slotId: string): string | undefine
  * the studio can preview exactly what the page renders. A photo WITH a focal point still
  * wins; this is only the fallback.
  */
-export function slotPosition(templateId: string, slotId: string): string | undefined {
+export function slotPosition(templateId, slotId) {
   return PLACEMENT[templateId]?.find((s) => s.id === slotId)?.defaultPosition;
+}
+
+/**
+ * PROSPECTIVE: which slots would a photograph at `index` of `set` feed, if the set had
+ * `count` stills? Used at UPLOAD time, where there is no record entry yet — the pipeline
+ * needs the slot minimum before it will accept the file.
+ *
+ * This replaces imageSlots.mjs's slotsForPhoto(), which re-parsed the contract's English
+ * `pick` strings with regexes. One pick implementation now, queried two ways.
+ */
+export function slotsForPosition(set, index, count) {
+  if (index < 0) return [];
+  const fake = Array.from({ length: Math.max(count, index + 1) }, (_, i) => ({ src: `#${i}` }));
+  const out = [];
+  for (const [templateId, slots] of Object.entries(PLACEMENT)) {
+    for (const slot of slots) {
+      if (slot.source ? slot.source !== set : slot.set !== set) continue;
+      const picked = applyPick(slot.pick, fake, fake);
+      const at = picked.findIndex((p) => p && p.src === `#${index}`);
+      if (at >= 0) out.push({ templateId, slotId: slot.id, index: at });
+    }
+  }
+  return out;
+}
+
+/**
+ * RETROSPECTIVE: every slot this photograph actually occupies on this client, following
+ * the cascade and honouring explicit assignments.
+ *
+ * The positional query cannot answer this. It matched a slot only when the slot's declared
+ * set equalled the photo's set, so on J Valdez — whose photographs live only in
+ * photos.trimming — it reported the trimming slots and silently omitted removal-a's hero
+ * plate, the photograph behind the headline on a LIVE ad page (docs/BUILD-LOG.md, 1b/1a).
+ */
+export function landingsFor(client, id, excluded) {
+  const out = [];
+  for (const templateId of Object.keys(PLACEMENT)) {
+    if (excluded && excluded.has(templateId)) continue;
+    for (const cell of templateCells(client, templateId)) {
+      if (cell.photo && photoId(cell.photo) === id) {
+        out.push({ templateId, slotId: cell.slotId, index: cell.index });
+      }
+    }
+  }
+  return out;
 }

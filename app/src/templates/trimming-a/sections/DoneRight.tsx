@@ -13,7 +13,7 @@ import { SafeText } from '../../../components/Safe';
 import { DeferredImage } from '../../../components/DeferredImage';
 import { altFor, photoSlots, withAlt } from '../slots';
 import { CallRow, Rule, Section, SplitHeading, type Copy } from './shared';
-import { slotSizes } from '../../../lib/placement';
+import { slotSizes } from '../../../lib/placement.mjs';
 
 export function DoneRight({ client, copy }: { client: ResolvedClient; copy: Copy }) {
   const { grid } = photoSlots(client);

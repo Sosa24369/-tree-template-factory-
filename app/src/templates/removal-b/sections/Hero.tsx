@@ -24,7 +24,7 @@
 import type { CSSProperties, ReactNode } from 'react';
 import type { ResolvedClient } from '../../../schema/resolve';
 import { SafeText } from '../../../components/Safe';
-import { partitionMedia, photosFor } from '../../../lib/photos';
+import { partitionMedia, photosFor } from '../../../lib/photos.mjs';
 import { cssUrl } from '../support';
 import { BoltIcon, BroomIcon, CallCta, Eyebrow, FORM_ANCHOR, Heading, PinIcon, ShieldIcon, StarIcon, type Copy } from './shared';
 

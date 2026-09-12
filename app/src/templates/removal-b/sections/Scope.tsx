@@ -15,7 +15,7 @@ import type { ResolvedClient } from '../../../schema/resolve';
 import { SafeText } from '../../../components/Safe';
 import { DeferredImage } from '../../../components/DeferredImage';
 import { altFor, withAlt } from '../support';
-import { partitionMedia, photosFor } from '../../../lib/photos';
+import { partitionMedia, photosFor } from '../../../lib/photos.mjs';
 import { CheckIcon, Eyebrow, Heading, Section, type Copy } from './shared';
 
 const GROUPS = [1, 2];

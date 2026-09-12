@@ -16,7 +16,7 @@
 import type { ResolvedClient } from '../../../schema/resolve';
 import { DeferredImage } from '../../../components/DeferredImage';
 import { altFor, photoSlots, withAlt } from '../slots';
-import { slotSizes } from '../../../lib/placement';
+import { slotSizes } from '../../../lib/placement.mjs';
 
 /**
  * CANONICAL STRUCTURE (2026-08-12): the rail ships as TWO photo bands around

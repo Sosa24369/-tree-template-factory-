@@ -12,7 +12,7 @@ import type { ResolvedClient } from '../../../schema/resolve';
 import { SafeText } from '../../../components/Safe';
 import { DeferredImage } from '../../../components/DeferredImage';
 import { altFor, withAlt } from '../assets';
-import { slotPhotos, slotSizes } from '../../../lib/placement';
+import { slotPhotos, slotSizes } from '../../../lib/placement.mjs';
 import { CheckIcon, Section, SplitHeading, type Copy } from './shared';
 
 /**
