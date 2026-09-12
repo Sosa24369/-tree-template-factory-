@@ -2844,3 +2844,48 @@ the photograph's ordinal in the set, and recomputing the cascade at the call sit
 that number is exactly how the duplication started.
 
 All 55 prerendered pages byte-identical across the whole exercise.
+
+## Stage 3 close-out — the guard, the bundle, the guide
+
+**The guard.** `image-spec` gained three assertions that had nothing to check before this
+phase: an assignment naming a photograph outside the client's library, an assignment naming
+a slot or template that does not exist, and a slot resolving to a Replace-grade photograph
+on a real client. `''` is read as deliberately empty — the studio's "Remove from slot" —
+not as a dangling id. The two-tier decision from Phase 1 is untouched: every photograph on
+both live clients predates the contract, so a Replace in a slot warns rather than fails.
+Warnings 85 → 172 on the current records; failures stay 0. Proved it fails when it should,
+against a record broken three ways, then reverted.
+
+**Readiness** now totals OK / under spec / replace per client and names the slots a Replace
+photograph actually fills:
+
+| client | counts | slots filled by a Replace photo |
+|---|---|---|
+| texas-tree-tops | 0 OK · 15 under spec · 15 replace | **22** |
+| j-valdez | 0 OK · 12 under spec · 0 replace | none |
+| summit-tree | 0 OK · 12 under spec · 0 replace | none |
+
+That count comes from dimensions and shape. It cannot see a before/after composite, so J
+Valdez's four read as "under spec" here. Only a person looking at the photographs fixes
+that, which is what the audit is for.
+
+**The bundle, measured against `33fe079` by building that commit rather than quoting it:**
+
+| | 33fe079 | now | delta |
+|---|---|---|---|
+| `index.js` raw | 469,505 | 474,534 | **+5,029** |
+| `index.js` gzip | 127,571 | 129,026 | **+1,455** |
+| `index.css` raw | 162,159 | 162,159 | +0 |
+| `index.css` gzip | 27,064 | 27,064 | +0 |
+| files in `dist` | 213 | 213 | +0 |
+
+**+1,455 B gzip, 0.94% of the bundle.** It buys one placement implementation instead of
+three, `sizes` that matches the real box on every slot (the hero plate was asking for a
+quarter of the width it paints), explicit assignment, and the studio panel's data. The
+growth was reported at each step and accepted at each step; the whole of it is steps 1–2
+plus 155 B for the last eight templates. Steps 3–5 added nothing to the public bundle.
+
+**`docs/PHOTOS.md`** is the owner's guide: the panel, the two upload paths, auto vs
+explicit, framing, the three statuses, and what the feature deliberately does not do. No
+screenshots — `docs/` has never carried images and that is a change worth making on
+purpose, not in passing.

@@ -35,6 +35,20 @@ studio could write is a token the studio could leak.
 
 ---
 
+## Photo placement (Phase 1b)
+
+A page has slots; slots hold photographs. `lib/placement.mjs` is the one place that decides
+which photograph lands in which slot — the templates, the studio, the upload pipeline and
+the image-spec guard all ask it, and nothing re-implements the rule. A record may carry an
+optional `photoSlots` map, per template, naming a photograph for a slot; anything it does
+not name is auto-filled by position exactly as before, so a record without the key renders
+byte-identically. The studio writes the key for one template the first time an assignment
+on that template changes. Nothing migrates a record wholesale.
+
+The owner-facing guide is **`docs/PHOTOS.md`**. The slot contract — labels, measured boxes,
+minimums, what to ask a client for — stays in `templates/imageSlots.mjs` and the generated
+`docs/IMAGE-SPEC.md`.
+
 ## Persistence: git, via a working clone
 
 **Decision: the `clients/*.json` records stay the single source of truth, and the
@@ -97,7 +111,9 @@ fake IP with every attempt.
 | **Which templates this client gets** (`excludedTemplates`) | Templates |
 | **Demo account switch** (`isDemo`) | Templates |
 | Reviews (author, attribution, body) | Reviews |
-| Photos per service — upload, reorder, **Frame** (focal point + three-crop preview), alt | Photos |
+| Photos per service — multi-file upload, reorder, **Frame** (focal point + a crop preview per slot), alt | Photos |
+| **Every photo slot on the selected page**, in page order, with the real crop, auto/explicit, a status pill, and place / swap / upload-into-slot controls | Photos on this page |
+| **Photo status** — OK / under spec / replace per client, and which slots a Replace photo fills | Readiness |
 | **Section background plates** — upload, replace, crop preset, clear | Section backgrounds |
 | SMS consent copy, Privacy / Terms URLs | Consent & legal |
 | GHL location, ad-click field, tags, source, GTM, CallRail | CRM & tracking |
