@@ -2647,9 +2647,14 @@ Array position is the only lever. There is no assignment map.
 Placement is decided in three places: each template's slicing, the contract's English
 `source.pick` strings, and `slotsForPhoto()`'s regexes over those strings. Four discrepancies:
 
-1. `IMAGE-SPEC.md` — the document handed to clients — says storm's hero "falls back to the
-   removal set, **never to trimming**". The cascade in `lib/photos.ts` is
-   `storm → generic → removal → trimming`. It does fall back to trimming.
+1. ~~`IMAGE-SPEC.md` says storm's hero "falls back to the removal set, **never to
+   trimming**" while the cascade is `storm → generic → removal → trimming`.~~
+   **WRONG — corrected 2026-09-11.** The contract was right and this entry was not. The
+   storm templates do not call `photosFor` at all: `storm-a/support.ts` has its own
+   narrower helper, `stormStills`, whose order is `storm → removal` and which never
+   touches generic or trimming. I read the cascade in `lib/photos.ts` and assumed storm
+   used it without checking. The real discrepancy is the opposite one — see the four
+   picks corrected when the remaining templates were wired, below.
 2. The mosaic renders **all** of `photos.generic`, not "first 5" as the contract states.
 3. The mosaic reads `client.photos.generic` directly, bypassing the cascade, using it only
    as fallback.
@@ -2799,3 +2804,43 @@ strengthened; no rule relaxed.
   (`dashboard-DG1U0wcZ.js`, built locally to the same hash).
 - **No photo has been through pipeline v2 on a real client**, so the focal remap that refutes
   H1 is proven by arithmetic and scratch files, not by a live upload.
+
+## Wiring the remaining eight templates — four more places the contract was wrong
+
+removal-a and trimming-a were wired in Stage 3 steps 1–2; the other eight followed, so all
+ten now read `lib/placement.mjs`. `RESOLVES_FROM_MAP` is derived from the table rather than
+hardcoded, so a template added later is read-only in the studio until it is wired.
+
+Wiring them meant reading every template's real slicing instead of the contract's English
+`pick` prose. The prose was wrong in four places, and three of those errors had been copied
+straight into the placement table:
+
+| slot | contract (and my table) said | the template has always done |
+|---|---|---|
+| `removal-b/tile` | first 6 | `MAX_TILES = 7`, **minus one when the set carries a video** |
+| `storm-a/handle` | "the photo after the tiles (7th), or the last" | `all[all.length - 1]` — **always the last still** |
+| `removal-c/longform` | 2nd, falling back to the 1st | `gallery[1] && …` — **nothing** when there is no 2nd |
+| `trimming-c/longform` | same | same |
+
+And the cascade correction above: storm resolves `storm → removal` only, and **skips a set
+that holds nothing but videos**, which the general `photosFor` does not do. Three new picks
+encode this — `firstNLessVideo`, `lastStill`, `nthStrict` — plus a per-slot `cascade`.
+`afterTiles`, which only ever encoded the prose, is deleted.
+
+**None of these are triggered by either live client's data.** Texas Tree Tops has a video
+first in its removal set, so `firstNLessVideo(7)` and `firstN(6)` happen to agree; its storm
+set is non-empty, so the cascade never runs; both clients have more than two stills, so the
+strict picks never differ. The byte-identical prerender diff passed before and after — it
+would have passed with the errors in, and shipped them. Reading the code is what caught
+them; the diff could not have.
+
+Proved against synthetic data that does trigger each one — 8 assertions, all passing:
+9 stills → 7 tiles; 9 stills plus a video → 6; 8 storm stills → the 8th; 1 still → no side
+photo; 2 → the 2nd; no storm set with generic and removal present → removal; only trimming
+→ nothing; a video-only storm set → falls through to removal.
+
+`slotSource()` was added for one honest reason: storm's side-photo alt text is composed from
+the photograph's ordinal in the set, and recomputing the cascade at the call site to get
+that number is exactly how the duplication started.
+
+All 55 prerendered pages byte-identical across the whole exercise.

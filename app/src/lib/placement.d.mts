@@ -5,19 +5,23 @@ import type { ServiceKey } from './photos.mjs';
 export type Pick =
   | { kind: 'first' }
   | { kind: 'nth'; n: number }
+  | { kind: 'nthStrict'; n: number }
+  | { kind: 'lastStill' }
+  | { kind: 'firstNLessVideo'; n: number }
   | { kind: 'range'; from: number; to: number }
   | { kind: 'firstN'; n: number }
   | { kind: 'lastN'; n: number }
   | { kind: 'all' }
   | { kind: 'middleShare' }
-  | { kind: 'theRest' }
-  | { kind: 'afterTiles' };
+  | { kind: 'theRest' };
 
 export interface PlacementSlot {
   id: string;
   set: ServiceKey;
   pick: Pick;
   mode?: 'direct-then-cascade';
+  /** A slot with its own fallback order, narrower than lib/photos' cascade (storm). */
+  cascade?: ServiceKey[];
   cells: number | 'all';
   sizes: string;
   defaultPosition?: string;
@@ -53,6 +57,9 @@ export function cellKey(slot: PlacementSlot, i: number): string;
 export function resolvePlacement(client: ResolvedClient, templateId: string): Map<string, ResolvedSlot>;
 export function templateCells(client: ResolvedClient, templateId: string): Cell[];
 export function slotPhotos(client: ResolvedClient, templateId: string, slotId: string): (PhotoSet | null)[];
+
+/** The stills a slot picks from, before the pick narrows them. */
+export function slotSource(client: ResolvedClient, templateId: string, slotId: string): PhotoSet[];
 export function slotSizes(templateId: string, slotId: string): string | undefined;
 export function slotPosition(templateId: string, slotId: string): string | undefined;
 

@@ -12,7 +12,8 @@
 import type { ResolvedClient } from '../../../schema/resolve';
 import { SafeText } from '../../../components/Safe';
 import { DeferredImage } from '../../../components/DeferredImage';
-import { altFor, stormStills, withAlt } from '../support';
+import { altFor, withAlt } from '../support';
+import { slotPhotos, slotSizes, slotSource } from '../../../lib/placement.mjs';
 import { CheckIcon, Eyebrow, FenceIcon, Heading, Section, TreeIcon, BroomIcon, type Copy } from './shared';
 
 const GROUP_ICONS = [TreeIcon, FenceIcon, BroomIcon] as const;
@@ -26,7 +27,7 @@ const ITEMS = [1, 2, 3, 4, 5, 6];
  * with the earlier ones — and a client with no storm photography simply gets
  * the single-column layout back (R4/R5: never stock, never another client's).
  */
-export function Handle({ client, copy }: { client: ResolvedClient; copy: Copy }) {
+export function Handle({ client, copy, templateId }: { client: ResolvedClient; copy: Copy; templateId: 'storm-a' | 'storm-b' | 'storm-c' }) {
   const groups = GROUPS.map((g, gi) => ({
     Icon: GROUP_ICONS[gi],
     heading: copy(`handle.group${g}.h`),
@@ -35,8 +36,10 @@ export function Handle({ client, copy }: { client: ResolvedClient; copy: Copy })
 
   if (groups.length === 0) return null;
 
-  const all = stormStills(client);
-  const photo = all.length > 0 ? all[all.length - 1] : null;
+  // The side photo is the LAST still; its alt names that ordinal, so the count has to
+  // be the same list the slot picked from.
+  const all = slotSource(client, templateId, 'handle');
+  const photo = slotPhotos(client, templateId, 'handle')[0] ?? null;
 
   return (
     <Section tone="paper" className="st-handle">
@@ -76,7 +79,7 @@ export function Handle({ client, copy }: { client: ResolvedClient; copy: Copy })
               photo={photo.alt ? photo : withAlt(photo, altFor(client.name, all.length))}
               className="st-handle-photo-img"
               wrapperClassName="st-handle-photo-box"
-              sizes="(max-width: 979px) 92vw, 40vw"
+              sizes={slotSizes(templateId, 'handle')}
             />
           </div>
         )}

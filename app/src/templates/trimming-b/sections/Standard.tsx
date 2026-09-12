@@ -17,7 +17,7 @@
 import type { ResolvedClient } from '../../../schema/resolve';
 import { SafeText } from '../../../components/Safe';
 import { DeferredImage } from '../../../components/DeferredImage';
-import { partitionMedia, photosFor } from '../../../lib/photos.mjs';
+import { slotPhotos } from '../../../lib/placement.mjs';
 import { altFor, Display, Eyebrow, Section, type Copy } from './shared';
 
 /**
@@ -33,8 +33,7 @@ export function Standard({ client, copy }: { client: ResolvedClient; copy: Copy 
   const heading = `${copy('standard.h2a')}${copy('standard.h2b')}`.trim();
   if (!heading && items.length === 0) return null;
 
-  const { stills } = partitionMedia(photosFor(client, 'trimming'));
-  const photo = stills[1] ?? stills[0] ?? null;
+  const photo = slotPhotos(client, 'trimming-b', 'standard')[0] ?? null;
 
   return (
     <Section tone="paper" className="tb-standard">

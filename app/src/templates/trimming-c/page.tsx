@@ -19,7 +19,7 @@ import { LeadForm } from '../../components/LeadForm';
 import { DeferredImage } from '../../components/DeferredImage';
 import { ReviewsSlider } from '../../components/ReviewsSlider';
 import { ServiceAreasCarousel } from '../../components/ServiceAreasCarousel';
-import { photosFor, partitionMedia } from '../../lib/photos.mjs';
+import { slotPhotos } from '../../lib/placement.mjs';
 import { GoogleAdsCallAsset } from '../../components/GoogleAdsCallAsset';
 import { renderSections } from '../../lib/renderSections';
 import { brandAttrs } from '../../lib/brandAttrs';
@@ -28,9 +28,9 @@ type Copy = (key: string) => string;
 
 const FORM_ANCHOR = 'tc-form';
 
-function stills(client: ResolvedClient, limit?: number): PhotoSet[] {
-  const { stills: onlyStills } = partitionMedia(photosFor(client, 'trimming'));
-  return typeof limit === 'number' ? onlyStills.slice(0, limit) : onlyStills;
+/** Placement for this template's slots — the counts live in lib/placement.mjs. */
+function slot(client: ResolvedClient, id: string): PhotoSet[] {
+  return slotPhotos(client, 'trimming-c', id).filter((p): p is PhotoSet => p !== null);
 }
 
 function Split({
@@ -67,7 +67,8 @@ export function TrimmingCPage({
   copy: Copy;
   brandStyle: CSSProperties;
 }) {
-  const gallery = stills(client, 8);
+  const gallery = slot(client, 'work');
+  const sidePhoto = slot(client, 'longform')[0] ?? null;
   const reviewCount = (client.reviews ?? []).filter((r) => (r?.body ?? '').trim()).length;
   const services = Array.from({ length: 17 }, (_, i) => copy(`services.item${i + 1}`)).filter((s) => s.trim());
   const requests = Array.from({ length: 7 }, (_, i) => copy(`longform.request${i + 1}`)).filter((s) => s.trim());
@@ -252,10 +253,10 @@ export function TrimmingCPage({
                     </ul>
                   )}
                 </div>
-                {gallery[1] && (
+                {sidePhoto && (
                   <div className="tc-longform-photo">
                     <DeferredImage
-                      photo={gallery[1]}
+                      photo={sidePhoto}
                       wrapperClassName="tc-longform-photo-box"
                       className="tc-longform-photo-img"
                       sizes="(max-width: 979px) 92vw, 38vw"

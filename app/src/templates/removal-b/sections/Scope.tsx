@@ -15,7 +15,7 @@ import type { ResolvedClient } from '../../../schema/resolve';
 import { SafeText } from '../../../components/Safe';
 import { DeferredImage } from '../../../components/DeferredImage';
 import { altFor, withAlt } from '../support';
-import { partitionMedia, photosFor } from '../../../lib/photos.mjs';
+import { slotPhotos, slotSizes } from '../../../lib/placement.mjs';
 import { CheckIcon, Eyebrow, Heading, Section, type Copy } from './shared';
 
 const GROUPS = [1, 2];
@@ -35,8 +35,7 @@ export function Scope({ client, copy }: { client: ResolvedClient; copy: Copy }) 
 
   if (groups.length === 0) return null;
 
-  const { stills } = partitionMedia(photosFor(client, 'removal'));
-  const photo = stills[1] ?? stills[0] ?? null;
+  const photo = slotPhotos(client, 'removal-b', 'scope')[0] ?? null;
 
   return (
     <Section tone="tint" className="rb-scope">
@@ -71,7 +70,7 @@ export function Scope({ client, copy }: { client: ResolvedClient; copy: Copy }) 
               photo={photo.alt ? photo : withAlt(photo, altFor(client.name, 2))}
               className="rb-scope-photo-img"
               wrapperClassName="rb-scope-photo-box"
-              sizes="(max-width: 979px) 92vw, 38vw"
+              sizes={slotSizes('removal-b', 'scope')}
             />
           </div>
         )}

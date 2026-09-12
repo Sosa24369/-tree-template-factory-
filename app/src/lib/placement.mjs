@@ -35,7 +35,11 @@ export const photoId = (p) => p.id ?? p.src;
  *  all          every still
  *  middleShare  trimming-a's gallery: after the hero takes 2, the first half of the rest
  *  theRest      trimming-a's grid: the second half, only when the rest is 6 or more
- *  afterTiles   storm's side photo: index 6, or the last still if there are fewer
+ *  lastStill    storm's side photo: the LAST still. The contract's prose said
+ *               "the photo after the tiles (7th), or the last"; the template has always
+ *               said all[all.length - 1]. The code is the truth.
+ *  nthStrict    the nth still and nothing if it is missing (the hybrids)
+ *  firstNLessVideo  n stills, one fewer when the set carries a video (removal-b)
  */
 
 
@@ -60,7 +64,7 @@ export const PLACEMENT = {
   ],
   'removal-b': [
     { id: 'hero-wash', set: 'removal', pick: { kind: 'first' }, cells: 1, sizes: '100vw' },
-    { id: 'tile', set: 'removal', pick: { kind: 'firstN', n: 6 }, cells: 6,
+    { id: 'tile', set: 'removal', pick: { kind: 'firstNLessVideo', n: 7 }, cells: 7,
       sizes: '(max-width: 767px) 45vw, (max-width: 1023px) 30vw, 76vw' },
     { id: 'scope', set: 'removal', pick: { kind: 'nth', n: 1 }, cells: 1,
       sizes: '(max-width: 1023px) 90vw, 32vw' },
@@ -69,7 +73,7 @@ export const PLACEMENT = {
     { id: 'hero-wash', set: 'removal', pick: { kind: 'first' }, cells: 1, sizes: '100vw' },
     { id: 'work', set: 'removal', pick: { kind: 'firstN', n: 9 }, cells: 9,
       sizes: '(max-width: 767px) 45vw, (max-width: 1023px) 45vw, 26vw' },
-    { id: 'longform', set: 'removal', pick: { kind: 'nth', n: 1 }, cells: 1,
+    { id: 'longform', set: 'removal', pick: { kind: 'nthStrict', n: 1 }, cells: 1,
       sizes: '(max-width: 1023px) 90vw, 32vw' },
   ],
   'trimming-a': [
@@ -91,14 +95,14 @@ export const PLACEMENT = {
   'trimming-c': [
     { id: 'work', set: 'trimming', pick: { kind: 'firstN', n: 8 }, cells: 8,
       sizes: '(max-width: 767px) 44vw, (max-width: 1023px) 45vw, 19vw' },
-    { id: 'longform', set: 'trimming', pick: { kind: 'nth', n: 1 }, cells: 1,
+    { id: 'longform', set: 'trimming', pick: { kind: 'nthStrict', n: 1 }, cells: 1,
       sizes: '(max-width: 1023px) 90vw, 31vw' },
   ],
   'storm-a': [
-    { id: 'hero-wash', set: 'storm', pick: { kind: 'first' }, cells: 1, sizes: '100vw' },
-    { id: 'tile', set: 'storm', pick: { kind: 'firstN', n: 6 }, cells: 6,
+    { id: 'hero-wash', set: 'storm', cascade: ['storm', 'removal'], pick: { kind: 'first' }, cells: 1, sizes: '100vw' },
+    { id: 'tile', set: 'storm', cascade: ['storm', 'removal'], pick: { kind: 'firstN', n: 6 }, cells: 6,
       sizes: '(max-width: 767px) 44vw, (max-width: 1023px) 30vw, 24vw' },
-    { id: 'handle', set: 'storm', pick: { kind: 'afterTiles' }, cells: 1,
+    { id: 'handle', set: 'storm', cascade: ['storm', 'removal'], pick: { kind: 'lastStill' }, cells: 1,
       sizes: '(max-width: 1023px) 90vw, 28vw' },
   ],
   agnostic: [
@@ -115,8 +119,11 @@ PLACEMENT['storm-c'] = PLACEMENT['storm-a'];
  * EXPLICIT assignment only reaches the page for a template in this set. Until a template
  * is wired, the studio says so and disables the controls rather than letting someone
  * assign a photo, save, publish, and see nothing change.
+ *
+ * All ten are wired as of Phase 1b Stage 3. The set is kept — and derived from PLACEMENT
+ * rather than hardcoded — so a template added later is read-only until it is wired.
  */
-export const RESOLVES_FROM_MAP = new Set(['removal-a', 'trimming-a']);
+export const RESOLVES_FROM_MAP = new Set(Object.keys(PLACEMENT));
 
 /** trimming-a's gallery/grid split: after the hero takes 2, halve the rest — but only
  *  when the rest is 6 or more, otherwise the gallery takes everything and the grid is
@@ -130,6 +137,12 @@ function applyPick(pick, stills, raw) {
   switch (pick.kind) {
     case 'first': return stills.slice(0, 1);
     case 'nth': return (stills[pick.n] ?? stills[0]) ? [stills[pick.n] ?? stills[0]] : [];
+    // No fall back to the first: the hybrids render `gallery[1] && ...`, so a client with
+    // a single photograph gets nothing here rather than the same photo twice.
+    case 'nthStrict': return stills[pick.n] ? [stills[pick.n]] : [];
+    case 'lastStill': return stills.length ? [stills[stills.length - 1]] : [];
+    // removal-b's masonry gives the video a cell of its own, so the stills get one fewer.
+    case 'firstNLessVideo': return stills.slice(0, raw.some((p) => p && p.kind === 'video') ? pick.n - 1 : pick.n);
     case 'range': return stills.slice(pick.from, pick.to);
     case 'firstN': return stills.slice(0, pick.n);
     // Deliberately the RAW list: Services.tsx slices photosFor() without partitioning.
@@ -137,10 +150,6 @@ function applyPick(pick, stills, raw) {
     case 'all': return stills;
     case 'middleShare': return stills.slice(2, 2 + share(stills.length));
     case 'theRest': return stills.length - 2 >= 6 ? stills.slice(2 + share(stills.length)) : [];
-    case 'afterTiles': {
-      const p = stills[Math.min(6, stills.length - 1)];
-      return p ? [p] : [];
-    }
   }
 }
 
@@ -153,6 +162,33 @@ function applyPick(pick, stills, raw) {
  * `client.photoSlots[templateId]` overrides a single cell, keyed `slotId` for a one-cell
  * slot and `slotId.N` (1-based) otherwise.
  */
+/**
+ * The photographs a slot picks FROM, before the pick narrows them — the client's stills
+ * for that slot's set, through whichever cascade the slot uses. Exposed because alt text
+ * is composed from a photo's ordinal within that list ("photo 6 of the storm set"), and
+ * recomputing the cascade at the call site is how it drifted in the first place.
+ */
+export function slotSource(client, templateId, slotId) {
+  const slot = (PLACEMENT[templateId] ?? []).find((s) => s.id === slotId);
+  if (!slot) return [];
+  if (slot.mode === 'direct-then-cascade') {
+    const direct = partitionMedia(client.photos?.[slot.set] ?? []).stills;
+    if (direct.length) return direct;
+    return partitionMedia(photosFor(client, slot.set)).stills;
+  }
+  if (slot.cascade) {
+    for (const key of slot.cascade) {
+      const list = client.photos?.[key];
+      if (list && list.length) {
+        const s = partitionMedia(list).stills;
+        if (s.length) return s;
+      }
+    }
+    return [];
+  }
+  return partitionMedia(photosFor(client, slot.set)).stills;
+}
+
 export function resolvePlacement(client, templateId) {
   const slots = PLACEMENT[templateId] ?? [];
   const assigned = client.photoSlots?.[templateId] ?? {};
@@ -167,6 +203,21 @@ export function resolvePlacement(client, templateId) {
       const direct = partitionMedia(client.photos?.[slot.set] ?? []).stills;
       const raw = photosFor(client, slot.set);
       auto = direct.length > 0 ? direct : applyPick(slot.pick, partitionMedia(raw).stills, raw);
+    } else if (slot.cascade) {
+      // A slot with its own cascade. Storm is the only one: storm -> removal, and NEVER
+      // generic or trimming — a neatly-pruned trimming photo is off-message on a storm
+      // page. It also SKIPS a set that holds only videos rather than rendering nothing,
+      // which the general photosFor() does not do. Both behaviours are reproduced here
+      // exactly; storm-a is a live ad page.
+      let stills = [];
+      for (const key of slot.cascade) {
+        const list = client.photos?.[key];
+        if (list && list.length) {
+          const s = partitionMedia(list).stills;
+          if (s.length) { stills = s; break; }
+        }
+      }
+      auto = applyPick(slot.pick, stills, stills);
     } else {
       const raw = photosFor(client, slot.set);
       auto = applyPick(slot.pick, partitionMedia(raw).stills, raw);

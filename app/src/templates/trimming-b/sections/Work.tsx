@@ -25,10 +25,8 @@
 
 import type { ResolvedClient } from '../../../schema/resolve';
 import { DeferredImage } from '../../../components/DeferredImage';
-import { partitionMedia, photosFor } from '../../../lib/photos.mjs';
+import { slotPhotos } from '../../../lib/placement.mjs';
 import { altFor, Eyebrow, Section, type Copy } from './shared';
-
-const MAX_PHOTOS = 6;
 
 /**
  * CANONICAL STRUCTURE (2026-08-12): the gallery ships as TWO photo bands
@@ -37,8 +35,8 @@ const MAX_PHOTOS = 6;
  * nothing when it has no photos.
  */
 export function Work({ client, copy, band }: { client: ResolvedClient; copy: Copy; band?: 1 | 2 }) {
-  const { stills } = partitionMedia(photosFor(client, 'trimming'));
-  const all = stills.slice(0, MAX_PHOTOS);
+  const stills = slotPhotos(client, 'trimming-b', 'work').filter((p) => p !== null);
+  const all = stills;
   const split = Math.ceil(all.length / 2);
   const shots = band === 1 ? all.slice(0, split) : band === 2 ? all.slice(split) : all;
   if (shots.length === 0) return null;

@@ -24,19 +24,22 @@
 import type { CSSProperties, ReactNode } from 'react';
 import type { ResolvedClient } from '../../../schema/resolve';
 import { SafeText } from '../../../components/Safe';
-import { stormStills, cssUrl } from '../support';
+import { cssUrl } from '../support';
+import { slotPhotos } from '../../../lib/placement.mjs';
 import { AlertIcon, CallCta, FORM_ANCHOR, type Copy } from './shared';
 
 export function Hero({
   client,
   copy,
+  templateId,
   formPanel,
 }: {
   client: ResolvedClient;
   copy: Copy;
+  templateId: 'storm-a' | 'storm-b' | 'storm-c';
   formPanel?: ReactNode;
 }) {
-  const art = stormStills(client, 1)[0] ?? null;
+  const art = slotPhotos(client, templateId, 'hero-wash')[0] ?? null;
   const artStyle = art?.src
     ? ({
         '--st-art': cssUrl(art.src),

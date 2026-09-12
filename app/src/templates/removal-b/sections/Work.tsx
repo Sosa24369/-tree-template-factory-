@@ -21,11 +21,9 @@ import type { ResolvedClient } from '../../../schema/resolve';
 import { SafeText } from '../../../components/Safe';
 import { DeferredImage } from '../../../components/DeferredImage';
 import { partitionMedia, photosFor } from '../../../lib/photos.mjs';
+import { slotPhotos, slotSizes } from '../../../lib/placement.mjs';
 import { altFor, withAlt } from '../support';
 import { Eyebrow, Heading, Section, type Copy } from './shared';
-
-/** Enough to fill the mosaic twice over; more than this is weight, not proof. */
-const MAX_TILES = 7;
 
 /**
  * CANONICAL STRUCTURE (2026-08-12): the mosaic ships as TWO photo bands around
@@ -34,9 +32,12 @@ const MAX_TILES = 7;
  * Either band collapses to nothing when it has no media.
  */
 export function Work({ client, copy, band }: { client: ResolvedClient; copy: Copy; band?: 1 | 2 }) {
-  const { videos, stills } = partitionMedia(photosFor(client, 'removal'));
+  // Which photographs and how many is placement (lib/placement.mjs) — including the
+  // video taking a cell of its own, so the stills get one fewer. Splitting them into two
+  // bands around the process section is layout, and stays here.
+  const { videos } = partitionMedia(photosFor(client, 'removal'));
   const clip = band === 2 ? null : (videos[0] ?? null);
-  const all = stills.slice(0, (videos[0] ?? null) ? MAX_TILES - 1 : MAX_TILES);
+  const all = slotPhotos(client, 'removal-b', 'tile').filter((p) => p !== null);
   const split = Math.ceil(all.length / 2);
   const tiles = band === 1 ? all.slice(0, split) : band === 2 ? all.slice(split) : all;
 
@@ -78,7 +79,7 @@ export function Work({ client, copy, band }: { client: ResolvedClient; copy: Cop
               photo={shot?.alt ? shot : withAlt(shot, altFor(client.name, i + 1))}
               className="rb-tile-img"
               wrapperClassName="rb-tile-box"
-              sizes="(max-width: 767px) 92vw, 40vw"
+              sizes={slotSizes('removal-b', 'tile')}
             />
           </li>
         ))}

@@ -54,7 +54,7 @@ export function StormPage({
       <main>
 
         {renderSections(client, 'storm-a', {
-          hero: () => <Hero client={client} copy={copy} formPanel={<EstimatePanel client={client} copy={copy} />} />,
+          hero: () => <Hero client={client} copy={copy} templateId={variant} formPanel={<EstimatePanel client={client} copy={copy} />} />,
           trust: () => <Trust copy={copy} />,
           reviews: () => (
             (client.reviews ?? []).some((r) => (r?.body ?? '').trim()) && (
@@ -66,8 +66,8 @@ export function StormPage({
               </section>
             )
           ),
-          work: () => <Work client={client} copy={copy} />,
-          handle: () => <Handle client={client} copy={copy} />,
+          work: () => <Work client={client} copy={copy} templateId={variant} />,
+          handle: () => <Handle client={client} copy={copy} templateId={variant} />,
           areas: () => <Areas client={client} copy={copy} />,
           process: () => <Process copy={copy} />,
           insurance: () => <Insurance copy={copy} />,

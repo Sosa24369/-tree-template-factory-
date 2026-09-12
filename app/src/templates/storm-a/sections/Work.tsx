@@ -17,11 +17,9 @@
 import type { ResolvedClient } from '../../../schema/resolve';
 import { SafeText } from '../../../components/Safe';
 import { DeferredImage } from '../../../components/DeferredImage';
-import { altFor, stormStills, withAlt } from '../support';
+import { altFor, withAlt } from '../support';
+import { slotPhotos, slotSizes } from '../../../lib/placement.mjs';
 import { Eyebrow, Heading, Section, type Copy } from './shared';
-
-/** Enough to fill the mosaic; more than this is weight, not proof. */
-const MAX_TILES = 6;
 
 /**
  * CANONICAL STRUCTURE: the mosaic now ships as TWO photo bands around the
@@ -30,8 +28,9 @@ const MAX_TILES = 6;
  * (there is no second heading in the copy and none gets written). Either band
  * collapses to nothing when it has no photos — one band beats an empty frame.
  */
-export function Work({ client, copy, band }: { client: ResolvedClient; copy: Copy; band?: 1 | 2 }) {
-  const all = stormStills(client, MAX_TILES);
+export function Work({ client, copy, templateId, band }: { client: ResolvedClient; copy: Copy; templateId: 'storm-a' | 'storm-b' | 'storm-c'; band?: 1 | 2 }) {
+  // How many tiles, and the storm-only cascade behind them, live in lib/placement.mjs.
+  const all = slotPhotos(client, templateId, 'tile').filter((p) => p !== null);
   const split = Math.ceil(all.length / 2);
   const tiles = band === 1 ? all.slice(0, split) : band === 2 ? all.slice(split) : all;
   if (tiles.length === 0) return null;
@@ -53,7 +52,7 @@ export function Work({ client, copy, band }: { client: ResolvedClient; copy: Cop
               photo={shot?.alt ? shot : withAlt(shot, altFor(client.name, i + 1))}
               className="st-tile-img"
               wrapperClassName="st-tile-box"
-              sizes="(max-width: 767px) 92vw, 32vw"
+              sizes={slotSizes(templateId, 'tile')}
             />
           </li>
         ))}

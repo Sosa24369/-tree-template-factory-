@@ -20,7 +20,7 @@ import { LeadForm } from '../../components/LeadForm';
 import { DeferredImage } from '../../components/DeferredImage';
 import { ReviewsSlider } from '../../components/ReviewsSlider';
 import { ServiceAreasCarousel } from '../../components/ServiceAreasCarousel';
-import { photosFor, partitionMedia } from '../../lib/photos.mjs';
+import { slotPhotos } from '../../lib/placement.mjs';
 import { GoogleAdsCallAsset } from '../../components/GoogleAdsCallAsset';
 import { renderSections } from '../../lib/renderSections';
 import { brandAttrs } from '../../lib/brandAttrs';
@@ -34,10 +34,9 @@ function cssUrl(src: string): string {
   return `url("${src.replace(/["'()\\\s]/g, encodeURIComponent)}")`;
 }
 
-function stills(client: ResolvedClient, limit?: number): PhotoSet[] {
-  const list = photosFor(client, 'removal');
-  const { stills: onlyStills } = partitionMedia(list);
-  return typeof limit === 'number' ? onlyStills.slice(0, limit) : onlyStills;
+/** Placement for this template's slots — the counts live in lib/placement.mjs. */
+function slot(client: ResolvedClient, id: string): PhotoSet[] {
+  return slotPhotos(client, 'removal-c', id).filter((p): p is PhotoSet => p !== null);
 }
 
 /** Two-part heading whose word gap is carried by the copy's own spaces. */
@@ -128,12 +127,13 @@ export function RemovalCPage({
   copy: Copy;
   brandStyle: CSSProperties;
 }) {
-  const art = stills(client, 1)[0] ?? null;
+  const art = slot(client, 'hero-wash')[0] ?? null;
   const heroStyle: CSSProperties = {
     ...brandStyle,
     ...(art?.src ? ({ '--rc-art': cssUrl(art.src) } as CSSProperties) : null),
   };
-  const gallery = stills(client, 9);
+  const gallery = slot(client, 'work');
+  const sidePhoto = slot(client, 'longform')[0] ?? null;
   const reviewCount = (client.reviews ?? []).filter((r) => (r?.body ?? '').trim()).length;
   const services = Array.from({ length: 20 }, (_, i) => copy(`services.item${i + 1}`)).filter((s) => s.trim());
   const requests = Array.from({ length: 7 }, (_, i) => copy(`longform.request${i + 1}`)).filter((s) => s.trim());
@@ -296,10 +296,10 @@ export function RemovalCPage({
                     </ul>
                   )}
                 </div>
-                {gallery[1] && (
+                {sidePhoto && (
                   <div className="rc-longform-photo">
                     <DeferredImage
-                      photo={gallery[1]}
+                      photo={sidePhoto}
                       wrapperClassName="rc-longform-photo-box"
                       className="rc-longform-photo-img"
                       sizes="(max-width: 979px) 92vw, 38vw"

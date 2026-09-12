@@ -24,7 +24,7 @@
 import type { CSSProperties, ReactNode } from 'react';
 import type { ResolvedClient } from '../../../schema/resolve';
 import { SafeText } from '../../../components/Safe';
-import { partitionMedia, photosFor } from '../../../lib/photos.mjs';
+import { slotPhotos } from '../../../lib/placement.mjs';
 import { cssUrl } from '../support';
 import { BoltIcon, BroomIcon, CallCta, Eyebrow, FORM_ANCHOR, Heading, PinIcon, ShieldIcon, StarIcon, type Copy } from './shared';
 
@@ -42,8 +42,7 @@ export function Hero({
 }) {
   // Stills only: a client's removal set can contain an .mp4 (the control's does),
   // and a video path in a CSS background paints nothing.
-  const { stills } = partitionMedia(photosFor(client, 'removal'));
-  const art = stills[0] ?? null;
+  const art = slotPhotos(client, 'removal-b', 'hero-wash')[0] ?? null;
 
   const chips = [1, 2, 3, 4]
     .map((n) => copy(`hero.chip${n}`))

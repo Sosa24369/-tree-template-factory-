@@ -22,6 +22,7 @@
 import type { ResolvedClient } from '../../../schema/resolve';
 import { DeferredImage } from '../../../components/DeferredImage';
 import { partitionMedia, photosFor } from '../../../lib/photos.mjs';
+import { slotPhotos } from '../../../lib/placement.mjs';
 import { galleryAlt } from '../copy.defaults';
 import { Section, SectionHead } from './shared';
 import { withAlt, type Copy } from '../text';
@@ -35,7 +36,8 @@ const SIZES = '(max-width: 639px) 47vw, (max-width: 1023px) 31vw, 260px';
  * collapses to nothing when it has no media.
  */
 export function Gallery({ client, copy, band }: { client: ResolvedClient; copy: Copy; band?: 1 | 2 }) {
-  const { videos, stills: all } = partitionMedia(photosFor(client, 'generic'));
+  const { videos } = partitionMedia(photosFor(client, 'generic'));
+  const all = slotPhotos(client, 'agnostic', 'shot').filter((p) => p !== null);
   const clip = band === 2 ? null : (videos[0] ?? null);
   const split = Math.ceil(all.length / 2);
   const stills = band === 1 ? all.slice(0, split) : band === 2 ? all.slice(split) : all;
