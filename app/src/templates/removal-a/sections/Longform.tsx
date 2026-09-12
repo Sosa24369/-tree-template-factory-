@@ -12,7 +12,7 @@ import type { ResolvedClient } from '../../../schema/resolve';
 import { SafeText } from '../../../components/Safe';
 import { DeferredImage } from '../../../components/DeferredImage';
 import { altFor, withAlt } from '../assets';
-import { slotPhotos } from '../../../lib/placement';
+import { slotPhotos, slotSizes } from '../../../lib/placement';
 import { CheckIcon, Section, SplitHeading, type Copy } from './shared';
 
 /**
@@ -47,7 +47,7 @@ export function Longform({ client, copy }: { client: ResolvedClient; copy: Copy 
               photo={photo.alt ? photo : withAlt(photo, altFor(client.name, 2))}
               className="ra-longform-photo-img"
               wrapperClassName="ra-longform-photo-box"
-              sizes="(max-width: 979px) 92vw, 38vw"
+              sizes={slotSizes('removal-a', 'longform')}
             />
           </div>
         )}

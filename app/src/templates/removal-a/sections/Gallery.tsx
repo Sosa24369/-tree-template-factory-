@@ -16,7 +16,7 @@ import { SafeSection } from '../../../components/Safe';
 import { DeferredImage } from '../../../components/DeferredImage';
 import { altFor, withAlt } from '../assets';
 import { partitionMedia, photosFor } from '../../../lib/photos';
-import { slotPhotos } from '../../../lib/placement';
+import { slotPhotos, slotSizes } from '../../../lib/placement';
 
 /**
  * CANONICAL STRUCTURE (2026-08-12): the rail ships as TWO photo bands around
@@ -65,6 +65,7 @@ export function Gallery({ client, band }: { client: ResolvedClient; band?: 1 | 2
               <DeferredImage
                 photo={shot?.alt ? shot : withAlt(shot, altFor(client.name, i + 1))}
                 className="ra-rail-img"
+                sizes={slotSizes('removal-a', 'rail')}
               />
             </li>
           ))}

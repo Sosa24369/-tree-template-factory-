@@ -24,6 +24,10 @@ export function render(url: string): string {
 
 export { listClients } from './lib/clientRegistry';
 export { TEMPLATE_META, COPY_DEFAULTS } from './templates/registry';
+// The prerenderer needs the slot contract's `sizes` so the LCP <link rel="preload"> can
+// advertise the same width the <img> does. Exported here rather than duplicated in
+// scripts/prerender.mjs, which is how it drifted to a stale 55vw in the first place.
+export { slotSizes } from './lib/placement';
 // COPY_DEFAULTS is re-exported so Node-side tooling (the a->c copy-parity guard,
 // the demo-copy audit) can read the real shipped strings from the built bundle
 // rather than re-parsing TypeScript. It is data the client bundle already

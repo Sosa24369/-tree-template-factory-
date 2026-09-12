@@ -10,7 +10,7 @@ import type { ResolvedClient } from '../../../schema/resolve';
 import { SafeSection, SafeText } from '../../../components/Safe';
 import { DeferredImage } from '../../../components/DeferredImage';
 import { altFor, withAlt } from '../assets';
-import { slotPhotos } from '../../../lib/placement';
+import { slotPhotos, slotSizes } from '../../../lib/placement';
 import { CallCta, Section, SplitHeading, type Copy } from './shared';
 
 export function Restoration({ client, copy }: { client: ResolvedClient; copy: Copy }) {
@@ -33,6 +33,7 @@ export function Restoration({ client, copy }: { client: ResolvedClient; copy: Co
               <DeferredImage
                 photo={shot?.alt ? shot : withAlt(shot, altFor(client.name, i + 1))}
                 className="ra-mosaic-img"
+                sizes={slotSizes('removal-a', 'mosaic')}
               />
             </li>
           ))}

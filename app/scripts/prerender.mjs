@@ -27,7 +27,7 @@ if (!existsSync(SSR)) {
 }
 
 const shell = readFileSync(join(DIST, 'index.html'), 'utf8');
-const { render, listClients, TEMPLATE_META } = await import(SSR);
+const { render, listClients, TEMPLATE_META, slotSizes } = await import(SSR);
 
 const escapeHtml = (s) =>
   String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
@@ -57,7 +57,10 @@ function lcpImage(client) {
  * advertises the SAME srcset the <img> carries (client.brand.logoSrcset) so the two
  * stay in exact sync and the browser fetches one small variant.
  */
-const PHOTO_LCP_TEMPLATES = new Set(['removal-a', 'trimming-a']);
+// template id -> the slot whose photograph is the mobile LCP, so the preload can read
+// that slot's declared `sizes` from the contract instead of carrying its own copy.
+const PHOTO_LCP_SLOT = new Map([['removal-a', 'hero-plate'], ['trimming-a', 'hero-band']]);
+const PHOTO_LCP_TEMPLATES = new Set(PHOTO_LCP_SLOT.keys());
 // Must match the sizes the <HeaderBrand/> lockup passes to its <img> (the header
 // logo displays at 64px mobile / 96px desktop since the logo swap of 2026-08-13).
 const LOGO_SIZES = '(min-width: 768px) 96px, 64px';
@@ -122,10 +125,14 @@ function pageHead(client, template) {
   if (PHOTO_LCP_TEMPLATES.has(template.id)) {
     const lcp = lcpImage(client);
     if (lcp) {
-      // The preload MUST advertise the same candidate set as the <img>, otherwise the
-      // browser preloads the full-size file and then downloads a smaller one anyway.
+      // The preload MUST advertise the same candidate set AND the same sizes as the
+      // <img>, otherwise the browser preloads one candidate and then downloads another.
+      // Both now come from the slot contract (lib/placement.ts); this line used to carry
+      // its own copy of the sizes string, and it was still the stale 55vw after the <img>
+      // had been corrected to 100vw — the LCP fetching a quarter-width file.
+      const sizes = slotSizes(template.id, PHOTO_LCP_SLOT.get(template.id)) ?? '100vw';
       const responsive = lcp.srcset
-        ? ` imagesrcset="${escapeHtml(lcp.srcset)}" imagesizes="(max-width: 767px) 100vw, 55vw"`
+        ? ` imagesrcset="${escapeHtml(lcp.srcset)}" imagesizes="${escapeHtml(sizes)}"`
         : '';
       bits.push(`<link rel="preload" as="image" href="${escapeHtml(lcp.src)}"${responsive} fetchpriority="high">`);
     }

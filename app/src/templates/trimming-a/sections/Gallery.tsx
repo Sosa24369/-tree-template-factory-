@@ -16,6 +16,7 @@
 import type { ResolvedClient } from '../../../schema/resolve';
 import { DeferredImage } from '../../../components/DeferredImage';
 import { altFor, photoSlots, withAlt } from '../slots';
+import { slotSizes } from '../../../lib/placement';
 
 /**
  * CANONICAL STRUCTURE (2026-08-12): the rail ships as TWO photo bands around
@@ -57,7 +58,7 @@ export function Gallery({ client, band }: { client: ResolvedClient; band?: 1 | 2
               photo={withAlt(shot, altFor(client.name, i + 1))}
               className="ta-shot-img"
               wrapperClassName="ta-shot"
-              sizes="(max-width: 767px) 78vw, 30vw"
+              sizes={slotSizes('trimming-a', 'grid')}
             />
           </li>
         ))}

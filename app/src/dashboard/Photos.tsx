@@ -22,6 +22,7 @@ import { useEffect, useRef, useState } from 'react';
 import type { Json } from './lib';
 import { api, fileToBase64 } from './lib';
 import { BREAKPOINTS, IMAGE_SLOTS, MASTERS, minWidth, slotsForPhoto, stillCount, stillIndex, type ImageSlot, type SlotSet } from '../templates/imageSlots.mjs';
+import { slotPosition } from '../lib/placement';
 
 const SERVICES = ['removal', 'trimming', 'storm', 'generic'] as const;
 type Service = (typeof SERVICES)[number];
@@ -299,7 +300,13 @@ function ExistingPicker({ slug, onPick, onClose }: { slug: string; onPick: (src:
 function CropPreview({ src, focal, slots, position }: { src: string; focal: { x: number; y: number } | null; slots: ImageSlot[]; position: number }) {
   const cover = slots.filter((s) => s.policy === 'cover');
   const shown = cover.length ? cover.slice(0, 4) : [];
-  const pos = focal ? `${pct(focal.x)} ${pct(focal.y)}` : '50% 50%';
+  // Where this photo sits in a given slot. A focal point wins everywhere; without one the
+  // answer is the SLOT's declared default, not a blanket 50% 50%. Stage 1 found this
+  // preview showing 50% 50% while removal-a's hero plate shipped `center 35%` — a 37 CSS
+  // px lie on the one slot that puts the headline on a photograph. Both sides now read
+  // lib/placement.ts, so they cannot disagree.
+  const posFor = (s: ImageSlot) =>
+    focal ? `${pct(focal.x)} ${pct(focal.y)}` : (slotPosition(s.template, s.id) ?? '50% 50%');
   return (
     <div className="dash-crops">
       {shown.length === 0 && (
@@ -320,7 +327,7 @@ function CropPreview({ src, focal, slots, position }: { src: string; focal: { x:
               return (
                 <div className="dash-crop-cell" key={b.id}>
                   <span className="dash-help">{b.label} · {w} × {h}</span>
-                  <img src={src} alt="" style={{ width: Math.round(w * scale), height: Math.round(h * scale), objectFit: 'cover', objectPosition: pos, display: 'block', borderRadius: 4, background: '#eef1f4' }} />
+                  <img src={src} alt="" style={{ width: Math.round(w * scale), height: Math.round(h * scale), objectFit: 'cover', objectPosition: posFor(s), display: 'block', borderRadius: 4, background: '#eef1f4' }} />
                 </div>
               );
             })}

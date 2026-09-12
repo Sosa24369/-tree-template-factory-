@@ -16,7 +16,7 @@ import type { ResolvedClient } from '../../../schema/resolve';
 import { SafeImage, SafeText } from '../../../components/Safe';
 import { LeadForm } from '../../../components/LeadForm';
 import { altFor, withAlt } from '../assets';
-import { slotPhotos } from '../../../lib/placement';
+import { slotPhotos, slotPosition, slotSizes } from '../../../lib/placement';
 import { preloadLcpImage } from '../../../lib/preloadLcp';
 import { CallCta, SplitHeading, type Copy } from './shared';
 
@@ -41,7 +41,7 @@ export function Hero({ client, copy }: { client: ResolvedClient; copy: Copy }) {
       {/* LCP element: eager + fetchPriority high, with its measured dimensions on
           the tag. It is absolutely positioned, so it can never shift the layout. */}
       <div className="ra-hero-plate" aria-hidden="true">
-        <SafeImage photo={plate} className="ra-hero-plate-img" loading="eager" fetchPriority="high" sizes="(max-width: 767px) 100vw, 55vw" />
+        <SafeImage photo={plate} className="ra-hero-plate-img" loading="eager" fetchPriority="high" sizes={slotSizes('removal-a', 'hero-plate')} position={slotPosition('removal-a', 'hero-plate')} />
       </div>
 
       <div className="ra-container ra-hero-grid">
@@ -106,7 +106,7 @@ export function Hero({ client, copy }: { client: ResolvedClient; copy: Copy }) {
         <ul className="ra-hero-proof">
           {proof.map((shot, i) => (
             <li key={shot.src}>
-              <SafeImage photo={withAlt(shot, altFor(client.name, i + 1))} className="ra-hero-proof-img" />
+              <SafeImage photo={withAlt(shot, altFor(client.name, i + 1))} className="ra-hero-proof-img" sizes={slotSizes('removal-a', 'hero-proof')} />
             </li>
           ))}
         </ul>

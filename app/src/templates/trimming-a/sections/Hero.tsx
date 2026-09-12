@@ -28,6 +28,7 @@ import { DeferredImage } from '../../../components/DeferredImage';
 import { LeadForm } from '../../../components/LeadForm';
 import { FORM_ANCHOR, altFor, photoSlots, withAlt } from '../slots';
 import { CallRow, SplitHeading, type Copy } from './shared';
+import { slotSizes } from '../../../lib/placement';
 
 export function Hero({ client, copy }: { client: ResolvedClient; copy: Copy }) {
   const { hero } = photoSlots(client);
@@ -112,7 +113,7 @@ export function Hero({ client, copy }: { client: ResolvedClient; copy: Copy }) {
                   photo={withAlt(shot, altFor(client.name, i + 1))}
                   className="ta-shot-img"
                   wrapperClassName="ta-shot"
-                  sizes="(max-width: 767px) 92vw, 44vw"
+                  sizes={slotSizes('trimming-a', 'hero-band')}
                 />
               </li>
             ))}

@@ -40,6 +40,7 @@ export function SafeImage({
   fetchPriority,
   style,
   sizes = '(max-width: 767px) 45vw, 22vw',
+  position,
 }: {
   photo: PhotoSet | null | undefined;
   className?: string;
@@ -48,6 +49,13 @@ export function SafeImage({
   style?: CSSProperties;
   /** Tell the browser how wide this renders, or it will download the largest candidate. */
   sizes?: string;
+  /**
+   * Where an UNFRAMED photo sits — the slot's declared default (lib/placement.ts). A
+   * focal point still wins. This exists so the page reads its object-position from the
+   * same place the studio's Frame preview does: Stage 1 found the removal-a hero plate
+   * taking `center 35%` from CSS while Frame previewed `50% 50%`, a 37 CSS px lie.
+   */
+  position?: string;
 }) {
   if (!photo?.src) return null;
   return (
@@ -56,9 +64,16 @@ export function SafeImage({
       {...(photo.srcset ? { srcSet: photo.srcset, sizes } : {})}
       alt={photo.alt ?? ''}
       className={className}
-      // A focal point (set by dragging in the editor) becomes object-position. Only
-      // emitted when present, so an untouched photo renders exactly as before.
-      style={photo.focal ? { ...style, objectPosition: `${Math.round(photo.focal.x * 100)}% ${Math.round(photo.focal.y * 100)}%` } : style}
+      // A focal point (set by dragging in the editor) becomes object-position; failing
+      // that, the slot's declared default. Emitted only when one of the two exists, so a
+      // slot that declares nothing renders exactly as before.
+      style={
+        photo.focal
+          ? { ...style, objectPosition: `${Math.round(photo.focal.x * 100)}% ${Math.round(photo.focal.y * 100)}%` }
+          : position
+            ? { ...style, objectPosition: position }
+            : style
+      }
       loading={loading}
       fetchPriority={fetchPriority}
       {...(photo.width != null ? { width: photo.width } : {})}

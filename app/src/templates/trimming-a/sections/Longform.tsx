@@ -22,6 +22,7 @@ import { SafeText } from '../../../components/Safe';
 import { DeferredImage } from '../../../components/DeferredImage';
 import { altFor, photoSlots, withAlt } from '../slots';
 import { CheckIcon, Rule, Section, SplitHeading, type Copy } from './shared';
+import { slotSizes } from '../../../lib/placement';
 
 const REQUESTS = [1, 2, 3, 4, 5, 6, 7];
 
@@ -56,7 +57,7 @@ export function Longform({ client, copy }: { client: ResolvedClient; copy: Copy 
               photo={photo.alt ? photo : withAlt(photo, altFor(client.name, 2))}
               className="ta-longform-photo-img"
               wrapperClassName="ta-longform-photo-box"
-              sizes="(max-width: 979px) 92vw, 38vw"
+              sizes={slotSizes('trimming-a', 'longform')}
             />
           </div>
         )}

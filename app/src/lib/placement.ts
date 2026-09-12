@@ -61,6 +61,23 @@ export interface PlacementSlot {
   mode?: 'direct-then-cascade';
   /** How many cells the slot has, for explicit assignment keys. 'all' gets none. */
   cells: number | 'all';
+  /**
+   * The `sizes` attribute for this slot, so the browser picks a candidate that fits the
+   * box it will actually be painted into. Stage 1 found these hand-written per template
+   * and understating the real box by up to 4.82x — the hero plate declared 55vw and
+   * renders at 100vw, so the browser fetched a quarter of the width it needed
+   * (docs/BUILD-LOG.md, Phase 1b, H4). Derived from the measured boxes in
+   * templates/imageSlots.mjs and rounded UP: overstating costs a slightly larger file,
+   * understating costs a soft photograph, and only one of those is visible.
+   */
+  sizes: string;
+  /**
+   * `object-position` when the photo has no focal point. Declared ONLY where the
+   * template's CSS differs from the 50% 50% initial value, so the studio's Frame preview
+   * and the page cannot disagree about where an unframed photo sits — Stage 1's H2, a
+   * 37 CSS px error on removal-a's desktop hero.
+   */
+  defaultPosition?: string;
 }
 
 /**
@@ -69,43 +86,66 @@ export interface PlacementSlot {
  */
 export const PLACEMENT: Record<string, PlacementSlot[]> = {
   'removal-a': [
-    { id: 'hero-plate', set: 'removal', pick: { kind: 'first' }, cells: 1 },
-    { id: 'hero-proof', set: 'removal', pick: { kind: 'range', from: 1, to: 3 }, cells: 2 },
-    { id: 'mosaic', set: 'generic', pick: { kind: 'firstN', n: 5 }, mode: 'direct-then-cascade', cells: 5 },
-    { id: 'longform', set: 'removal', pick: { kind: 'nth', n: 1 }, cells: 1 },
-    { id: 'rail', set: 'removal', pick: { kind: 'all' }, cells: 'all' },
-    { id: 'service-photo', set: 'removal', pick: { kind: 'lastN', n: 3 }, cells: 3 },
+    { id: 'hero-plate', set: 'removal', pick: { kind: 'first' }, cells: 1,
+      sizes: '100vw', defaultPosition: '50% 35%' },
+    { id: 'hero-proof', set: 'removal', pick: { kind: 'range', from: 1, to: 3 }, cells: 2,
+      sizes: '(max-width: 767px) 90vw, (max-width: 1023px) 45vw, 38vw' },
+    { id: 'mosaic', set: 'generic', pick: { kind: 'firstN', n: 5 }, mode: 'direct-then-cascade', cells: 5,
+      sizes: '(max-width: 767px) 90vw, (max-width: 1023px) 60vw, 76vw' },
+    { id: 'longform', set: 'removal', pick: { kind: 'nth', n: 1 }, cells: 1,
+      sizes: '(max-width: 1023px) 90vw, 31vw' },
+    { id: 'rail', set: 'removal', pick: { kind: 'all' }, cells: 'all',
+      sizes: '(max-width: 767px) 65vw, (max-width: 1023px) 70vw, 40vw' },
+    { id: 'service-photo', set: 'removal', pick: { kind: 'lastN', n: 3 }, cells: 3,
+      sizes: '(max-width: 1023px) 90vw, 24vw' },
   ],
   'removal-b': [
-    { id: 'hero-wash', set: 'removal', pick: { kind: 'first' }, cells: 1 },
-    { id: 'tile', set: 'removal', pick: { kind: 'firstN', n: 6 }, cells: 6 },
-    { id: 'scope', set: 'removal', pick: { kind: 'nth', n: 1 }, cells: 1 },
+    { id: 'hero-wash', set: 'removal', pick: { kind: 'first' }, cells: 1, sizes: '100vw' },
+    { id: 'tile', set: 'removal', pick: { kind: 'firstN', n: 6 }, cells: 6,
+      sizes: '(max-width: 767px) 45vw, (max-width: 1023px) 30vw, 76vw' },
+    { id: 'scope', set: 'removal', pick: { kind: 'nth', n: 1 }, cells: 1,
+      sizes: '(max-width: 1023px) 90vw, 32vw' },
   ],
   'removal-c': [
-    { id: 'hero-wash', set: 'removal', pick: { kind: 'first' }, cells: 1 },
-    { id: 'work', set: 'removal', pick: { kind: 'firstN', n: 9 }, cells: 9 },
-    { id: 'longform', set: 'removal', pick: { kind: 'nth', n: 1 }, cells: 1 },
+    { id: 'hero-wash', set: 'removal', pick: { kind: 'first' }, cells: 1, sizes: '100vw' },
+    { id: 'work', set: 'removal', pick: { kind: 'firstN', n: 9 }, cells: 9,
+      sizes: '(max-width: 767px) 45vw, (max-width: 1023px) 45vw, 26vw' },
+    { id: 'longform', set: 'removal', pick: { kind: 'nth', n: 1 }, cells: 1,
+      sizes: '(max-width: 1023px) 90vw, 32vw' },
   ],
   'trimming-a': [
-    { id: 'hero-band', set: 'trimming', pick: { kind: 'firstN', n: 2 }, cells: 2 },
-    { id: 'gallery', set: 'trimming', pick: { kind: 'middleShare' }, cells: 'all' },
-    { id: 'grid', set: 'trimming', pick: { kind: 'theRest' }, cells: 'all' },
-    { id: 'longform', set: 'trimming', pick: { kind: 'nth', n: 1 }, cells: 1 },
+    { id: 'hero-band', set: 'trimming', pick: { kind: 'firstN', n: 2 }, cells: 2,
+      sizes: '(max-width: 767px) 90vw, (max-width: 1023px) 44vw, 37vw' },
+    { id: 'gallery', set: 'trimming', pick: { kind: 'middleShare' }, cells: 'all',
+      sizes: '(max-width: 767px) 90vw, (max-width: 1023px) 60vw, 50vw' },
+    { id: 'grid', set: 'trimming', pick: { kind: 'theRest' }, cells: 'all',
+      sizes: '(max-width: 767px) 78vw, (max-width: 1023px) 39vw, 19vw' },
+    { id: 'longform', set: 'trimming', pick: { kind: 'nth', n: 1 }, cells: 1,
+      sizes: '(max-width: 1023px) 90vw, 31vw' },
   ],
   'trimming-b': [
-    { id: 'work', set: 'trimming', pick: { kind: 'firstN', n: 6 }, cells: 6 },
-    { id: 'standard', set: 'trimming', pick: { kind: 'nth', n: 1 }, cells: 1 },
+    { id: 'work', set: 'trimming', pick: { kind: 'firstN', n: 6 }, cells: 6,
+      sizes: '(max-width: 767px) 43vw, (max-width: 1023px) 29vw, 22vw' },
+    { id: 'standard', set: 'trimming', pick: { kind: 'nth', n: 1 }, cells: 1,
+      sizes: '(max-width: 1023px) 90vw, 28vw' },
   ],
   'trimming-c': [
-    { id: 'work', set: 'trimming', pick: { kind: 'firstN', n: 8 }, cells: 8 },
-    { id: 'longform', set: 'trimming', pick: { kind: 'nth', n: 1 }, cells: 1 },
+    { id: 'work', set: 'trimming', pick: { kind: 'firstN', n: 8 }, cells: 8,
+      sizes: '(max-width: 767px) 44vw, (max-width: 1023px) 45vw, 19vw' },
+    { id: 'longform', set: 'trimming', pick: { kind: 'nth', n: 1 }, cells: 1,
+      sizes: '(max-width: 1023px) 90vw, 31vw' },
   ],
   'storm-a': [
-    { id: 'hero-wash', set: 'storm', pick: { kind: 'first' }, cells: 1 },
-    { id: 'tile', set: 'storm', pick: { kind: 'firstN', n: 6 }, cells: 6 },
-    { id: 'handle', set: 'storm', pick: { kind: 'afterTiles' }, cells: 1 },
+    { id: 'hero-wash', set: 'storm', pick: { kind: 'first' }, cells: 1, sizes: '100vw' },
+    { id: 'tile', set: 'storm', pick: { kind: 'firstN', n: 6 }, cells: 6,
+      sizes: '(max-width: 767px) 44vw, (max-width: 1023px) 30vw, 24vw' },
+    { id: 'handle', set: 'storm', pick: { kind: 'afterTiles' }, cells: 1,
+      sizes: '(max-width: 1023px) 90vw, 28vw' },
   ],
-  agnostic: [{ id: 'shot', set: 'generic', pick: { kind: 'all' }, cells: 'all' }],
+  agnostic: [
+    { id: 'shot', set: 'generic', pick: { kind: 'all' }, cells: 'all',
+      sizes: '(max-width: 767px) 44vw, (max-width: 1023px) 30vw, 24vw' },
+  ],
 };
 PLACEMENT['storm-b'] = PLACEMENT['storm-a'];
 PLACEMENT['storm-c'] = PLACEMENT['storm-a'];
@@ -192,4 +232,18 @@ export function resolvePlacement(client: ResolvedClient, templateId: string): Ma
 /** Convenience for a template that wants one slot's list without the map. */
 export function slotPhotos(client: ResolvedClient, templateId: string, slotId: string): (PhotoSet | null)[] {
   return resolvePlacement(client, templateId).get(slotId)?.photos ?? [];
+}
+
+/** The `sizes` attribute for a slot. One source of truth; templates carry no literals. */
+export function slotSizes(templateId: string, slotId: string): string | undefined {
+  return PLACEMENT[templateId]?.find((s) => s.id === slotId)?.sizes;
+}
+
+/**
+ * Where an unframed photo sits in this slot — the template CSS's own default, declared so
+ * the studio can preview exactly what the page renders. A photo WITH a focal point still
+ * wins; this is only the fallback.
+ */
+export function slotPosition(templateId: string, slotId: string): string | undefined {
+  return PLACEMENT[templateId]?.find((s) => s.id === slotId)?.defaultPosition;
 }
