@@ -259,7 +259,7 @@ export function App() {
             <div id="photoslots">
               <section className="dash-group">
                 <h2 className="dash-group-head">Photos on this page</h2>
-                <Slots record={record} templateId={previewTpl} onChange={onChange} />
+                <Slots record={record} slug={slug!} templateId={previewTpl} onChange={onChange} />
               </section>
             </div>
             <div id="business"><Form record={record} onChange={onChange} slug={slug!} /></div>

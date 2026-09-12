@@ -15,6 +15,7 @@
 
 import { useState } from 'react';
 import type { Json } from './lib';
+import { api, fileToBase64 } from './lib';
 import { PLACEMENT, RESOLVES_FROM_MAP, templateCells, type Cell } from '../lib/placement.mjs';
 import { photoStatus } from '../lib/photoStatus';
 import { IMAGE_SLOTS, MASTERS, minWidth } from '../templates/imageSlots.mjs';
@@ -38,14 +39,17 @@ function positionFor(templateId: string, slotId: string, photo: PhotoSet | null)
 }
 
 export function Slots({
-  record, templateId, onChange, onFrame,
+  record, slug, templateId, onChange, onFrame,
 }: {
   record: Json;
+  slug: string;
   templateId: string;
   onChange: (next: Json) => void;
   onFrame?: (src: string) => void;
 }) {
   const [picking, setPicking] = useState<string | null>(null);
+  const [busy, setBusy] = useState<string | null>(null);
+  const [notice, setNotice] = useState<{ key: string; kind: 'error' | 'warn' | 'ok'; text: string } | null>(null);
   const slots = PLACEMENT[templateId] ?? [];
   const wired = RESOLVES_FROM_MAP.has(templateId);
   const cells = templateCells(record as never, templateId);
@@ -71,6 +75,39 @@ export function Slots({
       // Written for THIS template only — nothing migrates a record wholesale.
       photoSlots: { ...(record.photoSlots ?? {}), [templateId]: next },
     });
+  };
+
+  /**
+   * File -> optimised -> placed, into THIS cell. Two clicks and an OS file dialog: the
+   * photo goes through the same pipeline (rotate, strip, 4:3, refuse under-minimum and
+   * HEIC with the number), joins the slot's set, and is assigned to the cell it was
+   * dropped on. The focal point defaults to the centre; Frame refines it afterwards.
+   */
+  const uploadInto = async (cell: Cell, set: string, file: File) => {
+    const key = cell.key!;
+    setBusy(key);
+    setNotice(null);
+    try {
+      const existing = ((record.photos ?? {}) as Record<string, PhotoSet[]>)[set] ?? [];
+      const at = existing.length;
+      const dataBase64 = await fileToBase64(file);
+      const res = await api.upload({ slug, filename: file.name, dataBase64, set, index: at, count: at });
+      const nextPhotos = { ...(record.photos ?? {}), [set]: [...existing, res.photo] };
+      const nextAssign = { ...assignments, [key]: res.photo.id ?? res.photo.src };
+      onChange({
+        ...record,
+        photos: nextPhotos,
+        photoSlots: { ...(record.photoSlots ?? {}), [templateId]: nextAssign },
+      });
+      setNotice({
+        key, kind: res.warnings.length ? 'warn' : 'ok',
+        text: res.warnings.length ? res.warnings.join(' ') : `Placed, centred: ${res.photo.width} × ${res.photo.height}.`,
+      });
+    } catch (err: any) {
+      setNotice({ key, kind: 'error', text: err.body?.message || err.message });
+    } finally {
+      setBusy(null);
+    }
   };
 
   /** Assignable cells only, in page order — what the arrows walk. */
@@ -172,6 +209,15 @@ export function Slots({
                           title="Swap with the cell below" onClick={() => move(c, 1)}>↓</button>
                         <button className="dash-btn dash-btn--ghost dash-btn--sm" type="button"
                           onClick={() => setPicking(picking === c.key ? null : c.key)}>Choose…</button>
+                        <label className="dash-btn dash-btn--ghost dash-btn--sm" title="Upload a file straight into this slot">
+                          {busy === c.key ? 'Optimising…' : 'Upload here'}
+                          <input type="file" accept="image/*,.heic,.heif" hidden
+                            onChange={(e) => {
+                              const f = e.target.files?.[0];
+                              e.currentTarget.value = '';
+                              if (f) void uploadInto(c, slot.set, f);
+                            }} />
+                        </label>
                         {c.photo && onFrame && (
                           <button className="dash-btn dash-btn--ghost dash-btn--sm" type="button"
                             onClick={() => onFrame(c.photo!.src)}>Frame</button>
@@ -187,6 +233,13 @@ export function Slots({
                             onClick={() => write({ [c.key as string]: undefined })}>Reset to auto</button>
                         )}
                       </div>
+                    )}
+
+                    {notice && notice.key === c.key && (
+                      <p className={`dash-photo-notice dash-photo-notice--${notice.kind}`}
+                         role={notice.kind === 'error' ? 'alert' : 'status'}>
+                        {notice.kind === 'error' ? '✗ ' : notice.kind === 'warn' ? '⚠ ' : '✓ '}{notice.text}
+                      </p>
                     )}
 
                     {picking === c.key && c.key && (

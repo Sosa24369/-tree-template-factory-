@@ -22,7 +22,7 @@ import { useEffect, useRef, useState } from 'react';
 import type { Json } from './lib';
 import { api, fileToBase64 } from './lib';
 import { BREAKPOINTS, IMAGE_SLOTS, MASTERS, minWidth, slotById, stillCount, type ImageSlot } from '../templates/imageSlots.mjs';
-import { landingsFor, photoId, slotPosition, slotsForPosition } from '../lib/placement.mjs';
+import { landingsFor, photoId, slotPosition } from '../lib/placement.mjs';
 
 /**
  * Every slot a photograph ACTUALLY lands in on this client, cascade and explicit
@@ -40,11 +40,6 @@ function landedSlots(record: Json, photo: any, excluded: Set<string>): ImageSlot
 
 const SERVICES = ['removal', 'trimming', 'storm', 'generic'] as const;
 type Service = (typeof SERVICES)[number];
-
-const ASPECTS: { label: string; value: number | null }[] = [
-  { label: '4:3 — the contract (even grids, every slot)', value: 4 / 3 },
-  { label: 'Original shape — grids of mixed shapes go uneven', value: null },
-];
 
 const pct = (v: number) => `${Math.round(v * 100)}%`;
 const focalPos = (p: any) => (p?.focal ? `${pct(p.focal.x)} ${pct(p.focal.y)}` : undefined);
@@ -83,7 +78,12 @@ function PhotoService({ svc, slug, record, excluded, list, onList }: { svc: Serv
   const [from, setFrom] = useState<number | null>(null);
   const [over, setOver] = useState<number | null>(null);
   const gridRef = useRef<HTMLDivElement>(null);
-  const [pending, setPending] = useState<{ dataUrl: string; file: File } | null>(null);
+  // The master shape, chosen once beside the button instead of inside a modal every
+  // upload. 4:3 is the contract; "keep original" survives for the rare photo that must
+  // not be cropped, which is the only thing the old mandatory dialog offered that the
+  // tile cannot.
+  const [aspect, setAspect] = useState<number | null>(4 / 3);
+  const [progress, setProgress] = useState<{ done: number; total: number } | null>(null);
   const [framing, setFraming] = useState<number | null>(null);
   const [notice, setNotice] = useState<{ kind: 'error' | 'warn' | 'ok'; text: string } | null>(null);
 
@@ -181,25 +181,64 @@ function PhotoService({ svc, slug, record, excluded, list, onList }: { svc: Serv
 
       <div className="dash-photo-add">
         <label className="dash-btn dash-btn--sm">
-          Upload photo
+          Upload photos
           <input
             type="file"
             accept="image/*,.heic,.heif"
+            multiple
             hidden
             onChange={async (e) => {
-              const file = e.target.files?.[0];
-              if (!file) return;
-              setNotice(null);
-              const dataUrl = await fileToBase64(file);
-              setPending({ dataUrl, file });
+              const files = Array.from(e.target.files ?? []);
               e.currentTarget.value = '';
+              if (!files.length) return;
+              setNotice(null);
+              setBusy(true);
+              // File -> optimised -> placed, in that order and nothing in between. The
+              // focal point defaults to the centre and is refined afterwards with Frame
+              // on the tile, which is a refinement and never a gate.
+              const added: any[] = [];
+              const refused: string[] = [];
+              let warned = 0;
+              for (const [n, file] of files.entries()) {
+                setProgress({ done: n, total: files.length });
+                try {
+                  const dataBase64 = await fileToBase64(file);
+                  const at = stillCount(list) + added.length;
+                  const res = await api.upload({ slug, filename: file.name, dataBase64, aspect, set: svc, index: at, count: at });
+                  added.push(res.photo);
+                  if (res.warnings.length) warned += 1;
+                } catch (err: any) {
+                  refused.push(`${file.name}: ${err.body?.message || err.message}`);
+                }
+              }
+              setProgress(null);
+              setBusy(false);
+              if (added.length) onList([...list, ...added]);
+              // A refusal is shown with its reason and never swallowed, even when other
+              // files in the same selection went through.
+              if (refused.length) {
+                setNotice({ kind: 'error', text: `${refused.length} of ${files.length} refused — ${refused.join(' · ')}` });
+              } else if (warned) {
+                setNotice({ kind: 'warn', text: `Added ${added.length}. ${warned} came in under a slot minimum — open Frame on the tile to see which slots.` });
+              } else if (added.length) {
+                setNotice({ kind: 'ok', text: `Added ${added.length} photo${added.length === 1 ? '' : 's'}, centred. Use Frame on a tile to set the subject.` });
+              }
             }}
           />
+        </label>
+        <label className="dash-help dash-photo-aspect">
+          Shape
+          <select className="dash-input dash-input--sm" value={aspect === null ? 'original' : '43'}
+            onChange={(e) => setAspect(e.target.value === 'original' ? null : 4 / 3)}>
+            <option value="43">4:3 — the contract</option>
+            <option value="original">Keep the original shape</option>
+          </select>
         </label>
         <button className="dash-btn dash-btn--ghost dash-btn--sm" type="button" onClick={() => setPicking((v) => !v)}>
           Pick from existing
         </button>
-        {busy && <span className="dash-help">Optimising…</span>}
+        {progress && <span className="dash-help">Optimising {progress.done + 1} of {progress.total}…</span>}
+        {busy && !progress && <span className="dash-help">Optimising…</span>}
       </div>
       {notice && (
         <p className={`dash-photo-notice dash-photo-notice--${notice.kind}`} role={notice.kind === 'error' ? 'alert' : 'status'}>
@@ -208,30 +247,6 @@ function PhotoService({ svc, slug, record, excluded, list, onList }: { svc: Serv
       )}
 
       {picking && <ExistingPicker slug={slug} onPick={(src) => { onList([...list, { src, alt: '' }]); setPicking(false); }} onClose={() => setPicking(false)} />}
-
-      {pending && (
-        <CropDialog
-          dataUrl={pending.dataUrl}
-          set={svc}
-          index={stillCount(list)}
-          count={stillCount(list)}
-          excluded={excluded}
-          onCancel={() => setPending(null)}
-          onConfirm={async (focal, aspect) => {
-            setBusy(true);
-            setPending(null);
-            try {
-              const res = await api.upload({ slug, filename: pending.file.name, dataBase64: pending.dataUrl, focal, aspect, set: svc, index: stillCount(list), count: stillCount(list) });
-              onList([...list, res.photo]);
-              setNotice(res.warnings.length ? { kind: 'warn', text: res.warnings.join(' ') } : { kind: 'ok', text: `Added as #${list.length + 1}: ${res.photo.width} × ${res.photo.height}, ${res.photo.pipeline?.aspect ?? ''}, lands in ${res.slots.map((s) => `${s.template} ${s.id}`).join(', ') || 'no slot on the templates this client builds'}.` });
-            } catch (err: any) {
-              setNotice({ kind: 'error', text: err.body?.message || err.message });
-            } finally {
-              setBusy(false);
-            }
-          }}
-        />
-      )}
 
       {framing !== null && list[framing] && (
         <FrameDialog
@@ -311,9 +326,13 @@ function ExistingPicker({ slug, onPick, onClose }: { slug: string; onPick: (src:
  * slot's box makes around the focal point. object-fit: cover + object-position is
  * exactly what the template does, so this IS the crop, not an approximation.
  */
-function CropPreview({ src, focal, slots, position }: { src: string; focal: { x: number; y: number } | null; slots: ImageSlot[]; position: number }) {
-  const cover = slots.filter((s) => s.policy === 'cover');
-  const shown = cover.length ? cover.slice(0, 4) : [];
+function CropPreview({ src, focal, slots }: { src: string; focal: { x: number; y: number } | null; slots: ImageSlot[] }) {
+  // EVERY slot this photograph feeds, named — not the first four, and not only the ones
+  // that crop. Stage 1 found this list truncated with slice(0, 4) AND filtered to cover
+  // policy, on top of a query that already missed the cascade, so a photo could feed a
+  // live ad page's hero plate and show nothing here at all.
+  const shown = slots.filter((s) => s.policy === 'cover' || s.policy === 'plate');
+  const whole = slots.filter((s) => s.policy !== 'cover' && s.policy !== 'plate');
   // Where this photo sits in a given slot. A focal point wins everywhere; without one the
   // answer is the SLOT's declared default, not a blanket 50% 50%. Stage 1 found this
   // preview showing 50% 50% while removal-a's hero plate shipped `center 35%` — a 37 CSS
@@ -325,7 +344,7 @@ function CropPreview({ src, focal, slots, position }: { src: string; focal: { x:
     <div className="dash-crops">
       {shown.length === 0 && (
         <p className="dash-help">
-          Position #{position} is shown whole ({slots.length ? slots.map((s) => `${s.template} ${s.id}`).join(', ') : 'no slot on the templates this client builds'}); the box takes the photo's own shape, so nothing is cropped.
+          This photograph is shown whole ({slots.length ? slots.map((s) => `${s.template} ${s.id}`).join(', ') : 'no slot on the templates this client builds'}); the box takes the photo's own shape, so nothing is cropped.
           The focal point still matters if the photo is ever moved to a cover slot.
         </p>
       )}
@@ -348,7 +367,12 @@ function CropPreview({ src, focal, slots, position }: { src: string; focal: { x:
           </div>
         </div>
       ))}
-      {cover.length > 4 && <p className="dash-help">…and {cover.length - 4} more cover slot{cover.length - 4 === 1 ? '' : 's'} crop it the same way.</p>}
+      {whole.length > 0 && (
+        <p className="dash-help">
+          Shown whole, nothing cropped, in {whole.length} more slot{whole.length === 1 ? '' : 's'}:{' '}
+          {whole.map((s) => `${s.template} ${s.label.split(' — ')[0].toLowerCase()}`).join(', ')}.
+        </p>
+      )}
     </div>
   );
 }
@@ -380,7 +404,7 @@ function FrameDialog({ photo, slots, position, onCancel, onSave }: { photo: any;
             <span className="dash-help">{photo.width && photo.height ? `${photo.width} × ${photo.height}` : 'size unknown'}{photo.pipeline ? ` · pipeline v${photo.pipeline.version}, ${photo.pipeline.aspect}` : ' · legacy import'}</span>
           </div>
         </div>
-        <CropPreview src={photo.src} focal={focal} slots={slots} position={position} />
+        <CropPreview src={photo.src} focal={focal} slots={slots} />
         <div className="dash-modal-actions">
           {focal && <button className="dash-btn dash-btn--ghost" type="button" onClick={() => setFocal(null)}>Clear focal point</button>}
           <button className="dash-btn dash-btn--ghost" type="button" onClick={onCancel}>Cancel</button>
@@ -391,57 +415,3 @@ function FrameDialog({ photo, slots, position, onCancel, onSave }: { photo: any;
   );
 }
 
-/** Frame a NEW upload: focal point + master shape, with the same three-crop preview. */
-function CropDialog({ dataUrl, set, index, count, excluded, onCancel, onConfirm }: { dataUrl: string; set: Service; index: number; count: number; excluded: Set<string>; onCancel: () => void; onConfirm: (focal: { x: number; y: number }, aspect: number | null) => void }) {
-  const [focal, setFocal] = useState({ x: 0.5, y: 0.5 });
-  const [aspect, setAspect] = useState<number | null>(4 / 3);
-  const [dims, setDims] = useState<{ w: number; h: number } | null>(null);
-  const imgRef = useRef<HTMLImageElement>(null);
-  const slots = slotsForPosition(set as never, index, Math.max(count, index + 1))
-    .map((l) => slotById(l.templateId, l.slotId))
-    .filter((s): s is ImageSlot => !!s && !excluded.has(s.template));
-  let need = MASTERS.photo.min[0];
-  for (const s of slots) need = Math.max(need, minWidth(s.master));
-  // What the 4:3 master will be, so the size warning appears before the upload is refused.
-  const masterW = dims ? (aspect ? Math.min(dims.w, Math.round(dims.h * aspect)) : dims.w) : null;
-  return (
-    <div className="dash-modal" role="dialog" aria-modal="true">
-      <div className="dash-modal-card dash-modal-card--wide">
-        <h3>Frame the photo (it will be #{index + 1} in {set})</h3>
-        <p className="dash-help">Click the subject. The upload is cropped to the chosen shape around it, and the crops below are what the templates will show.</p>
-        <div className="dash-frame-grid">
-          <div className="dash-crop">
-            <img
-              ref={imgRef}
-              src={dataUrl}
-              alt=""
-              className="dash-crop-img"
-              onLoad={(e) => setDims({ w: e.currentTarget.naturalWidth, h: e.currentTarget.naturalHeight })}
-              onClick={(e) => { const r = (e.target as HTMLImageElement).getBoundingClientRect(); setFocal({ x: (e.clientX - r.left) / r.width, y: (e.clientY - r.top) / r.height }); }}
-            />
-            <span className="dash-focal" style={{ left: pct(focal.x), top: pct(focal.y) }} aria-hidden="true" />
-          </div>
-          <div className="dash-frame-side">
-            <label className="dash-field">
-              <span className="dash-label">Master shape</span>
-              <select className="dash-input" value={aspect === null ? 'null' : String(aspect)} onChange={(e) => setAspect(e.target.value === 'null' ? null : Number(e.target.value))}>
-                {ASPECTS.map((a) => <option key={a.label} value={a.value === null ? 'null' : String(a.value)}>{a.label}</option>)}
-              </select>
-            </label>
-            {dims && <span className="dash-help">Source {dims.w} × {dims.h}{masterW != null && aspect ? ` → master ${masterW} × ${Math.round(masterW / aspect)}` : ''}. This position needs {need} px wide{masterW != null && masterW < need ? <strong className="dash-v-err"> — too small, it will be refused.</strong> : '.'}</span>}
-            <span className="dash-label">Where #{index + 1} lands</span>
-            <ul className="dash-slot-list">
-              {slots.map((s) => <li key={`${s.template}/${s.id}`}><code>{s.template}</code> {s.label.split(' — ')[0]} <span className="dash-badge">{s.policy}</span></li>)}
-              {slots.length === 0 && <li className="dash-help">no slot on the templates this client builds</li>}
-            </ul>
-          </div>
-        </div>
-        <CropPreview src={dataUrl} focal={focal} slots={slots} position={index + 1} />
-        <div className="dash-modal-actions">
-          <button className="dash-btn dash-btn--ghost" type="button" onClick={onCancel}>Cancel</button>
-          <button className="dash-btn" type="button" onClick={() => onConfirm(focal, aspect)}>Optimise & add</button>
-        </div>
-      </div>
-    </div>
-  );
-}
