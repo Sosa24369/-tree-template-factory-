@@ -169,10 +169,42 @@ only**.
    thumbnail equals the shipped crop within a few pixels at 390, 820 and 1440.
 3. Moving a photo to another slot: **one action**.
 4. **No mandatory modal** anywhere in the upload path.
-5. The four live pages prerender **byte-identical** before and after the schema change —
-   `/p/texas-tree-tops/removal-a`, `/p/texas-tree-tops/storm-a`, `/p/j-valdez/removal-a`,
-   `/p/j-valdez/trimming-a`.
+5. The four live pages — `/p/texas-tree-tops/removal-a`, `/p/texas-tree-tops/storm-a`,
+   `/p/j-valdez/removal-a`, `/p/j-valdez/trimming-a` — **may change bytes only through the
+   live-campaign gate**, and only when a headless screenshot diff at 390, 820 and 1440
+   shows:
+   - **layout pixel-identical** — every image box and section box in the same place at the
+     same size; any geometry change is a stop; and
+   - **image content differing only where a larger srcset candidate was selected**, with
+     the gate naming those slots and showing before/after.
+
+   Any other pixel difference is a stop. See the note below on why the second clause
+   exists.
 6. Public JS and CSS do not grow: placement resolves at prerender.
 7. Frame's preview and the built page report the same `object-position` for every slot,
    focal set or not.
 8. Declared `sizes` is within 10% of the measured box at all three breakpoints, every slot.
+
+### Why criterion 5 carves out the srcset candidate
+
+The instruction was "byte-identical", then "pixel-identical at 390, 820 and 1440". Measured
+against the current live records, **pixel-identical alone would block the H4 fix on the
+slots where it works.** Correcting `sizes` changes which file the browser downloads:
+
+| slot | today's `sizes` | file today | file with correct `sizes` | |
+|---|---|---|---|---|
+| removal-a hero plate, J Valdez @1440 | `55vw` | `hero-photo-1.webp` | `hero-photo-1.webp` | same |
+| removal-a hero plate, Texas Tree Tops @1440 | `55vw` | `gallery-02.webp` | `gallery-02.webp` | same |
+| removal-a service strip, J Valdez @820 | `22vw` | `work-photo-3-400w.webp` | `work-photo-3.webp` | **changes** |
+| removal-a mosaic cell 1, J Valdez @1440 | `22vw` | `hero-photo-1-800w.webp` | `hero-photo-1.webp` | **changes** |
+
+The hero plate is unaffected only because the masters are too small to offer a bigger
+candidate — the largest is already being chosen. Where a bigger candidate *does* exist, the
+browser fetches it and the photograph renders **sharper**. That is not a regression to be
+blocked; it is the entire point of the fix, and it will differ under any pixel diff.
+
+So the gate distinguishes the two kinds of difference. **Geometry is the invariant** — no
+box may move or resize, which is what "the page did not change" actually means for an ad
+landing page. Sharpness from a correctly-sized candidate is shown and approved, per slot,
+rather than forbidden. If the owner prefers the strict reading, H4 cannot ship on live
+clients and criterion 8 has to be scoped to demo records only.
