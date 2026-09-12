@@ -378,12 +378,15 @@ function CropPreview({ src, focal, slots }: { src: string; focal: { x: number; y
 }
 
 /** Set (or move) the focal point on a photo that is already in the set, with every crop previewed. */
-function FrameDialog({ photo, slots, position, onCancel, onSave }: { photo: any; slots: ImageSlot[]; position: number; onCancel: () => void; onSave: (focal: { x: number; y: number } | null) => void }) {
+export function FrameDialog({ photo, slots, position, onCancel, onSave }: { photo: any; slots: ImageSlot[]; position?: number; onCancel: () => void; onSave: (focal: { x: number; y: number } | null) => void }) {
+  // Opened from a photo card this is the photo's number in its set; opened from the slot
+  // panel there is no such number, so name the file instead.
+  const who = position ? `photo #${position}` : String(photo.src ?? '').split('/').pop();
   const [focal, setFocal] = useState<{ x: number; y: number } | null>(photo.focal ?? null);
   return (
     <div className="dash-modal" role="dialog" aria-modal="true">
       <div className="dash-modal-card dash-modal-card--wide">
-        <h3>Frame photo #{position}</h3>
+        <h3>Frame {who}</h3>
         <p className="dash-help">Click the subject. Every cover slot crops around that point; the previews below are the real crops at each breakpoint.</p>
         <div className="dash-frame-grid">
           <div className="dash-crop">
@@ -396,7 +399,7 @@ function FrameDialog({ photo, slots, position, onCancel, onSave }: { photo: any;
             {focal && <span className="dash-focal" style={{ left: pct(focal.x), top: pct(focal.y) }} aria-hidden="true" />}
           </div>
           <div className="dash-frame-side">
-            <span className="dash-label">Where #{position} lands</span>
+            <span className="dash-label">Where {who} lands</span>
             {slots.length === 0 && <span className="dash-help">No slot on the templates this client builds.</span>}
             <ul className="dash-slot-list">
               {slots.map((s) => <li key={`${s.template}/${s.id}`}><code>{s.template}</code> {s.label.split(' — ')[0]} <span className="dash-badge">{s.policy}</span></li>)}

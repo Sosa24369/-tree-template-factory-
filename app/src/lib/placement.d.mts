@@ -36,7 +36,7 @@ export interface ResolvedSlot {
 export interface Cell {
   slotId: string;
   index: number;
-  key: string | null;
+  key: string;
   photo: PhotoSet | null;
   source: 'explicit' | 'auto';
 }

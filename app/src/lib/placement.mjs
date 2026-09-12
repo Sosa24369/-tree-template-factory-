@@ -231,7 +231,7 @@ export function resolvePlacement(client, templateId) {
     const source = [];
     for (let i = 0; i < n; i++) {
       const key = cellKey(slot, i);
-      const explicit = slot.cells === 'all' ? undefined : assigned[key];
+      const explicit = assigned[key];
       // An assignment of '' means DELIBERATELY EMPTY — "remove from slot" in the studio.
       // Without it, clearing an assignment would just let auto-fill put the same photo
       // straight back, and the slot could never be emptied.
@@ -266,7 +266,7 @@ export function templateCells(client, templateId) {
       out.push({
         slotId: slot.id,
         index,
-        key: slot.cells === 'all' ? null : cellKey(slot, index),
+        key: cellKey(slot, index),
         photo,
         source: r.source[index],
       });

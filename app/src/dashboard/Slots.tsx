@@ -16,6 +16,9 @@
 import { useState } from 'react';
 import type { Json } from './lib';
 import { api, fileToBase64 } from './lib';
+import { FrameDialog } from './Photos';
+import { landingsFor } from '../lib/placement.mjs';
+import { slotById, type ImageSlot } from '../templates/imageSlots.mjs';
 import { PLACEMENT, RESOLVES_FROM_MAP, templateCells, type Cell } from '../lib/placement.mjs';
 import { photoStatus } from '../lib/photoStatus.mjs';
 import { IMAGE_SLOTS, MASTERS, minWidth } from '../templates/imageSlots.mjs';
@@ -49,6 +52,7 @@ export function Slots({
 }) {
   const [picking, setPicking] = useState<string | null>(null);
   const [busy, setBusy] = useState<string | null>(null);
+  const [framing, setFraming] = useState<PhotoSet | null>(null);
   const [notice, setNotice] = useState<{ key: string; kind: 'error' | 'warn' | 'ok'; text: string } | null>(null);
   const slots = PLACEMENT[templateId] ?? [];
   const wired = RESOLVES_FROM_MAP.has(templateId);
@@ -110,6 +114,32 @@ export function Slots({
     }
   };
 
+  /**
+   * Save a focal point onto a photograph, wherever it lives. A photo can sit in more than
+   * one set, and the focal point belongs to the PHOTOGRAPH, not to the slot it was framed
+   * from — one focal point per photo, applied in every slot it feeds.
+   */
+  const saveFocal = (target: PhotoSet, focal: { x: number; y: number } | null) => {
+    const id = target.id ?? target.src;
+    const photos: Record<string, PhotoSet[]> = {};
+    for (const [set, list] of Object.entries((record.photos ?? {}) as Record<string, PhotoSet[]>)) {
+      photos[set] = (list ?? []).map((p) => {
+        if ((p.id ?? p.src) !== id) return p;
+        if (focal) return { ...p, focal };
+        const { focal: _drop, ...rest } = p;
+        return rest as PhotoSet;
+      });
+    }
+    onChange({ ...record, photos });
+    setFraming(null);
+  };
+
+  /** Every slot this photograph feeds, for the Frame preview. */
+  const framedSlots = (photo: PhotoSet): ImageSlot[] =>
+    landingsFor(record as never, photo.id ?? photo.src, new Set<string>(record.excludedTemplates ?? []))
+      .map((l) => slotById(l.templateId, l.slotId))
+      .filter((s): s is ImageSlot => !!s);
+
   /** Assignable cells only, in page order — what the arrows walk. */
   const walkable = cells.filter((c) => c.key !== null);
   const idOf = (c: Cell) => (c.photo ? c.photo.id ?? c.photo.src : '');
@@ -154,9 +184,8 @@ export function Slots({
               <strong>{m.label}</strong>
               <span className="dash-badge">{slot.set}</span>
               <span className="dash-help">
-                {slot.cells === 'all'
-                  ? `every photo in the set — ${mine.length} today, reorder them in the set below`
-                  : `${mine.filter((c) => c.photo).length} of ${mine.length} filled`}
+                {`${mine.filter((c) => c.photo).length} of ${mine.length} filled`}
+                {slot.cells === 'all' ? ' — one cell per photo in the set' : ''}
               </span>
             </div>
 
@@ -165,7 +194,7 @@ export function Slots({
                 const st = photoStatus(c.photo, m.need);
                 const ratio = m.box[0] / m.box[1];
                 const w = 148, h = Math.max(40, Math.round(w / ratio));
-                const key = c.key ?? `${slot.id}.auto.${c.index}`;
+                const key = c.key;
                 return (
                   <div className="dash-slot-cell" key={key}>
                     <div className="dash-slot-thumb" style={{ width: w, height: h }}>
@@ -201,7 +230,7 @@ export function Slots({
                       )}
                     </div>
 
-                    {c.key !== null && wired && (
+                    {wired && (
                       <div className="dash-slot-actions">
                         <button className="dash-btn dash-btn--ghost dash-btn--sm" type="button"
                           title="Swap with the cell above" onClick={() => move(c, -1)}>↑</button>
@@ -221,6 +250,11 @@ export function Slots({
                         {c.photo && onFrame && (
                           <button className="dash-btn dash-btn--ghost dash-btn--sm" type="button"
                             onClick={() => onFrame(c.photo!.src)}>Frame</button>
+                        )}
+                        {c.photo && (
+                          <button className="dash-btn dash-btn--ghost dash-btn--sm" type="button"
+                            title="Set the subject — what must survive the crop in every slot this photo feeds"
+                            onClick={() => setFraming(c.photo)}>Frame</button>
                         )}
                         {c.photo && (
                           <button className="dash-btn dash-btn--ghost dash-btn--sm" type="button"
@@ -267,6 +301,15 @@ export function Slots({
           </div>
         );
       })}
+
+      {framing && (
+        <FrameDialog
+          photo={framing}
+          slots={framedSlots(framing)}
+          onCancel={() => setFraming(null)}
+          onSave={(focal) => saveFocal(framing, focal)}
+        />
+      )}
     </div>
   );
 }

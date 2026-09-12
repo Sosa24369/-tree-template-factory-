@@ -105,12 +105,19 @@ for (const file of readdirSync(join(ROOT, 'clients')).filter((f) => f.endsWith('
     if (excluded.has(tpl)) continue;
     if (!PLACEMENT[tpl]) { fails.push(`${slug}: photoSlots.${tpl} is not a template that takes photographs`); continue; }
     const keys = new Set();
+    const openEnded = new Set();
     for (const slot of PLACEMENT[tpl]) {
-      if (slot.cells === 'all') continue;
+      // An 'all' slot has as many cells as the set has photographs, so its key space is
+      // data-dependent: `rail.4` is legal on a client with four, illegal on one with two,
+      // and the count changes as photographs are added. Accept any positive index and let
+      // the resolver ignore one past the end, rather than failing a publish on arithmetic.
+      if (slot.cells === 'all') { openEnded.add(slot.id); continue; }
       for (let i = 0; i < slot.cells; i++) keys.add(cellKey(slot, i));
     }
     for (const [key, id] of Object.entries(map ?? {})) {
-      if (!keys.has(key)) { fails.push(`${slug}: photoSlots.${tpl}.${key} is not a slot on ${tpl}`); continue; }
+      const m = /^(.+)\.(\d+)$/.exec(key);
+      const open = m && openEnded.has(m[1]) && Number(m[2]) >= 1;
+      if (!keys.has(key) && !open) { fails.push(`${slug}: photoSlots.${tpl}.${key} is not a slot on ${tpl}`); continue; }
       // '' is DELIBERATELY EMPTY — the studio's "Remove from slot". Not a dangling id.
       if (id !== '' && !library.has(id)) fails.push(`${slug}: photoSlots.${tpl}.${key} points at ${id}, which is not in this client's photographs`);
     }
