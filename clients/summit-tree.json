@@ -263,5 +263,12 @@
       "trust.item3": "Licensed and insured — proof on request"
     }
   },
-  "excludedTemplates": []
+  "excludedTemplates": [],
+  "photoSlots": {
+    "removal-a": {
+      "hero-plate": "/assets/_shared/services-card-photo-3-1290bfcd.webp",
+      "hero-proof.1": "/assets/_shared/services-card-photo-1-ecd55f38.webp",
+      "hero-proof.2": "/assets/_shared/services-card-photo-2-a6cb4660.webp"
+    }
+  }
 }
