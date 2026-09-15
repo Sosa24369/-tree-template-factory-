@@ -69,16 +69,21 @@ export const MANIFESTS = Object.freeze({
     FOOTER,
     STICKY,
   ]),
+  // B10 (2026-09-14, owner's request): the offer band moved from directly under the hero
+  // to after "How it works" and the photo strip that belongs to it. This is the CONTROL's
+  // defined order, not a per-client layout — the layout lock still forces every client
+  // back to exactly this sequence; the sequence itself changed. The hero, and therefore
+  // everything above the fold at every width, is unchanged.
   'trimming-a': Object.freeze([
     HEADER,
     S('hero', 'Hero + form', 'L'),
-    S('benefits', 'Offer band'),
     S('why-choose', 'Why choose us + reviews'),
     S('done-right', 'Done right grid'),
     S('longform', 'Services blurb'),
     S('areas', 'Service areas'),
     S('process', 'How it works'),
     S('gallery', 'Recent jobs'),
+    S('benefits', 'Offer band'),
     S('services', 'Services list'),
     S('mid-cta', 'Mid-page CTA'),
     S('faq', 'FAQ'),
