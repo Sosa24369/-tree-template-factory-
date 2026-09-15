@@ -326,6 +326,16 @@
   margin-top: clamp(30px, 4.5vw, 48px);
 }
 
+/* B3 + B7 — under the offer cards and under the "done right" grid the CTA closes a
+   block that spans the whole column, so it sits on that block's centre line instead of
+   hugging the left edge beneath one card. Alignment only: the link, its number and its
+   href are untouched. Hero, reviews and services keep their left alignment. */
+.trimming-a .ta-benefits .ta-cta-row,
+.trimming-a .ta-doneright .ta-cta-row {
+  display: flex;
+  justify-content: center;
+}
+
 /* ---------------------------------------------------------------- *
  * Deferred photographs — the one sizing contract for every one of them.
  *
