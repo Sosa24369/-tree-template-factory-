@@ -3065,3 +3065,100 @@ no-images rule.
   hero plate at tablet, whose height follows the hero's content: 820 × 1656 as Stage 1
   measured it, 820 × 1563 on Summit. The contract's single tablet number is exact for the
   records it was measured on, not for every client.
+
+## Follow-up — B2, B9 and the LCP preload — 2026-09-15
+
+Owner's decisions on the proposals above: bundle growth accepted (+422 B JS, +124 B CSS
+gzip); B2 = `gallery-slide-3` ("removal-class" in the brief was a slip — this is the trimming
+page); B9 = option B. Three more local commits.
+
+**The preload had to change first.** `lcpImage()` in `scripts/prerender.mjs` took "the first
+still in the client's photo set". Assigning a photo to trimming-a's `hero-band.1` would have
+left J Valdez's page preloading `hero-photo-1` at high priority, a photo no longer on it, while
+the photo actually in the cell got no preload. It now reads the LCP slot's first photo through
+the resolver, with the old rule as a fallback. Mapping every page's preload against its slot
+first found the same bug already live on a demo: Summit's trimming-a preloaded
+`services-card-photo-3` while its hero band showed `services-card-photo-1`. That page and its
+thank-you page were the only ones the fix changed. Thank-you pages preload a hero photo they
+never show; that predates this work and is left alone.
+
+**B2.** One key, `photoSlots.trimming-a["hero-band.1"]`. `hero-photo-2` stays in cell 2 and in
+every other slot; `hero-photo-1` stays the removal-a hero plate. `<img>` uses on J Valdez's
+pages: `hero-photo-2` 13 → 13, `gallery-slide-5` 6 → 6, `hero-photo-1` 8 → 7,
+`gallery-slide-3` 8 → 9. The new cell's alt text is the record's own for that photo.
+
+**B9.** Steps run across from 768 px (2 × 2, then one line from 980 px), connector along the
+top. Recent jobs becomes the band under them: same background, contained to the column. With
+exactly five tiles it is the approved grid (measured 350/170, 365/178, 5 × 208, matching the
+prototype); other counts keep the swipeable rail, since that grid only closes at five. Texas
+Tree Tops has 12 and Summit 1. Both sections stay where the manifest has always put them.
+**Found on the way:** Texas Tree Tops' live trimming-a rail was centred and overflowing at
+1440, so its first photo sat 976 px off the left edge and could not be scrolled to. Contained
+and left-aligned, it can.
+
+**21.png and 22.png** (missed from the first list): both 1080 × 1080, both refused by the
+pipeline, and neither is new. 21 is `work-photo-3` retouched (mean difference 3.4), 22 is
+`hero-photo-2` retouched (2.6), the truck with the painted number.
+
+**Live ad pages.** `protected-routes.json` lists four: TTT removal-a, TTT storm-a, J Valdez
+removal-a and trimming-a. Summit is `isDemo`, `noindex, nofollow`, with no GTM: no spend
+possible. Texas Tree Tops' trimming-a and trimming-c, and J Valdez's trimming-c, are **not**
+on the list but are published, reachable, and carry the client's GTM container. Whether an ad
+points at them lives in Google Ads, which the repo cannot see. That is for the owner to
+confirm before publish.
+
+**Shared stock photos on TTT removal-a (read-only so far).** `_shared/services-card-photo-1/2/3`
+appear four times, not three: rail cells 19–21 with alt "Texas Tree Tops tree removal job,
+photo 19/20/21", and `services-card-photo-3` again as the first photo of the services strip,
+alt "…photo 1". These are alt text composed by `altFor()`, not visible captions. J Valdez's
+live pages now carry no `_shared/` or `_template/` asset; TTT storm-a carries none.
+
+### Verification (final build, against a fresh build of `a49d1a7`)
+
+- **Pages that differ from main across the whole session: eight.** The six above, plus J
+  Valdez's and Summit's trimming-a thank-you pages (preload only). B9 changes no HTML beyond
+  one class on J Valdez's trimming-a: it is CSS, and the `sizes` string the page hydrates with.
+- **Phone numbers: 0 differences on all 55 pages** (183 `tel:` hrefs, 373 `data-dni`, 367
+  visible numbers, GTM ids), main vs final.
+- **Guards 12/12.** Criterion 8: 153 image boxes, all within 10 % of or above their box.
+- **Lighthouse, same method** (`vite preview`, devtools throttling, mobile, trackers blocked,
+  0 GTM loads, one discarded warm-up, 3 runs each, interleaved):
+
+| page | before | after | LCP before | LCP after | CLS |
+|---|---|---|---|---|---|
+| jv/trimming-a | 98 98 98 | 98 98 98 | 1.83–1.84 s | 1.83 s | 0 → 0 |
+| ttt/trimming-a | 98 98 98 | 98 98 98 | 1.90–1.91 s | 1.90–1.92 s | 0 → 0 |
+
+  J Valdez removal-a is byte-identical to its measurement above (98 → 98).
+- **Bundle vs main:** JS +461 B gzip (+925 raw), CSS +316 B gzip (+1,285 raw). That is
+  +39 B JS and +192 B CSS beyond the growth already accepted, for B2 and B9. A first B9 draft
+  cost +300 B CSS; replacing a repeated `:has()` quantity query with one rendered class
+  brought it down.
+
+### Incident — tags fired from my test browser
+
+Six local-build probes loaded J Valdez's and Texas Tree Tops' pages in headless Chrome
+**without blocking trackers**: b2, b9, b9real, crit8, hero, newboxes. (A seventh unblocked
+probe, one-click, only drove the local studio dev server for Summit, which has no GTM; its one
+click was a studio arrow button.) I had blocked
+trackers only on loads of the live site. The local builds embed the clients' real GTM
+containers, and J Valdez's has no hostname restriction, so its page-load tags fire on
+`localhost` like anywhere else. The evidence: the sticky call bar in those captures read
+(214) 444-7963 and (214) 203-1200, numbers written in by the call-tracking swap (CallRail
+company 683934430 is a custom-HTML tag in the container). The page's own number,
+(469) 402-1196, is byte-identical in every built page.
+
+What could have fired, from the container's tag list: GA4 (G-LS213RD8KQ) page views, the
+Google tag's Ads page hit (AW-17871027168), the conversion linker, and CallRail sessions,
+each of which is handed a pool number. No probe clicked a phone link, submitted a form or
+opened a thank-you page, so no call or lead conversion fired. The count is at least
+~60 loads in the second half of the session (≈45 J Valdez, ≈15 Texas Tree Tops), plus an
+unknown number from probes in the first half. Lighthouse runs were blocked throughout
+(0 GTM loads). Not verified: which tags actually sent hits, since that is visible only in
+GA4, Ads and CallRail.
+
+Fixed in the harness, not per script: `cdp.mjs` now blocks the full tracker list on every
+page it opens, merges any script's own list into that rather than replacing it, and prints a
+warning if any tracker host ever answers. Re-verified: GTM does not load, and every number
+on the page is (469) 402-1196. The B9 sheet was recaptured; the earlier option A/B sheet
+shows swapped numbers and is superseded.
