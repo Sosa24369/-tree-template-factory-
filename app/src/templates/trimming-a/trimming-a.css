@@ -733,6 +733,47 @@
  * S5 — why homeowners choose us + Google reviews, on the deep brand slab
  * ---------------------------------------------------------------- */
 
+/* B4 — the reviews in full on this page. The shared slider clamps every body to six
+   lines inside a fixed 240px card (for zero layout shift on templates that need it), so
+   the two long reviews on J Valdez's record — 388 and 448 characters — were cut off
+   mid-sentence. Scoped to .trimming-a so the other seven templates using the slider,
+   three of them live ad pages, are untouched. The cards in a row share the tallest
+   height, so the rail stays even; CLS is measured, not assumed (docs/BUILD-LOG.md). */
+.trimming-a .rvs-card {
+  height: auto;
+}
+
+.trimming-a .rvs-body {
+  display: block;
+  overflow: visible;
+  -webkit-line-clamp: unset;
+}
+
+/* B5 — the listing link sits directly under the reviews, not after a section's worth
+   of space, so it reads as part of them. */
+.trimming-a .ta-reviews-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: var(--tap);
+  margin-top: 14px;
+  padding: 10px 18px;
+  border-radius: var(--ta-r);
+  color: #ffffff;
+  font-weight: 650;
+  font-size: 0.95rem;
+  text-decoration: none;
+  /* An outline, not a fill: the call button below stays the one filled action here. */
+  box-shadow: inset 0 0 0 1.5px rgba(255, 255, 255, 0.55);
+  transition: background-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.trimming-a .ta-reviews-link:hover,
+.trimming-a .ta-reviews-link:focus-visible {
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 0 0 1.5px #ffffff;
+}
+
 .trimming-a .ta-why-body {
   margin: clamp(16px, 2.2vw, 22px) 0 0;
   color: var(--ta-on-deep-soft);

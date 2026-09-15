@@ -180,6 +180,9 @@ export const trimmingACopy: Record<string, string> = {
   //   blank-co). Composed from the record now. J Valdez keeps its source-exact
   //   sentence (short brand + its own list, wrong-service word fixed) via
   //   clients/j-valdez.json copyOverrides['trimming-a'].
+  // A plain label for the link to the client's own Google reviews listing. No count,
+  // no rating in it: those are claims, and the listing speaks for itself.
+  'why.reviewsLink': 'Read all our reviews on Google',
 
   /* ---------------------------------------------------------------- *
    * SECTION 6 — "Tree Trimming Done Clean, Done Right" photo grid

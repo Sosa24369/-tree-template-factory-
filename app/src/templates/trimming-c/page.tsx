@@ -203,6 +203,14 @@ export function TrimmingCPage({
                 <Split as="h2" className="tc-h2" a={copy('why.h1a')} b={copy('why.h1b')} stacked />
                 <SafeText as="p" className="tc-lede tc-lede--onink" value={copy('why.body')} />
                 <ReviewsSlider client={client} />
+                {/* Same link as trimming-a's reviews — the a->c copy-parity guard requires
+                    every visible string on the control to appear on the hybrid. */}
+                {typeof client.reviewsSource?.profileUrl === 'string' && /^https:\/\//.test(client.reviewsSource.profileUrl) && (
+                  <a className="tc-reviews-link" href={client.reviewsSource.profileUrl} target="_blank" rel="noopener noreferrer">
+                    {copy('why.reviewsLink')}
+                    <span aria-hidden="true"> →</span>
+                  </a>
+                )}
                 <div className="tc-cta-row">
                   <PhoneLink client={client} placement="reviews" className="tc-call tc-call--onink" subLabel={copy('cta.callSubLabel')}>
                     {copy('cta.callLabelPrefix')}

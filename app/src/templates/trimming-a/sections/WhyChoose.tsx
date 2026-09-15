@@ -22,6 +22,13 @@ import { ReviewsSlider } from '../../../components/ReviewsSlider';
 import { CallRow, Rule, Section, SplitHeading, type Copy } from './shared';
 
 export function WhyChoose({ client, copy }: { client: ResolvedClient; copy: Copy }) {
+  // B4/B5 — the client's own Google reviews listing, straight under the reviews so it
+  // reads as part of them. The URL is client data (reviewsSource.profileUrl, recorded
+  // when the reviews were transcribed); with no URL, or anything but https, there is no
+  // link rather than an invented one.
+  const profileUrl = client.reviewsSource?.profileUrl;
+  const reviewsUrl = typeof profileUrl === 'string' && /^https:\/\//.test(profileUrl) ? profileUrl : null;
+
   return (
     <Section tone="deep" className="ta-why">
       <div className="ta-why-head">
@@ -35,6 +42,12 @@ export function WhyChoose({ client, copy }: { client: ResolvedClient; copy: Copy
           is the CAPTION of the reviews; heading, prose, slider and CTA are
           ONE block. */}
       <ReviewsSlider client={client} />
+      {reviewsUrl && (
+        <a className="ta-reviews-link" href={reviewsUrl} target="_blank" rel="noopener noreferrer">
+          {copy('why.reviewsLink')}
+          <span aria-hidden="true"> →</span>
+        </a>
+      )}
 
       <CallRow client={client} copy={copy} placement="reviews" tone="onDeep" />
     </Section>
