@@ -235,16 +235,16 @@ export const IMAGE_SLOTS = [
     notes: '2.35:1 on a phone, 1.45:1 on a tablet, 2.14:1 on desktop. A square or a stacked composite is cut through the middle here.',
   },
   {
-    template: 'trimming-a', id: 'gallery', label: 'Before/after gallery rail', section: 'Gallery', element: '.ta-shot-img (gallery)',
+    template: 'trimming-a', id: 'gallery', label: 'Recent jobs — square photo strip', section: 'Recent jobs', element: '.ta-gallery .ta-shot-img',
     source: { set: 'trimming', pick: 'the middle share after the hero takes 2 (with 12 photos: 5)' }, policy: 'cover', focal: 'required', master: 'photo',
-    renders: { mobile: [[350, 130], [170, 130]], tablet: [[490, 230], [240, 230]], desktop: [[717, 537], [353, 230]] },
-    notes: 'A lead cell plus a row of 1.3:1 / 1.53:1 cells; the lead is 4:3 on desktop. Before/after labels at the top edge of a square are cut off in the small cells.',
+    renders: { mobile: [[304, 304]], tablet: [[320, 320]], desktop: [[268, 268]] },
+    notes: 'Square cells, so a 4:3 master loses a quarter of its width and a labelled before/after composite loses its labels. Re-measured 2026-09-14: this and the grid below had each other\'s boxes, so the studio previewed both in the wrong shape.',
   },
   {
-    template: 'trimming-a', id: 'grid', label: '"Done clean, done right" grid', section: 'Done right', element: '.ta-shot-img (grid)',
+    template: 'trimming-a', id: 'grid', label: '"Done clean, done right" photo grid', section: 'Done right', element: '.ta-doneright .ta-shot-img',
     source: { set: 'trimming', pick: 'the rest (with 12 photos: the last 5)' }, policy: 'cover', focal: 'required', master: 'photo',
-    renders: { mobile: [[304, 304]], tablet: [[320, 320]], desktop: [[268, 268]] },
-    notes: 'Square cells: a 4:3 master loses a quarter of its width. With fewer than 8 photos this grid is empty and the section keeps its copy.',
+    renders: { mobile: [[350, 129], [171, 129]], tablet: [[740, 271], [365, 271]], desktop: [[716, 540], [352, 264]] },
+    notes: 'A bento: on desktop a 2x2 feature plus five 4:3 cells, closing at six; below 980px two columns, with the feature and an even last tile spanning both. Rebuilt 2026-09-14 (B6) from two competing CSS blocks that left a hole. A sixth photo is an explicit assignment (photoSlots grid.6). With fewer than 8 photos this grid is empty and the section keeps its copy.',
   },
   {
     template: 'trimming-a', id: 'longform', label: 'Longform — side photograph', section: 'Longform', element: '.ta-longform-photo-img',

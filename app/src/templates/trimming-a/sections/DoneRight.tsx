@@ -34,7 +34,7 @@ export function DoneRight({ client, copy }: { client: ResolvedClient; copy: Copy
                 photo={withAlt(shot, altFor(client.name, i + 1))}
                 className="ta-shot-img"
                 wrapperClassName="ta-shot"
-                sizes={slotSizes('trimming-a', 'gallery')}
+                sizes={slotSizes('trimming-a', 'grid')}
               />
             </li>
           ))}

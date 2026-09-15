@@ -58,7 +58,7 @@ export function Gallery({ client, band }: { client: ResolvedClient; band?: 1 | 2
               photo={withAlt(shot, altFor(client.name, i + 1))}
               className="ta-shot-img"
               wrapperClassName="ta-shot"
-              sizes={slotSizes('trimming-a', 'grid')}
+              sizes={slotSizes('trimming-a', 'gallery')}
             />
           </li>
         ))}

@@ -222,5 +222,10 @@
     "profileName": "J Valdez Tree Service",
     "pulledAt": "2026-08-12",
     "note": "9 most recent 5-star text reviews, transcribed verbatim from the Google Business Profile (sorted Newest). All 10 newest had text; the 9 newest kept. Reviewer casing preserved."
+  },
+  "photoSlots": {
+    "trimming-a": {
+      "grid.6": "/assets/j-valdez/gallery-slide-4-07c07931.webp"
+    }
   }
 }
