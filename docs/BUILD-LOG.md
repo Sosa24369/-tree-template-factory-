@@ -2889,3 +2889,179 @@ plus 155 B for the last eight templates. Steps 3–5 added nothing to the public
 explicit, framing, the three statuses, and what the feature deliberately does not do. No
 screenshots — `docs/` has never carried images and that is a change worth making on
 purpose, not in passing.
+
+---
+
+# J VALDEZ TRIMMING-A — GROUP B — 2026-09-14
+
+Owner's brief: fix layout, photos, reviews and areas on `/p/j-valdez/trimming-a`, a live ad
+page. Two constraints override everything else in it. **No phone number is touched**: not the
+CTAs, the call row, the record, GTM or the forwarding number. **The truck photos stay**:
+nothing is swapped, cropped or replaced because a phone number is visible in it, and
+`hero-photo-2` and `gallery-slide-5` keep every slot they feed. Eight local commits, not
+pushed, not deployed. Held at the live-campaign gate.
+
+## What changed
+
+| item | commit | what | template-wide? |
+|---|---|---|---|
+| B6 | `placement: an explicit key…` + `trimming-a: "Done clean…"` | one bento rule instead of two competing ones; the hole closed with `grid.6` = `gallery-slide-4` | yes |
+| — | `removal-a: the Benefits photo…` | J Valdez's removal-a Benefits photo is their own (`work-photo-3`), not Texas Tree Tops' | slot yes, change JV only |
+| B8 | `trimming-a: Areas We Serve…` | marquee → one static wrapped list; every city once | yes |
+| B4, B5 | `trimming-a: reviews shown in full…` | reviews unclamped on trimming-a; Google-listing button 14 px under the slider | trimming-a (+ trimming-c for parity) |
+| B1 | `trimming-a: one spacing rhythm…` | hero copy gaps; body→button 48/55/66 → 24/25/34 | yes |
+| B3, B7 | `trimming-a: offer-block and done-right CTAs…` | those two call rows centred | yes |
+| B10 | `trimming-a: the offer band follows…` | offer band moved after "How it works" + Recent jobs; hero untouched | yes |
+
+**Not built, waiting on the owner:** B2 (hero proof strip, cell 1) and B9 (How it works
+layout), both proposed with screenshots. **Not done, by instruction:** A1, A2, and any review text.
+The reviews on the page are the ones already in the record, unchanged. The owner is pasting
+the real ones.
+
+### B6 — why the grid had a hole
+
+Two rules styled `.ta-mosaic`: the original (fixed heights, first and even-last tiles
+spanning) and a "Premium Reorder v2" block appended 2026-08-13 (its own gap, a 768 px
+breakpoint, `aspect-ratio: 4/3` on the cells) that never removed the first. Five photographs
+left a hole bottom right at every width; a sixth would have been an even last child, spanned
+two columns and wrapped onto a new row, which is a hole again. The replacement has one row
+height per breakpoint, so every gap is equal and the feature is exactly two rows plus one gap:
+`[1 1][2 3][4 5][6 6]` below 980 px, a 3 × 3 bento that closes at six above. Measured: desktop
+feature 716 × 540, cells 352 × 264, all six filled at 390 / 820 / 1440.
+
+The sixth photograph needed a way to exist. `grid` is an `'all'` slot, sized by what
+auto-fill produced, so `grid.6` had nowhere to go. An explicit key past the end now extends
+the slot (first commit). `gallery-slide-4`: a trimming result, not a composite, not one of
+the two photographs showing a phone number. It also appears in Recent jobs, because **J Valdez's
+library is 12 photographs and all 12 are already on this page.** Any sixth cell is a repeat
+until the client sends more.
+
+### The Benefits photo that was someone else's
+
+`_template/removal-a/benefit-strip-art` rendered as "template artwork" on every client's
+removal-a. The removal source manifest takes it from texastreetopsllc.com and nowhere else:
+it is a Texas Tree Tops job photograph, re-encoded and filed under `_template/`, where R4
+(which checks paths, not provenance) could not see it. On J Valdez's live page it showed TTT's
+crew as J Valdez's. New slot `removal-a/benefits`, mode `template-default`: nothing
+auto-fills it, so a client with no assignment keeps the artwork byte-for-byte (TTT
+removal-a and Summit are unchanged), and an explicit assignment replaces it. J Valdez:
+`work-photo-3`.
+
+**Every other `_template/` or `_shared/` asset that is a real job photograph.** Only one other
+family: `_shared/services-card-photo-1/2/3`. They appear in the Services section of *both*
+source sites (TTT and J Valdez), so they are most likely GoHighLevel template stock, not
+either client's work. They are in the TTT and Summit records, not J Valdez's. On TTT's live
+removal-a rail they are captioned "Texas Tree Tops tree removal job, photo 19/20/21". That
+is a claim the photos cannot back. **Not changed:** TTT is a separate live page and the owner
+has not asked. R4 still checks paths only; it cannot catch this class of leak.
+
+### B8 — root cause
+
+The section was a marquee: two tracks, each rendering its half of the list twice and
+translating −50 % for a seamless loop, under an edge-fade mask, pulled past the column by a
+negative margin. The loop clone produced the three repeated cities (the record holds ten
+unique ones), and the mask on a strip that is always mid-scroll produced the faded, clipped
+first chip. A ticker always has chips at its edges, so "every chip fully visible, always" is
+not a thing a marquee can do. The fix removes the mechanism rather than the symptom: one static
+wrapped list, no clone, no mask, no animation. It was already the reduced-motion layout.
+
+### B4 — CLS, measured rather than assumed
+
+The shared slider fixes card height at 240 px and clamps to six lines precisely so the
+track's height is known before fonts arrive. Unclamping trades that away on trimming-a. The
+cards now size to the tallest review in the row (Matt B., 448 characters). The section is
+below the fold on every viewport, and Lighthouse CLS stayed 0 (table below).
+
+## The 16 new photographs — none usable as sent
+
+All 16 are 1080 × 1080 PNG. **The pipeline refuses every one**: 1080 px is under the 1200 px
+tile minimum, and the minimum is not being lowered. Classified by eye, and compared against
+the existing library by mean pixel difference (0–255; single digits = the same frame):
+
+| file | what it is | same as existing? | service |
+|---|---|---|---|
+| 1 | trimming result | ≈ `gallery-slide-3` (15.7, same scene, re-shot or re-cropped) | trimming |
+| 2 | **composite** | = `hero-photo-1` (4.4), retouched | — |
+| 3 | new | no | removal |
+| 4 | **composite** | = `work-photo-2` (3.0), retouched | — |
+| 6, 7, 10, 16, 18, 19, 20 | new | no | removal |
+| 11 | fleet shot | = `work-photo-5` (2.5) | neither |
+| 12 | new | no | removal (likely) |
+| 13 | new | no | ambiguous; could be either |
+| 14 | trimming | = `work-photo-4` (4.3) | trimming |
+| 15 | trimming | = `work-photo-1` (4.6) | trimming (likely) |
+
+Genuinely new: 3, 6, 7, 10, 12, 13, 16, 18, 19, 20, which is ten removal-leaning
+photographs, none for trimming-a. `21.png` and `22.png` are in the same folder but were not in
+the list; not audited.
+
+**Where a 1080 square fills its box at 2× without upscaling** (box in CSS px, max width
+across 390 / 820 / 1440): trimming-a hero proof strip (530), trimming-a Recent jobs (320),
+removal-a hero proof strip (537), removal-a rail (320). **Where it would upscale:** trimming-a
+Done-clean bento (740 → 1.37×), trimming-a longform (740 → 1.37×), removal-a hero plate
+(1656 tall at 820 → 3.07×), removal-a benefits (738 → 1.37×), removal-a mosaic (1092 →
+2.02×), removal-a services blurb (738 → 1.37×), services list header (736 → 1.36×).
+
+**Ask the client for:** the original files straight off the phone (not exported, not
+retouched, not squared), at least 1600 px on the short side. Each of the ten new ones would
+qualify at that size.
+
+## Verification
+
+All against a build of `a49d1a7` (main before this work), made in a scratch worktree rather
+than quoted.
+
+- **Prerender diff: exactly six pages change**, with asset hashes normalised:
+  `demo/summit-tree/trimming-a`, `p/j-valdez/removal-a`, `p/j-valdez/trimming-a`,
+  `p/j-valdez/trimming-c`, `p/texas-tree-tops/trimming-a`, `p/texas-tree-tops/trimming-c`.
+  The other 49 are byte-identical, including Texas Tree Tops removal-a and storm-a. The CSS
+  bundle is shared, but every new rule is scoped to `.trimming-a` / `.trimming-c`.
+- **Phone numbers: 0 differences on all 55 pages.** Every `tel:` href (183), every
+  `data-dni` attribute (373) and every visible number pattern (367) compared as multisets,
+  main vs final. The Google Ads call conversion lives in GTM (`GTM-PFZPR33H`), and the GTM
+  snippet is byte-identical. Nothing in the record, GTM or forwarding was touched.
+- **Truck photos:** `hero-photo-2` (6 live slots) and `gallery-slide-5` (2) resolve to the
+  same cells as before. The only placement changes are `trimming-a grid.6` (new) and
+  `removal-a benefits` (artwork → `work-photo-3`).
+- **Guards 12/12.** Criterion 8: all 147 image boxes on the three changed live-template pages
+  declare `sizes` within 10 % of, or above, their measured box at 390 / 820 / 1440.
+- **No invented review or claim.** No review text touched; the one new string is the button
+  label "Read all our reviews on Google", with no count or rating.
+- **Bundle:** JS +422 B gzip (+803 raw), CSS +124 B gzip (−110 raw), same 213 files.
+  Measured with `gzip -9` on both builds.
+- **Lighthouse, the August method**: `vite preview` for both builds, applied devtools
+  throttling, mobile, performance only, GTM and every tracker blocked (0 GTM loads in 18
+  runs), one discarded warm-up per side, 3 runs each, before/after interleaved:
+
+| page | before perf | after perf | before LCP | after LCP | CLS before → after |
+|---|---|---|---|---|---|
+| jv/trimming-a | 98 98 98 | 98 98 98 | 1.85–1.90 s | 1.84–1.87 s | 0 → 0 |
+| jv/removal-a | 98 98 98 | 98 98 98 | 1.84–1.88 s | 1.84–1.86 s | 0 → 0 |
+| ttt/trimming-a | 98 98 98 | 98 98 98 | 1.92–1.94 s | 1.89–1.93 s | 0 → 0 |
+
+  No regression. A first pass served the builds from a plain static server with no
+  compression: 80–83 / 3.6–3.7 s on *both* sides, identical to each other, and not
+  comparable to August. The uncompressed CSS was blocking render. It is not reported as
+  the result.
+- **Page height** grows 187–725 px (full reviews, wrapped area chips, the closed bento).
+  Everything above the fold is unchanged at every width.
+
+Screenshots: before is the live page, captured with tracking blocked; after is the local
+build. Sheets for B1, B3/B7, B4/B5, B6, B8, B10 and removal-a Benefits, plus proposal sheets
+for B2 and B9, were sent to the owner. They are not in `docs/`, per the standing
+no-images rule.
+
+## Corrections to earlier entries
+
+- **Stage 3 step 2 (`19c0ff5`)** said trimming-a's components "are named the opposite of what
+  they render". Wrong. `Gallery.tsx` renders Recent jobs and `DoneRight.tsx` renders Done
+  clean, as named. The *contract* had the two slots' boxes swapped, and step 2 compensated by
+  swapping the component calls. Pages were right; the studio previewed each slot in the
+  other's box. Fixed at the source in the B6 commit, with contract, sizes, components and
+  IMAGE-SPEC all naming the slot they render.
+- **Stage 1, H4 table:** the row "j-valdez/trimming-a · 1440 · gallery lead · 717" is the Done
+  clean *grid* lead, for the same reason.
+- **Stage 1, H3 "REFUTED for client photo slots"** holds for every slot except the removal-a
+  hero plate at tablet, whose height follows the hero's content: 820 × 1656 as Stage 1
+  measured it, 820 × 1563 on Summit. The contract's single tablet number is exact for the
+  records it was measured on, not for every client.
