@@ -226,7 +226,18 @@ export function resolvePlacement(client, templateId) {
     // `cells` is the assignable key space, i.e. a MINIMUM — never a truncation. The
     // mosaic's direct read is deliberately unsliced, so a generic set of 23 must still
     // render 23 cells even though only 5 of them can carry an explicit assignment.
-    const n = slot.cells === 'all' ? auto.length : Math.max(slot.cells, auto.length);
+    // An explicit assignment past the end of an 'all' slot ADDS a cell: "put this
+    // photograph in the sixth cell of the grid" has to be something a person can say,
+    // or a grid with a hole in it can only be fixed by editing the template. Cells in
+    // between that nobody assigned stay empty, and templates drop empty cells.
+    let explicitMax = 0;
+    if (slot.cells === 'all') {
+      for (const key of Object.keys(assigned)) {
+        const m = /^(.+)\.(\d+)$/.exec(key);
+        if (m && m[1] === slot.id && assigned[key] !== '') explicitMax = Math.max(explicitMax, Number(m[2]));
+      }
+    }
+    const n = slot.cells === 'all' ? Math.max(auto.length, explicitMax) : Math.max(slot.cells, auto.length);
     const photos = [];
     const source = [];
     for (let i = 0; i < n; i++) {
