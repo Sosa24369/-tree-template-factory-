@@ -136,6 +136,12 @@ export const IMAGE_SLOTS = [
     notes: 'The most aggressive crop on any template: 3.87:1 on a tablet keeps a quarter of a 4:3 master\'s height. Put the focal point on the thing that must survive.',
   },
   {
+    template: 'removal-a', id: 'benefits', label: 'Benefits — side photograph', section: 'Benefits', element: '.ra-media-img',
+    source: { set: 'removal', pick: 'none — template artwork unless a photograph is assigned' }, policy: 'cover', focal: 'optional', master: 'photo',
+    renders: { mobile: [[350, 240]], tablet: [[738, 426]], desktop: [[488, 520]] },
+    notes: 'Shipped as template artwork on every client, but the artwork is a re-encode of a photograph from texastreetopsllc.com (source/removal manifest), filed under _template/ where the path-based R4 guard could not see it. It showed that photograph as the work of whichever client the page was for. Now a client slot: artwork where nothing is assigned, the client\'s own photograph when one is.',
+  },
+  {
     template: 'removal-a', id: 'art-why', label: 'Why choose us — background plate', section: 'Why choose us + reviews', element: '.ra-section (why)',
     source: { set: 'art', pick: 'sectionArt.removal-a.why' }, policy: 'plate', focal: 'optional', master: 'art',
     renders: { mobile: [[390, 896]], tablet: [[820, 809]], desktop: [[1440, 994]] },

@@ -10,17 +10,26 @@
 import type { ResolvedClient } from '../../../schema/resolve';
 import { SafeImage, SafeText } from '../../../components/Safe';
 import { altFor, benefitArt, benefitIcons, withAlt } from '../assets';
+import { slotPhotos, slotSizes } from '../../../lib/placement.mjs';
 import { CallCta, Section, type Copy } from './shared';
 
 export function Benefits({ client, copy }: { client: ResolvedClient; copy: Copy }) {
   const items = [1, 2, 3, 4].map((n) => copy(`benefits.item${n}`));
   const hasItems = items.some((text) => text.trim());
 
+  const ownPhoto = slotPhotos(client, 'removal-a', 'benefits')[0] ?? null;
+
   return (
     <Section tone="light" className="ra-benefits">
       <div className="ra-split">
         <div className="ra-split-media">
-          <SafeImage photo={withAlt(benefitArt, altFor(client.name, 1))} className="ra-media-img" />
+          {/* The client's own photograph when one is assigned (lib/placement.mjs,
+              removal-a/benefits); otherwise the template artwork, exactly as before. */}
+          <SafeImage
+            photo={withAlt(ownPhoto ?? benefitArt, altFor(client.name, 1))}
+            className="ra-media-img"
+            sizes={ownPhoto ? slotSizes('removal-a', 'benefits') : undefined}
+          />
         </div>
 
         <div className="ra-split-body">

@@ -61,6 +61,15 @@ export const PLACEMENT = {
       sizes: '(max-width: 767px) 65vw, (max-width: 1023px) 70vw, 40vw' },
     { id: 'service-photo', set: 'removal', pick: { kind: 'lastN', n: 3 }, cells: 3,
       sizes: '(max-width: 1023px) 90vw, 24vw' },
+    // The Benefits side photo. It shipped as TEMPLATE ARTWORK on every client's removal-a,
+    // but the "artwork" is a re-encode of a Texas Tree Tops job photograph (the removal
+    // source manifest attributes it to /assets/texas-tree-tops/benefit-strip-art-…); it
+    // was filed under _template/ so the R4 guard, which checks paths, would pass. On
+    // J Valdez's live page it presented TTT's crew as J Valdez's. `template-default` keeps
+    // the artwork where nothing is assigned — so no page moves that was not asked to —
+    // and lets a client's own photograph replace it by explicit assignment.
+    { id: 'benefits', set: 'removal', pick: { kind: 'none' }, mode: 'template-default', cells: 1,
+      sizes: '(max-width: 1023px) 90vw, 34vw' },
   ],
   'removal-b': [
     { id: 'hero-wash', set: 'removal', pick: { kind: 'first' }, cells: 1, sizes: '100vw' },
@@ -145,6 +154,7 @@ function applyPick(pick, stills, raw) {
     // No fall back to the first: the hybrids render `gallery[1] && ...`, so a client with
     // a single photograph gets nothing here rather than the same photo twice.
     case 'nthStrict': return stills[pick.n] ? [stills[pick.n]] : [];
+    case 'none': return [];
     case 'lastStill': return stills.length ? [stills[stills.length - 1]] : [];
     // removal-b's masonry gives the video a cell of its own, so the stills get one fewer.
     case 'firstNLessVideo': return stills.slice(0, raw.some((p) => p && p.kind === 'video') ? pick.n - 1 : pick.n);
@@ -176,6 +186,7 @@ function applyPick(pick, stills, raw) {
 export function slotSource(client, templateId, slotId) {
   const slot = (PLACEMENT[templateId] ?? []).find((s) => s.id === slotId);
   if (!slot) return [];
+  if (slot.mode === 'template-default') return [];
   if (slot.mode === 'direct-then-cascade') {
     const direct = partitionMedia(client.photos?.[slot.set] ?? []).stills;
     if (direct.length) return direct;
@@ -203,7 +214,9 @@ export function resolvePlacement(client, templateId) {
   const out = new Map();
   for (const slot of slots) {
     let auto;
-    if (slot.mode === 'direct-then-cascade') {
+    if (slot.mode === 'template-default') {
+      auto = [];
+    } else if (slot.mode === 'direct-then-cascade') {
       // The mosaic's quirk, reproduced: the direct read is NOT sliced by the pick.
       const direct = partitionMedia(client.photos?.[slot.set] ?? []).stills;
       const raw = photosFor(client, slot.set);

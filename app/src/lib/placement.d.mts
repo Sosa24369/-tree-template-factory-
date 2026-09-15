@@ -13,13 +13,14 @@ export type Pick =
   | { kind: 'lastN'; n: number }
   | { kind: 'all' }
   | { kind: 'middleShare' }
-  | { kind: 'theRest' };
+  | { kind: 'theRest' }
+  | { kind: 'none' };
 
 export interface PlacementSlot {
   id: string;
   set: ServiceKey;
   pick: Pick;
-  mode?: 'direct-then-cascade';
+  mode?: 'direct-then-cascade' | 'template-default';
   /** A slot with its own fallback order, narrower than lib/photos' cascade (storm). */
   cascade?: ServiceKey[];
   cells: number | 'all';

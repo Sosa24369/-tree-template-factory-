@@ -208,6 +208,8 @@ export function Slots({
                             display: 'block', borderRadius: 4, background: '#eef1f4',
                           }}
                         />
+                      ) : slot.mode === 'template-default' ? (
+                        <span className="dash-empty-slot">template artwork — not this client's photograph. Choose one to replace it.</span>
                       ) : (
                         <span className="dash-empty-slot">empty — nothing renders here</span>
                       )}
