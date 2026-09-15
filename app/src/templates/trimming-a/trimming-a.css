@@ -25,8 +25,8 @@
      - THE MOBILE HERO IS NOT A PHOTOGRAPH. It leads with the brand colour, so the
        LCP element is the headline: it paints with the first stylesheet and needs no
        second round trip. Below-the-fold photographs load through <DeferredImage/>.
-     - The slider is CSS scroll-snap, the FAQ is <details>, the marquee is one
-       keyframe, the icons are inline SVG.
+     - The slider is CSS scroll-snap, the FAQ is <details>, the service areas are a
+       plain wrapped list, the icons are inline SVG.
      - Every <img> carries the measured width/height from the client record and the
        rules below only ever override them proportionally, so CLS stays at zero.
 
@@ -936,7 +936,7 @@
 }
 
 /* ---------------------------------------------------------------- *
- * S8 — areas we serve marquee
+ * S8 — areas we serve
  *
  * Two identical groups per track, translated -50%: the loop is seamless because the
  * second group takes over exactly where the first began. The clone is aria-hidden,
@@ -950,39 +950,15 @@
   color: var(--ta-ink-2);
 }
 
-.trimming-a .ta-marquees {
-  display: grid;
-  gap: clamp(10px, 1.6vw, 14px);
-  margin-top: clamp(30px, 4.5vw, 48px);
-  margin-inline: calc(var(--ta-gutter) * -1);
-}
-
-.trimming-a .ta-marquee {
-  overflow: hidden;
-  padding-block: 4px;
-  -webkit-mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
-  mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
-}
-
-.trimming-a .ta-marquee-track {
+/* Every city once, wrapped, inside the content column. No mask, no clone, no
+   animation, no negative margin — see Areas.tsx for why each of those had to go. */
+.trimming-a .ta-tags {
   display: flex;
-  width: max-content;
-  animation: ta-marquee 44s linear infinite;
-}
-
-.trimming-a .ta-marquee-track--reverse {
-  animation-duration: 56s;
-  animation-direction: reverse;
-}
-
-.trimming-a .ta-marquee:hover .ta-marquee-track {
-  animation-play-state: paused;
-}
-
-.trimming-a .ta-marquee-group {
-  display: flex;
+  flex-wrap: wrap;
   gap: 10px;
-  padding-right: 10px;
+  margin: clamp(30px, 4.5vw, 48px) 0 0;
+  padding: 0;
+  list-style: none;
 }
 
 .trimming-a .ta-tag {
@@ -1002,39 +978,6 @@
 .trimming-a .ta-icon--pin {
   color: var(--brand-accent);
   flex: 0 0 auto;
-}
-
-@keyframes ta-marquee {
-  from {
-    transform: translate3d(0, 0, 0);
-  }
-  to {
-    transform: translate3d(-50%, 0, 0);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .trimming-a .ta-marquee {
-    -webkit-mask-image: none;
-    mask-image: none;
-  }
-
-  .trimming-a .ta-marquee-track {
-    animation: none;
-    width: 100%;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-
-  .trimming-a .ta-marquee-group {
-    flex-wrap: wrap;
-    justify-content: center;
-    padding-right: 0;
-  }
-
-  .trimming-a .ta-marquee-group[data-clone='true'] {
-    display: none;
-  }
 }
 
 /* ---------------------------------------------------------------- *

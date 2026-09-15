@@ -1,17 +1,23 @@
 /**
- * S8 — "Areas We Serve": the scrolling service-area marquee.
+ * S8 — "Areas We Serve": every city once, as a wrapped list of chips.
  *
  * The cities are CLIENT DATA (client.serviceAreaList), never copy — a different
  * client is a different list with no code change, and an empty list removes the
  * whole section rather than leaving an orphan heading (R5).
  *
- * The source emits three marquee tracks x two duplicate groups = 54 pills in the DOM
- * for nine unique names, in two different orderings (structure.md §2.8). Two tracks
- * are enough for the effect: each holds the list twice and translates -50%, which is
- * what makes the loop seamless, and the duplicate is aria-hidden so a screen reader
- * hears each city once. The second track runs in reverse, which is where the source's
- * "order B" visual came from. Under prefers-reduced-motion the CSS drops the
- * animation and the clone entirely and the tags simply wrap.
+ * This used to be a scrolling marquee: two tracks, each rendering its half of the
+ * list TWICE and translating -50% so the loop was seamless, under an edge-fade mask,
+ * pulled out past the content column by a negative margin. Every one of those
+ * choices produced what the owner reported on J Valdez's live page:
+ *   - "Sunnyvale, East Dallas and Lake Ray Hubbard each appear twice" — the loop
+ *     clone. The record itself has ten unique cities; nothing needed deduping in data.
+ *   - "the first chip on each row renders faded and clipped" — the mask, on a chip
+ *     half outside the column, on a strip that is always mid-scroll.
+ * A moving ticker ALWAYS has chips entering and leaving its edges, so "every chip
+ * fully visible, always" is not something a marquee can do. The static list is: one
+ * group, no clone, no mask, no animation — which also removes the duplicate DOM and
+ * a running animation, so it costs nothing in page speed. It is the layout the old
+ * CSS already fell back to under prefers-reduced-motion.
  *
  * Note the accent: Section 8 is the one heading where the source colours the FIRST
  * part ("Areas ") and leaves the second plain.
@@ -21,32 +27,17 @@ import type { ResolvedClient } from '../../../schema/resolve';
 import { SafeSection, SafeText } from '../../../components/Safe';
 import { PinIcon, Rule, Section, SplitHeading, type Copy } from './shared';
 
-function Track({ cities, reverse }: { cities: string[]; reverse: boolean }) {
-  const group = (clone: boolean) => (
-    <div className="ta-marquee-group" aria-hidden={clone ? true : undefined} data-clone={clone ? 'true' : undefined}>
-      {cities.map((city, i) => (
-        <span className="ta-tag" key={`${city}-${i}`}>
-          <PinIcon />
-          <SafeText as="span" value={city} />
-        </span>
-      ))}
-    </div>
-  );
-
-  return (
-    <div className="ta-marquee">
-      <div className={['ta-marquee-track', reverse ? 'ta-marquee-track--reverse' : null].filter(Boolean).join(' ')}>
-        {group(false)}
-        {group(true)}
-      </div>
-    </div>
-  );
-}
-
 export function Areas({ client, copy }: { client: ResolvedClient; copy: Copy }) {
-  const cities = (client.serviceAreaList ?? []).filter((city) => typeof city === 'string' && city.trim());
-  const half = Math.ceil(cities.length / 2);
-  const tracks = cities.length > 5 ? [cities.slice(0, half), cities.slice(half)] : [cities];
+  // Each city once, whatever the record holds: a list typed twice in the studio should
+  // not render twice on the page either. First spelling wins; order is preserved.
+  const seen = new Set<string>();
+  const cities = (client.serviceAreaList ?? []).filter((city): city is string => {
+    if (typeof city !== 'string' || !city.trim()) return false;
+    const key = city.trim().toLowerCase();
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
 
   return (
     <SafeSection when={cities}>
@@ -57,11 +48,14 @@ export function Areas({ client, copy }: { client: ResolvedClient; copy: Copy }) 
           <SafeText as="p" className="ta-areas-sub" value={copy('areas.h2')} />
         </div>
 
-        <div className="ta-marquees">
-          {tracks.map((track, i) => (
-            <Track key={i} cities={track} reverse={i % 2 === 1} />
+        <ul className="ta-tags">
+          {cities.map((city) => (
+            <li className="ta-tag" key={city}>
+              <PinIcon />
+              <SafeText as="span" value={city} />
+            </li>
           ))}
-        </div>
+        </ul>
       </Section>
     </SafeSection>
   );
