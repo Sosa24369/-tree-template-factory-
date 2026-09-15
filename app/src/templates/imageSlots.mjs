@@ -241,10 +241,10 @@ export const IMAGE_SLOTS = [
     notes: '2.35:1 on a phone, 1.45:1 on a tablet, 2.14:1 on desktop. A square or a stacked composite is cut through the middle here.',
   },
   {
-    template: 'trimming-a', id: 'gallery', label: 'Recent jobs — square photo strip', section: 'Recent jobs', element: '.ta-gallery .ta-shot-img',
+    template: 'trimming-a', id: 'gallery', label: 'Recent jobs — photo band under How it works', section: 'Recent jobs', element: '.ta-gallery .ta-shot-img',
     source: { set: 'trimming', pick: 'the middle share after the hero takes 2 (with 12 photos: 5)' }, policy: 'cover', focal: 'required', master: 'photo',
-    renders: { mobile: [[304, 304]], tablet: [[320, 320]], desktop: [[268, 268]] },
-    notes: 'Square cells, so a 4:3 master loses a quarter of its width and a labelled before/after composite loses its labels. Re-measured 2026-09-14: this and the grid below had each other\'s boxes, so the studio previewed both in the wrong shape.',
+    renders: { mobile: [[350, 350], [170, 170]], tablet: [[365, 365], [178, 178]], desktop: [[208, 208]] },
+    notes: 'The photo band under "How it works" (B9, option B, 2026-09-15). With exactly five photos, a grid: a lead square spanning two columns (phone) or two by two (tablet) plus four squares, and five across on desktop. Any other count keeps a swipeable rail of 304 / 320 / 268 squares. Square cells either way, so a 4:3 master loses a quarter of its width and a labelled before/after composite loses its labels.',
   },
   {
     template: 'trimming-a', id: 'grid', label: '"Done clean, done right" photo grid', section: 'Done right', element: '.ta-doneright .ta-shot-img',

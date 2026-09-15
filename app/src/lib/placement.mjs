@@ -92,9 +92,11 @@ export const PLACEMENT = {
     // done right" bento (DoneRight.tsx). Stage 3 had these two `sizes` swapped and
     // compensated by swapping the component calls — the numbers landed on the right
     // boxes, so the page was right, but the studio previewed each slot in the other's
-    // box. Measured after the B6 bento rebuild: grid 350/740/716, gallery 304/320/268.
+    // box. Measured after the B6 bento rebuild: grid 350/740/716. The gallery became the
+    // photo band under "How it works" (B9, option B): with five photos its lead cell is
+    // 350 / 365 / 208, so the phone and tablet values rose from 78vw / 39vw.
     { id: 'gallery', set: 'trimming', pick: { kind: 'middleShare' }, cells: 'all',
-      sizes: '(max-width: 767px) 78vw, (max-width: 1023px) 39vw, 19vw' },
+      sizes: '(max-width: 767px) 90vw, (max-width: 979px) 45vw, 19vw' },
     { id: 'grid', set: 'trimming', pick: { kind: 'theRest' }, cells: 'all',
       sizes: '(max-width: 979px) 91vw, 50vw' },
     { id: 'longform', set: 'trimming', pick: { kind: 'nth', n: 1 }, cells: 1,

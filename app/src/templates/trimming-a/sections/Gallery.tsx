@@ -29,10 +29,13 @@ export function Gallery({ client, band }: { client: ResolvedClient; band?: 1 | 2
   const gallery = band === 1 ? all.slice(0, split) : band === 2 ? all.slice(split) : all;
   const video = band === 2 ? null : clientVideo;
   if (gallery.length === 0 && !video) return null;
+  // Exactly five tiles get the photo-band grid under "How it works" (B9); any other count
+  // keeps the swipeable rail, because that grid only closes without a gap at five.
+  const tiles = gallery.length + (video ? 1 : 0);
 
   return (
     <section className="ta-gallery">
-      <ul className="ta-rail">
+      <ul className={tiles === 5 ? 'ta-rail ta-rail--five' : 'ta-rail'}>
         {video && (
           <li className="ta-rail-item ta-rail-item--video">
             <video

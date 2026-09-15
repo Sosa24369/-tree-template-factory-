@@ -1101,10 +1101,111 @@
   text-wrap: pretty;
 }
 
-@media (min-width: 980px) {
+/* B9, option B (owner's choice, 2026-09-15): from 768px the steps run ACROSS, the
+   connector along the top of each step instead of down its left edge. Two by two on a
+   tablet, all four on one line from 980px. On a phone they stay the ladder above. */
+@media (min-width: 768px) {
   .trimming-a .ta-steps {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    column-gap: clamp(36px, 5vw, 64px);
+    column-gap: 0;
+    row-gap: 34px;
+  }
+
+  .trimming-a .ta-step,
+  .trimming-a .ta-step:last-child {
+    padding: 38px 28px 0 0;
+    border-left: 0;
+    border-top: 2px solid var(--ta-hairline);
+  }
+
+  .trimming-a .ta-step:last-child {
+    padding-right: 0;
+  }
+
+  .trimming-a .ta-step::before {
+    top: 0;
+    left: 0;
+    transform: translateY(-50%);
+  }
+}
+
+@media (min-width: 980px) {
+  .trimming-a .ta-steps {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+/* B9, option B: the Recent jobs photos read as the band under the steps, not a separate
+   full-bleed strip. The two stay two sections in the manifest, in the order they always
+   had (process, then gallery), so the layout lock, the studio's section list and every
+   other template are untouched; only their spacing and containment change here. */
+.trimming-a .ta-process:has(+ .ta-gallery) {
+  padding-bottom: 0;
+}
+
+.trimming-a .ta-process + .ta-gallery {
+  padding-block: clamp(26px, 3.6vw, 40px) var(--ta-pad);
+  background: var(--ta-paper);
+  border-bottom: 0;
+}
+
+/* Contained to the column the steps sit in. Left-aligned: a centred row that overflows
+   cannot be scrolled back to its first photo, which is what a long rail (Texas Tree
+   Tops has 12) did at desktop widths. */
+.trimming-a .ta-process + .ta-gallery .ta-rail {
+  max-width: var(--ta-max);
+  margin-inline: auto;
+  justify-content: flex-start;
+}
+
+/* Exactly five (Gallery.tsx adds .ta-rail--five), the owner-approved grid: a lead photo
+   and four squares that close with no gap at every width. Five is what a twelve-photo
+   library puts here (J Valdez). Any other count keeps the swipeable rail above, because
+   this grid would leave holes. */
+.trimming-a .ta-rail--five {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  overflow: visible;
+  scroll-snap-type: none;
+}
+
+.trimming-a .ta-rail--five > .ta-rail-item {
+  width: auto;
+  aspect-ratio: 1 / 1;
+}
+
+.trimming-a .ta-rail--five > .ta-rail-item:first-child {
+  grid-column: span 2;
+}
+
+.trimming-a .ta-rail--five .ta-shot,
+.trimming-a .ta-rail--five .ta-shot-img,
+.trimming-a .ta-rail--five .ta-rail-video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+@media (min-width: 768px) {
+  .trimming-a .ta-rail--five {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .trimming-a .ta-rail--five > .ta-rail-item:first-child {
+    grid-row: span 2;
+  }
+}
+
+@media (min-width: 980px) {
+  .trimming-a .ta-rail--five {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+
+  .trimming-a .ta-rail--five > .ta-rail-item:first-child {
+    grid-column: auto;
+    grid-row: auto;
   }
 }
 
