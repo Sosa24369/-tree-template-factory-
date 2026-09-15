@@ -27,13 +27,26 @@ if (!existsSync(SSR)) {
 }
 
 const shell = readFileSync(join(DIST, 'index.html'), 'utf8');
-const { render, listClients, TEMPLATE_META, slotSizes } = await import(SSR);
+const { render, listClients, TEMPLATE_META, slotSizes, slotPhotos } = await import(SSR);
 
 const escapeHtml = (s) =>
   String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
 
-/** The LCP element on every template is the first still in the client's photo set. */
-function lcpImage(client) {
+/**
+ * The photograph in the LCP slot's first cell, as the page will render it.
+ *
+ * This used to be "the first still in the client's photo set", which agreed with the page
+ * only while placement was purely positional. Once a person assigns a photo to the slot
+ * (photoSlots), the first still is a photo the page no longer shows: the browser would
+ * fetch it at high priority and then fetch the real one. It was already wrong without
+ * any assignment on a record whose sets cascade differently (Summit's trimming-a preloaded
+ * its first removal photo while the hero band showed its first trimming one). The slot's
+ * resolver answer wins; the old rule remains only as a fallback for a slot with no photo.
+ */
+function lcpImage(client, templateId) {
+  const slot = PHOTO_LCP_SLOT.get(templateId);
+  const placed = slot ? slotPhotos(client, templateId, slot).find((p) => p && p.kind !== 'video' && p.src) : null;
+  if (placed) return placed;
   for (const key of ['removal', 'trimming', 'storm', 'generic']) {
     const list = client.photos?.[key];
     const still = list?.find((p) => p.kind !== 'video' && p.src);
@@ -123,7 +136,7 @@ function pageHead(client, template) {
     `<meta name="robots" content="${client.isDemo ? 'noindex, nofollow' : 'noindex'}">`,
   ];
   if (PHOTO_LCP_TEMPLATES.has(template.id)) {
-    const lcp = lcpImage(client);
+    const lcp = lcpImage(client, template.id);
     if (lcp) {
       // The preload MUST advertise the same candidate set AND the same sizes as the
       // <img>, otherwise the browser preloads one candidate and then downloads another.
