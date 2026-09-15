@@ -134,6 +134,20 @@ export function altFor(clientName: string, n: number): string {
   return who ? `${who} tree removal job, photo ${n}` : `Tree removal job, photo ${n}`;
 }
 
+/**
+ * The alt for a client photo in a slot that composes one (hero proof, services strip,
+ * Benefits). The composed alt names this page's service, "… tree removal job", which is
+ * only true of a photo the client filed under removal. A photo the placement cascade
+ * borrowed from another set is described by its own record alt instead: J Valdez files
+ * every photo as trimming, and their removal-a called 16 trimming photos removal jobs. A
+ * borrowed photo with no alt of its own gets a neutral one rather than a false service.
+ */
+export function slotAlt(client: { name: string; photos?: { removal?: PhotoSet[] } }, photo: PhotoSet, n: number): string {
+  const filedUnderRemoval = (client.photos?.removal ?? []).some((p) => p?.src === photo.src);
+  if (filedUnderRemoval) return altFor(client.name, n);
+  return photo.alt?.trim() || `Tree work, photo ${n}`;
+}
+
 /** Same photo, different alt — PhotoSet is data, so never mutate the module copy. */
 export function withAlt(source: PhotoSet, alt: string): PhotoSet {
   return { ...source, alt };

@@ -1,8 +1,11 @@
 # Open item: alt text that claims stock photos as the client's own work
 
-Raised by the owner 2026-09-15. **Nothing here is fixed.** This is the write-up the owner asked
-for, to decide separately. All findings are from the build of `9058f10` (= `origin/main`) and,
-where marked, the live site.
+Raised by the owner 2026-09-15. **Status:** J Valdez's wrong-service alts were moved into the
+Group B batch by the owner and are fixed on `main` (see "Fixed" at the end). The Texas Tree
+Tops instances and the Summit fixes are **still open**, for a separate decision.
+
+The findings below are from the build of `9058f10` and, where marked, the live site. They
+describe the state *before* the J Valdez fix.
 
 ## The problem
 
@@ -103,3 +106,22 @@ live removal-a, attributes only.
 
 Every option above changes alt attributes on a live ad page, so each goes through the
 live-campaign gate like any other change.
+
+## Fixed — J Valdez's wrong-service alts (owner's decision, same batch as Group B)
+
+- **The record:** the seven J Valdez photos with no alt now carry plain descriptions, with no
+  company name and no "job" (for example `work-photo-4`: "Worker with a pole saw beside a
+  heavily pruned tree, cut branches on the ground"). The five that already had alts are
+  unchanged.
+- **removal-a's hero proof, services strip and Benefits slots** compose "… tree removal job"
+  only for a photo the client filed under removal. A photo the cascade borrowed from another
+  set is described by its own alt, or a neutral "Tree work, photo N" if it has none.
+- **Result:** every J Valdez photo on every J Valdez page is described by what it shows. Zero
+  alts contain "job" or the company name. On the live removal-a, 17 alts change: the 16
+  "tree removal job" alts, plus the hero plate, which had an empty alt. On the live trimming-a,
+  7 change, from "J Valdez Tree Services tree trimming job, photo N". J Valdez's agnostic,
+  removal-b/c and trimming-b/c pick up the same descriptions, which also clears the 5 + 4
+  empty alts on removal-c and trimming-c.
+- **Out of scope, by construction:** every Texas Tree Tops and Summit photo in those slots is
+  filed under removal, so their pages are **byte-identical**. The Texas Tree Tops stock-photo
+  instances and the Summit fixes above remain open.

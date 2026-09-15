@@ -10,7 +10,7 @@
 import type { ResolvedClient } from '../../../schema/resolve';
 import { SafeText } from '../../../components/Safe';
 import { DeferredImage } from '../../../components/DeferredImage';
-import { altFor, withAlt } from '../assets';
+import { slotAlt, withAlt } from '../assets';
 import { slotPhotos, slotSizes } from '../../../lib/placement.mjs';
 import { CallCta, CheckIcon, Section, SplitHeading, type Copy } from './shared';
 
@@ -46,7 +46,7 @@ export function Services({ client, copy }: { client: ResolvedClient; copy: Copy 
           items.length > 0 ? (
             <div className="ra-service-col" key={col}>
               <DeferredImage
-                photo={strip[col] ? withAlt(strip[col], altFor(client.name, col + 1)) : null}
+                photo={strip[col] ? withAlt(strip[col], slotAlt(client, strip[col], col + 1)) : null}
                 className="ra-service-photo"
                 sizes={slotSizes('removal-a', 'service-photo')}
               />
