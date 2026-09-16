@@ -6,57 +6,50 @@ is the operative instruction; the spec holds everything else.
 
 ## Where the run is
 
-**Amendment section 1 — the per-page loop. Page 1 of 4 (J Valdez removal-a): BUILT,
-VERIFIED, EVIDENCE COMMITTED, waiting only on the Lighthouse-after subagent** (it writes
-`lighthouse-after.json` + `lighthouse-after-summary.txt` into the evidence folder; after it:
-write `summary.md` with before/after score, LCP, first-viewport image bytes; stop if any of
-the three regressed; commit). **Page 2 (J Valdez trimming-a): draft scope committed**
-(`docs/batch-four-pages/j-valdez-trimming-a/scope.md`), not measured, not built. Pages 3–4
-not started.
+**Page 1 (J Valdez removal-a): COMPLETE** — evidence folder full, Lighthouse 98→99, 1.85→1.72 s,
+602,973→381,865 image bytes; summary.md written; all committed.
 
-Section 0 (rails) is complete and proven. Hook: `.claude/hooks/block-publish.py`, registered
-in `.claude/settings.json` (committed) AND `~/.claude/settings.json` (the live one this
-session; guarded to this repo). Both entries come out only when the owner approves the
-batch. Branch `batch/four-pages` off main `3c685d1`; nothing pushed, nothing published.
+**Page 2 (J Valdez trimming-a): EDITS COMMITTED (P1, S1, S3, decisions 16–19, before-*.png),
+NOT YET BUILT OR VERIFIED.** A Lighthouse-BEFORE subagent is measuring main (3c685d1) for this
+page; the build is held until it reports so its timings are clean. Pages 3–4 not started.
 
-## Commits on the branch (oldest first)
+Section 0 (rails) complete and proven: hook in `.claude/settings.json` (committed) AND
+`~/.claude/settings.json` (live this session; guarded to this repo) — both come out only when
+the owner approves the batch. Branch `batch/four-pages` off main `3c685d1`; nothing pushed,
+nothing published.
 
-S0 rails · R5/S1 reviews · S2 areas · R4 cards · R3 grid+resolver · R1 preload · R1/R2/R3
-record + 28 assets · R-evidence · HANDOFF · R3 image-spec key rule · S1 no-stretch · R3 set
-order (1600px first) · R3/crit8 removal-c sizes · R3 grid breakpoint 768 · P-scope (page 2
-draft + decision 15) · R-evidence (final build). Working tree clean.
-
-## Page-1 results on the final build (7ca924e), all in `docs/batch-four-pages/j-valdez-removal-a/`
-
-- Guards 12/12. Criterion 8 on the nine changed pages: clean except five PRE-EXISTING
-  lines on j-valdez/removal-b and summit/removal-a (same on live; decisions 14).
-- 55-page phone/GTM compare: ZERO differences (183 tel, 373 data-dni, 367 numbers, 68 GTM).
-- Prerender diff: 11 of 55 pages; 3 protected (target; ttt removal-a template-wide; jv
-  trimming-a = hero-photo-2's focal only). Every page explained in the file.
-- Bundle +912 B gzip (JS +1111 = record data; CSS −199).
-- Lighthouse before: 98 / 1.85 s / 602,973 image bytes. After: PENDING.
-- Built-page measurements: hero #112d25, no plate, no photo preload; proof cells at their
-  focal points; six uniform cells 170×128 / 237×178 / 353×265, no grey; cards 4:3, 0 dead
-  space; 10 chips/10 unique; 0 of 9 reviews cut, cards fit their text, button 14 px under.
-- Decisions 1–15 in decisions.md.
+## What page 2 changed (committed, unbuilt)
+- P1: `.ta-process + .ta-gallery` bottom pad = ½ `--ta-pad`; `.ta-gallery + .ta-benefits`
+  top pad = ½ (seam was 108+108 px at 1440 live; regression from B9+B10).
+- S1: `styles/reviews-slider.css` gained a block scoped to `.trimming-a, .removal-a, .storm`:
+  whole cards (1 / 2 / 3 per view at <768 / 768–1023 / ≥1024), height auto, no clamp,
+  `align-items: flex-start`. The per-template unclamp rules were removed from trimming-a.css
+  and removal-a.css. → removal-a's `after-why-*.png` and its review measurements must be
+  refreshed (decision 17); storm-a's reviews change visually too (page 4 evidences it).
+- S3: `.ta-mosaic` = six uniform 4:3 cells (2 cols <980, 3 cols ≥980, no feature tile).
+  Record: photos.trimming 12→15 (trimming-limbs-over-roof-img1117, trimming-lake-slope-
+  pxl145030926, trimming-climber-creek-img1116; 12 new asset files); photoSlots.trimming-a:
+  hero-band.2, gallery.1–5, gallery.6='' , gallery.7='' (share(15)=7), grid.1–6 (work-photo-1,
+  limbs, work-photo-3, work-photo-4, lake, gallery-slide-4), longform = climber.
+- Expected diff: trimming-a ×3 clients (CSS+HTML for JV), removal-a ×3 (CSS only → HTML
+  unchanged), storm ×3 (CSS only), plus any JV page reading photos.trimming by position:
+  trimming-b, trimming-c, agnostic, removal-b/c (cascade) — check each in prerender-diff.
 
 ## EXACT NEXT ACTION
-
-1. When the Lighthouse-after subagent reports: read the two files it wrote; write
-   `summary.md` (before vs after: score, LCP, first-viewport image bytes; state the LCP
-   element after = hero text); if score, LCP or bytes regressed and cannot be recovered,
-   STOP (amendment §3). Commit `R-evidence: lighthouse after + summary`.
-2. Page 2, J Valdez trimming-a: measure the ⏳ items in its scope.md on the LIVE page at
-   390/820/1440 (P1 gap `.ta-gallery`→`.ta-benefits`; grid cell boxes; review track). Take
-   before-screenshots of `.ta-gallery`,`.ta-benefits`,`.ta-why`,`.ta-doneright`. Ingest
-   IMG_1117 (focal ≈0.30,0.30), PXL_20260407_145030926 (0.50,0.45), IMG_1116 (0.35,0.45)
-   into photos.trimming with plain alts (replica ingest script pattern is in
-   `$SP/…/removal-entries.json`'s producer; rewrite it for these three). Build P1, S1, S3;
-   pins as needed so trimming-a's Recent jobs band and hero band do not change except where
-   scoped. Same evidence set into `docs/batch-four-pages/j-valdez-trimming-a/`. One commit
-   per item (P1:, S1:, S3:). Then pages 3 and 4.
-3. End: `docs/batch-four-pages/REPORT.md`, then hold for one approval; remove the hook
-   (both entries) only after approval; publish only then.
+1. When the Lighthouse-before subagent for trimming-a reports (files land in
+   `docs/batch-four-pages/j-valdez-trimming-a/`): `cd app && npm run build`.
+2. Verify on the build (server on 4178, tracker-blocked harness): P1 gap = one `--ta-pad`
+   (54/66/108); Recent jobs band still exactly gallery-slide-1..5; hero band unchanged
+   (gallery-slide-3, hero-photo-2); grid six uniform cells with the new photos; longform =
+   climber; reviews: 1/2/3 whole cards per view, no partial card, no stretch; chips 10/10.
+   Take after-screenshots (gallery, benefits, why, done-right), crops for grid.2, grid.5,
+   longform (+ grid.1/3/4/6 for completeness), guards, criterion 8 on every changed page,
+   prediff.py (add whys for trimming-b/-c, agnostic, removal-b/-c, storm ×3 if present),
+   bundle.txt, compare55.py, then Lighthouse-AFTER (subagent, vite preview 4182), summary.md.
+   Refresh page 1's after-why-*.png + measurements. Commit evidence.
+3. Page 3 (TTT removal-a): scope T1–T5 against the spec, then build. Page 4 (TTT storm-a): T6–T7.
+4. End: `docs/batch-four-pages/REPORT.md`; hold for one approval; remove hook (both
+   entries) only after approval; publish only then.
 
 ## Tooling (scratchpad; recreate if gone)
 
