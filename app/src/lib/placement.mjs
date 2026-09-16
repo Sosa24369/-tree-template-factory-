@@ -246,18 +246,18 @@ export function resolvePlacement(client, templateId) {
     // `cells` is the assignable key space, i.e. a MINIMUM — never a truncation. The
     // mosaic's direct read is deliberately unsliced, so a generic set of 23 must still
     // render 23 cells even though only 5 of them can carry an explicit assignment.
-    // An explicit assignment past the end of an 'all' slot ADDS a cell: "put this
-    // photograph in the sixth cell of the grid" has to be something a person can say,
-    // or a grid with a hole in it can only be fixed by editing the template. Cells in
-    // between that nobody assigned stay empty, and templates drop empty cells.
+    // An explicit assignment past the end of a slot ADDS a cell: "put this photograph
+    // in the sixth cell of the grid" has to be something a person can say, or a grid
+    // with a hole in it can only be fixed by editing the template. True for an 'all'
+    // slot and for a fixed-count one alike (removal-a's mosaic declares 5 and J Valdez's
+    // Restoration grid closes at 6). Cells in between that nobody assigned stay empty,
+    // and templates drop empty cells. No record without such a key changes.
     let explicitMax = 0;
-    if (slot.cells === 'all') {
-      for (const key of Object.keys(assigned)) {
-        const m = /^(.+)\.(\d+)$/.exec(key);
-        if (m && m[1] === slot.id && assigned[key] !== '') explicitMax = Math.max(explicitMax, Number(m[2]));
-      }
+    for (const key of Object.keys(assigned)) {
+      const m = /^(.+)\.(\d+)$/.exec(key);
+      if (m && m[1] === slot.id && assigned[key] !== '') explicitMax = Math.max(explicitMax, Number(m[2]));
     }
-    const n = slot.cells === 'all' ? Math.max(auto.length, explicitMax) : Math.max(slot.cells, auto.length);
+    const n = Math.max(slot.cells === 'all' ? auto.length : Math.max(slot.cells, auto.length), explicitMax);
     const photos = [];
     const source = [];
     for (let i = 0; i < n; i++) {
