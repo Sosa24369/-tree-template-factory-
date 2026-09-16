@@ -1144,9 +1144,16 @@
 }
 
 .trimming-a .ta-process + .ta-gallery {
-  padding-block: clamp(26px, 3.6vw, 40px) var(--ta-pad);
+  /* P1 (2026-09-16): the band ended on a full section pad and the offer band that follows
+     it (B10) opened with another — 108 + 108px of white at 1440, measured live. Half a pad
+     on each side of the seam, so the seam is one pad, like every other section boundary. */
+  padding-block: clamp(26px, 3.6vw, 40px) calc(var(--ta-pad) / 2);
   background: var(--ta-paper);
   border-bottom: 0;
+}
+
+.trimming-a .ta-gallery + .ta-benefits {
+  padding-top: calc(var(--ta-pad) / 2);
 }
 
 /* Contained to the column the steps sit in. Left-aligned: a centred row that overflows
