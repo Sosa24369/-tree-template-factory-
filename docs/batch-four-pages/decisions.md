@@ -101,3 +101,35 @@ alternative rejected, and why. Owner's own rulings are marked **(owner)**.
     item names the copy, and the ads are tuned to it — so this is reported for the owner's
     decision (add the two cities to the sentence, or drop them from the list), not edited.
     Rejected: editing the override to name all ten.
+16. **P1 is a regression from the last ship, and the fix is the seam, not either section.**
+    Measured live: the Recent jobs band and the offer band abut (0 px between the sections)
+    but the band's bottom padding is a full `--ta-pad` (B9 gave it `padding-block: … var(--ta-pad)`)
+    and the offer band B10 moved after it opens with another full pad: 54+54 / 66+66 /
+    108+108 px of white between the last photo and the first card at 390/820/1440. The
+    standard allows one section pad at a seam. Fix: half a pad on each side of that seam
+    (`.ta-process + .ta-gallery { padding-bottom: calc(var(--ta-pad)/2) }` and
+    `.ta-gallery + .ta-benefits { padding-top: calc(var(--ta-pad)/2) }`), so the seam equals
+    one pad. Rejected: touching the offer band's own layout, or reordering again.
+17. **S1 is one layout, applied to the three batch templates, not to the shared slider file.**
+    Whole cards at every width: one card per view under 768, two to 1023, three from 1024
+    (`flex-basis: calc((100% − gaps)/n)`), scroll-snap paginating whole cards, and
+    `align-items: flex-start` so a card fits its own text. Scoped to `.trimming-a`,
+    `.removal-a` and `.storm-a` so removal-b, trimming-b and agnostic keep the live slider.
+    removal-a's review evidence (after-why-*.png, measurements) is refreshed after this
+    lands. Rejected: editing `reviews-slider.css` (changes 14 pages, ten outside the batch).
+18. **S3 photo placement on trimming-a.** The composite work-photo-2 also fills the
+    services-blurb slot (740×740 at 820) — a composite in a large cell — so it leaves both
+    places: grid cell 2 ← IMG_1117 (limbs lowered over a roof: the headline's own promise),
+    longform ← IMG_1116 (climber in the canopy). work-photo-5 (trucks beside an empty lot)
+    ← PXL_20260407_145030926 (lakeside slope, trimmed trees). work-photo-1 (bucket truck in a
+    large tree) stays: it reads as canopy work under "Done clean, done right". gallery-slide-4
+    stays in cell 6 and also in Recent jobs — the owner-accepted repeat until more originals
+    arrive; the three new photos were needed elsewhere. Rejected: pulling gallery-slide-4
+    and leaving five cells (the uniform grid needs six).
+19. **Pins so the new trimming photos change only the grid and the blurb.** trimming-a's
+    slots are positional (hero 2, gallery = middle share, grid = the rest), so three more
+    photos in `photos.trimming` would re-split the sets and grow Recent jobs. The band and
+    hero band are pinned to what they show today: hero-band.2 = hero-photo-2, gallery.1–5 =
+    gallery-slide-1..5, and the cells the larger middle share would add are pinned empty
+    ('' — the studio's own Remove-from-slot) so the band keeps exactly five tiles. Rejected:
+    a separate set key (the schema has four; generic is read directly by removal-a's grid).
