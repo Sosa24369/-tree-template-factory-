@@ -905,11 +905,7 @@
 }
 
 /* ---------------------------------------------------------------- *
- * S7 — areas we serve marquee
- *
- * Two identical groups per track, translated -50%: the loop is seamless because the
- * second group takes over exactly where the first began. The clone is aria-hidden,
- * so a screen reader hears each city once.
+ * S7 — areas we serve
  * ---------------------------------------------------------------- */
 
 .removal-a .ra-areas-sub {
@@ -919,40 +915,17 @@
   color: var(--ra-ink-2);
 }
 
-.removal-a .ra-marquees {
-  display: grid;
-  gap: clamp(10px, 1.6vw, 14px);
-  margin-top: clamp(32px, 4.5vw, 52px);
-  margin-inline: calc(var(--ra-gutter) * -1);
-}
-
-.removal-a .ra-marquee {
-  overflow: hidden;
-  padding-block: 10px;
-  background: var(--ra-art-marquee, url('/assets/texas-tree-tops/bg-row-sreex03pnx-4a4f2b51.webp')) center / cover no-repeat;
-  -webkit-mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
-  mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
-}
-
-.removal-a .ra-marquee-track {
+/* Every city once, wrapped, inside the content column. No clone, no mask, no
+   animation, no negative margin, no background art: the same fix trimming-a shipped
+   (B8), for the same reasons (Areas.tsx). Restoring motion is a later, shared item. */
+.removal-a .ra-tags {
   display: flex;
-  width: max-content;
-  animation: ra-marquee 46s linear infinite;
-}
-
-.removal-a .ra-marquee-track--reverse {
-  animation-duration: 58s;
-  animation-direction: reverse;
-}
-
-.removal-a .ra-marquee:hover .ra-marquee-track {
-  animation-play-state: paused;
-}
-
-.removal-a .ra-marquee-group {
-  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 10px;
-  padding-right: 10px;
+  margin: clamp(32px, 4.5vw, 52px) 0 0;
+  padding: 0;
+  list-style: none;
 }
 
 .removal-a .ra-pill {
@@ -972,39 +945,6 @@
 .removal-a .ra-icon--pin {
   color: var(--brand-accent);
   flex: 0 0 auto;
-}
-
-@keyframes ra-marquee {
-  from {
-    transform: translate3d(0, 0, 0);
-  }
-  to {
-    transform: translate3d(-50%, 0, 0);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .removal-a .ra-marquee {
-    -webkit-mask-image: none;
-    mask-image: none;
-  }
-
-  .removal-a .ra-marquee-track {
-    animation: none;
-    width: 100%;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-
-  .removal-a .ra-marquee-group {
-    flex-wrap: wrap;
-    justify-content: center;
-    padding-right: 0;
-  }
-
-  .removal-a .ra-marquee-group[data-clone='true'] {
-    display: none;
-  }
 }
 
 /* ---------------------------------------------------------------- *
