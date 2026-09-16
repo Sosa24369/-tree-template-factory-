@@ -92,6 +92,24 @@ for (const file of readdirSync(join(ROOT, 'clients')).filter((f) => f.endsWith('
     }
   }
 
+  /* ---- shared and template stock is never the client's work (2026-09-16) ---- */
+  // R4 checks paths, so a stock photograph under /assets/_shared/ or /assets/_template/
+  // passed it while the templates composed "<client> tree removal job, photo N" for it —
+  // a claim the picture cannot back, read by screen readers and search engines
+  // (docs/ALT-TEXT-ITEM.md). Every such entry must carry its own alt, and that alt must
+  // not name the client. Demo records are held to it too: the demo is the sales copy.
+  {
+    const who = String(record.name ?? '').trim().toLowerCase();
+    for (const [set, list] of Object.entries(record.photos ?? {})) {
+      (list ?? []).forEach((ph, i) => {
+        if (!/\/assets\/_(shared|template)\//.test(String(ph?.src ?? ''))) return;
+        const alt = String(ph?.alt ?? '').trim();
+        if (!alt) fails.push(`${slug}: photos.${set}[${i}] is shared stock (${ph.src.split('/').pop()}) with no alt — the templates would compose one naming the client`);
+        else if (who && alt.toLowerCase().includes(who)) fails.push(`${slug}: photos.${set}[${i}] is shared stock but its alt names the client: "${alt}"`);
+      });
+    }
+  }
+
   /* ---- explicit slot assignments (Phase 1b) ---- */
   // Three things a record with `photoSlots` can get wrong that nothing else would catch:
   // an assignment naming a photograph that is not in the library, a wired template whose

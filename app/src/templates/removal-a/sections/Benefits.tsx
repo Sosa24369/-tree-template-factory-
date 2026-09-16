@@ -9,7 +9,7 @@
 
 import type { ResolvedClient } from '../../../schema/resolve';
 import { SafeImage, SafeText } from '../../../components/Safe';
-import { altFor, benefitArt, benefitIcons, slotAlt, withAlt } from '../assets';
+import { BENEFIT_ART_ALT, benefitArt, benefitIcons, slotAlt, withAlt } from '../assets';
 import { slotPhotos, slotSizes } from '../../../lib/placement.mjs';
 import { CallCta, Section, type Copy } from './shared';
 
@@ -26,7 +26,7 @@ export function Benefits({ client, copy }: { client: ResolvedClient; copy: Copy 
           {/* The client's own photograph when one is assigned (lib/placement.mjs,
               removal-a/benefits); otherwise the template artwork, exactly as before. */}
           <SafeImage
-            photo={ownPhoto ? withAlt(ownPhoto, slotAlt(client, ownPhoto, 1)) : withAlt(benefitArt, altFor(client.name, 1))}
+            photo={ownPhoto ? withAlt(ownPhoto, slotAlt(client, ownPhoto, 1)) : withAlt(benefitArt, BENEFIT_ART_ALT)}
             className="ra-media-img"
             sizes={ownPhoto ? slotSizes('removal-a', 'benefits') : undefined}
           />

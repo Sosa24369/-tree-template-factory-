@@ -129,6 +129,9 @@ export const reviewGoogle = photo('/assets/_shared/review-google-glyph-9b63bd0b.
  * from client data at render time, and a client that supplies its own photos
  * supplies its own alt with them (PhotoSet.alt).
  */
+/** The Benefits artwork's own description — it is a photograph, not any client's job. */
+export const BENEFIT_ART_ALT = 'Crew member cutting through a felled tree trunk with a chainsaw beside a house';
+
 export function altFor(clientName: string, n: number): string {
   const who = (clientName || '').trim();
   return who ? `${who} tree removal job, photo ${n}` : `Tree removal job, photo ${n}`;
@@ -143,9 +146,13 @@ export function altFor(clientName: string, n: number): string {
  * borrowed photo with no alt of its own gets a neutral one rather than a false service.
  */
 export function slotAlt(client: { name: string; photos?: { removal?: PhotoSet[] } }, photo: PhotoSet, n: number): string {
+  // A record alt always wins: it is the one place a person has said what the photo shows.
+  // (Before 2026-09-16 a photo filed under removal was composed as "<client> tree removal
+  // job" even when the record described it, which is how three stock photographs were
+  // labelled as Texas Tree Tops' work — docs/ALT-TEXT-ITEM.md.)
+  if (photo.alt?.trim()) return photo.alt.trim();
   const filedUnderRemoval = (client.photos?.removal ?? []).some((p) => p?.src === photo.src);
-  if (filedUnderRemoval) return altFor(client.name, n);
-  return photo.alt?.trim() || `Tree work, photo ${n}`;
+  return filedUnderRemoval ? altFor(client.name, n) : `Tree work, photo ${n}`;
 }
 
 /** Same photo, different alt — PhotoSet is data, so never mutate the module copy. */
