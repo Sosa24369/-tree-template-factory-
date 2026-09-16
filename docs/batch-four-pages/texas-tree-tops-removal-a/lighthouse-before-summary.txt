@@ -1,0 +1,36 @@
+Lighthouse BASELINE (before) — Texas Tree Tops removal-a
+========================================================
+Page:        http://localhost:4181/p/texas-tree-tops/removal-a/
+Source:      commit 3c685d1 (main), built in a detached scratch worktree (/tmp/lh-before-wt3), `npm run build` -> prerendered 56 page(s)
+Server:      `npx vite preview --port 4181 --strictPort` (gzip confirmed via Accept-Encoding: gzip -> Content-Encoding: gzip)
+Tool:        Lighthouse 13.4.1 (global), Chrome --headless=new
+Method:      August method — --only-categories=performance --throttling-method=devtools --form-factor=mobile
+             blocked-url-patterns: *googletagmanager.com* *google-analytics.com* *googleadservices.com* *doubleclick.net* *callrail.com* *calltrk.com* *leadconnectorhq.com* *msgsndr.com*
+Runs:        1 discarded warm-up, then 3 real runs (/tmp/lh-r3-before-1.json, -2.json, -3.json)
+Date:        2026-09-16
+
+run 1: score 98 | LCP 1.91 s | CLS 0 | TBT 0 ms | FCP 1.91 s | LCP element: <p class="ra-body ra-hero-body"> "Get $300 Off With Your Tree Removal Service All Summer! Whether you need a tree…" | image bytes (all images fetched during the run, mobile, no scroll): 441941 | gtm requests completed: 0
+run 2: score 98 | LCP 1.90 s | CLS 0 | TBT 0 ms | FCP 1.90 s | LCP element: <p class="ra-body ra-hero-body"> "Get $300 Off With Your Tree Removal Service All Summer! Whether you need a tree…" | image bytes (all images fetched during the run, mobile, no scroll): 441941 | gtm requests completed: 0
+run 3: score 98 | LCP 1.90 s | CLS 0 | TBT 0 ms | FCP 1.90 s | LCP element: <p class="ra-body ra-hero-body"> "Get $300 Off With Your Tree Removal Service All Summer! Whether you need a tree…" | image bytes (all images fetched during the run, mobile, no scroll): 441941 | gtm requests completed: 0
+
+(exact LCP ms: run 1 = 1906, run 2 = 1901, run 3 = 1898. The one googletagmanager.com request per run was blocked, statusCode -1.)
+
+Images fetched (identical across all three runs; transferSize, gzip server):
+  /assets/_template/removal-a/benefit-strip-art-0ec53c98.webp     124750 B
+  /assets/texas-tree-tops/gallery-02-bbfa6cba.webp                 99016 B
+  /assets/texas-tree-tops/gallery-03-d51219d3.webp                 59492 B
+  /assets/texas-tree-tops/bg-row-sreex03pnx-4a4f2b51.webp          55836 B
+  /assets/texas-tree-tops/gallery-04-1f2fc961.webp                 48316 B
+  /assets/texas-tree-tops/bg-section-zzw8wc9z7t-02ec5eac.webp      25346 B
+  /assets/texas-tree-tops/logo-header-e9743261.webp                13990 B
+  /assets/texas-tree-tops/bg-section-pt0s1qtmn0-d26338c9.webp       4234 B
+  /assets/texas-tree-tops/bg-section-evifliwtqp-6b6b2797.webp       3548 B
+  /assets/texas-tree-tops/bg-row-yixqrlnvyw-3d3ce344.webp           3302 B
+  /assets/_shared/benefit-icon-4-2b31db6c.svg                       1175 B
+  /assets/_shared/benefit-icon-1-dbb86f4d.svg                       1057 B
+  /assets/_shared/benefit-icon-2-6710e15b.svg                       1036 B
+  /assets/_shared/benefit-icon-3-8423c543.svg                        843 B
+  (plus 7 inline data:image/svg+xml URIs, 0 B transfer each)
+  total image transfer: 441941 B (14 network images + 7 inline SVGs)
+
+Baseline copied: run 2 (median score 98 of 98/98/98; tie-break median LCP 1901 ms) -> lighthouse-before.json
