@@ -344,5 +344,10 @@
     "profileName": "Texas Tree Tops-Tree Services LLC",
     "pulledAt": "2026-08-12",
     "note": "9 most recent 5-star text reviews, transcribed verbatim from the Google Business Profile (sorted Newest). Two rating-only reviews in that window (Eileen Petroski, Charles Leonard) skipped — no text to quote. Reviewer typos preserved."
+  },
+  "photoSlots": {
+    "removal-a": {
+      "mosaic.6": "/assets/texas-tree-tops/restoration-photo-1-64e65fab.webp"
+    }
   }
 }
