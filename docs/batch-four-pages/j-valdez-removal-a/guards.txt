@@ -1,0 +1,20 @@
+Guards — run 2026-09-16T04:49Z on branch batch/four-pages, working tree with R1–R5/S2 applied
+
+PASS  tsc            TypeScript
+PASS  factory-rules  Factory rules (R1 · R3 · R5 · schema)
+PASS  layout-lock    Layout lock (R2 — controls)
+PASS  studio-save    Studio save (identity · atomic · no trailer)
+FAIL  image-spec     Image spec (exists · minimum · focal point)
+PASS  publish-gate   Publish gate self-test
+pre: 5/6 passed
+
+--- image-spec ---
+
+
+PASS  r4-leakage     R4 cross-client leakage
+PASS  copy-parity    a → c copy parity
+PASS  demo-isolation Demo isolation (D1–D10)
+PASS  tracking       Conversion tracking
+PASS  lead-function  Lead Function contract
+PASS  faq-a11y       FAQ accessibility
+post: 6/6 passed

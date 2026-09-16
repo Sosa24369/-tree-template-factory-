@@ -1,0 +1,14 @@
+Prerender diff — J Valdez removal-a batch vs the live build (e3394aa). Asset hashes normalised.
+11 of 55 pages change.
+
+          demo/summit-tree/removal-a                 194 changed lines   template-wide CSS/markup as TTT removal-a; demo, no GTM
+          p/j-valdez/agnostic                        125 changed lines   new photos.removal set: the agnostic work grid reads generic -> removal first
+PROTECTED p/j-valdez/removal-a                       263 changed lines   THE TARGET
+          p/j-valdez/removal-a/thank-you               2 changed lines   preload line only: the hero plate is empty so the logo preload replaces the photo preload
+          p/j-valdez/removal-b                        34 changed lines   new photos.removal set: this template cascades removal -> trimming and now finds removal photos (service match)
+          p/j-valdez/removal-c                        52 changed lines   same as removal-b: removal set now exists; plus the reviews button for a->c copy parity
+PROTECTED p/j-valdez/trimming-a                        2 changed lines   ?? not anticipated
+          p/j-valdez/trimming-b                        4 changed lines   ?? not anticipated
+          p/j-valdez/trimming-c                        4 changed lines   ?? not anticipated
+PROTECTED p/texas-tree-tops/removal-a                380 changed lines   template-wide: reviews unclamped + Google reviews button (S1/R5), static areas list (S2), one grid rule (R3 CSS), 4:3 service cards (R4)
+          p/texas-tree-tops/removal-c                  4 changed lines   reviews button for a->c copy parity

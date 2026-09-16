@@ -45,3 +45,27 @@ alternative rejected, and why. Owner's own rulings are marked **(owner)**.
    .hero-plate = ""` (the studio's own Remove-from-slot) so only J Valdez loses the photo;
    Texas Tree Tops' removal-a hero is untouched. Rejected: a template flag, which would
    have changed a protected page the owner did not name.
+
+## 2026-09-16 — J Valdez removal-a, during the build
+
+8. **image-spec guard, two violations on the first build.** (a) "photos.removal[0] is
+   1320 px wide, removal-a hero-plate needs 1600": the guard applies the hero-plate minimum
+   to whatever leads the removal set; the pin to an empty plate is invisible to that rule.
+   Fix: reorder the set so removal-boom-over-house-nf3 (1600×1200) leads — no guard change,
+   grid cells are explicit so the grid is unaffected. Rejected: teaching the guard about
+   the '' pin (a guard change for one record). (b) "photoSlots.removal-a.mosaic.6 is not a
+   slot": the key validator predates the resolver rule; it gets the same rule. Rejected:
+   a five-cell grid (needs a spanning cell, against "uniform cell size").
+9. **S1 no-stretch.** After unclamping, the cards in a row still share the tallest height
+   (flex stretch: 426 px at 390, 356 px at 820/1440). The standard says nothing stretches
+   to match a neighbour, review cards included → `.removal-a .rvs-track { align-items:
+   flex-start }`. trimming-a gets the same in its own pass.
+10. **Duplicate photos on the page (pre-existing, left).** hero-photo-2 ×3 (proof cell,
+    longform, rail), work-photo-3 ×3 (Benefits, services, rail), work-photo-4/5 ×2. All
+    from the rail showing the whole 12-photo library; every count is what live shows
+    today. Removing rail cells is a layout change the owner excluded ("everything else
+    below the fold stays"). The six new photos each appear once.
+11. **Logo preloaded twice (pre-existing, left).** Every text-hero page (storm-a, removal-b,
+    now removal-a) carries two preload links for the one logo file: the prerender's and
+    React's SSR float. Same URL, one fetch. Removing the float touches every page
+    including storm-a; not this page's item.
