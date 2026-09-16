@@ -1,0 +1,21 @@
+Guards — run 2026-09-16T06:47Z on branch batch/four-pages at 66c3db4
+
+PASS  tsc            TypeScript
+PASS  factory-rules  Factory rules (R1 · R3 · R5 · schema)
+PASS  layout-lock    Layout lock (R2 — controls)
+PASS  studio-save    Studio save (identity · atomic · no trailer)
+PASS  image-spec     Image spec (exists · minimum · focal point)
+PASS  publish-gate   Publish gate self-test
+pre: 6/6 passed
+
+PASS  r4-leakage     R4 cross-client leakage
+PASS  copy-parity    a → c copy parity
+PASS  demo-isolation Demo isolation (D1–D10)
+PASS  tracking       Conversion tracking
+PASS  lead-function  Lead Function contract
+PASS  faq-a11y       FAQ accessibility
+post: 6/6 passed
+
+Criterion 8 (declared sizes vs rendered box at 390/820/1440, DPR 2) on every page this page's changes reach (trimming-a x3; removal-a x2 and storm-a x2 for the scoped S1 slider; trimming-b as a positional reader of photos.trimming; trimming-c x3 for the sizes fix):
+309 images checked on the changed pages at 390/820/1440
+  => every declared sizes within 10% of (or above) its real box
