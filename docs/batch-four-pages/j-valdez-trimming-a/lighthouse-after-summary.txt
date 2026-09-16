@@ -1,0 +1,26 @@
+J Valdez trimming-a — Lighthouse AFTER
+======================================
+Date: 2026-09-16
+Branch / commit: batch/four-pages @ 66c3db4 (dist served as built; not rebuilt for this measurement)
+Page: http://localhost:4182/p/j-valdez/trimming-a/
+Server: vite preview --port 4182 --strictPort (Content-Encoding: gzip confirmed); served HTML contains trimming-climber-creek (new build confirmed)
+Tool: Lighthouse 13.4.1 (global CLI), Chrome --headless=new
+Method (August method): --only-categories=performance --throttling-method=devtools --form-factor=mobile
+Blocked URL patterns: *googletagmanager.com* *google-analytics.com* *googleadservices.com* *doubleclick.net* *callrail.com* *calltrk.com* *leadconnectorhq.com* *msgsndr.com*
+Runs: 1 discarded warm-up, then 3 measured runs (/tmp/lh-t-after-1..3.json)
+Selection: median performance score; tie-break median LCP
+
+run 1: score 98 | LCP 1.87 s | CLS 0 | TBT 0 ms | FCP 1.87 s | LCP element: <p class="ta-hero-body"> "Need a tree trimming service near you? Our East Dallas crew includes roof and g…" | image bytes (all images fetched during the run, mobile, no scroll): 87834 | gtm requests completed: 0
+run 2: score 98 | LCP 1.85 s | CLS 0 | TBT 0 ms | FCP 1.85 s | LCP element: <p class="ta-hero-body"> "Need a tree trimming service near you? Our East Dallas crew includes roof and g…" | image bytes (all images fetched during the run, mobile, no scroll): 87834 | gtm requests completed: 0
+run 3: score 98 | LCP 1.85 s | CLS 0 | TBT 0 ms | FCP 1.85 s | LCP element: <p class="ta-hero-body"> "Need a tree trimming service near you? Our East Dallas crew includes roof and g…" | image bytes (all images fetched during the run, mobile, no scroll): 87834 | gtm requests completed: 0
+
+Exact values: LCP 1874.716 / 1852.430 / 1851.417 ms; FCP identical to LCP in each run; CLS 0 in all; TBT 0 ms in all.
+GTM: 1 request to https://www.googletagmanager.com/gtm.js?id=GTM-PFZPR33H per run, statusCode -1 (blocked); 0 completed.
+
+Images fetched (identical in all three runs; transferSize, gzip server):
+  /assets/j-valdez/gallery-slide-3-650f67b6-800w.webp   78976 B
+  /assets/j-valdez/logo-header-2ea7dab6.webp              8858 B
+  data:image/svg+xml (inline icon)                            0 B
+  total                                                   87834 B
+
+Copied to lighthouse-after.json: run 2 (score 98, LCP 1852.43 ms — median LCP among the three 98s).
