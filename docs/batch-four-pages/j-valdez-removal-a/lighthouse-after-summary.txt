@@ -1,0 +1,30 @@
+Lighthouse AFTER measurement: J Valdez / removal-a
+page: http://localhost:4182/p/j-valdez/removal-a/  (built site at app/dist, branch batch/four-pages, commit 7ca924e)
+method (August method): Lighthouse 13.4.1, --only-categories=performance, --throttling-method=devtools (applied), --form-factor=mobile, Chrome --headless=new; served by `vite preview --port 4182 --strictPort` with gzip (Content-Encoding: gzip confirmed); build marker ra-reviews-link present (count 1)
+blocked URL patterns: *googletagmanager.com* *google-analytics.com* *googleadservices.com* *doubleclick.net* *callrail.com* *calltrk.com* *leadconnectorhq.com* *msgsndr.com*
+runs: 1 discarded warm-up, then 3 measured runs (raw JSON: /tmp/lh-after-1.json, -2.json, -3.json)
+measured: 2026-09-16T06:21:07.374Z, 2026-09-16T06:21:31.387Z, 2026-09-16T06:21:55.513Z
+LCP element source: audits[lcp-breakdown-insight].details.items[] node (Lighthouse 13 has no largest-contentful-paint-element audit)
+image bytes = sum of transferSize over audits[network-requests].details.items with resourceType == Image (every image the page requested during the run)
+
+run 1: score 99 | LCP 1.72 s | CLS 0 | TBT 0 ms | FCP 1.72 s | LCP element: <p class="ra-body ra-hero-body"> "Get $300 Off With Your Tree Removal Service All Summer! Whether you need a tree…" | image bytes (first viewport, mobile): 381865 | gtm requests completed: 0
+run 2: score 99 | LCP 1.72 s | CLS 0 | TBT 0 ms | FCP 1.72 s | LCP element: <p class="ra-body ra-hero-body"> "Get $300 Off With Your Tree Removal Service All Summer! Whether you need a tree…" | image bytes (first viewport, mobile): 381865 | gtm requests completed: 0
+run 3: score 99 | LCP 1.74 s | CLS 0 | TBT 8 ms | FCP 1.74 s | LCP element: <p class="ra-body ra-hero-body"> "Get $300 Off With Your Tree Removal Service All Summer! Whether you need a tree…" | image bytes (first viewport, mobile): 381865 | gtm requests completed: 0
+
+image requests (identical across all 3 runs; path and transferSize in bytes; total 381865):
+  /assets/j-valdez/logo-header-2ea7dab6.webp  8858
+  data:image/svg+xml (inline icon)  0
+  /assets/texas-tree-tops/bg-section-evifliwtqp-6b6b2797.webp  3548
+  /assets/texas-tree-tops/bg-section-pt0s1qtmn0-d26338c9.webp  4234
+  /assets/texas-tree-tops/bg-row-yixqrlnvyw-3d3ce344.webp  3302
+  /assets/texas-tree-tops/bg-section-zzw8wc9z7t-02ec5eac.webp  25346
+  /assets/j-valdez/hero-photo-2-c029d1c8-800w.webp  103742
+  /assets/j-valdez/removal-bucket-truck-img1119-966a7dc4-800w.webp  118606
+  /assets/j-valdez/work-photo-3-1e169c6d-800w.webp  110118
+  /assets/_shared/benefit-icon-1-dbb86f4d.svg  1057
+  /assets/_shared/benefit-icon-2-6710e15b.svg  1036
+  /assets/_shared/benefit-icon-3-8423c543.svg  843
+  /assets/_shared/benefit-icon-4-2b31db6c.svg  1175
+googletagmanager.com requests: 1 attempted, 0 completed (blocked, statusCode -1) in every run
+
+copied: run 1 (median score 99; all three scored 99/99/99, tie broken by median LCP 1.719 s) -> lighthouse-after.json
