@@ -1,6 +1,6 @@
 # Batch report — four pages, one approval
 
-Branch `batch/four-pages`, 43 commits on top of `main` (`3c685d1`, the last deploy record),
+Branch `batch/four-pages`, 45 commits on top of `main` (`3c685d1`, the last deploy record),
 fast-forwardable. **Built and verified. Nothing pushed, nothing published.** The publish
 guard (`.claude/hooks/block-publish.py`, entries in `.claude/settings.json` and
 `~/.claude/settings.json`) is still active and comes out only after this approval.
@@ -205,7 +205,7 @@ dry-run push to main and a real deploy attempt in the proof run were both refuse
 2. I remove the guard — the `PreToolUse` entry in `.claude/settings.json` and the mirrored
    one in `~/.claude/settings.json`, and the hook script — in one commit.
 3. Fast-forward `main` to the branch and push it (`git merge --ff-only batch/four-pages`,
-   43 commits; the studio on Railway pulls `main`).
+   45 commits; the studio on Railway pulls `main`).
 4. Publish — your call between: **(a)** you click Publish in the studio; its protected-route
    check will ask you to confirm each of the four routes, which is expected (all four are the
    targets) and is the built-in second look; or **(b)** on your word I build from `main` and

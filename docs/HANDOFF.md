@@ -1,67 +1,58 @@
-# HANDOFF — batch/four-pages, written mid-run 2026-09-16
+# HANDOFF — batch/four-pages, at the gate (2026-09-16)
 
-Read this, then `docs/batch-four-pages/{four-page-spec.md, amendment.md, removal-a-scope.md,
-decisions.md}`, before touching anything. The amendment (unattended run, one gate at the end)
-is the operative instruction; the spec holds everything else.
+Read `docs/batch-four-pages/REPORT.md` first; it is the deliverable and links every folder.
+Then `amendment.md` (operative), `four-page-spec.md`, `removal-a-scope.md`, `decisions.md`.
 
 ## Where the run is
 
-**Pages 1–2: COMPLETE.** **Page 3 (Texas Tree Tops removal-a): BUILT AND VERIFIED, waiting
-only on its Lighthouse-after subagent** (before: 98 / 1.90 s / 441,941 B). Evidence committed
-except lighthouse-after.json, lighthouse-after-summary.txt, summary.md. **Page 4 (TTT storm-a):
-scope.md committed; nothing built.** Working tree clean.
+**All four pages COMPLETE and verified on the final build; the batch is HELD for the owner's
+one approval.** Branch `batch/four-pages` at `0607178`, 45 commits on `main` (`3c685d1`),
+fast-forwardable. Working tree clean. Nothing pushed, nothing published. The publish guard
+is active in `.claude/settings.json` and `~/.claude/settings.json` (script
+`.claude/hooks/block-publish.py`).
 
-Rails complete and proven (hook in `.claude/settings.json` AND `~/.claude/settings.json`;
-both entries out only after the owner approves). Branch `batch/four-pages` off `3c685d1`;
-nothing pushed, nothing published.
-
-## Page-3 results on the build (f07ebc9 state)
-- 0/9 reviews cut, whole cards 1/2/3, button present; 25 chips once, no mask, none clipped;
-  six uniform cells (170×128 / 237×178 / 353×265), no grey, cell 6 = restoration-photo-1;
-  cards 4:3, dead space 0; hero unchanged (gallery-02 plate, gallery-03/04 proof); stock
-  photos and the Benefits artwork now carry descriptive alts; JV removal-a's proof cells carry
-  their record alts.
-- Guards 12/12 (new stock-alt guard included); criterion 8 clean on 300 boxes except the
-  pre-existing Summit rail lines; compare zero on 55; diff 22 pages (11 alt-only, labelled);
-  bundle +1,597 B for the batch. Decisions 22–24.
+## Final-build numbers (see REPORT.md)
+- Compare: 55 pages, zero differences. Guards 12/12. Diff 28 of 55 pages, every row labelled.
+  Bundle +1,527 B gzip of 3,072. Lighthouse: p1 98→99 / 1.85→1.72 s; p2 unchanged;
+  p3 98→98 / 1.90→1.90 s, image bytes −55,836; p4 99→99 / 1.74→1.73 s.
+- Decisions 1–28 in decisions.md (+ the hook log: three false positives, no publish attempted).
+- Decision 28 (late find): page 1's removal set had cascaded into J Valdez agnostic /
+  removal-b / removal-c and dropped the truck and the yard sign from three pages; pinned
+  back to live on the record, re-verified, page 1's diff and compare refreshed.
 
 ## EXACT NEXT ACTION
-1. When the TTT removal-a Lighthouse-after subagent reports: write
-   `docs/batch-four-pages/texas-tree-tops-removal-a/summary.md` (before/after; LCP element =
-   hero text; note "left alone": gallery-02 hero plate is a 680 px file at 1440×1192, the
-   grid's five gallery-0x photos are 382–680 px files, TTT bg-* section art; T4 not real);
-   stop if score/LCP/bytes regressed unrecoverably; commit `T-evidence: lighthouse after + summary`.
-2. Page 4, TTT storm-a (PROTECTED): live measurements + before-screens (reviews section,
-   `.st-areas`) at 390/820/1440; T7: rewrite `components/ServiceAreasCarousel.tsx` as one
-   static wrapped `<ul>` (dedupe case-insensitively, keep `role="group"`/aria-label), and
-   `styles/service-areas-carousel.css` as a wrapped chip list (no mask, no animation, no
-   negative margin, keep chip look); this reaches storm-a/-b/-c, agnostic, removal-b,
-   trimming-b, removal-c, trimming-c for all clients — explain each in the diff. T6 is
-   already applied (`.storm` scope). Build, verify (0 cut, whole cards; 25 chips once, none
-   clipped, first reachable), evidence set, Lighthouse before (subagent, main 3c685d1) and
-   after, commits `T7:`, `T-evidence`.
-3. End: `docs/batch-four-pages/REPORT.md` (one section per page linking its folder, the
-   decision log, the left-alone list); hold for one approval; remove the hook (both entries)
-   only after approval; publish only then.
+1. **Wait for the owner.** Do not publish, push, merge or remove the hook without the
+   approval in the owner's own words. If they ask for changes, make them on this branch,
+   re-run the set (compare, guards, criterion 8, diff, bundle, Lighthouse on the touched
+   page), update the page folder, decisions.md and REPORT.md, and hold again.
+2. On approval, in order (REPORT.md "After your approval"): remove the guard (both settings
+   entries + the script) in one commit → `git checkout main && git merge --ff-only
+   batch/four-pages && git push origin main` → publish by the owner's choice (studio
+   Publish click with its four protected-route confirmations, or the Pages direct upload
+   from a main build on their word) → re-run the 55-page compare against live and
+   Lighthouse on the four live URLs → deploy record in the BUILD-LOG.
+3. Stage 4 stays paused; do not write the 4b prediction.
 
 ## Tooling (scratchpad; recreate if gone)
-
 `SP=/tmp/claude-501/-Users-faizanumer-tree-template-factory/bb29fa72-5baf-4823-966b-81f43983f0cc/scratchpad`
-- `$SP/probe/cdp.mjs` — headless Chrome harness; **blocks every tracker on every page load
-  by default** (the clients' real GTM containers are in the local builds — never load a
-  page unblocked). `sections.mjs`, `crit8.mjs`, `afterC.mjs`, `crops.mjs`, `serve.mjs`.
-- `$SP/run-guards.mjs pre|post` — the 12 guards. `$SP/compare55.py`, `$SP/stagehunks.py`,
-  `$SP/hunks.py` — per-item staging. `$SP/pages-ship/` — normalised live build (e3394aa)
-  for prerender diffs; `$SP/removal-entries.json` — the ingested photo entries.
-- Lighthouse method (August): `vite preview` (gzip), `--throttling-method=devtools
+- `$SP/probe/cdp.mjs` — headless Chrome harness; **blocks every tracker on every load**
+  (the clients' real GTM containers are in the local builds — never load a page unblocked).
+  `sections.mjs` (screens), `crit8live.mjs` (criterion 8, BASE env), `sacAll.mjs` (areas
+  list on routes), `scopeStorm.mjs`, `serve.mjs <dir> <port>`.
+- `$SP/run-guards.mjs pre|post` — the 12 guards. `$SP/compare55.py /tmp/live55 app/dist <out>`.
+- Diff: `zsh $SP/pagediff.sh $SP/pages-now` (hash-normalised snapshot) then
+  `python3 $SP/prediff.py $SP/pages-ship $SP/pages-now <out>` (labels live in the script).
+  Running prediff on `app/dist` directly lists every page (bundle hashes) — don't.
+- Lighthouse (August method): `vite preview` (gzip), `--throttling-method=devtools
   --form-factor=mobile --only-categories=performance --chrome-flags="--headless=new"`,
   `--blocked-url-patterns` for googletagmanager, google-analytics, googleadservices,
-  doubleclick, callrail, calltrk, leadconnectorhq, msgsndr.
+  doubleclick, callrail, calltrk, leadconnectorhq, msgsndr; 1 warm-up + 3 runs, median.
+- The hook matches its regex anywhere in a Bash command except heredoc bodies: don't put
+  the deploy command's name in grep patterns or commit messages outside a heredoc.
 
 ## Hard constraints (unchanged)
-
 No phone number, `data-dni`, GTM id or record phone field changes — proven by the 55-page
-compare before each gate. hero-photo-2 and gallery-slide-5 stay in every slot. No review
-text written or changed. Never log into the studio. Never load a client page in a browser
-without the tracker block. Publish only after the owner approves the whole batch and the
-hook is removed.
+compare. hero-photo-2 and gallery-slide-5 stay in every slot they occupy (now checked page
+by page against live, not only on the target page). No review text written or changed.
+Never log into the studio. Never load a client page without the tracker block. Publish only
+after the owner approves the whole batch and the hook is removed.
