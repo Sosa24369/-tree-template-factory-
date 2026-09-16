@@ -90,3 +90,14 @@ alternative rejected, and why. Owner's own rulings are marked **(owner)**.
     `sizes` strings for spanning/odd cells. Logged for a later sizes pass; not fixed here
     because each would be a change to a page the owner did not name, for a defect the
     batch did not cause.
+
+## 2026-09-16 — J Valdez trimming-a (page 2), findings before the build
+
+15. **S2's 10-vs-8 cities mismatch is in the record's own copy, and stays.** The chips
+    render `serviceAreaList` (10 cities). The paragraph above them is the record's
+    `copyOverrides.trimming-a["why.body"]`, which names 8: Forney and Lake Ray Hubbard are
+    chips only. No other template override has the mismatch (removal-a composes its
+    sentence from the list). The spec keeps headline and body copy as they are unless an
+    item names the copy, and the ads are tuned to it — so this is reported for the owner's
+    decision (add the two cities to the sentence, or drop them from the list), not edited.
+    Rejected: editing the override to name all ten.
