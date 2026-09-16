@@ -1,4 +1,4 @@
-Bundle, gzip -9, vs the live build e3394aa:
-  JS  129541 -> 130636  (+1095 B)
-  CSS 27399 -> 27195  (-204 B)
-  total +891 B  (batch ceiling 3072 B)
+Bundle, gzip -9, this build (7ca924e) vs the live build e3394aa (measured the same way):
+  JS  129541 -> 130652  (+1111 B)   growth = J Valdez record data bundled into the app (7 photo entries with pipeline blocks, 26 slot pins) + removal-c sizes call
+  CSS 27399 -> 27200  (-199 B)   the marquee, keyframes and duplicate grid block removed outweigh the additions
+  total +912 B   (batch ceiling 3072 B; owner approval needed for anything above zero)

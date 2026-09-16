@@ -1,14 +1,14 @@
-Prerender diff — J Valdez removal-a batch vs the live build (e3394aa). Asset hashes normalised.
-11 of 55 pages change.
+Prerender diff — built pages vs the live build (e3394aa), asset hashes normalised. 11 of 55 pages change.
+Protected pages are the four in protected-routes.json; TTT storm-a is not in this list, i.e. byte-identical.
 
-          demo/summit-tree/removal-a                 194 changed lines   template-wide CSS/markup as TTT removal-a; demo, no GTM
-          p/j-valdez/agnostic                        125 changed lines   new photos.removal set: the agnostic work grid reads generic -> removal first
-PROTECTED p/j-valdez/removal-a                       263 changed lines   THE TARGET
-          p/j-valdez/removal-a/thank-you               2 changed lines   preload line only: the hero plate is empty so the logo preload replaces the photo preload
+          demo/summit-tree/removal-a                 194 changed lines   template-wide CSS/markup as Texas Tree Tops removal-a; demo, no GTM
+          p/j-valdez/agnostic                        125 changed lines   new photos.removal set: the agnostic work grid reads generic -> removal before trimming
+PROTECTED p/j-valdez/removal-a                       263 changed lines   THE TARGET (R1 hero, R2 proof strip, R3 grid, R4 cards, R5/S1 reviews, S2 areas)
+          p/j-valdez/removal-a/thank-you               2 changed lines   preload line only: the hero plate is empty, so the logo preload replaces the photo preload
           p/j-valdez/removal-b                        34 changed lines   new photos.removal set: this template cascades removal -> trimming and now finds removal photos (service match)
-          p/j-valdez/removal-c                        52 changed lines   same as removal-b: removal set now exists; plus the reviews button for a->c copy parity
-PROTECTED p/j-valdez/trimming-a                        2 changed lines   ?? not anticipated
-          p/j-valdez/trimming-b                        4 changed lines   ?? not anticipated
-          p/j-valdez/trimming-c                        4 changed lines   ?? not anticipated
-PROTECTED p/texas-tree-tops/removal-a                380 changed lines   template-wide: reviews unclamped + Google reviews button (S1/R5), static areas list (S2), one grid rule (R3 CSS), 4:3 service cards (R4)
-          p/texas-tree-tops/removal-c                  4 changed lines   reviews button for a->c copy parity
+          p/j-valdez/removal-c                        52 changed lines   same as removal-b, plus the Google reviews button for a->c copy parity, plus the work grid now declaring the slot sizes (criterion 8, pre-existing)
+PROTECTED p/j-valdez/trimming-a                        2 changed lines   hero-photo-2's focal point (set on the photograph for R2): one object-position style on its hero-band cell; nothing else
+          p/j-valdez/trimming-b                        4 changed lines   hero-photo-2's focal point: object-position on its two cells; nothing else
+          p/j-valdez/trimming-c                        4 changed lines   hero-photo-2's focal point: object-position on its two cells; nothing else
+PROTECTED p/texas-tree-tops/removal-a                380 changed lines   template-wide: reviews in full + Google reviews button (S1/R5), static areas list (S2), one grid rule (R3 CSS), 4:3 service cards (R4)
+          p/texas-tree-tops/removal-c                  4 changed lines   Google reviews button for a->c copy parity; work grid sizes attribute (criterion 8 fix)
