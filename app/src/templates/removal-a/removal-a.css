@@ -802,9 +802,11 @@
  * holding a 1092x380 photo, a 439px grey band under each, and every width had cells
  * of different sizes. Measured on the live page, not guessed (docs/BUILD-LOG.md).
  *
- * Now every cell is the same 4:3 box: two columns on a phone, three from 860px. A
- * client whose count does not divide evenly keeps the last-child span so nothing is
- * stranded; six closes at every width, which is what J Valdez's grid holds.
+ * Now every cell is the same 4:3 box: two columns on a phone, three from 768px (the
+ * breakpoint the live page already used, so a tablet keeps its three-across row and an
+ * odd count does not grow a spanning cell at 820). Below 768 a client whose count does
+ * not divide evenly keeps the last-child span so nothing is stranded; six closes at
+ * every width, which is what J Valdez's grid holds.
  * ---------------------------------------------------------------- */
 
 .removal-a .ra-grid-mosaic {
@@ -836,13 +838,13 @@
   object-fit: cover;
 }
 
-@media (max-width: 859px) {
+@media (max-width: 767px) {
   .removal-a .ra-grid-mosaic > li:last-child:nth-child(odd) {
     grid-column: span 2;
   }
 }
 
-@media (min-width: 860px) {
+@media (min-width: 768px) {
   .removal-a .ra-grid-mosaic {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }

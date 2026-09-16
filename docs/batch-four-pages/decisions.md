@@ -69,3 +69,24 @@ alternative rejected, and why. Owner's own rulings are marked **(owner)**.
     now removal-a) carries two preload links for the one logo file: the prerender's and
     React's SSR float. Same URL, one fetch. Removing the float touches every page
     including storm-a; not this page's item.
+12. **removal-c work grid under-declared its sizes (pre-existing, fixed).** Criterion 8, run
+    for the first time on removal-c because it is in this batch's diff, found the work cells
+    render 364 px at 820 and 1440 (live and built alike) while removal-c/page.tsx passed no
+    `sizes` at all, so the images fell to DeferredImage's default `22vw` (317 px at 1440)
+    instead of the contract's `26vw`. Not caused by the batch;
+    fixed by reading `slotSizes('removal-c', 'work')`, the same rule every wired template
+    follows. Changes only the `sizes` attribute on the three removal-c pages. Rejected:
+    leaving it and reporting, since the amendment stops only on a box that cannot be fixed.
+13. **Grid breakpoint 768, not 860.** The one-rule grid first went to three columns at
+    860px, so at 820 an odd count (Summit's 3, Texas Tree Tops' 5) grew a spanning cell
+    that criterion 8 flagged (738px box, 492px declared) — a miss the live page did not
+    have, because its appended block went to three columns at 768. Restored 768: the live
+    tablet layout is preserved, J Valdez's six cells stay uniform (two rows of three), and
+    the 820 miss disappears. Rejected: declaring bigger sizes for a spanning cell.
+14. **Pre-existing criterion-8 misses on pages outside the target (left, listed).** The
+    same check on the LIVE pages shows J Valdez removal-b's spanning tile (350px at 390,
+    489px at 820 against 176/246 declared) and Summit removal-a's rail (332px at 390 against
+    254 declared) already miss today. Neither page is in the batch; both are template
+    `sizes` strings for spanning/odd cells. Logged for a later sizes pass; not fixed here
+    because each would be a change to a page the owner did not name, for a defect the
+    batch did not cause.
