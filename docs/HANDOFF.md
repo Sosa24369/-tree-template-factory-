@@ -6,50 +6,48 @@ is the operative instruction; the spec holds everything else.
 
 ## Where the run is
 
-**Page 1 (J Valdez removal-a): COMPLETE.** Lighthouse 98→99, 1.85→1.72 s, 602,973→381,865 B.
-**Page 2 (J Valdez trimming-a): BUILT AND VERIFIED, waiting only on its Lighthouse-after
-subagent** (before: 98 / 1.85 s / 87,834 B). Evidence committed except lighthouse-after.json,
-lighthouse-after-summary.txt and summary.md. **Page 3 (TTT removal-a) and 4 (TTT storm-a): not
-started** — page 3 prep (library listing, T5 specifics) was being read when this was written.
+**Pages 1 and 2 (J Valdez removal-a, trimming-a): COMPLETE**, all evidence committed
+(page 1: 98→99 / 1.85→1.72 s / 602,973→381,865 B; page 2: 98→98 / 1.85→1.85 s / 87,834 B
+unchanged). **Page 3 (Texas Tree Tops removal-a, PROTECTED): EDITS COMMITTED (T3 sixth cell,
+T5 alt text, decisions 22–24, before-*.png), NOT YET BUILT OR VERIFIED.** A Lighthouse-BEFORE
+subagent is measuring main (3c685d1) for this page; the build is held until it reports.
+**Page 4 (TTT storm-a): not started.**
 
 Rails complete and proven (hook in `.claude/settings.json` AND `~/.claude/settings.json`;
 both entries out only after the owner approves). Branch `batch/four-pages` off `3c685d1`;
-nothing pushed, nothing published. Working tree clean at `341f13b`.
+nothing pushed, nothing published. Working tree clean.
 
-## Page-2 results on the final build (66c3db4)
-- P1 seam = one `--ta-pad` (54/66/108 px; was 108+108 at 1440). S3: six uniform cells
-  (171×128 / 365×274 / 352×264): work-photo-1, IMG_1116 climber (also the blurb photo —
-  Longform renders grid[1], decision 20), work-photo-3, work-photo-4, PXL lake slope,
-  IMG_1117 limbs over roof. Band and hero band unchanged. S1: 1/2/3 whole cards, no partial,
-  no stretch, 0 cut — on trimming-a AND removal-a (scoped shared rule; removal-a's
-  after-why-*.png refreshed). Chips 10/10.
-- Guards 12/12; criterion 8 clean on 309 boxes (trimming-c's missing sizes fixed, decision
-  21); compare zero on 55; diff 11 pages (same set as page 1; JV trimming-a 26 lines);
-  bundle +1,545 B for the batch so far.
-- Decisions 16–21 logged.
+## What page 3 changed (committed, unbuilt)
+- T3: `photoSlots.removal-a.mosaic.6 = restoration-photo-1` on the TTT record (decision 22).
+- T5: three stock alts on the TTT record; Summit's stock alts corrected (12 entries);
+  `slotAlt()` prefers a record alt (also changes JV removal-a's hero-proof.2 alt →
+  re-run page 1's diff/compare); Benefits template art gets a neutral alt
+  (`BENEFIT_ART_ALT`); guard in `scripts/verify-image-spec.mjs` (decision 24).
+- Already applied by pages 1–2 and only needing evidence here: T1 (S1 slider), T2 (S2
+  static chips), R4 cards, R5 button, one-rule grid. T4 measured NOT REAL (decision 23).
+- Live measurements are in the chat only: reviews 5/9 cut; 50/25 chips masked; grid two
+  439 px grey bands at 1440; services dead space up to 362 px at 820; rail first item
+  reachable at all widths; hero plate = gallery-02, a 680 px file at 1440×1192 (report only).
 
 ## EXACT NEXT ACTION
-1. When the trimming-a Lighthouse-after subagent reports: write
-   `docs/batch-four-pages/j-valdez-trimming-a/summary.md` (before/after score, LCP, image
-   bytes; LCP element = hero text; note the accepted repeat gallery-slide-3 in hero band +
-   band); stop if score/LCP/bytes regressed unrecoverably; commit `P-evidence: lighthouse after + summary`.
-2. Page 3, TTT removal-a (PROTECTED): write scope.md against the spec's T1–T5. Already
-   applied by the shared/template work and needing only evidence: T1 (S1 slider), T2 (S2
-   static list: 25 chips once), R3-CSS grid (five cells → needs a sixth: `photoSlots.removal-a
-   .mosaic.6` from the 24-photo removal library first — pick a removal-class, non-composite,
-   ≥706 px-wide file; the library listing was being read), R4 cards, R5 button. T4: measure
-   the 24-item rail's first-item reachability at 390/820/1440 live (earlier probe: reachable).
-   T5: record alts for `_shared/services-card-photo-1/2/3` (plain descriptions from
-   docs/ALT-TEXT-ITEM.md), `slotAlt()` to prefer a record alt before composing (this also
-   changes JV removal-a's hero-proof.2 alt → re-run page 1's diff/compare), a guard in
-   scripts/verify-image-spec.mjs failing any `_shared/`/`_template/` photo whose alt names
-   the client, Summit's two inaccurate alts. Before-screenshots live (why, areas,
-   restoration, services, rail), build, verify, evidence, Lighthouse before/after
-   (subagents), commit per item (T1:, T2:, T3:, T4:, T5:).
-3. Page 4, TTT storm-a (PROTECTED): T6 (S1 — already applied via `.storm` scope, evidence),
-   T7 (S2 — `components/ServiceAreasCarousel.tsx` static list, 50→25 chips, first item
-   reachable), no S3. Same evidence set.
-4. End: REPORT.md; hold; remove hook (both entries) only after approval; publish only then.
+1. When the TTT removal-a Lighthouse-before subagent reports: `cd app && npm run build`.
+2. Verify on the build (server 4178, tracker-blocked harness): 0/9 reviews cut, whole
+   cards; 25 chips once, no mask; six uniform grid cells, no grey, cell 6 =
+   restoration-photo-1; services dead space 0, 4:3; button present; hero unchanged.
+   After-screens (why, areas, restoration, gallery, services); crops for mosaic.6; guards
+   12/12 (the new stock-alt guard included); criterion 8 on every page the diff names;
+   prediff.py with whys for: TTT removal-a (target), JV removal-a (hero-proof.2 alt),
+   Summit removal-a/-b/-c/agnostic/storm-*/trimming-* (stock alts), TTT trimming-a and
+   agnostic (stock alts), TTT removal-c (parity/sizes, already); bundle.txt; compare55.py;
+   Lighthouse-AFTER (subagent, vite preview 4182); summary.md; commit `T-evidence`.
+   Re-run page 1's `prerender-diff.txt` and `phone-gtm-compare.txt` (slotAlt changed its
+   HTML by one alt) and commit.
+3. Page 4, TTT storm-a (PROTECTED): T6 (S1 via `.storm` scope — evidence), T7
+   (`components/ServiceAreasCarousel.tsx` → static list, 50→25 chips, first item
+   reachable), no S3. Scope, before-screens, build, verify, evidence, Lighthouse
+   before/after, commits (T6:, T7:).
+4. End: `docs/batch-four-pages/REPORT.md`; hold for one approval; remove the hook (both
+   entries) only after approval; publish only then.
 
 ## Tooling (scratchpad; recreate if gone)
 
