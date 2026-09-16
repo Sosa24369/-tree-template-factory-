@@ -3162,3 +3162,28 @@ page it opens, merges any script's own list into that rather than replacing it, 
 warning if any tracker host ever answers. Re-verified: GTM does not load, and every number
 on the page is (469) 402-1196. The B9 sheet was recaptured; the earlier option A/B sheet
 shows swapped numbers and is superseded.
+
+## Deploy record — Group B + the alt fix, 2026-09-15
+
+Owner approved all 20 changed pages after checking Google Ads: no campaign on either
+account is unpaused, and no final URL points at Texas Tree Tops trimming-a/-c or J Valdez
+trimming-c. Direct upload from `e3394aa`, the pushed commit, after a clean rebuild that
+reproduced the verified build byte for byte:
+`wrangler pages deploy dist --project-name=tree-template-factory` → **deployment `5f2a92f1`**
+(58 files uploaded, 154 unchanged, 213 total).
+
+**Proved on the live domain after the deploy, against a snapshot taken minutes before it:**
+
+| check | result |
+|---|---|
+| Phone numbers on the four protected pages | **identical.** `tel:+14694021196` (J Valdez ×2 pages), `tel:+16824520735` (Texas Tree Tops ×2); visible numbers, `data-dni` counts (19/19/18/10) and GTM ids all unchanged |
+| Phone/GTM tokens across all 55 live pages | **0 differences** (183 `tel:`, 373 `data-dni`, 367 visible numbers, 68 GTM ids) |
+| Every route | 55/55 HTTP 200 at its own URL, no redirect, no path changed; route set identical to before |
+| `/p/texas-tree-tops/storm-a` | byte-identical apart from the shared bundle's content hash, which `protected-routes.json` excludes by design |
+| The changes are live | J Valdez trimming-a: B2 photo, reviews button, areas list, B9 five-photo band. J Valdez removal-a: the Benefits photo is the client's own, `benefit-strip-art` gone. Texas Tree Tops removal-a: no `.mp4` inside an `<img>` (the rail's real `<video>` element remains) |
+
+The studio on Railway is **still the older deploy**: `railway whoami` shows
+`faizanumer1111@gmail.com`, which cannot see the `sosa24369` workspace, so `railway up` is
+blocked on the owner logging in as `fred@treeleads.io`. Records saved by the older studio UI
+keep the new `photoSlots` keys (its writer spreads what it does not touch), but it cannot show
+the removal-a Benefits slot until it is redeployed.
