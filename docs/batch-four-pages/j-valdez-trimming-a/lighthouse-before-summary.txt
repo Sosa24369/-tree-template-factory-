@@ -1,0 +1,20 @@
+Lighthouse BASELINE (before) — J Valdez trimming-a
+page: http://localhost:4181/p/j-valdez/trimming-a/
+source: commit 3c685d1 (main, before state), built in a scratch worktree (npm run build -> prerendered 56 page(s)), served by `vite preview --port 4181 --strictPort` (gzip on)
+method (August method): Lighthouse 13.4.1, --only-categories=performance --throttling-method=devtools --form-factor=mobile --chrome-flags="--headless=new", blocked: *googletagmanager.com* *google-analytics.com* *googleadservices.com* *doubleclick.net* *callrail.com* *calltrk.com* *leadconnectorhq.com* *msgsndr.com*; one discarded warm-up, then 3 real runs
+chrome: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.0.0 Safari/537.36
+fetched: 2026-09-16T06:28:31.750Z
+
+run 1: score 98 | LCP 1.84 s | CLS 0.000 | TBT 0 ms | FCP 1.84 s | LCP element: <p class="ta-hero-body"> (section.ta-hero > div.ta-container > div.ta-hero-copy > p.ta-hero-body) "Need a tree trimming service near you? Our East Dallas crew includes roof and g…" | image bytes (all images fetched during the run, mobile, no scroll): 87834 | gtm requests completed: 0
+run 2: score 98 | LCP 1.85 s | CLS 0.000 | TBT 0 ms | FCP 1.85 s | LCP element: <p class="ta-hero-body"> (section.ta-hero > div.ta-container > div.ta-hero-copy > p.ta-hero-body) "Need a tree trimming service near you? Our East Dallas crew includes roof and g…" | image bytes (all images fetched during the run, mobile, no scroll): 87834 | gtm requests completed: 0
+run 3: score 98 | LCP 1.87 s | CLS 0.000 | TBT 0 ms | FCP 1.87 s | LCP element: <p class="ta-hero-body"> (section.ta-hero > div.ta-container > div.ta-hero-copy > p.ta-hero-body) "Need a tree trimming service near you? Our East Dallas crew includes roof and g…" | image bytes (all images fetched during the run, mobile, no scroll): 87834 | gtm requests completed: 0
+
+images fetched (path, transferSize; identical in all three runs):
+  /assets/j-valdez/gallery-slide-3-650f67b6-800w.webp  78976 B  (status 200)
+  /assets/j-valdez/logo-header-2ea7dab6.webp  8858 B  (status 200)
+  data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'…  0 B  (status 200)
+  total image transfer: 87834 B
+
+gtm: 1 googletagmanager.com request(s) seen per run, 0 completed (blocked, statusCode -1)
+
+baseline file: lighthouse-before.json = run 2 (median score, tie broken by median LCP)
