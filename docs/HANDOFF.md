@@ -6,94 +6,57 @@ is the operative instruction; the spec holds everything else.
 
 ## Where the run is
 
-**Amendment section 1 — the per-page loop. Page 1 of 4: J Valdez removal-a. Build done,
-verification mostly done, two fixes outstanding, then evidence completion, then page 2.**
-Pages 2–4 (JV trimming-a, TTT removal-a, TTT storm-a) are not started and not yet scoped
-against the spec.
+**Amendment section 1 — the per-page loop. Page 1 of 4 (J Valdez removal-a): BUILT,
+VERIFIED, EVIDENCE COMMITTED, waiting only on the Lighthouse-after subagent** (it writes
+`lighthouse-after.json` + `lighthouse-after-summary.txt` into the evidence folder; after it:
+write `summary.md` with before/after score, LCP, first-viewport image bytes; stop if any of
+the three regressed; commit). **Page 2 (J Valdez trimming-a): draft scope committed**
+(`docs/batch-four-pages/j-valdez-trimming-a/scope.md`), not measured, not built. Pages 3–4
+not started.
 
-Section 0 (rails) is complete and proven:
-- Hook: `.claude/hooks/block-publish.py` registered in `.claude/settings.json` (committed)
-  AND in `~/.claude/settings.json` (the live one this session; guarded to this repo). Proven:
-  `git push origin main --dry-run` and one real `wrangler pages deploy …` attempt were both
-  refused in-session (verbatim in the chat and decisions.md 7). Remove BOTH entries only when
-  the owner approves the batch. Cloudflare Pages is direct-upload (not git-connected).
-- Branch `batch/four-pages`, off main at `3c685d1`. Nothing pushed. Nothing published.
-- Durable copies + `decisions.md` (11 entries so far) in `docs/batch-four-pages/`.
+Section 0 (rails) is complete and proven. Hook: `.claude/hooks/block-publish.py`, registered
+in `.claude/settings.json` (committed) AND `~/.claude/settings.json` (the live one this
+session; guarded to this repo). Both entries come out only when the owner approves the
+batch. Branch `batch/four-pages` off main `3c685d1`; nothing pushed, nothing published.
 
-## Files changed — all COMMITTED on batch/four-pages unless marked
+## Commits on the branch (oldest first)
 
-One commit per item (`git log --oneline main..HEAD`): S0 rails · R5/S1 reviews · S2 areas ·
-R4 services · R3 grid + resolver · R1 preload · R1/R2/R3 record + 28 asset files
-(`app/public/assets/j-valdez/removal-*.webp`) · R-evidence.
+S0 rails · R5/S1 reviews · S2 areas · R4 cards · R3 grid+resolver · R1 preload · R1/R2/R3
+record + 28 assets · R-evidence · HANDOFF · R3 image-spec key rule · S1 no-stretch · R3 set
+order (1600px first) · R3/crit8 removal-c sizes · R3 grid breakpoint 768 · P-scope (page 2
+draft + decision 15) · R-evidence (final build). Working tree clean.
 
-| file | item |
-|---|---|
-| `app/src/templates/removal-a/removal-a.css` | R3 one grid rule; R4 4:3 cards; R5 reviews CSS + button; S2 static areas |
-| `app/src/templates/removal-a/sections/Areas.tsx` | S2 static list, dedupe |
-| `app/src/templates/removal-a/sections/Services.tsx` | R4 wrapperClassName |
-| `app/src/templates/removal-a/sections/WhyChoose.tsx`, `copy.defaults.ts` | R5 button + `why.reviewsLink` |
-| `app/src/templates/removal-c/page.tsx`, `removal-c.css` | copy-parity link |
-| `app/src/lib/placement.mjs` | explicit key past a fixed-count slot adds a cell |
-| `app/scripts/prerender.mjs` | empty LCP slot → logo preload, no first-still fallback |
-| `clients/j-valdez.json` | photos.removal (7), hero-photo-2 focal, 26 photoSlots.removal-a keys |
-| `docs/batch-four-pages/**` | spec, amendment, scope, decisions, evidence |
-| `.claude/settings.json`, `.claude/hooks/block-publish.py` | rails |
+## Page-1 results on the final build (7ca924e), all in `docs/batch-four-pages/j-valdez-removal-a/`
 
-Uncommitted: nothing intended. `~/.claude/settings.json` (outside the repo) carries the
-live hook entry.
+- Guards 12/12. Criterion 8 on the nine changed pages: clean except five PRE-EXISTING
+  lines on j-valdez/removal-b and summit/removal-a (same on live; decisions 14).
+- 55-page phone/GTM compare: ZERO differences (183 tel, 373 data-dni, 367 numbers, 68 GTM).
+- Prerender diff: 11 of 55 pages; 3 protected (target; ttt removal-a template-wide; jv
+  trimming-a = hero-photo-2's focal only). Every page explained in the file.
+- Bundle +912 B gzip (JS +1111 = record data; CSS −199).
+- Lighthouse before: 98 / 1.85 s / 602,973 image bytes. After: PENDING.
+- Built-page measurements: hero #112d25, no plate, no photo preload; proof cells at their
+  focal points; six uniform cells 170×128 / 237×178 / 353×265, no grey; cards 4:3, 0 dead
+  space; 10 chips/10 unique; 0 of 9 reviews cut, cards fit their text, button 14 px under.
+- Decisions 1–15 in decisions.md.
 
-## Suites run on the current build (working tree = HEAD of the branch)
+## EXACT NEXT ACTION
 
-- **Guards: 11/12.** `image-spec` FAILS with exactly two violations (decisions.md 8):
-  (a) `photos.removal[0] is 1320 px wide, removal-a hero-plate needs 1600`; (b)
-  `photoSlots.removal-a.mosaic.6 is not a slot on removal-a`. Other 11 pass.
-- **Criterion 8:** 153 image boxes on the three changed live-template pages, all within
-  10% — but the check script only covers jv/trimming-a, jv/removal-a, ttt/trimming-a; extend
-  it to ttt/removal-a and summit/removal-a (both change) before calling it done.
-- **55-page phone/GTM compare:** ZERO differences (evidence file written).
-- **Prerender diff:** 11 of 55 pages change; 3 protected (jv removal-a = target, ttt
-  removal-a = template-wide CSS/button, jv trimming-a = hero-photo-2's focal point only).
-  The three "?? not anticipated" lines in `prerender-diff.txt` (jv trimming-a/-b/-c) are
-  the focal point's `object-position` on hero-photo-2 — rewrite those lines to say so.
-- **Bundle:** JS +1095 B, CSS −204 B = +891 B gzip vs live (ceiling 3 KB/batch). The JS
-  growth is the record data (7 photo entries with pipeline blocks + 26 pins) bundled in.
-- **Lighthouse before:** 98 / LCP 1.85 s / first-viewport image bytes 602,973 (baseline
-  files in the evidence folder). **Lighthouse after: NOT RUN YET.**
-- **After-measurements (built page, DPR 2):** hero #112d25, no plate, no photo preload;
-  proof cells at focal 45%/48% and 60%/50%; six uniform grid cells (170×128 / 362×272 /
-  353×265), no grey; cards 4:3, dead space 0; 10 chips / 10 unique, none clipped; 0 of 9
-  reviews cut, button 14 px under; no horizontal overflow.
-
-## Decisions taken in the owner's place — all in `docs/batch-four-pages/decisions.md`
-
-Entries 1–11. The ones that shape the next steps: 8 (guard fixes), 9 (S1 no-stretch), 3
-(pins keep the rail/services unchanged), 4 (IMG_1119 original instead of work-photo-1).
-
-## EXACT NEXT ACTION (in order)
-
-1. In `clients/j-valdez.json`, move the `removal-boom-over-house-nf3-*` entry (1600×1200)
-   to index 0 of `photos.removal`. Grid cells are explicit (`mosaic.1–6`) so the grid does
-   not change; jv removal-b/-c/agnostic will re-order (they read the set by position) —
-   note it in prerender-diff.txt.
-2. In the image-spec guard (find the `is not a slot on` message under `server/` or
-   `app/image-checks.mjs`), accept a numeric key past a fixed `cells` count, mirroring
-   `placement.mjs` (`explicitMax`). Commit as `R3: image-spec accepts a key past a fixed-count slot`.
-3. Add `.removal-a .rvs-track { align-items: flex-start; }` to removal-a.css next to the
-   R5 block (decision 9). Commit `S1: removal-a review cards fit their own text`.
-4. `cd app && npm run build`; re-run the guards script (`$SP/run-guards.mjs pre` and `post`
-   — scratchpad tools listed below) → overwrite `guards.txt`; re-run criterion 8 with
-   ttt/removal-a and summit/removal-a added; re-run the after-measurement probe and the
-   after-screenshots (reviews section changes); regenerate `prerender-diff.txt`.
-5. Lighthouse AFTER in a subagent (same method as the baseline; serve `app/dist` via
-   `npx vite preview --port 4182 --strictPort` from app/; 1 warm-up + 3 runs; median →
-   `lighthouse-after.json`; write `summary.md` with before/after score, LCP, first-viewport
-   image bytes; no regression on any of the three or STOP).
-6. Re-run the 55-page compare (subagent, `compare55.py`) — zero differences or STOP.
-7. Commit updated evidence. Page 1 done. Then page 2: JV trimming-a — scope it against the
-   spec (P1 gap after the proof rail, S1/S2/S3 there, the 10-vs-8 cities mismatch), build,
-   same evidence set into `docs/batch-four-pages/j-valdez-trimming-a/`.
-
-Stop conditions (amendment §3) still apply throughout. Reviews stay stubbed.
+1. When the Lighthouse-after subagent reports: read the two files it wrote; write
+   `summary.md` (before vs after: score, LCP, first-viewport image bytes; state the LCP
+   element after = hero text); if score, LCP or bytes regressed and cannot be recovered,
+   STOP (amendment §3). Commit `R-evidence: lighthouse after + summary`.
+2. Page 2, J Valdez trimming-a: measure the ⏳ items in its scope.md on the LIVE page at
+   390/820/1440 (P1 gap `.ta-gallery`→`.ta-benefits`; grid cell boxes; review track). Take
+   before-screenshots of `.ta-gallery`,`.ta-benefits`,`.ta-why`,`.ta-doneright`. Ingest
+   IMG_1117 (focal ≈0.30,0.30), PXL_20260407_145030926 (0.50,0.45), IMG_1116 (0.35,0.45)
+   into photos.trimming with plain alts (replica ingest script pattern is in
+   `$SP/…/removal-entries.json`'s producer; rewrite it for these three). Build P1, S1, S3;
+   pins as needed so trimming-a's Recent jobs band and hero band do not change except where
+   scoped. Same evidence set into `docs/batch-four-pages/j-valdez-trimming-a/`. One commit
+   per item (P1:, S1:, S3:). Then pages 3 and 4.
+3. End: `docs/batch-four-pages/REPORT.md`, then hold for one approval; remove the hook
+   (both entries) only after approval; publish only then.
 
 ## Tooling (scratchpad; recreate if gone)
 
