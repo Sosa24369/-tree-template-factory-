@@ -1,4 +1,4 @@
 Bundle, gzip -9, vs the live build e3394aa and vs page 3's final build (f6093fd):
-  JS  129541 -> 131162  (+1621 B vs live; -131 B vs page 3)   the marquee's duplicate-row render, scroll handling and animation-duration maths are gone
+  JS  129541 -> 131382  (+1841 B vs live; +89 B vs page 3)   T7 removes the marquee's duplicate-row render, scroll handling and animation maths (-131 B); the J Valdez record pins of decisions 28 add 32 keys to the bundled record (+220 B)
   CSS 27399 -> 27085  (-314 B vs live; -159 B vs page 3)   the marquee keyframes, edge mask, negative margin and hover-pause rules are gone; the chip rule stays
-  batch total so far +1307 B   (ceiling 3072 B across the batch)
+  batch total +1527 B   (ceiling 3072 B across the batch)

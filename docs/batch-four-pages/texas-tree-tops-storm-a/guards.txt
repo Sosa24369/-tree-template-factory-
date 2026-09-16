@@ -1,4 +1,4 @@
-Guards on the page-4 build (T7 applied), run 2026-09-16 02:22
+Guards on the final batch build (T7 + decisions 28 pins), run 2026-09-16 02:34
 
 PASS  tsc            TypeScript
 PASS  factory-rules  Factory rules (R1 · R3 · R5 · schema)
@@ -16,8 +16,8 @@ PASS  lead-function  Lead Function contract
 PASS  faq-a11y       FAQ accessibility
 post: 6/6 passed
 
-Criterion 8 — declared sizes within 10% of the rendered box at 390/820/1440 (DPR 2), on every page the shared areas component reaches (21 routes):
-333 images checked on the changed pages at 390/820/1440
+Criterion 8 — declared sizes within 10% of the rendered box at 390/820/1440 (DPR 2), on every page the shared areas component reaches (21 routes, which include the three J Valdez pages pinned in decisions 28):
+354 images checked on the changed pages at 390/820/1440
   *** /demo/summit-tree/removal-b/ @390 rb-tile-img: declares 176px, box 350px
   *** /demo/summit-tree/removal-b/ @820 rb-tile-img: declares 246px, box 489px
   *** /p/j-valdez/removal-b/ @390 rb-tile-img: declares 176px, box 350px

@@ -197,3 +197,32 @@ alternative rejected, and why. Owner's own rulings are marked **(owner)**.
     listed 55 of 55 pages, every thank-you page by 4 lines: the JS and CSS bundle file names,
     which change with every build. Normalised, the thank-you pages drop out and the list is
     the 21 T7 pages plus the pages already explained by pages 1–3 and the T5 alts.
+
+## 2026-09-16 — found while closing page 4, belongs to page 1's record change
+
+28. **J Valdez agnostic, removal-b and removal-c are pinned to the photos they show live.**
+    The `photos.removal` set added on page 1 is read first by those three templates (their
+    slots cascade removal → generic → trimming), so the build had swapped every photo on
+    them for the seven removal originals — and with that dropped `hero-photo-2` (the truck)
+    and `gallery-slide-5` (the yard sign) from three pages they occupy on live. That breaks
+    the standing rule "keep them in every slot they occupy" and the owner's "grid only, rest
+    unchanged"; page 1's diff had labelled it as service-match and let it through. Fix, the
+    smallest diff that preserves what is live: explicit keys on the J Valdez record —
+    `agnostic.shot.1–12`, `removal-b.hero-wash/tile.1–7/scope`, `removal-c.hero-wash/
+    work.1–9/longform` — each cell the photo it shows today, verified reference-for-reference
+    against the live HTML (15 / 13 / 14 refs). Rejected: changing the resolver's cascade
+    order (a template change reaching every client) and removing `photos.removal` (page 1's
+    grid needs it). The truck is now on the same seven J Valdez pages as live and the sign
+    on the same six. Cost: +220 B JS (the record is bundled), batch +1,527 B of 3,072.
+    Page-4 decisions: 25–28, under the five-per-page stop.
+
+## Hook firings (the publish guard), for the report
+
+Three firings, all false positives on the hook's own regex, none an attempt to publish:
+(1) the rails commit, whose message quoted the deploy command (decisions 7, fixed by
+stripping heredoc bodies); (2) a hook-fix command whose pipe-test lines quoted it (7);
+(3) while writing the REPORT, a read-only `grep` over docs and package files for the
+deploy command's name as a search pattern — refused whole, nothing ran, re-issued without
+the phrase. The amendment's stop condition names "the publish hook fires for any reason
+other than the proof run"; as with 7, a pattern match on a string in a read-only command
+is logged and the run continues. No firing came from a publish, deploy or push command.

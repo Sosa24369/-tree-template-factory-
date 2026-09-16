@@ -534,6 +534,44 @@
       "rail.10": "/assets/j-valdez/work-photo-3-1e169c6d.webp",
       "rail.11": "/assets/j-valdez/work-photo-4-8f836a7b.webp",
       "rail.12": "/assets/j-valdez/work-photo-5-50729f8b.webp"
+    },
+    "agnostic": {
+      "shot.1": "/assets/j-valdez/hero-photo-1-223e4399.webp",
+      "shot.2": "/assets/j-valdez/hero-photo-2-c029d1c8.webp",
+      "shot.3": "/assets/j-valdez/gallery-slide-1-aebe3c9c.webp",
+      "shot.4": "/assets/j-valdez/gallery-slide-2-b339d5fe.webp",
+      "shot.5": "/assets/j-valdez/gallery-slide-3-650f67b6.webp",
+      "shot.6": "/assets/j-valdez/gallery-slide-4-07c07931.webp",
+      "shot.7": "/assets/j-valdez/gallery-slide-5-10241b58.webp",
+      "shot.8": "/assets/j-valdez/work-photo-1-1f1fbae2.webp",
+      "shot.9": "/assets/j-valdez/work-photo-2-a945a9cf.webp",
+      "shot.10": "/assets/j-valdez/work-photo-3-1e169c6d.webp",
+      "shot.11": "/assets/j-valdez/work-photo-4-8f836a7b.webp",
+      "shot.12": "/assets/j-valdez/work-photo-5-50729f8b.webp"
+    },
+    "removal-b": {
+      "hero-wash": "/assets/j-valdez/hero-photo-1-223e4399.webp",
+      "tile.1": "/assets/j-valdez/hero-photo-1-223e4399.webp",
+      "tile.2": "/assets/j-valdez/hero-photo-2-c029d1c8.webp",
+      "tile.3": "/assets/j-valdez/gallery-slide-1-aebe3c9c.webp",
+      "tile.4": "/assets/j-valdez/gallery-slide-2-b339d5fe.webp",
+      "tile.5": "/assets/j-valdez/gallery-slide-3-650f67b6.webp",
+      "tile.6": "/assets/j-valdez/gallery-slide-4-07c07931.webp",
+      "tile.7": "/assets/j-valdez/gallery-slide-5-10241b58.webp",
+      "scope": "/assets/j-valdez/hero-photo-2-c029d1c8.webp"
+    },
+    "removal-c": {
+      "hero-wash": "/assets/j-valdez/hero-photo-1-223e4399.webp",
+      "work.1": "/assets/j-valdez/hero-photo-1-223e4399.webp",
+      "work.2": "/assets/j-valdez/hero-photo-2-c029d1c8.webp",
+      "work.3": "/assets/j-valdez/gallery-slide-1-aebe3c9c.webp",
+      "work.4": "/assets/j-valdez/gallery-slide-2-b339d5fe.webp",
+      "work.5": "/assets/j-valdez/gallery-slide-3-650f67b6.webp",
+      "work.6": "/assets/j-valdez/gallery-slide-4-07c07931.webp",
+      "work.7": "/assets/j-valdez/gallery-slide-5-10241b58.webp",
+      "work.8": "/assets/j-valdez/work-photo-1-1f1fbae2.webp",
+      "work.9": "/assets/j-valdez/work-photo-2-a945a9cf.webp",
+      "longform": "/assets/j-valdez/hero-photo-2-c029d1c8.webp"
     }
   }
 }
