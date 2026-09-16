@@ -1,0 +1,4 @@
+Bundle, gzip -9, vs the live build e3394aa and vs page 2's final build (66c3db4):
+  JS  129541 -> 131293  (+1752 B vs live; +52 B vs page 2)   record alts (TTT 3, Summit 12), one pin, the artwork alt string, record-first slotAlt
+  CSS 27399 -> 27244  (-155 B vs live; +0 B vs page 2)   no CSS change on this page
+  batch total so far +1597 B   (ceiling 3072 B across the batch)

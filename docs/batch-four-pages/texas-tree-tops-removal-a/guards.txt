@@ -1,0 +1,23 @@
+Guards — run 2026-09-16T07:03Z on branch batch/four-pages at f07ebc9
+
+PASS  tsc            TypeScript
+PASS  factory-rules  Factory rules (R1 · R3 · R5 · schema)
+PASS  layout-lock    Layout lock (R2 — controls)
+PASS  studio-save    Studio save (identity · atomic · no trailer)
+PASS  image-spec     Image spec (exists · minimum · focal point)
+PASS  publish-gate   Publish gate self-test
+pre: 6/6 passed
+
+PASS  r4-leakage     R4 cross-client leakage
+PASS  copy-parity    a → c copy parity
+PASS  demo-isolation Demo isolation (D1–D10)
+PASS  tracking       Conversion tracking
+PASS  lead-function  Lead Function contract
+PASS  faq-a11y       FAQ accessibility
+post: 6/6 passed
+
+Criterion 8 (declared sizes vs rendered box at 390/820/1440, DPR 2) on the pages this page's changes reach with layout or photo effects, plus the earlier batch pages as regression checks:
+300 images checked on the changed pages at 390/820/1440
+  *** /demo/summit-tree/removal-a/ @390 ra-rail-img: declares 254px, box 332px
+  *** /demo/summit-tree/removal-a/ @390 ra-rail-img: declares 254px, box 332px
+  *** /demo/summit-tree/removal-a/ @390 ra-rail-img: declares 254px, box 332px
