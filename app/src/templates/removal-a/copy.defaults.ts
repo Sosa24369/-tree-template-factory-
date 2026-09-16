@@ -131,6 +131,9 @@ export const removalACopy: Record<string, string> = {
   /* ---------------------------------------------------------------- *
    * SECTION 4 — Why choose us + Google reviews
    * ---------------------------------------------------------------- */
+  // A plain label for the link to the client's own Google reviews listing. No count,
+  // no rating in it: those are claims, and the listing speaks for itself.
+  'why.reviewsLink': 'Read all our reviews on Google',
   'why.h1a': 'Why {{areaName|Local}} Homeowners', // GEO via {{areaName}}
   'why.h1b': 'Choose {{name}} for Tree Removal', // BRAND via {{name}}
   'why.body':

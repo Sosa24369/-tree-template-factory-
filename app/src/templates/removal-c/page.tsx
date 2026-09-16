@@ -249,6 +249,14 @@ export function RemovalCPage({
                 <Split as="h2" className="rc-h2" a={copy('why.h1a')} b={copy('why.h1b')} stacked />
                 <SafeText as="p" className="rc-lede" value={copy('why.body')} />
                 <ReviewsSlider client={client} />
+                {/* Same link as removal-a's reviews — the a->c copy-parity guard requires
+                    every visible string on the control to appear on the hybrid. */}
+                {typeof client.reviewsSource?.profileUrl === 'string' && /^https:\/\//.test(client.reviewsSource.profileUrl) && (
+                  <a className="rc-reviews-link" href={client.reviewsSource.profileUrl} target="_blank" rel="noopener noreferrer">
+                    {copy('why.reviewsLink')}
+                    <span aria-hidden="true"> →</span>
+                  </a>
+                )}
                 <div className="rc-cta-row">
                   <CallCta client={client} copy={copy} placement="reviews" tone="onInk" />
                 </div>
