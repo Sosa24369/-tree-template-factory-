@@ -48,6 +48,7 @@ export function Services({ client, copy }: { client: ResolvedClient; copy: Copy 
               <DeferredImage
                 photo={strip[col] ? withAlt(strip[col], slotAlt(client, strip[col], col + 1)) : null}
                 className="ra-service-photo"
+                wrapperClassName="ra-service-shot"
                 sizes={slotSizes('removal-a', 'service-photo')}
               />
               <ul className="ra-service-list">

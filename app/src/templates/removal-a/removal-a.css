@@ -854,9 +854,21 @@
   box-shadow: var(--ra-shadow);
 }
 
-.removal-a .ra-service-photo {
+/* R4 (2026-09-16): the card photo is a 4:3 box, not a 150-190px strip. The sources are
+   square, so a letterbox threw away most of the subject. The deferred-image wrapper
+   reserved the photo's OWN ratio inline (a 1080x1080 square) above a strip-height
+   image: 198 / 546 / 153 px of dead white between photo and list at 390 / 820 / 1440,
+   measured on the live page. The wrapper now IS the 4:3 box and the photo fills it. */
+.removal-a .ra-service-shot {
+  display: block;
   width: 100%;
-  height: clamp(150px, 24vw, 190px);
+  aspect-ratio: 4 / 3 !important;
+}
+
+.removal-a .ra-service-photo {
+  display: block;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
 }
 
