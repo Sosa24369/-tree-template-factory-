@@ -764,6 +764,12 @@
   -webkit-line-clamp: unset;
 }
 
+/* S1 — a card fits its own text. The track is a flex row, which stretches every card
+   to the tallest in view, so a one-line review sat in a fourteen-line box. */
+.removal-a .rvs-track {
+  align-items: flex-start;
+}
+
 /* The client's Google listing, directly under the reviews: an outline button, so the
    call button below stays the one filled action in the section. */
 .removal-a .ra-reviews-link {
