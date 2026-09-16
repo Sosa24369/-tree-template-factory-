@@ -1,0 +1,4 @@
+Bundle, gzip -9, vs the live build e3394aa and vs page 3's final build (f6093fd):
+  JS  129541 -> 131162  (+1621 B vs live; -131 B vs page 3)   the marquee's duplicate-row render, scroll handling and animation-duration maths are gone
+  CSS 27399 -> 27085  (-314 B vs live; -159 B vs page 3)   the marquee keyframes, edge mask, negative margin and hover-pause rules are gone; the chip rule stays
+  batch total so far +1307 B   (ceiling 3072 B across the batch)

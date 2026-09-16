@@ -1,0 +1,23 @@
+Lighthouse BASELINE (before) — Texas Tree Tops storm-a
+======================================================
+Page:        http://localhost:4181/p/texas-tree-tops/storm-a/
+Source:      commit 3c685d1 (main), built in a detached scratch worktree (/tmp/lh-before-wt4), `npm run build` -> prerendered 56 page(s)
+Server:      `npx vite preview --port 4181 --strictPort` (gzip confirmed via Accept-Encoding: gzip -> Content-Encoding: gzip)
+Tool:        Lighthouse 13.4.1 (global), Chrome --headless=new
+Method:      August method — --only-categories=performance --throttling-method=devtools --form-factor=mobile
+             blocked-url-patterns: *googletagmanager.com* *google-analytics.com* *googleadservices.com* *doubleclick.net* *callrail.com* *calltrk.com* *leadconnectorhq.com* *msgsndr.com*
+Runs:        1 discarded warm-up, then 3 real runs (/tmp/lh-s4-before-1.json, -2.json, -3.json)
+Date:        2026-09-16
+
+run 1: score 99 | LCP 1.74 s | CLS 0 | TBT 0 ms | FCP 1.74 s | LCP element: <p class="st-hero-body"> "A tree on the house, a fence flattened, a yard full of wreckage. You need it go…" | image bytes (all images fetched during the run, mobile, no scroll): 13990 | gtm requests completed: 0
+run 2: score 99 | LCP 1.74 s | CLS 0 | TBT 0 ms | FCP 1.74 s | LCP element: <p class="st-hero-body"> "A tree on the house, a fence flattened, a yard full of wreckage. You need it go…" | image bytes (all images fetched during the run, mobile, no scroll): 13990 | gtm requests completed: 0
+run 3: score 99 | LCP 1.73 s | CLS 0 | TBT 0 ms | FCP 1.73 s | LCP element: <p class="st-hero-body"> "A tree on the house, a fence flattened, a yard full of wreckage. You need it go…" | image bytes (all images fetched during the run, mobile, no scroll): 13990 | gtm requests completed: 0
+
+(exact LCP ms: run 1 = 1737, run 2 = 1736, run 3 = 1733. The one googletagmanager.com request per run was blocked, statusCode -1.)
+
+Images fetched (identical across all three runs; transferSize, gzip server):
+  /assets/texas-tree-tops/logo-header-e9743261.webp      13990 B
+  (no inline data:image URIs recorded)
+  total image transfer: 13990 B (1 network image)
+
+Baseline copied: run 2 (median score 99 of 99/99/99; tie-break median LCP 1736 ms) -> lighthouse-before.json

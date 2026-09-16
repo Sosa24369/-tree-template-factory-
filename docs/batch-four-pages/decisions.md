@@ -173,3 +173,27 @@ alternative rejected, and why. Owner's own rulings are marked **(owner)**.
     strings, in all four sets the demo lists them (12 entries); (e) the guard in
     verify-image-spec.mjs fails any `_shared/` or `_template/` record entry with no alt or an
     alt naming the client, demos included.
+
+## 2026-09-16 — Texas Tree Tops storm-a (page 4)
+
+25. **T7 is a rewrite of the shared component, not a CSS override.** Two ways to give every
+    page one static list: (a) keep `ServiceAreasCarousel` as it was and hide the second copy
+    and the animation with CSS; (b) render one list. (a) leaves 50 chips in the DOM for 25
+    cities, the aria-hidden duplicate in every page's HTML, a tabbable track and the marquee
+    code in the bundle. Chose (b): one `<ul>`, cities deduplicated case-insensitively, the
+    group role and label kept, the chip rule untouched, the class root and export names kept
+    so the six importing templates need no edit. Reach is 21 pages across all three clients
+    (the owner's ruling, decisions 5, is "the static list on every page"); each is in the
+    prerender diff with the same markup change, and each was measured at 390/820/1440.
+26. **Storm-a's work grid stays (no S3).** The six tiles are three shapes by design (171×128,
+    171×228, 171×171 at 390; 340×255, 340×454, 340×340 at 1440) and the grid closes cleanly
+    on live at every width — the spec's S3 (one aspect ratio, one size) named removal-a and
+    trimming-a's grids, not this one, and the draft scope said no S3. The storm photo set on
+    the Mac is 800×600 (under the 1200 minimum, and the tall tile is 680×908 at 2×), so no
+    photo from it goes in. For the report: ask Texas Tree Tops for storm originals ≥1600 px
+    (tree on a roof/fence/car, uprooted root plate, crews at a storm job).
+27. **The page-4 diff is measured with the hash-normalised snapshot** (`pagediff.sh` →
+    `prediff.py`), the same method as pages 1–3. A first run against `app/dist` directly
+    listed 55 of 55 pages, every thank-you page by 4 lines: the JS and CSS bundle file names,
+    which change with every build. Normalised, the thank-you pages drop out and the list is
+    the 21 T7 pages plus the pages already explained by pages 1–3 and the T5 alts.
