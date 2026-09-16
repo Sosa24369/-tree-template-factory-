@@ -45,14 +45,11 @@ const escapeHtml = (s) =>
  */
 function lcpImage(client, templateId) {
   const slot = PHOTO_LCP_SLOT.get(templateId);
-  const placed = slot ? slotPhotos(client, templateId, slot).find((p) => p && p.kind !== 'video' && p.src) : null;
-  if (placed) return placed;
-  for (const key of ['removal', 'trimming', 'storm', 'generic']) {
-    const list = client.photos?.[key];
-    const still = list?.find((p) => p.kind !== 'video' && p.src);
-    if (still) return still;
-  }
-  return null;
+  // Only what the slot resolves to. The old fallback, "the first still in any set", is
+  // gone: a client who has deliberately emptied the hero plate (J Valdez removal-a
+  // leads with the brand colour) must not have a photograph they never show fetched at
+  // high priority. With nothing in the slot the page is a text hero, and the logo leads.
+  return slot ? (slotPhotos(client, templateId, slot).find((p) => p && p.kind !== 'video' && p.src) ?? null) : null;
 }
 
 /**
@@ -135,9 +132,9 @@ function pageHead(client, template) {
     // header in app/public/_headers so the rule survives a stripped <head>.
     `<meta name="robots" content="${client.isDemo ? 'noindex, nofollow' : 'noindex'}">`,
   ];
-  if (PHOTO_LCP_TEMPLATES.has(template.id)) {
-    const lcp = lcpImage(client, template.id);
-    if (lcp) {
+  const lcp = PHOTO_LCP_TEMPLATES.has(template.id) ? lcpImage(client, template.id) : null;
+  if (lcp) {
+    {
       // The preload MUST advertise the same candidate set AND the same sizes as the
       // <img>, otherwise the browser preloads one candidate and then downloads another.
       // Both now come from the slot contract (lib/placement.ts); this line used to carry
@@ -150,7 +147,8 @@ function pageHead(client, template) {
       bits.push(`<link rel="preload" as="image" href="${escapeHtml(lcp.src)}"${responsive} fetchpriority="high">`);
     }
   } else {
-    // Text-hero template: the enlarged logo is the LCP.
+    // Text hero — by template, or because this client's hero plate is deliberately
+    // empty: the enlarged logo is the LCP.
     const lp = logoPreload(client);
     if (lp) bits.push(lp);
   }
