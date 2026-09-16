@@ -19,7 +19,7 @@ import { LeadForm } from '../../components/LeadForm';
 import { DeferredImage } from '../../components/DeferredImage';
 import { ReviewsSlider } from '../../components/ReviewsSlider';
 import { ServiceAreasCarousel } from '../../components/ServiceAreasCarousel';
-import { slotPhotos } from '../../lib/placement.mjs';
+import { slotPhotos, slotSizes } from '../../lib/placement.mjs';
 import { GoogleAdsCallAsset } from '../../components/GoogleAdsCallAsset';
 import { renderSections } from '../../lib/renderSections';
 import { brandAttrs } from '../../lib/brandAttrs';
@@ -233,7 +233,7 @@ export function TrimmingCPage({
                   <ul className="tc-work-grid">
                     {gallery.map((photo, i) => (
                       <li key={i} className="tc-work-cell">
-                        <DeferredImage photo={photo} wrapperClassName="tc-work-frame" className="tc-work-img" />
+                        <DeferredImage photo={photo} wrapperClassName="tc-work-frame" className="tc-work-img"  sizes={slotSizes('trimming-c', 'work')} />
                       </li>
                     ))}
                   </ul>

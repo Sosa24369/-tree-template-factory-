@@ -133,3 +133,18 @@ alternative rejected, and why. Owner's own rulings are marked **(owner)**.
     gallery-slide-1..5, and the cells the larger middle share would add are pinned empty
     ('' — the studio's own Remove-from-slot) so the band keeps exactly five tiles. Rejected:
     a separate set key (the schema has four; generic is read directly by removal-a's grid).
+20. **trimming-a's blurb photo is `grid[1]`, not the `longform` slot (pre-existing contract
+    mismatch, logged, not fixed here).** Longform.tsx renders the second Done-clean grid
+    photo; the placement contract declares a `longform` slot picking the set's second
+    photo, so the studio's slot list would preview one picture while the page shows another,
+    and a pin on that key does nothing. The batch keeps the diff small: the dead pin is
+    removed, the grid is ordered so cell 2 (and therefore the blurb) is the climber
+    (IMG_1116) and the limbs-over-a-roof photo takes cell 6 — which also retires the
+    gallery-slide-4 repeat. Consequence accepted: the climber appears twice (cell 2 and the
+    blurb), as the composite did on the live page. The fix — Longform reading its slot, or
+    the contract saying "grid cell 2" — changes Texas Tree Tops' and Summit's blurb photos
+    and is a template item for the report. Rejected: fixing it now.
+21. **trimming-c work grid: same missing `sizes` as removal-c (pre-existing, fixed).**
+    Criterion 8 at 820: cells 364 px, declared 180 (DeferredImage's default 22vw); the
+    contract's 45vw covers it. `sizes={slotSizes('trimming-c','work')}` — attribute only,
+    three trimming-c pages.
