@@ -148,3 +148,28 @@ alternative rejected, and why. Owner's own rulings are marked **(owner)**.
     Criterion 8 at 820: cells 364 px, declared 180 (DeferredImage's default 22vw); the
     contract's 45vw covers it. `sizes={slotSizes('trimming-c','work')}` — attribute only,
     three trimming-c pages.
+
+## 2026-09-16 — Texas Tree Tops removal-a (page 3)
+
+22. **T3's sixth cell is `restoration-photo-1`.** The grid's five photos (gallery-02/03/04/
+    05/07) are 382–680 px files — 2–3× upscaled in every cell and "Replace"-grade under the
+    guard's legacy allowance; not this page's item, reported. The only removal-library files
+    that fill a 353 px cell at 2× are the five `restoration-photo-*` at 1000 px; of those,
+    photo-1 (a climber cutting a dead tree down with a chainsaw) and grid-2 (a lift at a
+    leaning tree over a garage) are removal work, photo-3 is a crew standing under an oak,
+    photo-4 a chipper at a driveway, photo-5 a stump grinder. Photo-1: the clearest cut, no
+    branding, no composite. Rejected: the Mobile Makeover set (Texas Tree Tops trimming —
+    wrong service for a removal grid).
+23. **T4 is not real.** The 24-item rail's first item is reachable at 390, 820 and 1440 on
+    the live page (first item at x = 20 / 41 / 174 px inside a left-aligned rail); the
+    unreachable-first-item defect was trimming-a's centred rail, fixed in Group B. Reported
+    as measured; no change.
+24. **T5 details.** (a) The three stock alts are on the Texas Tree Tops record; (b) `slotAlt()`
+    now prefers a record alt everywhere, which also gives J Valdez's hero-proof.2 its record
+    description (page 1's diff and compare are re-run); (c) the Benefits template artwork
+    gets a neutral description of the picture instead of "<client> tree removal job" — true
+    for Texas Tree Tops (their photograph), no longer a false claim on Summit; (d) Summit's
+    stock alts: the two inaccurate ones corrected and the third harmonised to the same three
+    strings, in all four sets the demo lists them (12 entries); (e) the guard in
+    verify-image-spec.mjs fails any `_shared/` or `_template/` record entry with no alt or an
+    alt naming the client, demos included.
