@@ -111,7 +111,11 @@ for (const file of readdirSync(join(ROOT, 'clients')).filter((f) => f.endsWith('
       // data-dependent: `rail.4` is legal on a client with four, illegal on one with two,
       // and the count changes as photographs are added. Accept any positive index and let
       // the resolver ignore one past the end, rather than failing a publish on arithmetic.
-      if (slot.cells === 'all') { openEnded.add(slot.id); continue; }
+      // A fixed-count slot with more than one cell is open-ended too: the resolver lets an
+      // explicit key past `cells` ADD a cell (removal-a's five-cell mosaic closes at six on
+      // J Valdez), so `mosaic.6` is a real assignment, not a typo. Single-cell slots keep
+      // their one bare key.
+      if (slot.cells === 'all' || slot.cells > 1) { openEnded.add(slot.id); continue; }
       for (let i = 0; i < slot.cells; i++) keys.add(cellKey(slot, i));
     }
     for (const [key, id] of Object.entries(map ?? {})) {
