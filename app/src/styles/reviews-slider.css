@@ -137,3 +137,55 @@
     height: 252px;
   }
 }
+
+/* ---------------------------------------------------------------- *
+ * Batch/four-pages (S1, 2026-09-16) — on the three live-ad templates the slider shows
+ * WHOLE cards at every width and a card fits its own text. Scoped, so removal-b,
+ * trimming-b and agnostic keep the layout above.
+ *
+ *   - one card per view under 768px, two to 1023px, three from 1024px: the flex basis
+ *     divides the track exactly, so no card is ever sliced at the right edge; the
+ *     scroll-snap and the arrows page through whole cards;
+ *   - height: auto and no line clamp — the client's real reviews run 38–679 characters
+ *     and a six-line clamp cut the long ones mid-sentence (measured: 2 of 9 on
+ *     J Valdez, 5 of 9 on Texas Tree Tops);
+ *   - align-items: flex-start — a one-line review no longer sits in a fourteen-line box.
+ *   CLS stays 0: the section is below the fold on every viewport (Lighthouse, both
+ *   before and after, in docs/batch-four-pages/).
+ * ---------------------------------------------------------------- */
+.trimming-a .rvs-track,
+.removal-a .rvs-track,
+.storm .rvs-track {
+  align-items: flex-start;
+}
+
+.trimming-a .rvs-card,
+.removal-a .rvs-card,
+.storm .rvs-card {
+  flex: 0 0 100%;
+  height: auto;
+}
+
+.trimming-a .rvs-body,
+.removal-a .rvs-body,
+.storm .rvs-body {
+  display: block;
+  overflow: visible;
+  -webkit-line-clamp: unset;
+}
+
+@media (min-width: 768px) {
+  .trimming-a .rvs-card,
+  .removal-a .rvs-card,
+  .storm .rvs-card {
+    flex-basis: calc((100% - 16px) / 2);
+  }
+}
+
+@media (min-width: 1024px) {
+  .trimming-a .rvs-card,
+  .removal-a .rvs-card,
+  .storm .rvs-card {
+    flex-basis: calc((100% - 32px) / 3);
+  }
+}

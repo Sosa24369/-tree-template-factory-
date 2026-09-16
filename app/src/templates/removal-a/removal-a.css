@@ -754,21 +754,8 @@
 /* S4 (R5, 2026-09-16) — the reviews in full on this page, as on trimming-a (B4). The
    shared slider clamps every body to six lines in a fixed card; 2 of J Valdez's 9 and
    5 of Texas Tree Tops' 9 were cut mid-sentence here. Scoped to .removal-a. */
-.removal-a .rvs-card {
-  height: auto;
-}
-
-.removal-a .rvs-body {
-  display: block;
-  overflow: visible;
-  -webkit-line-clamp: unset;
-}
-
-/* S1 — a card fits its own text. The track is a flex row, which stretches every card
-   to the tallest in view, so a one-line review sat in a fourteen-line box. */
-.removal-a .rvs-track {
-  align-items: flex-start;
-}
+/* The unclamp, the whole-card sizing and the no-stretch rule now live in
+   styles/reviews-slider.css, scoped to the three live-ad templates (S1). */
 
 /* The client's Google listing, directly under the reviews: an outline button, so the
    call button below stays the one filled action in the section. */
