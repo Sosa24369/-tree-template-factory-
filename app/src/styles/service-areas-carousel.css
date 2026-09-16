@@ -1,55 +1,24 @@
 /**
- * ServiceAreasCarousel — shared styles, scoped .sac-*.
+ * ServiceAreas — a wrapped, static chip list (2026-09-16, the four-page batch).
  *
- * One fixed-height row (zero CLS). The marquee is a CSS transform loop over a
- * doubled track; compositor-only, no layout or paint churn. Pauses on hover
- * and keyboard focus. prefers-reduced-motion: no animation — the row becomes
- * an ordinary horizontally scrollable strip instead.
- *
- * Pill colours are neutral with brand-derived hairlines via the same
- * --brand-* custom properties every template already sets (no literals, R1).
+ * The marquee this replaced needed a duplicate track to loop, an edge mask to hide the
+ * seam and a scroller to let a reader catch up; on the live pages that meant every city
+ * twice, faded edges and a first chip nobody could reach. One list, wrapped inside the
+ * column, is what the reduced-motion rule already rendered. The chip itself is unchanged.
  */
 
 .sac {
-  /* v2: user-scrollable as well as drifting — the strip scrolls on its own
-     axis while the transform drift runs; pausing (hover/focus/touch) leaves
-     an ordinary scrollable row. Scrollbar hidden; one fixed-height row. */
-  overflow-x: auto;
-  overflow-y: hidden;
-  scrollbar-width: none;
-  padding-block: 6px;
-  /* soft fade at both edges so pills enter/leave gracefully */
-  -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
-  mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
-}
-
-.sac-track {
-  display: flex;
-  width: max-content;
-  gap: 10px;
-  animation: sac-marquee linear infinite;
-  will-change: transform;
-}
-
-.sac-track:hover,
-.sac-track:focus-visible,
-.sac-track:focus-within {
-  animation-play-state: paused;
-}
-
-.sac-track:focus-visible {
-  outline: 2px solid currentColor;
-  outline-offset: 4px;
-  border-radius: 8px;
+  margin-top: clamp(24px, 4vw, 40px);
 }
 
 .sac-row {
   display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 10px;
   margin: 0;
   padding: 0;
   list-style: none;
-  flex: 0 0 auto;
 }
 
 .sac-city {
@@ -63,33 +32,4 @@
   background: color-mix(in srgb, var(--brand-primary, #234) 6%, #ffffff);
   border: 1px solid color-mix(in srgb, var(--brand-primary, #234) 18%, #e2e2dd);
   color: color-mix(in srgb, var(--brand-primary, #234) 72%, #000000);
-}
-
-@keyframes sac-marquee {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-50%);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .sac {
-    -webkit-mask-image: none;
-    mask-image: none;
-  }
-  .sac-track {
-    animation: none;
-    width: auto;
-    overflow-x: auto;
-  }
-  /* the duplicate row is pure animation plumbing — hide it when static */
-  .sac-row[aria-hidden='true'] {
-    display: none;
-  }
-}
-
-.sac::-webkit-scrollbar {
-  display: none;
 }
