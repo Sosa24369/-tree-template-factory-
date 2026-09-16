@@ -871,22 +871,14 @@
  * S6 — "Done Clean, Done Right" work grid
  * ---------------------------------------------------------------- */
 
-/* "Done clean, done right" — ONE bento rule. It used to be two: this block, and a
-   "Premium Reorder v2" block (2026-08-13) layered on at the bottom of the file that set
-   its own gap, a 768px breakpoint and aspect-ratio: 4/3 on the cells without removing
-   the spans or the fixed heights here. The two fought: five photos left a hole at the
-   bottom right, a sixth would have been an even last child, spanned two columns and
-   wrapped onto a new row — a hole again — and fixed heights inside 4:3 cells made the
-   gaps uneven. Measured, not guessed; see docs/BUILD-LOG.md.
-
-   Row height is one value per breakpoint, so every gap is the same and the feature tile
-   is exactly two rows plus one gap.
-     phone/tablet  2 columns   [1 1][2 3][4 5][6 6]   the even last tile closes the tail
-     desktop       3 columns   [1 1 2][1 1 3][4 5 6]  a 3x3 bento that closes at six    */
+/* "Done clean, done right" — six uniform 4:3 cells (S3, 2026-09-16). The bento of
+   2026-09-14 gave the first photo a 2x2 feature tile and let an even last tile span; the
+   four-page spec's standard is one aspect ratio and one size per grid, so the feature
+   is gone: two columns below 980px, three from 980px, every cell the same. Six closes
+   both ways; an odd count keeps the last-tile span below 980 so nothing is stranded. */
 .trimming-a .ta-mosaic {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  grid-auto-rows: clamp(120px, 33vw, 280px);
   gap: clamp(8px, 1.2vw, 12px);
   margin: clamp(30px, 4.5vw, 46px) 0 0;
   padding: 0;
@@ -894,6 +886,7 @@
 }
 
 .trimming-a .ta-mosaic > li {
+  aspect-ratio: 4 / 3;
   overflow: hidden;
   border-radius: 12px;
 }
@@ -911,26 +904,15 @@
   object-fit: cover;
 }
 
-.trimming-a .ta-mosaic > li:first-child,
-.trimming-a .ta-mosaic > li:last-child:nth-child(even) {
-  grid-column: span 2;
+@media (max-width: 979px) {
+  .trimming-a .ta-mosaic > li:last-child:nth-child(odd) {
+    grid-column: span 2;
+  }
 }
 
 @media (min-width: 980px) {
   .trimming-a .ta-mosaic {
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    grid-auto-rows: clamp(200px, 18.4vw, 264px);
-  }
-
-  .trimming-a .ta-mosaic > li:first-child {
-    grid-column: span 2;
-    grid-row: span 2;
-  }
-
-  /* Three columns close evenly on their own; stretching the last tile here is what
-     stranded it on a row of its own. */
-  .trimming-a .ta-mosaic > li:last-child:nth-child(even) {
-    grid-column: auto;
   }
 }
 

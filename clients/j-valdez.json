@@ -141,6 +141,84 @@
         "width": 1080,
         "height": 1080,
         "srcset": "/assets/j-valdez/work-photo-5-50729f8b-400w.webp 400w, /assets/j-valdez/work-photo-5-50729f8b-800w.webp 800w, /assets/j-valdez/work-photo-5-50729f8b.webp 1000w"
+      },
+      {
+        "src": "/assets/j-valdez/trimming-limbs-over-roof-img1117-50008e86.webp",
+        "alt": "Crew on a roof line lowering trimmed limbs clear of the house",
+        "width": 1320,
+        "height": 990,
+        "srcset": "/assets/j-valdez/trimming-limbs-over-roof-img1117-50008e86-400w.webp 400w, /assets/j-valdez/trimming-limbs-over-roof-img1117-50008e86-800w.webp 800w, /assets/j-valdez/trimming-limbs-over-roof-img1117-50008e86-1200w.webp 1200w, /assets/j-valdez/trimming-limbs-over-roof-img1117-50008e86.webp 1320w",
+        "focal": {
+          "x": 0.3,
+          "y": 0.5
+        },
+        "pipeline": {
+          "version": 2,
+          "at": "2026-09-16T06:25:21.278Z",
+          "source": {
+            "width": 1320,
+            "height": 1759,
+            "format": "jpeg",
+            "bytes": 1074065
+          },
+          "master": [
+            1320,
+            990
+          ],
+          "aspect": "4:3"
+        }
+      },
+      {
+        "src": "/assets/j-valdez/trimming-lake-slope-pxl145030926-52bafeba.webp",
+        "alt": "Trimmed trees along a lakeside slope with the ground cleared",
+        "width": 1600,
+        "height": 1200,
+        "srcset": "/assets/j-valdez/trimming-lake-slope-pxl145030926-52bafeba-400w.webp 400w, /assets/j-valdez/trimming-lake-slope-pxl145030926-52bafeba-800w.webp 800w, /assets/j-valdez/trimming-lake-slope-pxl145030926-52bafeba-1200w.webp 1200w, /assets/j-valdez/trimming-lake-slope-pxl145030926-52bafeba.webp 1600w",
+        "focal": {
+          "x": 0.5,
+          "y": 0.452
+        },
+        "pipeline": {
+          "version": 2,
+          "at": "2026-09-16T06:25:21.849Z",
+          "source": {
+            "width": 2048,
+            "height": 1542,
+            "format": "jpeg",
+            "bytes": 1309809
+          },
+          "master": [
+            1600,
+            1200
+          ],
+          "aspect": "4:3"
+        }
+      },
+      {
+        "src": "/assets/j-valdez/trimming-climber-creek-img1116-7cfa960e.webp",
+        "alt": "Climber working in the canopy of a tall tree beside a creek",
+        "width": 1320,
+        "height": 990,
+        "srcset": "/assets/j-valdez/trimming-climber-creek-img1116-7cfa960e-400w.webp 400w, /assets/j-valdez/trimming-climber-creek-img1116-7cfa960e-800w.webp 800w, /assets/j-valdez/trimming-climber-creek-img1116-7cfa960e-1200w.webp 1200w, /assets/j-valdez/trimming-climber-creek-img1116-7cfa960e.webp 1320w",
+        "focal": {
+          "x": 0.35,
+          "y": 0.5
+        },
+        "pipeline": {
+          "version": 2,
+          "at": "2026-09-16T06:25:22.389Z",
+          "source": {
+            "width": 1320,
+            "height": 1721,
+            "format": "jpeg",
+            "bytes": 1394845
+          },
+          "master": [
+            1320,
+            990
+          ],
+          "aspect": "4:3"
+        }
       }
     ],
     "removal": [
@@ -414,7 +492,21 @@
   "photoSlots": {
     "trimming-a": {
       "hero-band.1": "/assets/j-valdez/gallery-slide-3-650f67b6.webp",
-      "grid.6": "/assets/j-valdez/gallery-slide-4-07c07931.webp"
+      "grid.6": "/assets/j-valdez/gallery-slide-4-07c07931.webp",
+      "hero-band.2": "/assets/j-valdez/hero-photo-2-c029d1c8.webp",
+      "gallery.1": "/assets/j-valdez/gallery-slide-1-aebe3c9c.webp",
+      "gallery.2": "/assets/j-valdez/gallery-slide-2-b339d5fe.webp",
+      "gallery.3": "/assets/j-valdez/gallery-slide-3-650f67b6.webp",
+      "gallery.4": "/assets/j-valdez/gallery-slide-4-07c07931.webp",
+      "gallery.5": "/assets/j-valdez/gallery-slide-5-10241b58.webp",
+      "gallery.6": "",
+      "gallery.7": "",
+      "grid.1": "/assets/j-valdez/work-photo-1-1f1fbae2.webp",
+      "grid.2": "/assets/j-valdez/trimming-limbs-over-roof-img1117-50008e86.webp",
+      "grid.3": "/assets/j-valdez/work-photo-3-1e169c6d.webp",
+      "grid.4": "/assets/j-valdez/work-photo-4-8f836a7b.webp",
+      "grid.5": "/assets/j-valdez/trimming-lake-slope-pxl145030926-52bafeba.webp",
+      "longform": "/assets/j-valdez/trimming-climber-creek-img1116-7cfa960e.webp"
     },
     "removal-a": {
       "benefits": "/assets/j-valdez/work-photo-3-1e169c6d.webp",
