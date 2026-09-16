@@ -1,0 +1,29 @@
+Lighthouse AFTER — Texas Tree Tops removal-a
+Method (August method, unchanged): Lighthouse 13.4.1 (global), performance category only, throttling-method=devtools, form-factor=mobile, chrome-flags="--headless=new", quiet. Blocked URL patterns: *googletagmanager.com*, *google-analytics.com*, *googleadservices.com*, *doubleclick.net*, *callrail.com*, *calltrk.com*, *leadconnectorhq.com*, *msgsndr.com*.
+Target: http://localhost:4182/p/texas-tree-tops/removal-a/ served by `vite preview --port 4182 --strictPort` from app/dist (branch batch/four-pages, commit f07ebc9 state, gzip on, new-build marker restoration-photo-1 present). One discarded warm-up, then three measured runs. Measured 2026-09-16.
+
+run 1: score 98 | LCP 1.90 s | CLS 0 | TBT 0 ms | FCP 1.90 s | LCP element: <p class="ra-body ra-hero-body"> "Get $300 Off With Your Tree Removal Service All Summer! Whether you need a tree…" (section.ra-hero > div.ra-container > div.ra-hero-copy > p.ra-body) | image bytes (all images fetched during the run, mobile, no scroll): 386,105 | gtm requests completed: 0
+run 2: score 98 | LCP 1.91 s | CLS 0 | TBT 0 ms | FCP 1.91 s | LCP element: <p class="ra-body ra-hero-body"> "Get $300 Off With Your Tree Removal Service All Summer! Whether you need a tree…" (section.ra-hero > div.ra-container > div.ra-hero-copy > p.ra-body) | image bytes (all images fetched during the run, mobile, no scroll): 386,105 | gtm requests completed: 0
+run 3: score 98 | LCP 1.89 s | CLS 0 | TBT 0 ms | FCP 1.89 s | LCP element: <p class="ra-body ra-hero-body"> "Get $300 Off With Your Tree Removal Service All Summer! Whether you need a tree…" (section.ra-hero > div.ra-container > div.ra-hero-copy > p.ra-body) | image bytes (all images fetched during the run, mobile, no scroll): 386,105 | gtm requests completed: 0
+
+Exact values: run 1 LCP 1903.8 ms; run 2 LCP 1908.2 ms; run 3 LCP 1885.0 ms. CLS 0.0000 and TBT 0.0 ms in all runs. FCP equals LCP in every run (the LCP element is hero text, painted at first contentful paint).
+GTM: one request to https://www.googletagmanager.com/gtm.js?id=GTM-W32M4C6F was attempted in each run and blocked (statusCode -1); 0 completed.
+
+Images fetched (resourceType Image, transferSize bytes; identical list in all three runs, 20 entries, 13 network files + 7 inline data: URIs):
+  /assets/_template/removal-a/benefit-strip-art-0ec53c98.webp   124,750
+  /assets/texas-tree-tops/gallery-02-bbfa6cba.webp                99,016
+  /assets/texas-tree-tops/gallery-03-d51219d3.webp                59,492
+  /assets/texas-tree-tops/gallery-04-1f2fc961.webp                48,316
+  /assets/texas-tree-tops/bg-section-zzw8wc9z7t-02ec5eac.webp     25,346
+  /assets/texas-tree-tops/logo-header-e9743261.webp               13,990
+  /assets/texas-tree-tops/bg-section-pt0s1qtmn0-d26338c9.webp      4,234
+  /assets/texas-tree-tops/bg-section-evifliwtqp-6b6b2797.webp      3,548
+  /assets/texas-tree-tops/bg-row-yixqrlnvyw-3d3ce344.webp          3,302
+  /assets/_shared/benefit-icon-4-2b31db6c.svg                      1,175
+  /assets/_shared/benefit-icon-1-dbb86f4d.svg                      1,057
+  /assets/_shared/benefit-icon-2-6710e15b.svg                      1,036
+  /assets/_shared/benefit-icon-3-8423c543.svg                        843
+  data:image/svg+xml (inline, 7 entries: 1 URL-encoded + 6 base64)      0
+  TOTAL                                                          386,105
+
+Copied run: run 1 (all three scored 98; tie-break on median LCP = 1903.8 ms) -> lighthouse-after.json
