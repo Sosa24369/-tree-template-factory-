@@ -416,6 +416,78 @@
           ],
           "aspect": "4:3"
         }
+      },
+      {
+        "src": "/assets/j-valdez/removal-stump-base-cut-p16-38b0826b.webp",
+        "alt": "Crew member kneeling with a chainsaw at the base of a tree stump",
+        "width": 1080,
+        "height": 810,
+        "srcset": "/assets/j-valdez/removal-stump-base-cut-p16-38b0826b-400w.webp 400w, /assets/j-valdez/removal-stump-base-cut-p16-38b0826b-800w.webp 800w, /assets/j-valdez/removal-stump-base-cut-p16-38b0826b.webp 1080w",
+        "focal": {
+          "x": 0.35,
+          "y": 0.65
+        },
+        "pipeline": {
+          "version": 2,
+          "at": "2026-09-17T05:44:27.199Z",
+          "source": {
+            "width": 1080,
+            "height": 1080,
+            "format": "png",
+            "bytes": 2268196
+          },
+          "master": [
+            1080,
+            810
+          ],
+          "aspect": "4:3",
+          "note": "band placed for the crew; focal on the cut"
+        },
+        "minimumException": {
+          "by": "owner",
+          "on": "2026-09-17",
+          "slots": [
+            "removal-a:service-photo"
+          ],
+          "maxBox": 1080,
+          "measuredBox": 736
+        }
+      },
+      {
+        "src": "/assets/j-valdez/removal-felled-trunk-crew-p18-81b29bc8.webp",
+        "alt": "Two crew members at a felled trunk, the fresh cut face towards the camera",
+        "width": 1080,
+        "height": 810,
+        "srcset": "/assets/j-valdez/removal-felled-trunk-crew-p18-81b29bc8-400w.webp 400w, /assets/j-valdez/removal-felled-trunk-crew-p18-81b29bc8-800w.webp 800w, /assets/j-valdez/removal-felled-trunk-crew-p18-81b29bc8.webp 1080w",
+        "focal": {
+          "x": 0.5,
+          "y": 0.76
+        },
+        "pipeline": {
+          "version": 2,
+          "at": "2026-09-17T05:44:27.503Z",
+          "source": {
+            "width": 1080,
+            "height": 1080,
+            "format": "png",
+            "bytes": 2591288
+          },
+          "master": [
+            1080,
+            810
+          ],
+          "aspect": "4:3",
+          "note": "band placed for the crew; focal on the cut"
+        },
+        "minimumException": {
+          "by": "owner",
+          "on": "2026-09-17",
+          "slots": [
+            "removal-a:service-photo"
+          ],
+          "maxBox": 1080,
+          "measuredBox": 736
+        }
       }
     ]
   },
@@ -533,8 +605,8 @@
       "mosaic.6": "/assets/j-valdez/removal-log-rounds-img1126-490447e4.webp",
       "longform": "/assets/j-valdez/hero-photo-2-c029d1c8.webp",
       "service-photo.1": "/assets/j-valdez/work-photo-3-1e169c6d.webp",
-      "service-photo.2": "/assets/j-valdez/work-photo-4-8f836a7b.webp",
-      "service-photo.3": "/assets/j-valdez/work-photo-5-50729f8b.webp",
+      "service-photo.2": "/assets/j-valdez/removal-stump-base-cut-p16-38b0826b.webp",
+      "service-photo.3": "/assets/j-valdez/removal-felled-trunk-crew-p18-81b29bc8.webp",
       "rail.1": "/assets/j-valdez/hero-photo-2-c029d1c8.webp",
       "rail.2": "/assets/j-valdez/gallery-slide-3-650f67b6.webp",
       "rail.3": "/assets/j-valdez/gallery-slide-4-07c07931.webp",
@@ -542,7 +614,8 @@
       "rail.5": "/assets/j-valdez/work-photo-1-1f1fbae2.webp",
       "rail.6": "/assets/j-valdez/work-photo-3-1e169c6d.webp",
       "rail.7": "/assets/j-valdez/work-photo-4-8f836a7b.webp",
-      "rail.8": "/assets/j-valdez/work-photo-5-50729f8b.webp"
+      "rail.8": "/assets/j-valdez/work-photo-5-50729f8b.webp",
+      "rail.9": ""
     },
     "agnostic": {
       "shot.1": "/assets/j-valdez/hero-photo-1-223e4399.webp",
