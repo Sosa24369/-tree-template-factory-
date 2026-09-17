@@ -844,7 +844,7 @@
 .storm .st-handle-photo-box {
   display: block;
   width: 100%;
-  aspect-ratio: 4 / 3;
+  aspect-ratio: 4 / 3 !important; /* the inline ratio again — the square handle photo painted 400×400 */
   overflow: hidden;
   border-radius: var(--st-radius);
 }
@@ -871,8 +871,19 @@
 
 @media (min-width: 980px) {
   /* Inside the two-column body the three handle panels stack in the left
-     column so the photo gets real width on the right. */
+     column so the photo gets real width on the right. `auto-fit minmax(200px)`
+     did not stack them: at 1440 the 600 px column took two panels per row, the
+     third sat alone beside an empty slot and the photo left ~320 px of paper
+     under itself (the sweep, 2026-09-16). One column, and the photo box fills
+     the row's height so the split reads as a panel, not a hole. */
   .storm .st-handle-body .st-handle-grid {
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-template-columns: 1fr;
+  }
+  .storm .st-handle-body { align-items: stretch; }
+  .storm .st-handle-photo { display: flex; }
+  .storm .st-handle-photo-box {
+    aspect-ratio: auto !important;
+    height: 100%;
+    min-height: 320px;
   }
 }
