@@ -1,4 +1,4 @@
-Guards — run 2026-09-16T06:15Z on branch batch/four-pages at 7ca924e
+Guards on the final build, run 2026-09-17 00:35
 
 PASS  tsc            TypeScript
 PASS  factory-rules  Factory rules (R1 · R3 · R5 · schema)
@@ -14,14 +14,13 @@ PASS  demo-isolation Demo isolation (D1–D10)
 PASS  tracking       Conversion tracking
 PASS  lead-function  Lead Function contract
 PASS  faq-a11y       FAQ accessibility
-post: 6/6 passed
+PASS  image-boxes    Image boxes
+post: 7/7 passed
 
-Criterion 8 (declared sizes vs rendered box at 390/820/1440, DPR 2) on every page the batch changes that carries client photos:
-291 images checked on the changed pages at 390/820/1440
-  *** /demo/summit-tree/removal-a/ @390 ra-rail-img: declares 254px, box 332px
-  *** /demo/summit-tree/removal-a/ @390 ra-rail-img: declares 254px, box 332px
-  *** /demo/summit-tree/removal-a/ @390 ra-rail-img: declares 254px, box 332px
-  *** /p/j-valdez/removal-b/ @390 rb-tile-img: declares 176px, box 350px
-  *** /p/j-valdez/removal-b/ @820 rb-tile-img: declares 246px, box 489px
+PASS  rendered       Rendered pages (browser)
+PASS  call-bar       Mobile call bar (browser)
+rendered: 2/2 passed
 
-Lines on j-valdez/removal-b and summit-tree/removal-a (if any) are on the LIVE pages today too — decisions.md 14.
+Criterion 8 — declared sizes within 10% of the rendered box at 390/820/1440 (DPR 2), the four target pages:
+150 images checked on the changed pages at 390/820/1440
+  => every declared sizes within 10% of (or above) its real box

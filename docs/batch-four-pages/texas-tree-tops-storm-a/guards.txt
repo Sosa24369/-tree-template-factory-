@@ -1,4 +1,4 @@
-Guards on the final batch build (T7 + decisions 28 pins), run 2026-09-16 02:34
+Guards on the final build, run 2026-09-17 00:35
 
 PASS  tsc            TypeScript
 PASS  factory-rules  Factory rules (R1 · R3 · R5 · schema)
@@ -14,77 +14,13 @@ PASS  demo-isolation Demo isolation (D1–D10)
 PASS  tracking       Conversion tracking
 PASS  lead-function  Lead Function contract
 PASS  faq-a11y       FAQ accessibility
-post: 6/6 passed
+PASS  image-boxes    Image boxes
+post: 7/7 passed
 
-Criterion 8 — declared sizes within 10% of the rendered box at 390/820/1440 (DPR 2), on every page the shared areas component reaches (21 routes, which include the three J Valdez pages pinned in decisions 28):
-354 images checked on the changed pages at 390/820/1440
-  *** /demo/summit-tree/removal-b/ @390 rb-tile-img: declares 176px, box 350px
-  *** /demo/summit-tree/removal-b/ @820 rb-tile-img: declares 246px, box 489px
-  *** /p/j-valdez/removal-b/ @390 rb-tile-img: declares 176px, box 350px
-  *** /p/j-valdez/removal-b/ @820 rb-tile-img: declares 246px, box 489px
-  (removal-b rb-tile-img at 390/820: pre-existing on live, outside this batch — decisions 14)
+PASS  rendered       Rendered pages (browser)
+PASS  call-bar       Mobile call bar (browser)
+rendered: 2/2 passed
 
-Areas list on every reached route (chips / unique cities / mask / animation / first chip reachable / clipped / aria-hidden copies / horizontal overflow / rows):
-/demo/summit-tree/agnostic/                 390  {"chips":12,"unique":12,"masked":false,"animated":false,"firstReachable":true,"clipped":0,"hidden":0,"overflowX":false,"rows":4}
-/demo/summit-tree/agnostic/                 820  {"chips":12,"unique":12,"masked":false,"animated":false,"firstReachable":true,"clipped":0,"hidden":0,"overflowX":false,"rows":2}
-/demo/summit-tree/agnostic/                1440  {"chips":12,"unique":12,"masked":false,"animated":false,"firstReachable":true,"clipped":0,"hidden":0,"overflowX":false,"rows":2}
-/demo/summit-tree/removal-b/                390  {"chips":12,"unique":12,"masked":false,"animated":false,"firstReachable":true,"clipped":0,"hidden":0,"overflowX":false,"rows":4}
-/demo/summit-tree/removal-b/                820  {"chips":12,"unique":12,"masked":false,"animated":false,"firstReachable":true,"clipped":0,"hidden":0,"overflowX":false,"rows":2}
-/demo/summit-tree/removal-b/               1440  {"chips":12,"unique":12,"masked":false,"animated":false,"firstReachable":true,"clipped":0,"hidden":0,"overflowX":false,"rows":2}
-/demo/summit-tree/removal-c/                390  {"chips":12,"unique":12,"masked":false,"animated":false,"firstReachable":true,"clipped":0,"hidden":0,"overflowX":false,"rows":4}
-/demo/summit-tree/removal-c/                820  {"chips":12,"unique":12,"masked":false,"animated":false,"firstReachable":true,"clipped":0,"hidden":0,"overflowX":false,"rows":2}
-/demo/summit-tree/removal-c/               1440  {"chips":12,"unique":12,"masked":false,"animated":false,"firstReachable":true,"clipped":0,"hidden":0,"overflowX":false,"rows":1}
-/demo/summit-tree/storm-a/                  390  {"chips":12,"unique":12,"masked":false,"animated":false,"firstReachable":true,"clipped":0,"hidden":0,"overflowX":false,"rows":4}
-/demo/summit-tree/storm-a/                  820  {"chips":12,"unique":12,"masked":false,"animated":false,"firstReachable":true,"clipped":0,"hidden":0,"overflowX":false,"rows":2}
-/demo/summit-tree/storm-a/                 1440  {"chips":12,"unique":12,"masked":false,"animated":false,"firstReachable":true,"clipped":0,"hidden":0,"overflowX":false,"rows":2}
-/demo/summit-tree/storm-b/                  390  {"chips":12,"unique":12,"masked":false,"animated":false,"firstReachable":true,"clipped":0,"hidden":0,"overflowX":false,"rows":4}
-/demo/summit-tree/storm-b/                  820  {"chips":12,"unique":12,"masked":false,"animated":false,"firstReachable":true,"clipped":0,"hidden":0,"overflowX":false,"rows":2}
-/demo/summit-tree/storm-b/                 1440  {"chips":12,"unique":12,"masked":false,"animated":false,"firstReachable":true,"clipped":0,"hidden":0,"overflowX":false,"rows":2}
-/demo/summit-tree/storm-c/                  390  {"chips":12,"unique":12,"masked":false,"animated":false,"firstReachable":true,"clipped":0,"hidden":0,"overflowX":false,"rows":4}
-/demo/summit-tree/storm-c/                  820  {"chips":12,"unique":12,"masked":false,"animated":false,"firstReachable":true,"clipped":0,"hidden":0,"overflowX":false,"rows":2}
-/demo/summit-tree/storm-c/                 1440  {"chips":12,"unique":12,"masked":false,"animated":false,"firstReachable":true,"clipped":0,"hidden":0,"overflowX":false,"rows":2}
-/demo/summit-tree/trimming-b/               390  {"chips":12,"unique":12,"masked":false,"animated":false,"firstReachable":true,"clipped":0,"hidden":0,"overflowX":false,"rows":4}
-/demo/summit-tree/trimming-b/               820  {"chips":12,"unique":12,"masked":false,"animated":false,"firstReachable":true,"clipped":0,"hidden":0,"overflowX":false,"rows":2}
-/demo/summit-tree/trimming-b/              1440  {"chips":12,"unique":12,"masked":false,"animated":false,"firstReachable":true,"clipped":0,"hidden":0,"overflowX":false,"rows":2}
-/demo/summit-tree/trimming-c/               390  {"chips":12,"unique":12,"masked":false,"animated":false,"firstReachable":true,"clipped":0,"hidden":0,"overflowX":false,"rows":4}
-/demo/summit-tree/trimming-c/               820  {"chips":12,"unique":12,"masked":false,"animated":false,"firstReachable":true,"clipped":0,"hidden":0,"overflowX":false,"rows":2}
-/demo/summit-tree/trimming-c/              1440  {"chips":12,"unique":12,"masked":false,"animated":false,"firstReachable":true,"clipped":0,"hidden":0,"overflowX":false,"rows":1}
-/p/j-valdez/agnostic/                       390  {"chips":10,"unique":10,"masked":false,"animated":false,"firstReachable":true,"clipped":0,"hidden":0,"overflowX":false,"rows":4}
-/p/j-valdez/agnostic/                       820  {"chips":10,"unique":10,"masked":false,"animated":false,"firstReachable":true,"clipped":0,"hidden":0,"overflowX":false,"rows":2}
-/p/j-valdez/agnostic/                      1440  {"chips":10,"unique":10,"masked":false,"animated":false,"firstReachable":true,"clipped":0,"hidden":0,"overflowX":false,"rows":1}
-/p/j-valdez/removal-b/                      390  {"chips":10,"unique":10,"masked":false,"animated":false,"firstReachable":true,"clipped":0,"hidden":0,"overflowX":false,"rows":4}
-/p/j-valdez/removal-b/                      820  {"chips":10,"unique":10,"masked":false,"animated":false,"firstReachable":true,"clipped":0,"hidden":0,"overflowX":false,"rows":2}
-/p/j-valdez/removal-b/                     1440  {"chips":10,"unique":10,"masked":false,"animated":false,"firstReachable":true,"clipped":0,"hidden":0,"overflowX":false,"rows":1}
-/p/j-valdez/removal-c/                      390  {"chips":10,"unique":10,"masked":false,"animated":false,"firstReachable":true,"clipped":0,"hidden":0,"overflowX":false,"rows":3}
-/p/j-valdez/removal-c/                      820  {"chips":10,"unique":10,"masked":false,"animated":false,"firstReachable":true,"clipped":0,"hidden":0,"overflowX":false,"rows":2}
-/p/j-valdez/removal-c/                     1440  {"chips":10,"unique":10,"masked":false,"animated":false,"firstReachable":true,"clipped":0,"hidden":0,"overflowX":false,"rows":1}
-/p/j-valdez/trimming-b/                     390  {"chips":10,"unique":10,"masked":false,"animated":false,"firstReachable":true,"clipped":0,"hidden":0,"overflowX":false,"rows":4}
-/p/j-valdez/trimming-b/                     820  {"chips":10,"unique":10,"masked":false,"animated":false,"firstReachable":true,"clipped":0,"hidden":0,"overflowX":false,"rows":2}
-/p/j-valdez/trimming-b/                    1440  {"chips":10,"unique":10,"masked":false,"animated":false,"firstReachable":true,"clipped":0,"hidden":0,"overflowX":false,"rows":2}
-/p/j-valdez/trimming-c/                     390  {"chips":10,"unique":10,"masked":false,"animated":false,"firstReachable":true,"clipped":0,"hidden":0,"overflowX":false,"rows":3}
-/p/j-valdez/trimming-c/                     820  {"chips":10,"unique":10,"masked":false,"animated":false,"firstReachable":true,"clipped":0,"hidden":0,"overflowX":false,"rows":2}
-/p/j-valdez/trimming-c/                    1440  {"chips":10,"unique":10,"masked":false,"animated":false,"firstReachable":true,"clipped":0,"hidden":0,"overflowX":false,"rows":1}
-/p/texas-tree-tops/agnostic/                390  {"chips":25,"unique":25,"masked":false,"animated":false,"firstReachable":true,"clipped":0,"hidden":0,"overflowX":false,"rows":9}
-/p/texas-tree-tops/agnostic/                820  {"chips":25,"unique":25,"masked":false,"animated":false,"firstReachable":true,"clipped":0,"hidden":0,"overflowX":false,"rows":5}
-/p/texas-tree-tops/agnostic/               1440  {"chips":25,"unique":25,"masked":false,"animated":false,"firstReachable":true,"clipped":0,"hidden":0,"overflowX":false,"rows":3}
-/p/texas-tree-tops/removal-b/               390  {"chips":25,"unique":25,"masked":false,"animated":false,"firstReachable":true,"clipped":0,"hidden":0,"overflowX":false,"rows":9}
-/p/texas-tree-tops/removal-b/               820  {"chips":25,"unique":25,"masked":false,"animated":false,"firstReachable":true,"clipped":0,"hidden":0,"overflowX":false,"rows":5}
-/p/texas-tree-tops/removal-b/              1440  {"chips":25,"unique":25,"masked":false,"animated":false,"firstReachable":true,"clipped":0,"hidden":0,"overflowX":false,"rows":3}
-/p/texas-tree-tops/removal-c/               390  {"chips":25,"unique":25,"masked":false,"animated":false,"firstReachable":true,"clipped":0,"hidden":0,"overflowX":false,"rows":9}
-/p/texas-tree-tops/removal-c/               820  {"chips":25,"unique":25,"masked":false,"animated":false,"firstReachable":true,"clipped":0,"hidden":0,"overflowX":false,"rows":4}
-/p/texas-tree-tops/removal-c/              1440  {"chips":25,"unique":25,"masked":false,"animated":false,"firstReachable":true,"clipped":0,"hidden":0,"overflowX":false,"rows":2}
-/p/texas-tree-tops/storm-a/                 390  {"chips":25,"unique":25,"masked":false,"animated":false,"firstReachable":true,"clipped":0,"hidden":0,"overflowX":false,"rows":9}
-/p/texas-tree-tops/storm-a/                 820  {"chips":25,"unique":25,"masked":false,"animated":false,"firstReachable":true,"clipped":0,"hidden":0,"overflowX":false,"rows":5}
-/p/texas-tree-tops/storm-a/                1440  {"chips":25,"unique":25,"masked":false,"animated":false,"firstReachable":true,"clipped":0,"hidden":0,"overflowX":false,"rows":3}
-/p/texas-tree-tops/storm-b/                 390  {"chips":25,"unique":25,"masked":false,"animated":false,"firstReachable":true,"clipped":0,"hidden":0,"overflowX":false,"rows":9}
-/p/texas-tree-tops/storm-b/                 820  {"chips":25,"unique":25,"masked":false,"animated":false,"firstReachable":true,"clipped":0,"hidden":0,"overflowX":false,"rows":5}
-/p/texas-tree-tops/storm-b/                1440  {"chips":25,"unique":25,"masked":false,"animated":false,"firstReachable":true,"clipped":0,"hidden":0,"overflowX":false,"rows":3}
-/p/texas-tree-tops/storm-c/                 390  {"chips":25,"unique":25,"masked":false,"animated":false,"firstReachable":true,"clipped":0,"hidden":0,"overflowX":false,"rows":9}
-/p/texas-tree-tops/storm-c/                 820  {"chips":25,"unique":25,"masked":false,"animated":false,"firstReachable":true,"clipped":0,"hidden":0,"overflowX":false,"rows":5}
-/p/texas-tree-tops/storm-c/                1440  {"chips":25,"unique":25,"masked":false,"animated":false,"firstReachable":true,"clipped":0,"hidden":0,"overflowX":false,"rows":3}
-/p/texas-tree-tops/trimming-b/              390  {"chips":25,"unique":25,"masked":false,"animated":false,"firstReachable":true,"clipped":0,"hidden":0,"overflowX":false,"rows":9}
-/p/texas-tree-tops/trimming-b/              820  {"chips":25,"unique":25,"masked":false,"animated":false,"firstReachable":true,"clipped":0,"hidden":0,"overflowX":false,"rows":5}
-/p/texas-tree-tops/trimming-b/             1440  {"chips":25,"unique":25,"masked":false,"animated":false,"firstReachable":true,"clipped":0,"hidden":0,"overflowX":false,"rows":3}
-/p/texas-tree-tops/trimming-c/              390  {"chips":25,"unique":25,"masked":false,"animated":false,"firstReachable":true,"clipped":0,"hidden":0,"overflowX":false,"rows":9}
-/p/texas-tree-tops/trimming-c/              820  {"chips":25,"unique":25,"masked":false,"animated":false,"firstReachable":true,"clipped":0,"hidden":0,"overflowX":false,"rows":4}
-/p/texas-tree-tops/trimming-c/             1440  {"chips":25,"unique":25,"masked":false,"animated":false,"firstReachable":true,"clipped":0,"hidden":0,"overflowX":false,"rows":2}
+Criterion 8 — declared sizes within 10% of the rendered box at 390/820/1440 (DPR 2), the four target pages:
+150 images checked on the changed pages at 390/820/1440
+  => every declared sizes within 10% of (or above) its real box

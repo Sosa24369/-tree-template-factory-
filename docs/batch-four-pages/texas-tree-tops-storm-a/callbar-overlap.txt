@@ -1,0 +1,14 @@
+/p/texas-tree-tops/storm-a/ at 390×844 — bar .st-sticky 67px tall; reserved bottom padding 0px; page 9069px, 11 stops
+contrast — label rgb(26, 18, 5) on rgb(200, 149, 43): 6.88:1 at 15.2px; sub-label rgb(26, 18, 5) at opacity 1: 6.88:1 at 10.56px
+text under the bar at scroll end: 0; stops with a section call button in view while the bar shows: 0; text intersections across all stops: 12
+  stop  0  y=    0  bar hidden  intersects 0  · section call button in view (gap to bar 4px)
+  stop  1  y=  844  bar hidden  intersects 0  · section call button in view (gap to bar 847px)
+  stop  2  y= 1688  bar hidden  intersects 0  · section call button in view (gap to bar 518px)
+  stop  3  y= 2532  bar shown   intersects 0
+  stop  4  y= 3376  bar shown   intersects 1: span "Safe removal beside homes and power "
+  stop  5  y= 4220  bar shown   intersects 0
+  stop  6  y= 5064  bar shown   intersects 5: li.sac-city "Southlake" | li.sac-city "Trophy Club" | li.sac-city "University Park"
+  stop  7  y= 5908  bar shown   intersects 3: span.st-step-dot "4" | span.st-step-label "Step 4" | h3.st-step-h "Walkthrough before we leave"
+  stop  8  y= 6752  bar shown   intersects 0
+  stop  9  y= 7596  bar shown   intersects 3: p.st-faq-a "Yes. Storms don’t keep business hour" | span "Tree on your house?" | span.st-accent "Fence down?"
+  stop 10  y= 8225  bar hidden  intersects 0  · section call button in view (gap to bar 398px)

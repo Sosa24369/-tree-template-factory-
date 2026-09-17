@@ -1,0 +1,18 @@
+/p/j-valdez/trimming-a/ at 390×844 — bar .ta-sticky 91px tall; reserved bottom padding 0px; page 11914px, 15 stops
+contrast — label color(srgb 0.105412 0.0682353 0.0272941) on rgb(224, 145, 58): 8.28:1 at 16px; sub-label color(srgb 0.105412 0.0682353 0.0272941) at opacity 0.85: 6.98:1 at 12px
+text under the bar at scroll end: 0; stops with a section call button in view while the bar shows: 0; text intersections across all stops: 15
+  stop  0  y=    0  bar hidden  intersects 0  · section call button in view (gap to bar 20px)
+  stop  1  y=  844  bar shown   intersects 0
+  stop  2  y= 1688  bar shown   intersects 0
+  stop  3  y= 2532  bar hidden  intersects 0  · section call button in view (gap to bar 572px)
+  stop  4  y= 3376  bar hidden  intersects 0  · section call button in view (gap to bar 592px)
+  stop  5  y= 4220  bar shown   intersects 2: span "Tree pruning service for weak, dead," | span "Roof & gutter branch clearance for l"
+  stop  6  y= 5064  bar shown   intersects 2: li.sac-city "Rowlett" | li.sac-city "Sunnyvale"
+  stop  7  y= 5908  bar shown   intersects 2: h3.ta-step-h "Final Walkthrough" | p.ta-step-body "Before we leave, we make sure the tr"
+  stop  8  y= 6752  bar shown   intersects 0
+  stop  9  y= 7596  bar hidden  intersects 0  · section call button in view (gap to bar 292px)
+  stop 10  y= 8440  bar shown   intersects 2: span "Same-Day Tree Trimming" | span "Insured Tree Trimming Crew"
+  stop 11  y= 9284  bar hidden  intersects 0  · section call button in view (gap to bar 42px)
+  stop 12  y=10128  bar shown   intersects 5: p.ta-faq-a "Homeowners usually call for tree tri" | p.ta-faq-a "Yes. Many customers call us before l" | p.ta-faq-a "No — when it's done correctly. Our c"
+  stop 13  y=10972  bar shown   intersects 2: p.ta-footer-copy "© Copyright J. Valdez Tree Service C" | span.notranslate "(214) 544-9487"
+  stop 14  y=11070  bar shown   intersects 0
