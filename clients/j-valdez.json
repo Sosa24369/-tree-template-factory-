@@ -398,7 +398,7 @@
         "srcset": "/assets/j-valdez/removal-bucket-truck-img1119-966a7dc4-400w.webp 400w, /assets/j-valdez/removal-bucket-truck-img1119-966a7dc4-800w.webp 800w, /assets/j-valdez/removal-bucket-truck-img1119-966a7dc4-1200w.webp 1200w, /assets/j-valdez/removal-bucket-truck-img1119-966a7dc4.webp 1320w",
         "focal": {
           "x": 0.6,
-          "y": 0.5
+          "y": 0.05
         },
         "pipeline": {
           "version": 2,
