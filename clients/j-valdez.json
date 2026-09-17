@@ -116,7 +116,11 @@
         "alt": "Bucket truck lifting into a large tree, with cut branches and safety cones on the street",
         "width": 1080,
         "height": 1080,
-        "srcset": "/assets/j-valdez/work-photo-1-1f1fbae2-400w.webp 400w, /assets/j-valdez/work-photo-1-1f1fbae2-800w.webp 800w, /assets/j-valdez/work-photo-1-1f1fbae2.webp 1000w"
+        "srcset": "/assets/j-valdez/work-photo-1-1f1fbae2-400w.webp 400w, /assets/j-valdez/work-photo-1-1f1fbae2-800w.webp 800w, /assets/j-valdez/work-photo-1-1f1fbae2.webp 1000w",
+        "focal": {
+          "x": 0.6,
+          "y": 0
+        }
       },
       {
         "src": "/assets/j-valdez/work-photo-2-a945a9cf.webp",
