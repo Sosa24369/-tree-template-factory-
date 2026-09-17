@@ -455,3 +455,20 @@ is logged and the run continues. No firing came from a publish, deploy or push c
     loads eagerly and which cannot be lazy without ~150 B of observer code against 152 B of
     bundle headroom. Not decided here: the owner chooses between the frame, a lazy poster,
     and no clip (REPORT, "the one open trade-off").
+
+## 2026-09-17 — approval
+
+51. **Approved, all four; the poster accepted; the 16/18 pairing kept.** Owner: "Approved,
+    all four. Accept the poster trade-off on TTT removal-a. Your 16/18 pairing is right —
+    keep it. … Remove the guard, fast-forward main and push. Tell me when main is ready and
+    I'll click Publish in the studio and confirm the four routes. Then re-run the compare
+    against live and Lighthouse on the four live URLs, and write the deploy record. Leave the
+    three needs-photo slots as they are; they're follow-ups." One line came with both
+    options still in brackets — Forney and Lake Ray Hubbard: "[add them to the trimming-a
+    paragraph / drop the two chips]" — a body-copy edit on the protected page (and trimming-c
+    for a→c parity) versus removing two cities from the record's list, which every J Valdez
+    page's areas grid reads. Not guessed: asked, main pushed without it, to follow as its own
+    commit. The guard comes out in one commit (both settings entries and the script), main
+    fast-forwards (the branch is linear on 3c685d1), the owner publishes from the studio and
+    confirms the four protected routes; then the live compare, Lighthouse on the four live
+    URLs, and the deploy record.
