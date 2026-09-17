@@ -126,7 +126,11 @@
         "alt": "Climber working high in a large tree, with a wood chipper at the curb",
         "width": 1080,
         "height": 1080,
-        "srcset": "/assets/j-valdez/work-photo-3-1e169c6d-400w.webp 400w, /assets/j-valdez/work-photo-3-1e169c6d-800w.webp 800w, /assets/j-valdez/work-photo-3-1e169c6d.webp 1000w"
+        "srcset": "/assets/j-valdez/work-photo-3-1e169c6d-400w.webp 400w, /assets/j-valdez/work-photo-3-1e169c6d-800w.webp 800w, /assets/j-valdez/work-photo-3-1e169c6d.webp 1000w",
+        "focal": {
+          "x": 0.55,
+          "y": 1.0
+        }
       },
       {
         "src": "/assets/j-valdez/work-photo-4-8f836a7b.webp",
