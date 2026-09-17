@@ -15,14 +15,19 @@
 .sac-row {
   display: grid;
   grid-template-columns: repeat(60, minmax(0, 1fr));
-  gap: 8px 10px;
-  margin: 0;
+  /* Row gap only. A column-gap multiplies with the 60 tracks (59 × 10 px = 590 px, wider
+     than a phone column: the tracks collapse to zero and the pills overflow the viewport —
+     found by the sweep at 390). The horizontal breathing room is on the cells instead. */
+  row-gap: 8px;
+  column-gap: 0;
+  margin: 0 -5px;
   padding: 0;
   list-style: none;
 }
 
 .sac-city {
   grid-column: span var(--sac-span-s, 30);
+  margin: 0 5px;
   display: flex;
   align-items: center;
   justify-content: center;
