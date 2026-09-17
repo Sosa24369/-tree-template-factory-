@@ -54,14 +54,16 @@ const PROBE = `
   const barShown = () => { const cs = getComputedStyle(bar); const bb = bar.getBoundingClientRect(); return cs.display !== 'none' && cs.visibility !== 'hidden' && !bar.hasAttribute('hidden') && bb.height > 0 && bb.top < innerHeight && +cs.opacity > 0.05; };
   const stops = []; const H = innerHeight; const max = Math.max(0, document.documentElement.scrollHeight - H); let y = 0; let k = 0;
   while (true) {
-    scrollTo(0, y); await new Promise(r => setTimeout(r, 260));
+    scrollTo(0, y); await new Promise(r => setTimeout(r, 700)); // past the observer's frame and the bar's 220 ms slide
     const shown = barShown(); const bb = bar.getBoundingClientRect();
     const hits = shown ? textEls().filter(e => { const r = e.getBoundingClientRect(); return r.bottom > bb.top + 0.5 && r.top < bb.bottom - 0.5 && r.right > bb.left && r.left < bb.right; }).map(e => e.tagName.toLowerCase() + (typeof e.className === 'string' && e.className ? '.' + e.className.split(' ')[0] : '') + ' "' + [...e.childNodes].filter(n => n.nodeType === 3).map(n => n.textContent.trim()).join(' ').slice(0, 36) + '"') : [];
-    const ctas = [...document.querySelectorAll('a[href^="tel:"]')].filter(a => !bar.contains(a)).map(a => a.getBoundingClientRect()).filter(r => r.height > 0 && r.bottom > 0 && r.top < innerHeight);
+    // A SECTION's call button: inside <main>. The sticky header's number sits at the top of the
+    // screen and is never stacked with a bottom bar (the observer in lib/callbar.ts uses the same set).
+    const ctas = [...document.querySelectorAll('main a[href^="tel:"]')].filter(a => !bar.contains(a)).map(a => a.getBoundingClientRect()).filter(r => r.height > 0 && r.bottom > 0 && r.top < innerHeight);
     stops.push({ k, y: Math.round(scrollY), shown, hits, ctaInView: ctas.length, ctaGap: ctas.length ? Math.min(...ctas.map(r => Math.round(bb.top - r.bottom))) : null });
     if (y >= max) break; y = Math.min(y + H, max); k++;
   }
-  scrollTo(0, max); await new Promise(r => setTimeout(r, 260));
+  scrollTo(0, max); await new Promise(r => setTimeout(r, 700));
   const bottom = bar.getBoundingClientRect(); const lastText = textEls().filter(e => { const r = e.getBoundingClientRect(); return r.bottom > bottom.top + 0.5 && r.top < bottom.bottom; }).length;
   return { meta, stops, scrollHeight: document.documentElement.scrollHeight, hiddenAtEnd: lastText };`;
 
@@ -70,6 +72,8 @@ const page = await browser.newPage('about:blank');
 const fails = []; let checked = 0;
 for (const route of all) {
   await page.setViewport(390, 844, 2); await page.goto(base + route + '?cb=' + Date.now()); await sleep(1200);
+  // The pages scroll smoothly; a probe that reads geometry 260 ms after scrollTo would be mid-scroll. Instant, always.
+  await page.eval(`document.documentElement.style.scrollBehavior = 'auto'; document.body.style.scrollBehavior = 'auto'; return 1;`);
   await page.eval(`const H=document.documentElement.scrollHeight;for(let y=0;y<H+innerHeight;y+=Math.round(innerHeight*0.5)){scrollTo(0,y);await new Promise(r=>setTimeout(r,120));} await new Promise(r=>setTimeout(r,700)); scrollTo(0,0); return 1;`);
   const r = await page.eval(PROBE);
   if (r.none) continue;

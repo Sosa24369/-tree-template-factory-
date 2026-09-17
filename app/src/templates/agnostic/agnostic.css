@@ -903,13 +903,9 @@
   display: none;
 }
 
-.agnostic main {
-  padding-bottom: 84px;
-}
 
 @media (min-width: 768px) {
   .agnostic .ag-sticky { display: none; }
-  .agnostic main { padding-bottom: 0; }
 }
 
 .agnostic .ag-hero-call--solo {

@@ -80,16 +80,8 @@
   background: var(--rb-paper);
   font-synthesis-weight: none;
   overflow-x: hidden;
-  /* Room for the fixed mobile action bar, so it never covers the footer's legal
-     links — A2P registration requires those to be reachable. */
-  padding-bottom: 78px;
 }
 
-@media (min-width: 768px) {
-  .removal-b {
-    padding-bottom: 0;
-  }
-}
 
 /* The hero's secondary CTA, the mobile bar and the final CTA are all in-page
    anchors to the estimate form. */

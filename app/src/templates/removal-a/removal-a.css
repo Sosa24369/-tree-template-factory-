@@ -931,29 +931,7 @@
 /* Every city once, wrapped, inside the content column. No clone, no mask, no
    animation, no negative margin, no background art: the same fix trimming-a shipped
    (B8), for the same reasons (Areas.tsx). Restoring motion is a later, shared item. */
-.removal-a .ra-tags {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 10px;
-  margin: clamp(32px, 4.5vw, 52px) 0 0;
-  padding: 0;
-  list-style: none;
-}
 
-.removal-a .ra-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  padding: 9px 16px;
-  border: 1px solid var(--ra-hairline);
-  border-radius: 999px;
-  background: color-mix(in srgb, var(--ra-paper) 88%, transparent);
-  color: var(--ra-ink);
-  font-size: 0.875rem;
-  font-weight: 620;
-  white-space: nowrap;
-}
 
 .removal-a .ra-icon--pin {
   color: var(--brand-accent);
@@ -1331,13 +1309,9 @@
   opacity: 0.85;
 }
 
-.removal-a main {
-  padding-bottom: 84px;
-}
 
 @media (min-width: 768px) {
   .removal-a .ra-sticky { display: none; }
-  .removal-a main { padding-bottom: 0; }
 }
 
 /* ---------------------------------------------------------------- *

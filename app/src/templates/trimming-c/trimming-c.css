@@ -636,9 +636,6 @@
   width: 100%;
 }
 
-.trimming-c main {
-  padding-bottom: 84px;
-}
 
 /* ---------------- desktop ---------------- */
 
@@ -670,9 +667,6 @@
     display: none;
   }
 
-  .trimming-c main {
-    padding-bottom: 0;
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {

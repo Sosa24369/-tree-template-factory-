@@ -744,18 +744,16 @@
   text-decoration: none;
 }
 .st-sticky-call { background: var(--brand-accent); color: #1a1205; }
-.st-sticky-call .phone-sub { font-size: 0.66rem; font-weight: 600; opacity: 0.8; }
+.st-sticky-call .phone-sub { font-size: 0.66rem; font-weight: 600; } /* full ink: at opacity 0.8 the sub-label measured 3.9–4.6:1 on the accent */
 .st-sticky-form {
   background: color-mix(in srgb, #ffffff 12%, transparent);
   color: var(--st-onink);
   border: 1px solid var(--st-hairline-ink);
 }
 
-.storm main { padding-bottom: 76px; }
 
 @media (min-width: 768px) {
   .st-sticky { display: none; }
-  .storm main { padding-bottom: 0; }
 }
 
 /* ---------------------------------------------------------------- *

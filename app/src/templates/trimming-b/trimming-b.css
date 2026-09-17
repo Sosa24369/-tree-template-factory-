@@ -1067,13 +1067,9 @@
   opacity: 0.85;
 }
 
-.trimming-b main {
-  padding-bottom: 84px;
-}
 
 @media (min-width: 768px) {
   .trimming-b .tb-sticky { display: none; }
-  .trimming-b main { padding-bottom: 0; }
 }
 
 /* Hero form panel contrast: the eyebrow and the display's accent line were

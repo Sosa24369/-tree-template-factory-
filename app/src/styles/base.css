@@ -344,3 +344,43 @@ a:focus-visible {
 [data-dash-preview] [data-copy-key] { cursor: text; transition: outline-color .12s; outline: 2px dashed transparent; outline-offset: 2px; }
 [data-dash-preview] [data-copy-key]:hover { outline-color: #3aa0ff; }
 [data-dash-preview] [data-copy-key][contenteditable="true"] { outline: 2px solid #3aa0ff; background: rgba(58,160,255,.08); }
+
+/* ------------------------------------------------------------------ *
+ * The mobile call bar, every template (lib/callbar.ts sets the attribute):
+ * while a section's own call button is in view the bar slides off the
+ * bottom edge, so two identical CTAs never stack. Transform only — the
+ * page keeps the bottom padding it reserves for the bar.
+ * ------------------------------------------------------------------ */
+.ra-sticky, .ta-sticky, .st-sticky, .ag-sticky, .rb-sticky, .rc-sticky, .tb-sticky, .tc-sticky {
+  transition: transform 220ms ease;
+}
+html[data-cta-in-view] :is(.ra-sticky, .ta-sticky, .st-sticky, .ag-sticky, .rb-sticky, .rc-sticky, .tb-sticky, .tc-sticky) {
+  transform: translateY(calc(100% + 4px));
+  pointer-events: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .ra-sticky, .ta-sticky, .st-sticky, .ag-sticky, .rb-sticky, .rc-sticky, .tb-sticky, .tc-sticky { transition: none; }
+}
+
+/* Room under the page for the bar, INSIDE the footer, every template: a spacer the bar's
+ * real height (lib/callbar.ts measures it into --callbar-h; the fallback is the height
+ * measured at 390 px on 2026-09-16 plus the safe-area inset). It was `main { padding-
+ * bottom }` per template — but the footer comes after main, so on every page the bar
+ * covered the footer's last line at scroll end. Inside the footer, the space keeps the
+ * footer's colour; on the wrapper it would show as a band whenever the bar hides. */
+.removal-a { --callbar-static: 91px; }
+.trimming-a { --callbar-static: 91px; }
+.trimming-b { --callbar-static: 91px; }
+.removal-c { --callbar-static: 80px; }
+.trimming-c { --callbar-static: 80px; }
+.agnostic { --callbar-static: 71px; }
+.storm { --callbar-static: 67px; }
+.removal-b { --callbar-static: 67px; }
+@media (max-width: 767px) {
+  .ra-footer::after, .ta-footer::after, .st-footer::after, .ag-footer::after,
+  .rb-footer::after, .rc-footer::after, .tb-footer::after, .tc-footer::after {
+    content: '';
+    display: block;
+    height: var(--callbar-h, calc(var(--callbar-static, 84px) + env(safe-area-inset-bottom, 0px)));
+  }
+}

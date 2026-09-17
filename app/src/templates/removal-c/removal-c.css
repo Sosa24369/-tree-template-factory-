@@ -683,9 +683,6 @@
   width: 100%;
 }
 
-.removal-c main {
-  padding-bottom: 84px; /* room for the sticky bar */
-}
 
 /* ---------------- desktop ---------------- */
 
@@ -731,9 +728,6 @@
     display: none;
   }
 
-  .removal-c main {
-    padding-bottom: 0;
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {

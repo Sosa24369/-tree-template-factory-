@@ -981,28 +981,7 @@
 
 /* Every city once, wrapped, inside the content column. No mask, no clone, no
    animation, no negative margin — see Areas.tsx for why each of those had to go. */
-.trimming-a .ta-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin: clamp(30px, 4.5vw, 48px) 0 0;
-  padding: 0;
-  list-style: none;
-}
 
-.trimming-a .ta-tag {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  padding: 9px 15px;
-  border: 1px solid var(--ta-hairline);
-  border-radius: var(--ta-r);
-  background: var(--ta-paper);
-  color: var(--ta-ink);
-  font-size: 0.875rem;
-  font-weight: 620;
-  white-space: nowrap;
-}
 
 .trimming-a .ta-icon--pin {
   color: var(--brand-accent);
@@ -1587,13 +1566,9 @@
   opacity: 0.85;
 }
 
-.trimming-a main {
-  padding-bottom: 84px;
-}
 
 @media (min-width: 768px) {
   .trimming-a .ta-sticky { display: none; }
-  .trimming-a main { padding-bottom: 0; }
 }
 
 /* ---------------------------------------------------------------- *
