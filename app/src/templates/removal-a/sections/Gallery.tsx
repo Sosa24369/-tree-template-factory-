@@ -14,6 +14,7 @@
 import type { ResolvedClient } from '../../../schema/resolve';
 import { SafeSection } from '../../../components/Safe';
 import { DeferredImage } from '../../../components/DeferredImage';
+import type { PhotoSet } from '../../../schema/client';
 import { altFor, withAlt } from '../assets';
 import { partitionMedia, photosFor } from '../../../lib/photos.mjs';
 import { slotPhotos, slotSizes } from '../../../lib/placement.mjs';
@@ -30,7 +31,11 @@ export function Gallery({ client, band }: { client: ResolvedClient; band?: 1 | 2
   // on another client's page. A client with no photography gets no gallery.
   // Which photographs, and in what order, is placement (lib/placement.ts). Splitting them
   // into two bands around the process section is layout, and stays here.
-  const allStills = slotPhotos(client, 'removal-a', 'rail').filter((p) => p !== null);
+  // Stills only: a clip pinned into the rail resolves like any photo, and rendered as a
+  // still it is a broken <img src="….mp4"> beside the real <video> below (2026-09-17).
+  const allStills = slotPhotos(client, 'removal-a', 'rail').filter(
+    (p): p is PhotoSet => p !== null && (p as { kind?: string }).kind !== 'video',
+  );
   const { videos } = partitionMedia(photosFor(client, 'removal'));
   const split = Math.ceil(allStills.length / 2);
   const stills = band === 1 ? allStills.slice(0, split) : band === 2 ? allStills.slice(split) : allStills;
