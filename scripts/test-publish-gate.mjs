@@ -35,7 +35,10 @@ const ROOT = new URL('..', import.meta.url).pathname;
  * ------------------------------------------------------------------ */
 console.log('guard suite — shape');
 {
-  ok('every guard has an id, label, phase and a why', GUARDS.every((g) => g.id && g.label && g.why && ['pre', 'post'].includes(g.phase)));
+  ok('every guard has an id, label, phase and a why', GUARDS.every((g) => g.id && g.label && g.why && ['pre', 'post', 'rendered'].includes(g.phase)));
+  // The `rendered` phase needs a browser the studio host does not have: it belongs to the
+  // release machine, and must never leak into the two phases publish.mjs runs.
+  ok('the rendered phase exists and is kept out of pre and post', GUARDS.some((g) => g.phase === 'rendered') && GUARDS.filter((g) => g.phase === 'rendered').every((g) => g.phase !== 'pre' && g.phase !== 'post'));
   ok('guard ids are unique', new Set(GUARDS.map((g) => g.id)).size === GUARDS.length);
   const ids = new Set(GUARDS.map((g) => g.id));
   // The five the brief names by hand must all be in there. R5 lives inside
