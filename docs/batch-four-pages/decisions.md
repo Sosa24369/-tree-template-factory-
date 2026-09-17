@@ -226,3 +226,49 @@ deploy command's name as a search pattern — refused whole, nothing ran, re-iss
 the phrase. The amendment's stop condition names "the publish hook fires for any reason
 other than the proof run"; as with 7, a pattern match on a string in a read-only command
 is logged and the run continues. No firing came from a publish, deploy or push command.
+
+## 2026-09-16 — the hold: a check lied, two defects, a sweep (owner's second instruction)
+
+29. **The dead-space check measured the wrapper, not the photo.** `ib = im ? im.getBounding
+    ClientRect() : wb` — with no `<img>` inside a services card the image box was taken to
+    be the wrapper, so dead space was 0 by construction. Red, then green, on page 1's
+    build: unchanged, `dead 0px` on all nine cards; changed so a rendered box with no image
+    fails, run under the screenshot's own conditions (the harness's fast scroll pass, then
+    measure), cards 2 and 3 fail `348×261: NO IMG`; run settled (slow pass, wait for every
+    image) all three hold their loaded photographs. Cause: `DeferredImage` inserts the
+    `<img>` only once an IntersectionObserver fires within 300 px of the viewport, and the
+    capture ran ahead of the two lower cards. The slots were filled (record pins resolve,
+    the built HTML carries all three sources); the harness and the check were wrong. The
+    screenshot harness now scrolls slowly, waits for every image, and hides the fixed bar
+    before a section clip (a section capture painted the bar mid-clip, which is the second
+    screenshot). The deferred-placeholder window itself is a finding for the sweep.
+30. **Two guards, two hosts.** The static half (`image-boxes`, post phase) runs wherever node
+    runs — the studio's publish included — and fails a box with no image fallback or a
+    missing file: 0 hits on the build and on the live copies. The rendered half needs Chrome;
+    the studio host is Railpack with no browser, and the suite's contract says a guard that
+    cannot run is FAILED, never skipped-as-passed — so a browser guard in `post` would turn
+    the studio's Publish button off. It is a `rendered` phase instead: publish.mjs runs and
+    lists pre/post only; the release machine runs `scripts/run-guards.mjs rendered` before a
+    publish and the batch evidence records it. Rejected: skip-when-no-browser (a hidden pass),
+    and adding Chrome to the Railway image (the owner's call, not an unattended one).
+31. **Areas: a grid whose column count is chosen from the city count.** Alphabetical, all
+    cities at once, no scroll, no mask. A wrapped flex row cannot promise a last row of ≥ 2,
+    so the component computes columns per breakpoint and emits them as custom properties:
+    <768 two (three only if two strands a city and three does not); ≥768 four / three /
+    five; ≥1024 five / six / four / seven — the first whose last row holds ≥ 2. Twenty-five
+    (Texas Tree Tops) is 5 × 5: two and three columns both strand one city at 390, and five
+    would be 71 px wide — so at <768 the last THREE cities share the last row (a 12-track
+    grid: cells span 6, the tail spans 4). J Valdez 10 → 2 / 4 / 5 columns; Summit 12 →
+    2 / 4 / 5; Texas Tree Tops 25 → 2 (+tail) / 5 / 5. Chips stay pills (the two-column
+    grid at 390 is not cramped; the tail cells may wrap a long name to two lines).
+32. **removal-a and trimming-a use the shared component too.** They carried their own static
+    lists (`.ra-tags`, `.ta-tags`, with a pin icon); "same component, same result" and the
+    guard's "chip count equals the record on every route" both want one list. Their own
+    rules are deleted; the section wrappers, headings and copy are untouched.
+34. **Card 1's focal point.** `work-photo-3` (square, 1080 px) in a 4:3 box crops 25 % of its
+    height; the eave in the top-left corner runs to ~31 % of the frame at the left edge.
+    Focal set on the photograph, `{x: 0.55, y: 1.0}` (one focal point per photograph): the
+    crop now takes the whole 25 % from the top, keeping the climber and the chipper; a
+    sliver of eave (~6 % of the frame) can remain in the corner — shown in the crop, and
+    the sweep's row says whether it reads as a defect. The same focal reaches the photo's
+    other cells (removal-a benefits and rail, trimming-a grid cell 3).

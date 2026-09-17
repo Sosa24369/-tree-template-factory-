@@ -1,4 +1,34 @@
-# HANDOFF — batch/four-pages, at the gate (2026-09-16)
+# HANDOFF — batch/four-pages, ON HOLD after the gate (2026-09-16, owner's second instruction)
+
+The owner held the publish: two page-1 screenshots showed defects the evidence denied (empty
+photo boxes on services cards 2–3; the call bar painted over a review), and the check that
+said "dead space 0" measured the wrapper, not the photo. The instruction, verbatim, is in the
+conversation; its five parts and where each stands:
+
+1. **Fix the check first** — DONE, red then green (decisions 29–30): old check `dead 0px` ×9;
+   new check under the screenshot's conditions fails cards 2/3 `NO IMG`; settled, passes
+   (DeferredImage placeholders, not empty slots). Static guard `image-boxes` (post; 0 hits on
+   build and live), rendered guards `rendered` + `call-bar` in a new `rendered` phase (studio
+   host has no browser). Committed b4e7fb0. All-55 rendered hit list: running to
+   `$SP/rendered-prefix.txt` (then: fill every hit; card 1 focal set to {0.55,1.0} in the
+   record, uncommitted).
+2. **The call bar** — code written, uncommitted: `app/src/lib/callbar.ts` (hides the bar while
+   a `main a[href^=tel:]` is in view) hooked in `main.tsx`; hide rule in `styles/base.css`.
+   STILL TO DO: per-template `main { padding-bottom: calc(<bar height>px + env(safe-area-
+   inset-bottom)) }` from the measured heights (`$SP/callbar-before/*/callbar-overlap.txt`,
+   running); contrast check; `callbar-overlap.txt` into each page folder; decision 33. The bar
+   IS in the spec ("A tap-to-call bar stays visible while scrolling on mobile").
+3. **Areas relayout** — code written, uncommitted (decisions 31–32): grid with computed
+   columns, alphabetical, no lonely last row (25 → tail of three at <768);
+   removal-a/trimming-a switched to the shared component. Needs the build + rendered guard.
+4. **The sweep** — prompt drafted at `$SP/sweep-prompt.txt`; launch one subagent per target
+   page AFTER the build with fixes 1–3; fix each finding, one commit per finding with the row.
+5. **Back to the gate** — `$SP/evidence.sh` regenerates the pack on the final build (all but
+   Lighthouse, which a subagent runs ×4); then REPORT.md additions (step-1 outputs, the hit
+   list, callbar files, areas at three widths both clients, the sweep table).
+
+DO NOT BUILD while a background run is reading app/dist. Guard stays on; nothing pushed.
+
 
 Read `docs/batch-four-pages/REPORT.md` first; it is the deliverable and links every folder.
 Then `amendment.md` (operative), `four-page-spec.md`, `removal-a-scope.md`, `decisions.md`.
