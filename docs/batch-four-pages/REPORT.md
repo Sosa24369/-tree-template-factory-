@@ -283,7 +283,8 @@ and fixed: twelve tracks gave `span 2.4` for five columns (invalid, chips collap
 
 One subagent per page, looking at the rendered build at three widths, returning only a
 findings table; every row fixed in its own commit (the row is in the message) or marked
-needs-photo with the slot and the photograph it needs. Four subagents, one per page, 27 rows in all: **22 fixed** (one partly), **5 needs-photo**,
+needs-photo with the slot and the photograph it needs. Four subagents, one per page, 27 rows in all: **24 fixed** (one partly), **3 needs-photo**
+(after the owner's per-photo exception of 2026-09-17 filled cards 2 and 3 — decisions 49),
 each fix its own commit with the row in the message:
 
 - **storm-a** (4): the 390 grid overflow — mine, the sixty-track column gap (fixed); ragged
@@ -297,9 +298,11 @@ each fix its own commit with the row in the message:
   IMG_1122's pole (re-ingested, the left 12 % trimmed) and IMG_1126's cut heads
   (re-ingested, band higher — partly: the hand truck is the job's tool and stays); four
   composites in the rail (dropped, eight single photographs remain); the call-asset line —
-  fixed. Benefits and the three services cards — **needs-photo**: every removal original is
-  placed once and the spec forbids a photograph twice on a page
-  (`photoSlots.removal-a.service-photo.1/.2/.3`, `.benefits`; decisions 44).
+  fixed. Cards 2 and 3 — fixed on 2026-09-17 from the retouched removal set (16.png, 18.png,
+  1080 px under the owner's per-photo exception, focal on the cut; decisions 49). Benefits
+  and card 1 — **needs-photo**: every other removal original is placed once and the spec
+  forbids a photograph twice on a page (`photoSlots.removal-a.service-photo.1`, `.benefits`;
+  decisions 44).
 - **Texas Tree Tops removal-a** (9): the grid overflow; the rail's lead clip painting as a
   black box (a poster frame, a new `PhotoSet.poster` field, four templates, a guard rule);
   `gallery-04` (equipment only) in the proof strip, the grid and the rail, the helmet crop
@@ -311,8 +314,28 @@ each fix its own commit with the row in the message:
 Off the four pages, the rendered guard on all 55 found two more (decisions 48): removal-c's
 and trimming-c's ragged work grids (pre-existing on live; cells uniform 3:4 now) and a
 blind spot in the guard's own settle pass (horizontal rails). What only Texas Tree Tops and
-J Valdez can supply is unchanged: the five needs-photo slots above, the storm originals,
-the Texas Tree Tops removal originals ≥ 1600 px.
+J Valdez can supply: the three needs-photo slots above, the storm originals, the Texas
+Tree Tops removal originals ≥ 1600 px.
+
+## 4a. The owner's per-photo exception (2026-09-17)
+
+"Admit 1080 px files into any slot whose rendered box is ≤ 1080 at every breakpoint — a
+per-photo exception, not a lower global minimum." Encoded as `minimumException` on the
+photograph (who, when, the slots covered, the 1080 ceiling, the measured box); the
+image-spec guard honours it only for the cells the photo actually fills, reports it as a
+warning with the grant on the line, and fails anything outside it; the ingest minimum is
+unchanged (commit b3b52f2, decisions 49). Used twice: J Valdez removal-a's cards 2 and 3
+from `Retouching 23 Photos Quality Enhancement/Company Removal pics /` — 16.png (chainsaw
+at the stump base) on card 2, whose list opens with stump grinding; 18.png (felled trunk
+with crew) on card 3 — the service-match rule chose the pairing (your sentence named them
+the other way round; one line to swap). Each 4:3 band sits where the crew stays whole and
+the saved focal point is the cut. Crop sheets: `j-valdez-removal-a/crops/card-2-{390,1440}.png`,
+`card-3-{390,1440}.png`. The alternates (6.png, 13.png) were not needed.
+
+Two consequences, both caught: the J Valdez rail (`cells: all`) grew a ninth tile with the
+set — `rail.9` is deliberately empty; and the two entries' free-text notes took the batch
+bundle to 3,148 B of its 3,072 B ceiling (the record ships in the JS bundle) — cut to the
+fields the guard reads, 2,920 B.
 
 ## 5. The evidence pack, re-run on the final build
 
@@ -335,7 +358,7 @@ cell the hold changed, `callbar-overlap.txt` and `-before.txt`, `guards.txt`,
 `hold/`: `step1-check.txt`, `rendered-hits.txt`, `callbar-before-all-pages.txt`,
 `sweep-table.md`.
 
-**What only you can supply, updated:** the five needs-photo slots (page 1's three services
-cards and benefits; storm-a's tile 5), plus the earlier asks (reviews text, Texas Tree Tops
+**What only you can supply, updated:** the three needs-photo slots (page 1's card 1 and
+benefits; storm-a's tile 5), plus the earlier asks (reviews text, Texas Tree Tops
 removal and storm originals ≥ 1600 px, the two trimming-a cities). **Approval and publish
 steps** are unchanged from the section above the line. Stage 4 stays paused.

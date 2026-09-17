@@ -32,3 +32,25 @@ No regression on score, LCP or first-viewport bytes. Files: `lighthouse-before.j
 - Logo preloaded twice (prerender + React's SSR float), same file, one fetch. Pre-existing on every
   text-hero page (decisions 11).
 - Photos repeated on the page from the rail showing the whole library (decisions 10).
+
+## The hold (owner's second instruction, 2026-09-16/17) — what changed on this page
+
+- **The check that lied** — "dead space 0" measured the wrapper, not the photo; the replacement
+  fails the screenshot's condition on cards 2–3 (`348×261: NO IMG`) and passes settled: the
+  slots were filled, the images deferred (`hold/step1-check.txt`). Card 1's focal point set on
+  the photograph {0.55, 1.0} — the eave leaves all but a corner sliver.
+- **Call bar** — hidden while a section call button is in view; the space inside the footer at
+  the bar's height (91 px + safe-area); after: 0 rule failures (before: 5 stops stacked, text
+  under the bar at scroll end).
+- **Areas** — the shared alphabetical grid, 2 / 4 / 5 columns, no lonely last row.
+- **Sweep** (10 rows): the grid overflow; proof cell 2's bucket/cab → focal {0.6, 0.05};
+  IMG_1122 re-ingested with 120 px trimmed (the pole gone; the slot's 1200 px minimum caps the
+  trim); IMG_1126 re-ingested with the band higher (heads in); four composites out of the rail
+  (eight single photographs); the call-asset line in the footer's measure; **cards 2 and 3
+  filled on 2026-09-17** from the retouched removal set (16.png, 18.png at 1080 px under the
+  owner's per-photo exception, focal on the cut; `crops/card-2-*.png`, `crops/card-3-*.png`).
+  Needs-photo: card 1 (`service-photo.1`) and benefits (`benefits`) — decisions 44.
+- **Lighthouse, final build**: 99 / 1.70 s / 381,865 B against 98 / 1.85 s / 602,973 B before
+  (the cards are deferred; the run fetches the same thirteen images as at the gate).
+- Guards on the final build: pre 6/6 (image-spec PASS, the two waivers reported), post 7/7,
+  rendered 2/2; compare zero; criterion 8 clean; bundle +2,920 B of 3,072 for the batch.

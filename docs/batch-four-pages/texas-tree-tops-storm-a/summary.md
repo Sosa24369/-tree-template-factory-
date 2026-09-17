@@ -44,3 +44,19 @@ build — 99 / 1.74 s / 13,990 B — was replaced by this one so the evidence is
 - The storm photo set on this Mac is 800×600 — under the 1200 minimum and short of the tall
   tile's 680×908 at 2× — so no storm photograph goes in. Ask Texas Tree Tops for originals
   ≥ 1600 px (tree on a roof/fence/car, root plate, crews at a storm job).
+
+## The hold (owner's second instruction, 2026-09-16/17) — what changed on this page
+
+- **Areas** — the alphabetical grid: 2 (+ a tail of three) / 5 / 5 columns for the 25 cities,
+  nothing clipped (the sixty-track column-gap overflow at 390 found by the sweep is fixed).
+- **Call bar** — hidden while a section call button is in view (storm's three), the space
+  inside the footer, the sub-label at full ink (3.91:1 → 5.03:1 on storm-b's palette); after:
+  0 rule failures (before: 11 stops stacked, text under the bar at scroll end).
+- **Sweep** (4 rows): the grid overflow (fixed); ragged work tiles — DeferredImage's inline
+  ratio outranked the template's uniform 4:3 (fixed; decision 26 corrected); the "What we
+  handle" hole at 1440 — one column of panels, the photo a full-height panel (fixed); tile 5,
+  an equipment shot shown uncropped — needs-photo (`photoSlots.storm-a.tile.5`, storm damage
+  ≥ 800 px wide).
+- **Lighthouse, final build**: 99 / 1.74 s / 13,990 B — unchanged (text hero; the logo is the
+  only first-viewport image).
+- Guards on the final build: pre 6/6, post 7/7, rendered 2/2; compare zero; criterion 8 clean.

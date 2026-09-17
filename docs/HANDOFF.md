@@ -1,24 +1,26 @@
-# HANDOFF — batch/four-pages, the hold is DONE bar the last numbers (2026-09-17)
+# HANDOFF — batch/four-pages, at the gate again (2026-09-17)
 
-Read `docs/batch-four-pages/REPORT.md` (the gate section, then "The hold" below its rule)
-and `hold/sweep-table.md`. All five parts of the owner's second instruction are complete:
+Read `docs/batch-four-pages/REPORT.md` (the gate section, "The hold" below the rule, and 4a —
+the owner's per-photo exception) and `hold/sweep-table.md`. Everything in the owner's second
+instruction is done; on 2026-09-17 the owner granted a per-photo exception and cards 2/3 on
+J Valdez removal-a were filled from the retouched set (decisions 49). Lighthouse then showed
+Texas Tree Tops removal-a a point and ~160 ms behind the gate — recovered by weight (the lift
+in the eager proof cell, the grinder in the deferred grid; the clip's poster at 320 px) —
+decisions 50; its re-run is the last open item.
 
-1. Check fixed, red then green; guards `image-boxes` (post) + `rendered`/`call-bar` (rendered
-   phase, this machine). 2. Call bar: observer + footer spacer + full-ink sub-label; 27/27
-   pages clean. 3. Areas: alphabetical grid, computed columns, no lonely last row; both
-   templates' own lists replaced by the shared component. 4. Sweep: 27 rows, 22 fixed (one
-   partly), 5 needs-photo; one commit per row (`git log --oneline | grep 'Sweep'`); two
-   off-page grids and a guard blind spot fixed (decisions 48). 5. Evidence pack re-run on the
-   final build: compare zero; pre 6/6, post 7/7, rendered 2/2; criterion 8 clean; diff 28
-   pages labelled; bundle +2,732 B of 3,072. Committed (d8a8066).
+STATE: build = the working tree (commit 0d16a7d + docs). Guards on it: pre 6/6 (image-spec
+PASS, two waivers reported), post 7/7, rendered 0 hits on the changed pages; compare zero;
+criterion 8 clean; diff 28 pages labelled; bundle 2,920 B of 3,072.
 
-STILL OPEN at the moment of writing: the Lighthouse ×4 subagent on the final build (writes
-`<folder>/lighthouse-after.json` + `-summary.txt`); then replace `@@LH@@` in REPORT.md with the
-four before→after rows, add a "hold" addendum to each `<folder>/summary.md`, commit
-"Hold evidence: Lighthouse after ×4 + summaries", refresh this file, and HOLD for the owner.
+STILL OPEN: (1) the Lighthouse subagent on texas-tree-tops/removal-a (writes its
+lighthouse-after.json + summary); (2) then: replace `@@LH@@` in REPORT.md with the four rows,
+append the hold addendum to texas-tree-tops-removal-a/summary.md, add the numbers to
+decisions 50, run `zsh $SP/evidence.sh` (the pack: screens, compare, crit8, all three guard
+phases, call-bar listings, diff, bundle — ~35 min), commit the evidence + docs, refresh this
+file, and HOLD for the owner with the crop-sheet paths
+(j-valdez-removal-a/crops/card-2-{390,1440}.png, card-3-{390,1440}.png).
 
 Guard stays on until the owner has read the REPORT. Nothing pushed, nothing published.
-Decisions 29–48 in decisions.md.
 
 DO NOT BUILD while a background run is reading app/dist. Guard stays on; nothing pushed.
 

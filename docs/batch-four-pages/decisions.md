@@ -421,3 +421,33 @@ is logged and the run continues. No firing came from a publish, deploy or push c
     so cells off to the right never met the viewport and read "NO IMAGE"; the pass now
     scrolls every horizontal scroller to its end and back, as a reader would, before
     judging. With both, the guard is clean on the five affected pages.
+
+## 2026-09-17 — the owner's per-photo exception; cards 2 and 3; the proof cell's weight
+
+49. **Cards 2 and 3 on J Valdez removal-a, from the retouched set.** The owner admitted 1080 px
+    files into any slot whose rendered box is ≤ 1080 at every breakpoint, as a per-photo
+    exception — not a lower minimum. Encoded as `minimumException` on the photograph (by,
+    date, the slots covered, the 1080 ceiling, the measured box: the services card is 348 /
+    736 / 343 CSS px); the image-spec guard honours it only for the cells the photo actually
+    fills (resolver landings, pin-aware), reports it as a warning with the grant on the line,
+    and fails anything outside it; the ingest minimum is untouched. 16.png (chainsaw at the
+    stump base) → card 2, whose list opens with stump grinding; 18.png (felled trunk with
+    crew) → card 3 (removal) — the service-match rule chose the pairing; the owner's sentence
+    named them the other way round; one line to swap. The 4:3 band in each sits where the
+    crew stays whole and the saved focal point is the cut. The alternates (6.png dead pine
+    with bucket; 13.png crew with the fallen limb) were not needed. Consequence caught by the
+    guard: J Valdez's rail is `cells: all` and grew a ninth tile with the set — `rail.9` is
+    deliberately empty. The two entries' free-text notes were cut to the fields the guard
+    reads: the record ships inside the JS bundle, and the notes took the batch to 3,148 B
+    of its 3,072 B ceiling; without them 2,920 B. Card 1 stays needs-photo.
+50. **Texas Tree Tops removal-a's proof cell: the lift, not the grinder (Lighthouse).** The
+    final-build run after the sweep read 97 / 2.07 s / 479,505 B against 98 / 1.90 s / 386,105 B
+    at the gate: the proof strip loads eagerly and the grinder photograph's 800 px variant is
+    112 KB (rock and grass detail; re-encoding at the pipeline's q78 saves 2 KB) where the
+    equipment shot it replaced was 48 KB, and the clip's poster adds 29 KB. The grid and the
+    cards are deferred, the proof strip is not — so the placements swap by weight: proof cell
+    2 takes `restoration-grid-2` (the aerial lift at a dead tree — the strongest removal image
+    and, at 51 KB, the lightest candidate), the grinder goes to grid slot 3 and the rigging
+    crew to card 3. The poster stays at its quality (5 KB for a visible tile is a bad trade).
+    Expected first-viewport bytes ≈ 418 KB: above the gate's 386 KB by the poster, below the
+    original 442 KB. The re-run's numbers are in the page summary.

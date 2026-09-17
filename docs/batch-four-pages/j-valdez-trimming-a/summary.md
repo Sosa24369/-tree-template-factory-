@@ -47,3 +47,18 @@ No regression on score, LCP or first-viewport bytes.
 - The 8-vs-10 cities mismatch lives in the record's own trimming-a body-copy override
   (Forney, Lake Ray Hubbard are chips only); ads are tuned to that copy (decisions 15).
 - Longform renders grid cell 2, not the contract's `longform` slot (decisions 20).
+
+## The hold (owner's second instruction, 2026-09-16/17) — what changed on this page
+
+- **Areas** — the shared alphabetical grid replaces the template's own pill list: 2 / 4 / 5
+  columns at 390 / 820 / 1440 (rows 5×2 · 4/4/2 · 5/5), no lonely last row, nothing clipped.
+- **Call bar** — hidden while a section call button is in view; the reserved space is a
+  spacer inside the footer at the bar's real height (91 px + safe-area); after: 0 rule
+  failures at 390 × 844 (`callbar-overlap.txt`; before: 6 stops stacked, text under the bar
+  at scroll end).
+- **Sweep** (4 rows, all fixed): the 390 grid overflow; `gallery-slide-3`'s crowns cut in the
+  hero band → focal {0.5, 0.4}; `work-photo-1`'s bucket sliced in the grid → focal {0.6, 0.0};
+  the Google Ads call-asset line flush at x = 0 → the footer container's measure, CSS only.
+- **Lighthouse, final build**: 98 / 1.89 s / 87,834 B (runs 1.86–1.90 s) against 98 / 1.85 s /
+  87,834 B before — same score, same bytes, the LCP inside the run-to-run spread.
+- Guards on the final build: pre 6/6, post 7/7, rendered 2/2; compare zero; criterion 8 clean.

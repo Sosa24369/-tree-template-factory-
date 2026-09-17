@@ -2,7 +2,8 @@
 
 Each row is the subagent's finding, verbatim in substance; the last column is what it got.
 "fixed" = a commit on batch/four-pages (named); "needs-photo" = the slot and the photograph
-it needs, in decisions.md 44 / 38; "fixed (partly)" says which part.
+it needs, in decisions.md 44 / 38; "fixed (partly)" says which part. 2026-09-17: cards 2 and 3
+filled under the owner's per-photo exception (decisions 49) — 24 fixed, 3 needs-photo.
 
 | page | width | section | defect | outcome |
 |---|---|---|---|---|
@@ -21,8 +22,8 @@ it needs, in decisions.md 44 / 38; "fixed (partly)" says which part.
 | j-valdez/removal-a | 390 · 820 · 1440 | ra-restoration | IMG_1126: both crew members' heads cut at the top edge; the hand-truck frame fills the left third | fixed (partly) 6e1483f — re-ingested with the band higher, heads in; the hand truck is the job's tool and stays (42) |
 | j-valdez/removal-a | 390 · 820 · 1440 | ra-gallery | four of twelve rail tiles are composites: hero-photo-1 (two stacked), gallery-slide-1/-2 (before/after), work-photo-2 (side-by-side); two are trimming before-afters on a removal page | fixed 4a692fc — the four dropped from the rail; eight single photographs remain (decisions 43) |
 | j-valdez/removal-a | 390 · 820 · 1440 | ra-services | card 1 work-photo-3: the eave's sliver in the top-left corner (~45 × 25 px of 343 × 257 at 1440) | needs-photo — `service-photo.1` (44); the focal of decisions 34 is the most the photograph allows |
-| j-valdez/removal-a | 390 · 820 · 1440 | ra-services | card 2 work-photo-4: pole-saw pruning (trimming) under "Tree Removal Services We Offer" | needs-photo — `service-photo.2` (44) |
-| j-valdez/removal-a | 390 · 820 · 1440 | ra-services | card 3 work-photo-5: five trucks and a chipper by an empty field, no job | needs-photo — `service-photo.3` (44) |
+| j-valdez/removal-a | 390 · 820 · 1440 | ra-services | card 2 work-photo-4: pole-saw pruning (trimming) under "Tree Removal Services We Offer" | fixed ee1b2f1 — 16.png (chainsaw at the stump base) from the retouched set, 1080 px under the owner's per-photo exception, focal on the cut (decisions 49) |
+| j-valdez/removal-a | 390 · 820 · 1440 | ra-services | card 3 work-photo-5: five trucks and a chipper by an empty field, no job | fixed ee1b2f1 — 18.png (felled trunk with crew) from the retouched set, the same exception, focal on the cut (49) |
 | j-valdez/removal-a | 390 · 820 · 1440 | ra-footer | the call-asset line flush left at x = 0, 0 px gutter | fixed 23244a2 — as above (41) |
 | texas-tree-tops/removal-a | 390 | ra-areas | the same sixty-track overflow: twelve right-column chips unreachable | fixed db5e4ab — as above (35) |
 | texas-tree-tops/removal-a | 390 · 820 · 1440 | ra-gallery | the lead tile is the clip gallery-01.mp4 with no poster: a black box with native controls (302 × 190 / 302 × 320) | fixed — a poster frame captured from the clip; `PhotoSet.poster`, four templates, guard (decisions 47) |
