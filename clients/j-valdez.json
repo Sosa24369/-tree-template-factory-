@@ -272,7 +272,7 @@
         },
         "pipeline": {
           "version": 2,
-          "at": "2026-09-17T03:39:09.289Z",
+          "at": "2026-09-17T04:59:14.180Z",
           "source": {
             "width": 1320,
             "height": 1911,
@@ -280,11 +280,11 @@
             "bytes": 1231671
           },
           "master": [
-            1162,
-            872
+            1200,
+            900
           ],
           "aspect": "4:3",
-          "note": "left 12% of the frame trimmed before the 4:3 band (a pole and a cut figure on the frame edge — the sweep, 2026-09-16)"
+          "note": "left 120 px (9.1 %) of the frame trimmed before the 4:3 band — a pole and a cut figure on the frame edge (the sweep, 2026-09-16); the slot's 1200 px minimum caps the trim, the original being 1320 wide"
         }
       },
       {
