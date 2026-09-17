@@ -59,6 +59,7 @@ export function Gallery({ client, copy, band }: { client: ResolvedClient; copy: 
               // and no captured poster frame it is what makes the browser paint a
               // first frame instead of an empty black box.
               src={`${clip.src}#t=0.1`}
+              {...(clip.poster ? { poster: clip.poster } : {})}
               {...(clip.width != null ? { width: clip.width } : {})}
               {...(clip.height != null ? { height: clip.height } : {})}
               controls

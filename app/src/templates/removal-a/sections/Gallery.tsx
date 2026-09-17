@@ -49,6 +49,7 @@ export function Gallery({ client, band }: { client: ResolvedClient; band?: 1 | 2
                 // preload="none" and no captured poster frame, it is what makes
                 // the browser paint the first frame instead of an empty box.
                 src={`${clientVideo.src}#t=0.1`}
+                {...(clientVideo.poster ? { poster: clientVideo.poster } : {})}
                 {...(clientVideo.width != null ? { width: clientVideo.width } : {})}
                 {...(clientVideo.height != null ? { height: clientVideo.height } : {})}
                 controls

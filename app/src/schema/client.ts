@@ -242,6 +242,9 @@ export interface PhotoSet {
    * a real client wherever the photo is cover-cropped; see templates/imageSlots.mjs.
    */
   focal?: { x: number; y: number };
+  /** A clip's poster frame (a still in the same folder). A <video preload="none"> with no
+   *  poster paints as a black box until someone presses play (the sweep, 2026-09-16). */
+  poster?: string;
   /**
    * Extra flat darkening under the removal-a headline when THIS photo is the hero
    * plate, 0–0.9, set by the studio from the measured contrast (see

@@ -83,8 +83,12 @@ for (const file of files) {
       if (!existsSync(join(ASSETS, decodeURIComponent(u.split('?')[0])))) hits.push(`${page} · missing file · ${u}`);
     }
   }
-  for (const m of html.matchAll(/<video\b[^>]*\ssrc="([^"#]+)/g)) {
-    if (!existsSync(join(ASSETS, decodeURIComponent(m[1])))) hits.push(`${page} · missing file · ${m[1]}`);
+  for (const m of html.matchAll(/<video\b[^>]*>/g)) {
+    const src = / src="([^"#]+)/.exec(m[0])?.[1]; const poster = / poster="([^"]+)"/.exec(m[0])?.[1];
+    if (src && !existsSync(join(ASSETS, decodeURIComponent(src)))) hits.push(`${page} · missing file · ${src}`);
+    // A clip with preload="none" and no poster paints as a black box until someone presses play.
+    if (!poster) hits.push(`${page} · <video> with no poster · ${src ?? m[0].slice(0, 60)}`);
+    else if (!existsSync(join(ASSETS, decodeURIComponent(poster)))) hits.push(`${page} · missing file · ${poster}`);
   }
   const els = elements(html);
   for (const el of els) {
