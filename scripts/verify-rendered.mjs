@@ -1,7 +1,8 @@
 /**
  * Rendered pages — the checks that only a browser can make, on every built page at
- * 390 / 820 / 1440 (DPR 2), after the page has been scrolled top to bottom and every
- * image has finished loading (the state a reader who scrolls through the page sees):
+ * 390 / 820 / 1440 (DPR 2), after the page has been scrolled top to bottom, every horizontal
+ * rail scrolled to its end and back, and every image has finished loading (the state a
+ * reader who scrolls through the page sees):
  *
  *   image boxes   every photo box holds a LOADED <img> (or a <video>) whose box fills it
  *                 within 1.5 px. History: the four-page batch's probe measured an empty
@@ -49,7 +50,10 @@ const record = (route) => { const m = /^\/(?:p|demo)\/([^/]+)\//.exec(route); re
 const cityCount = (rec) => { const seen = new Set(); for (const c of rec?.serviceAreaList ?? []) if (typeof c === 'string' && c.trim()) seen.add(c.trim().toLowerCase()); return seen.size; };
 
 const BOX_SEL = '[style*="aspect-ratio"], [class*="-shot"], [class*="-frame"], [class*="-tile"], [class*="-cell"], [class*="-mosaic"] > li';
-const SETTLE = `const H=document.documentElement.scrollHeight;for(let y=0;y<H+innerHeight;y+=Math.round(innerHeight*0.5)){scrollTo(0,y);await new Promise(r=>setTimeout(r,220));} await new Promise(r=>setTimeout(r,1200)); await Promise.all([...document.images].map(i=>i.complete?1:new Promise(r=>{i.onload=i.onerror=r;}))); await new Promise(r=>setTimeout(r,400)); scrollTo(0,0); return 1;`;
+const SETTLE = `const H=document.documentElement.scrollHeight;for(let y=0;y<H+innerHeight;y+=Math.round(innerHeight*0.5)){scrollTo(0,y);await new Promise(r=>setTimeout(r,220));}
+  /* horizontal scrollers (rails, bands): a deferred cell off to the right never meets the viewport on a vertical pass — scroll each to its end and back, as a reader would */
+  for (const el of document.querySelectorAll('*')) { const cs = getComputedStyle(el); if (!/auto|scroll/.test(cs.overflowX) || el.scrollWidth <= el.clientWidth + 5) continue; el.scrollIntoView({ block: 'center' }); await new Promise(r=>setTimeout(r,150)); for (let x = 0; x <= el.scrollWidth; x += Math.max(120, Math.round(el.clientWidth * 0.6))) { el.scrollLeft = x; await new Promise(r=>setTimeout(r,180)); } await new Promise(r=>setTimeout(r,400)); el.scrollLeft = 0; }
+  await new Promise(r=>setTimeout(r,1200)); await Promise.all([...document.images].map(i=>i.complete?1:new Promise(r=>{i.onload=i.onerror=r;}))); await new Promise(r=>setTimeout(r,400)); scrollTo(0,0); return 1;`;
 const CHECK = `
   const out = { boxes: [], areas: null }; const seen = new Set();
   for (const w of document.querySelectorAll(${JSON.stringify(BOX_SEL)})) {

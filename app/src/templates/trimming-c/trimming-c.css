@@ -358,8 +358,17 @@
   grid-template-columns: repeat(2, 1fr);
 }
 
+/* Uniform cells: rows held portrait (382 × 510) and 4:3 photos side by side, each frame at its
+   own inline ratio, so the row stretched to the tallest and the 4:3 ones sat over paper (the
+   rendered guard, 2026-09-16; pre-existing on live). The cell owns the box — 3:4, which six of
+   Texas Tree Tops' nine grid photos already are — and the frame fills it, object-fit: cover. */
+.trimming-c .tc-work-cell {
+  aspect-ratio: 3 / 4;
+}
 .trimming-c .tc-work-frame {
   display: block;
+  height: 100%;
+  aspect-ratio: auto !important;
   border-radius: 10px;
   overflow: hidden;
   background: var(--ra-placeholder);
