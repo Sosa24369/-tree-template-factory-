@@ -24,7 +24,7 @@ import { readdirSync, readFileSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
 import sharp from 'sharp';
 import { IMAGE_SLOTS, MASTERS, slotById, stillCount, stillIndex } from '../app/src/templates/imageSlots.mjs';
-import { PLACEMENT, cellKey, photoId, slotsForPosition, templateCells } from '../app/src/lib/placement.mjs';
+import { PLACEMENT, cellKey, landingsFor, photoId, slotsForPosition, templateCells } from '../app/src/lib/placement.mjs';
 import { photoStatus } from '../app/src/lib/photoStatus.mjs';
 
 const ROOT = new URL('..', import.meta.url).pathname;
@@ -83,7 +83,22 @@ for (const file of readdirSync(join(ROOT, 'clients')).filter((f) => f.endsWith('
       let need = MASTERS.photo.min;
       let needWhy = 'a 4:3 tile';
       for (const s of slots) if (MASTERS[s.master].min[0] > need[0]) { need = MASTERS[s.master].min; needWhy = `${s.template} ${s.id}`; }
-      if (d.w < need[0]) sink.push(`${slug}: photos.${set}[${i}] (${tag}) is ${d.w} px wide, ${needWhy} needs ${need[0]}`);
+      if (d.w < need[0]) {
+        // A per-photo exception the OWNER granted (2026-09-17): a 1080 px file may sit in a slot
+        // whose rendered box is ≤ 1080 CSS px at every breakpoint. Not a lower minimum: the
+        // waiver names its slots, records the measured box, and holds only while the photo
+        // feeds nothing else and still covers that box. Anything outside it fails as before.
+        // Judged on the cells the photo ACTUALLY fills (landingsFor is pin-aware), not on the
+        // positional auto-fill map: a pinned card photo does not feed the rail it would auto-fill.
+        const w = p.minimumException;
+        const landed = w ? landingsFor(record, photoId(p), excluded).map((l) => `${l.templateId}:${l.slotId}`) : [];
+        const waived = w && Array.isArray(w.slots) && landed.length > 0
+          && landed.every((k) => w.slots.includes(k))
+          && Number(w.measuredBox) <= Number(w.maxBox) && d.w >= Number(w.measuredBox);
+        const msg = `${slug}: photos.${set}[${i}] (${tag}) is ${d.w} px wide, ${needWhy} needs ${need[0]}`;
+        if (waived) warns.push(`${msg} — waived by ${w.by} on ${w.on}: box ${w.measuredBox} px ≤ ${w.maxBox} px in ${w.slots.join(', ')}`);
+        else sink.push(msg);
+      }
 
       // Focal point: required wherever the photo is cover-cropped, on a real client.
       const coverSlots = slots.filter((s) => s.policy === 'cover' && s.focal === 'required');
