@@ -1,26 +1,24 @@
-# HANDOFF — batch/four-pages, at the gate again (2026-09-17)
+# HANDOFF — batch/four-pages, HELD AT THE GATE (2026-09-17)
 
-Read `docs/batch-four-pages/REPORT.md` (the gate section, "The hold" below the rule, and 4a —
-the owner's per-photo exception) and `hold/sweep-table.md`. Everything in the owner's second
-instruction is done; on 2026-09-17 the owner granted a per-photo exception and cards 2/3 on
-J Valdez removal-a were filled from the retouched set (decisions 49). Lighthouse then showed
-Texas Tree Tops removal-a a point and ~160 ms behind the gate — recovered by weight (the lift
-in the eager proof cell, the grinder in the deferred grid; the clip's poster at 320 px) —
-decisions 50; its re-run is the last open item.
+Read `docs/batch-four-pages/REPORT.md` — the gate section, "The hold" below the rule, 4a (the
+owner's per-photo exception) and "the one open trade-off" — then `hold/sweep-table.md`.
 
-STATE: build = the working tree (commit 0d16a7d + docs). Guards on it: pre 6/6 (image-spec
-PASS, two waivers reported), post 7/7, rendered 0 hits on the changed pages; compare zero;
-criterion 8 clean; diff 28 pages labelled; bundle 2,920 B of 3,072.
+DONE. The batch (four pages), the hold's five parts (check fixed red-then-green; call bar;
+areas grid; the sweep, 27 rows — 24 fixed, 3 needs-photo; the evidence pack), the owner's
+per-photo exception (cards 2/3 on J Valdez removal-a from the retouched set), and the
+Lighthouse recovery on Texas Tree Tops removal-a. Final build = the branch head. On it:
+compare zero (55 pages); guards pre 6/6 (image-spec PASS, two waivers reported), post 7/7,
+rendered 2/2 (all 55 pages); criterion 8 clean; call bar 0 failures; diff 28 pages, every
+row labelled; bundle +2,920 B of 3,072; Lighthouse 99/1.70 · 98/1.89 · 97/2.00 · 99/1.74.
 
-STILL OPEN: (1) the Lighthouse subagent on texas-tree-tops/removal-a (writes its
-lighthouse-after.json + summary); (2) then: replace `@@LH@@` in REPORT.md with the four rows,
-append the hold addendum to texas-tree-tops-removal-a/summary.md, add the numbers to
-decisions 50, run `zsh $SP/evidence.sh` (the pack: screens, compare, crit8, all three guard
-phases, call-bar listings, diff, bundle — ~35 min), commit the evidence + docs, refresh this
-file, and HOLD for the owner with the crop-sheet paths
-(j-valdez-removal-a/crops/card-2-{390,1440}.png, card-3-{390,1440}.png).
+OPEN — the owner's calls: (1) approve the batch, or send changes; (2) Texas Tree Tops
+removal-a's poster: accept (97 / 2.00 s, ~100 ms behind the gate for a real frame on the
+rail's first tile), a lazy poster (~150 B against 152 B of bundle headroom), or no clip;
+(3) the pairing of 16/18.png on cards 2/3 (service-match chose it; one line to swap).
+Then the publish steps in the REPORT: remove the guard (both settings files + the script),
+fast-forward main, publish by the owner's choice, re-verify live.
 
-Guard stays on until the owner has read the REPORT. Nothing pushed, nothing published.
+Guard stays on until then. Nothing pushed, nothing published. Decisions 1–50.
 
 DO NOT BUILD while a background run is reading app/dist. Guard stays on; nothing pushed.
 

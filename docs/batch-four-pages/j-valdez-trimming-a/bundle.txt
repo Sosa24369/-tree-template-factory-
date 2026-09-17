@@ -1,4 +1,2 @@
-Bundle, gzip -9, vs the live build e3394aa and vs page 1's final build (7ca924e):
-  JS  129541 -> 131241  (+1700 B vs live; +589 B vs page 1)   record data: three more trimming entries + 13 pins; trimming-c sizes call
-  CSS 27399 -> 27244  (-155 B vs live; +44 B vs page 1)   scoped slider block added; bento spans/rows and two per-template unclamp copies removed
-  batch total so far +1545 B   (ceiling 3072 B across the batch)
+Bundle, gzip -9, vs the live build e3394aa — the final build after the hold:
+  JS  129541 -> 132548  (+3007 B)   CSS 27399 -> 27312  (-87 B)   batch total +2920 B   (ceiling 3072 B)
