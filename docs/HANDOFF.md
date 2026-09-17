@@ -1,24 +1,30 @@
-# HANDOFF — batch/four-pages, HELD AT THE GATE (2026-09-17)
+# HANDOFF — APPROVED; main pushed; waiting for the owner's Publish click (2026-09-17)
 
-Read `docs/batch-four-pages/REPORT.md` — the gate section, "The hold" below the rule, 4a (the
-owner's per-photo exception) and "the one open trade-off" — then `hold/sweep-table.md`.
+The owner approved all four pages, accepted the poster trade-off on Texas Tree Tops
+removal-a, kept the 16/18 card pairing, and asked for the guard off, main fast-forwarded
+and pushed (decisions 51). DONE: the guard is out of both settings files and the repo;
+`main` is `cac5f84` (fast-forward from `3c685d1`, 82 commits) and pushed; the branch
+`batch/four-pages` is pushed too. The publish guard hook no longer exists — pushes and
+deploys are unblocked.
 
-DONE. The batch (four pages), the hold's five parts (check fixed red-then-green; call bar;
-areas grid; the sweep, 27 rows — 24 fixed, 3 needs-photo; the evidence pack), the owner's
-per-photo exception (cards 2/3 on J Valdez removal-a from the retouched set), and the
-Lighthouse recovery on Texas Tree Tops removal-a. Final build = the branch head. On it:
-compare zero (55 pages); guards pre 6/6 (image-spec PASS, two waivers reported), post 7/7,
-rendered 2/2 (all 55 pages); criterion 8 clean; call bar 0 failures; diff 28 pages, every
-row labelled; bundle +2,920 B of 3,072; Lighthouse 99/1.70 · 98/1.89 · 97/2.00 · 99/1.74.
+NEXT, in order:
+1. The owner clicks Publish in the studio and confirms the four protected routes
+   (`/p/texas-tree-tops/removal-a`, `/p/texas-tree-tops/storm-a`, `/p/j-valdez/removal-a`,
+   `/p/j-valdez/trimming-a`). Do not deploy from here unless the owner says so.
+2. After it: `python3 $SP/compare55.py` against the LIVE domain (refetch the 55 live pages
+   into /tmp/live55 first — the current copies are the PRE-batch pages), Lighthouse on the
+   four live URLs (August method, a subagent), and the deploy record in `docs/BUILD-LOG.md`
+   in the style of the 3c685d1 entry (deploy id from the studio's receipt).
+3. OPEN, owner's answer pending — Forney and Lake Ray Hubbard on J Valdez trimming-a: their
+   line came as "[add them to the trimming-a paragraph / drop the two chips]". Adding = a
+   copy edit to the record's `copyOverrides.trimming-a["why.body"]` (+ trimming-c for the
+   a→c parity guard); dropping = removing two cities from `serviceAreaList`, which every
+   J Valdez page's areas grid reads. Its own commit, guards, compare, then push.
+4. Follow-ups, not now: the three needs-photo slots (J Valdez removal-a `service-photo.1`,
+   `benefits`; storm-a `tile.5`); Stage 4 stays paused.
 
-OPEN — the owner's calls: (1) approve the batch, or send changes; (2) Texas Tree Tops
-removal-a's poster: accept (97 / 2.00 s, ~100 ms behind the gate for a real frame on the
-rail's first tile), a lazy poster (~150 B against 152 B of bundle headroom), or no clip;
-(3) the pairing of 16/18.png on cards 2/3 (service-match chose it; one line to swap).
-Then the publish steps in the REPORT: remove the guard (both settings files + the script),
-fast-forward main, publish by the owner's choice, re-verify live.
-
-Guard stays on until then. Nothing pushed, nothing published. Decisions 1–50.
+This HANDOFF commit is local on main and NOT pushed, so the main the studio builds is
+exactly cac5f84 until the owner has published.
 
 DO NOT BUILD while a background run is reading app/dist. Guard stays on; nothing pushed.
 
