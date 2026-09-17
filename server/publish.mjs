@@ -212,7 +212,7 @@ export function makePublisher({ repoDir, git, cfToken, cfAccountId, cfProject, b
     run,
     get status() { return status; },
     /** The suite, so the UI can list what a publish will check before starting one. */
-    guards: GUARDS.map(({ id, label, phase, why }) => ({ id, label, phase, why })),
+    guards: GUARDS.filter((g) => g.phase !== 'rendered').map(({ id, label, phase, why }) => ({ id, label, phase, why })), // the browser phase runs from the release machine, not here
     /** The production origin, so the UI can link the selected page on the live site. */
     baseUrl,
   };

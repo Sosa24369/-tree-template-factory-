@@ -8,11 +8,16 @@
  * and reports each one individually, so `publish` can refuse and say WHICH guard
  * failed rather than "something went wrong".
  *
- * Two phases, because half the guards read the BUILT output:
+ * Three phases, because half the guards read the BUILT output and two need a browser:
  *
- *   pre   runs before `npm run build`  — source-only rules. A failure here saves the
- *         two minutes a build costs.
- *   post  runs after `npm run build`   — everything that reads app/dist.
+ *   pre       runs before `npm run build`  — source-only rules. A failure here saves the
+ *             two minutes a build costs.
+ *   post      runs after `npm run build`   — everything that reads app/dist.
+ *   rendered  runs after the build too, in Chrome, on every page at three widths. The
+ *             studio host has no browser, so publish.mjs runs pre and post only and the
+ *             release machine runs `node scripts/run-guards.mjs rendered` before a publish
+ *             (the batch evidence records it). A guard that cannot run still counts as
+ *             FAILED where it is asked to run — it is never skipped-as-passed.
  *
  * Nothing here is advisory. `allPassed` is the only thing publish.mjs consults, and a
  * guard that errors (missing script, crashed node) counts as FAILED, never as passed —
@@ -127,6 +132,30 @@ export const GUARDS = [
     why: 'A <summary> ships with no accessible name — a screen-reader user tabs onto a control that announces nothing.',
     cmd: 'node',
     args: ['scripts/verify-faq-a11y.mjs'],
+  },
+  {
+    id: 'image-boxes',
+    label: 'Image boxes',
+    phase: 'post',
+    why: 'A photo box in the built page holds no image, or names a file that is not in the build — it paints as an empty grey block on the live page.',
+    cmd: 'node',
+    args: ['scripts/verify-image-boxes.mjs'],
+  },
+  {
+    id: 'rendered',
+    label: 'Rendered pages (browser)',
+    phase: 'rendered',
+    why: 'On the page as a reader sees it: a photo box paints empty or its image does not fill it, or the city grid is incomplete, clipped or leaves one city alone on the last row. Needs Chrome; the studio host has none, so this phase runs from the release machine before a publish.',
+    cmd: 'node',
+    args: ['scripts/verify-rendered.mjs'],
+  },
+  {
+    id: 'call-bar',
+    label: 'Mobile call bar (browser)',
+    phase: 'rendered',
+    why: 'At 390 px the fixed call bar fails 4.5:1 contrast, the page reserves less bottom padding than the bar is tall, or a section call button is in view while the bar shows (two stacked CTAs).',
+    cmd: 'node',
+    args: ['scripts/verify-callbar.mjs'],
   },
 ];
 
