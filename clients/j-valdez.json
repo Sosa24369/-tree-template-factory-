@@ -261,11 +261,11 @@
         }
       },
       {
-        "src": "/assets/j-valdez/removal-felled-trunk-img1122-c9ef5367.webp",
+        "src": "/assets/j-valdez/removal-felled-trunk-img1122-b4a0031b.webp",
         "alt": "Two crew members sawing a felled trunk into rounds in a back yard",
-        "width": 1162,
-        "height": 872,
-        "srcset": "/assets/j-valdez/removal-felled-trunk-img1122-c9ef5367-400w.webp 400w, /assets/j-valdez/removal-felled-trunk-img1122-c9ef5367-800w.webp 800w, /assets/j-valdez/removal-felled-trunk-img1122-c9ef5367.webp 1162w",
+        "width": 1200,
+        "height": 900,
+        "srcset": "/assets/j-valdez/removal-felled-trunk-img1122-b4a0031b-400w.webp 400w, /assets/j-valdez/removal-felled-trunk-img1122-b4a0031b-800w.webp 800w, /assets/j-valdez/removal-felled-trunk-img1122-b4a0031b.webp 1200w",
         "focal": {
           "x": 0.5,
           "y": 0.5
@@ -525,7 +525,7 @@
       "hero-plate": "",
       "hero-proof.1": "/assets/j-valdez/hero-photo-2-c029d1c8.webp",
       "hero-proof.2": "/assets/j-valdez/removal-bucket-truck-img1119-966a7dc4.webp",
-      "mosaic.1": "/assets/j-valdez/removal-felled-trunk-img1122-c9ef5367.webp",
+      "mosaic.1": "/assets/j-valdez/removal-felled-trunk-img1122-b4a0031b.webp",
       "mosaic.2": "/assets/j-valdez/removal-stump-cut-img1120-19e31d35.webp",
       "mosaic.3": "/assets/j-valdez/removal-bucket-over-water-nf4-16d47bf5.webp",
       "mosaic.4": "/assets/j-valdez/removal-boom-over-house-nf3-a0ee64e0.webp",
