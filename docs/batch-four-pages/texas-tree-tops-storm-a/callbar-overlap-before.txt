@@ -1,0 +1,15 @@
+BEFORE the fix (build cdbffed state) — the same measurement the guard makes:
+/p/texas-tree-tops/storm-a/ at 390×844 — bar .st-sticky 67px tall; reserved bottom padding 76px; page 9123px, 11 stops
+contrast — label rgb(26, 18, 5) on rgb(200, 149, 43): 6.88:1 at 15.2px; sub-label rgb(26, 18, 5) at opacity 0.8: 4.98:1 at 10.56px
+text under the bar at scroll end: 1; stops with a section call button in view while the bar shows: 11; text intersections across all stops: 21
+  stop  0  y=    0  bar shown   intersects 2: span "Call (682) 452-0735" | span.phone-sub "We’ll get a crew moving"  · section call button in view (gap to bar -61px)
+  stop  1  y=  844  bar shown   intersects 1: span.consent-copy "By checking this box you agree to re"  · section call button in view (gap to bar 708px)
+  stop  2  y= 1688  bar shown   intersects 3: p.rvs-body "Wow....so glad I found these guys! D" | span.rvs-author "Sandy M." | span.rvs-source "Google"  · section call button in view (gap to bar 447px)
+  stop  3  y= 2532  bar shown   intersects 0  · section call button in view (gap to bar 708px)
+  stop  4  y= 3376  bar shown   intersects 2: span "Tree fell on a car or driveway" | span "Tree leaning on a structure"  · section call button in view (gap to bar 708px)
+  stop  5  y= 4220  bar shown   intersects 0  · section call button in view (gap to bar 708px)
+  stop  6  y= 5064  bar shown   intersects 6: li.sac-city "Mansfield" | li.sac-city "Fort Worth" | li.sac-city "Hurst"  · section call button in view (gap to bar 708px)
+  stop  7  y= 5908  bar shown   intersects 3: p.st-step-body "Our crew handles the cutting, remova" | span.st-step-dot "4" | span.st-step-label "Step 4"  · section call button in view (gap to bar 708px)
+  stop  8  y= 6752  bar shown   intersects 1: span "Provided at no cost, whether or not "  · section call button in view (gap to bar 708px)
+  stop  9  y= 7596  bar shown   intersects 2: p.st-faq-a "Yes. Storms don’t keep business hour" | span "Tree on your house?"  · section call button in view (gap to bar 708px)
+  stop 10  y= 8279  bar shown   intersects 1: p.st-footer-copy "© 2026 Texas Tree Tops. All rights r"  · section call button in view (gap to bar 337px)

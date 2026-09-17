@@ -1,0 +1,19 @@
+BEFORE the fix (build cdbffed state) — the same measurement the guard makes:
+/p/j-valdez/removal-a/ at 390×844 — bar .ra-sticky 91px tall; reserved bottom padding 84px; page 12252px, 15 stops
+contrast — label color(srgb 0.105412 0.0682353 0.0272941) on rgb(224, 145, 58): 8.28:1 at 16px; sub-label color(srgb 0.105412 0.0682353 0.0272941) at opacity 0.85: 6.98:1 at 12px
+text under the bar at scroll end: 2; stops with a section call button in view while the bar shows: 5; text intersections across all stops: 40
+  stop  0  y=10338  bar shown   intersects 6: p.ra-faq-a "Tree removal cost depends on the siz" | p.ra-faq-a "Yes. We handle residential tree remo" | p.ra-faq-a "Stump grinding is available with qua"  · section call button in view (gap to bar 513px)
+  stop  1  y= 9043  bar shown   intersects 2: span "Tree Removal For Yard" | span "East Dallas Tree Removal"
+  stop  2  y= 7821  bar shown   intersects 3: span "Dead Tree Removal" | span "Large Tree Removal" | span "Oak Tree Removal"
+  stop  3  y= 6360  bar shown   intersects 3: span.ra-step-label "Step 2" | h3.ra-step-h "We Inspect The Job" | p.ra-step-body "Our crew looks at the tree size, acc"
+  stop  4  y= 4605  bar shown   intersects 0
+  stop  5  y= 4220  bar shown   intersects 1: p.ra-body "We provide professional tree removal"  · section call button in view (gap to bar 658px)
+  stop  6  y= 4957  bar shown   intersects 3: span "Residential tree removal for unwante" | span "Dead tree removal for dry, damaged, " | span "Tree cutting service for trees near "
+  stop  7  y= 5773  bar shown   intersects 5: span "Sunnyvale" | span "Heath" | span "Fate"
+  stop  8  y= 6608  bar shown   intersects 2: h3.ra-step-h "Safe Tree Removal" | p.ra-step-body "We handle the cutting, removal, and "
+  stop  9  y= 7421  bar shown   intersects 1: p.ra-body "Safe, clean, and professional tree r"
+  stop 10  y= 8284  bar shown   intersects 2: span "Stump Grinding" | span "Tree Stump Removal"
+  stop 11  y= 9134  bar shown   intersects 2: span "(469) 402-1196" | span.phone-sub "Call Now For A Free Estimate Today"  · section call button in view (gap to bar -69px)
+  stop 12  y= 9979  bar shown   intersects 3: span.ra-accent "Frequently Asked Questions" | span "About Tree Removals" | span "How fast can you come out for a tree"  · section call button in view (gap to bar 154px)
+  stop 13  y=10824  bar shown   intersects 4: p.ra-faq-a "Fill out the form and request your f" | span "Need Tree Removal?" | span.ra-accent "Get a Free Estimate Today"
+  stop 14  y=11373  bar shown   intersects 3: p.ra-footer-name "J Valdez Tree Services" | p.ra-footer-copy "© Copyright J Valdez Tree Services. " | span.notranslate "(214) 544-9487"  · section call button in view (gap to bar 259px)

@@ -1,0 +1,19 @@
+BEFORE the fix (build cdbffed state) — the same measurement the guard makes:
+/p/j-valdez/trimming-a/ at 390×844 — bar .ta-sticky 91px tall; reserved bottom padding 84px; page 11877px, 15 stops
+contrast — label color(srgb 0.105412 0.0682353 0.0272941) on rgb(224, 145, 58): 8.28:1 at 16px; sub-label color(srgb 0.105412 0.0682353 0.0272941) at opacity 0.85: 6.98:1 at 12px
+text under the bar at scroll end: 2; stops with a section call button in view while the bar shows: 6; text intersections across all stops: 40
+  stop  0  y= 9775  bar shown   intersects 7: p.ta-faq-a "In many cases, we can schedule same-" | p.ta-faq-a "Tree trimming cost depends on the si" | p.ta-faq-a "Tree trimming cost depends on the si"  · section call button in view (gap to bar 467px)
+  stop  1  y= 8511  bar shown   intersects 2: span "Free Tree Trimming Estimate" | span "Tree Trimming Near You"
+  stop  2  y= 7259  bar shown   intersects 2: span "Call (469) 402-1196" | span.phone-sub "Call Now For A Free Estimate Today"  · section call button in view (gap to bar -112px)
+  stop  3  y= 5682  bar shown   intersects 3: span.ta-step-label "Step 3" | h3.ta-step-h "Safe Tree Trimming" | p.ta-step-body "We handle the trimming, pruning, and"
+  stop  4  y= 4077  bar shown   intersects 3: span "Common Tree Trimming" | span.ta-accent "Requests We Handle" | span "Residential tree trimming for overgr"
+  stop  5  y= 4220  bar shown   intersects 2: span "Tree pruning service for weak, dead," | span "Roof & gutter branch clearance for l"
+  stop  6  y= 4957  bar shown   intersects 5: span "Rockwall" | span "Sunnyvale" | span "Heath"
+  stop  7  y= 5773  bar shown   intersects 2: p.ta-step-body "We handle the trimming, pruning, and" | span.ta-step-label "Step 4"
+  stop  8  y= 6608  bar shown   intersects 0
+  stop  9  y= 7421  bar shown   intersects 1: span "Tree Trimming"  · section call button in view (gap to bar 50px)
+  stop 10  y= 8284  bar shown   intersects 2: span "East Dallas Tree Trim Service" | span "Affordable Tree Trimming Service"
+  stop 11  y= 9134  bar shown   intersects 2: span "Ready To Get Those" | span.ta-accent "Trees Trimmed?"  · section call button in view (gap to bar 449px)
+  stop 12  y= 9979  bar shown   intersects 6: p.ta-faq-a "Yes. J Valdez Tree Service is licens" | p.ta-faq-a "Homeowners usually call for tree tri" | p.ta-faq-a "We provide tree trimming service in "  · section call button in view (gap to bar 671px)
+  stop 13  y=10824  bar shown   intersects 1: p.ta-footer-name "J Valdez Tree Service LLC"
+  stop 14  y=11033  bar shown   intersects 2: p.ta-footer-copy "© Copyright J. Valdez Tree Service C" | span.notranslate "(214) 544-9487"  · section call button in view (gap to bar 50px)

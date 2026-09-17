@@ -1,0 +1,20 @@
+BEFORE the fix (build cdbffed state) — the same measurement the guard makes:
+/p/texas-tree-tops/removal-a/ at 390×844 — bar .ra-sticky 91px tall; reserved bottom padding 84px; page 12972px, 16 stops
+contrast — label color(srgb 0.0941176 0.0701177 0.0202353) on rgb(200, 149, 43): 7.79:1 at 16px; sub-label color(srgb 0.0941176 0.0701177 0.0202353) at opacity 0.85: 6.64:1 at 12px
+text under the bar at scroll end: 1; stops with a section call button in view while the bar shows: 5; text intersections across all stops: 22
+  stop  0  y=10742  bar shown   intersects 2: span "About Tree Removals" | span "How fast can you come out for a tree"  · section call button in view (gap to bar 168px)
+  stop  1  y= 9546  bar shown   intersects 0
+  stop  2  y= 8393  bar shown   intersects 0
+  stop  3  y= 7034  bar shown   intersects 2: p.ra-step-body "Tell us what needs to be removed and" | span.ra-step-label "Step 2"
+  stop  4  y= 5274  bar shown   intersects 2: span "Residential tree removal for unwante" | span "Dead tree removal for dry, damaged, "
+  stop  5  y= 4327  bar shown   intersects 2: p.ra-body "Some trees become a problem slowly. " | p.ra-body "We provide professional tree removal"  · section call button in view (gap to bar 495px)
+  stop  6  y= 4983  bar shown   intersects 0
+  stop  7  y= 5755  bar shown   intersects 1: span "Debris cleanup and a final walkthrou"
+  stop  8  y= 6603  bar shown   intersects 2: span "Grand Prairie" | span "West Dallas"
+  stop  9  y= 7448  bar shown   intersects 2: p.ra-step-body "We handle the cutting, removal, and " | span.ra-step-label "Step 4"
+  stop 10  y= 8292  bar shown   intersects 0
+  stop 11  y= 9136  bar shown   intersects 3: span "Tree Stump Removal" | span "Tree and Stump Removal" | span "Debris Cleanup & Haul Away"
+  stop 12  y= 9980  bar shown   intersects 1: h2.ra-h2 "Looking for a Tree Removal Company N"  · section call button in view (gap to bar 28px)
+  stop 13  y=10796  bar shown   intersects 2: span "How fast can you come out for a tree" | p.ra-faq-a "In many cases, we can schedule same-"  · section call button in view (gap to bar 222px)
+  stop 14  y=11659  bar shown   intersects 1: p.ra-final-body "Fast tree removal service for homeow"
+  stop 15  y=12112  bar shown   intersects 2: p.ra-footer-name "Texas Tree Tops Tree Service LLC" | p.ra-footer-copy "© Copyright Texas Tree Tops. | All r"  · section call button in view (gap to bar 249px)
