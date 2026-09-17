@@ -1,9 +1,11 @@
 /**
- * S7 — "Areas We Serve": every city once, as a wrapped list of pills.
+ * S7 — "Areas We Serve": the shared static city grid (components/ServiceAreasCarousel).
  *
  * The cities are CLIENT DATA (client.serviceAreaList), never copy — a different
  * client is a different list with no code change, and an empty list removes the
- * whole section rather than leaving an orphan heading (R5).
+ * whole section rather than leaving an orphan heading (R5). The list itself is the shared
+ * component so every template lays the cities out the same way (alphabetical grid, last
+ * row never one city); the dedupe below only decides whether the section renders.
  *
  * This was a marquee: two tracks, each rendering its half of the list TWICE (the
  * second copy aria-hidden) and translating -50% for a seamless loop, under an edge
@@ -17,7 +19,8 @@
 
 import type { ResolvedClient } from '../../../schema/resolve';
 import { SafeSection, SafeText } from '../../../components/Safe';
-import { PinIcon, Section, SplitHeading, type Copy } from './shared';
+import { ServiceAreasCarousel } from '../../../components/ServiceAreasCarousel';
+import { Section, SplitHeading, type Copy } from './shared';
 
 export function Areas({ client, copy }: { client: ResolvedClient; copy: Copy }) {
   const seen = new Set<string>();
@@ -37,14 +40,7 @@ export function Areas({ client, copy }: { client: ResolvedClient; copy: Copy }) 
           <SafeText as="p" className="ra-areas-sub" value={copy('areas.h2')} />
         </div>
 
-        <ul className="ra-tags">
-          {cities.map((city) => (
-            <li className="ra-pill" key={city}>
-              <PinIcon />
-              <SafeText as="span" value={city} />
-            </li>
-          ))}
-        </ul>
+        <ServiceAreasCarousel client={client} />
       </Section>
     </SafeSection>
   );

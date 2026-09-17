@@ -25,7 +25,8 @@
 
 import type { ResolvedClient } from '../../../schema/resolve';
 import { SafeSection, SafeText } from '../../../components/Safe';
-import { PinIcon, Rule, Section, SplitHeading, type Copy } from './shared';
+import { ServiceAreasCarousel } from '../../../components/ServiceAreasCarousel';
+import { Rule, Section, SplitHeading, type Copy } from './shared';
 
 export function Areas({ client, copy }: { client: ResolvedClient; copy: Copy }) {
   // Each city once, whatever the record holds: a list typed twice in the studio should
@@ -48,14 +49,7 @@ export function Areas({ client, copy }: { client: ResolvedClient; copy: Copy }) 
           <SafeText as="p" className="ta-areas-sub" value={copy('areas.h2')} />
         </div>
 
-        <ul className="ta-tags">
-          {cities.map((city) => (
-            <li className="ta-tag" key={city}>
-              <PinIcon />
-              <SafeText as="span" value={city} />
-            </li>
-          ))}
-        </ul>
+        <ServiceAreasCarousel client={client} />
       </Section>
     </SafeSection>
   );

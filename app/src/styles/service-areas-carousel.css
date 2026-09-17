@@ -1,10 +1,11 @@
 /**
- * ServiceAreas — a wrapped, static chip list (2026-09-16, the four-page batch).
+ * ServiceAreas — a static, alphabetical city grid (2026-09-16, the four-page batch).
  *
- * The marquee this replaced needed a duplicate track to loop, an edge mask to hide the
- * seam and a scroller to let a reader catch up; on the live pages that meant every city
- * twice, faded edges and a first chip nobody could reach. One list, wrapped inside the
- * column, is what the reduced-motion rule already rendered. The chip itself is unchanged.
+ * The column count lives on the list as custom properties set by the component from
+ * the city count, so the last row never holds a single city (see the component for the
+ * arithmetic). Twelve tracks: a cell spans 12 / columns; below 768 px the marked tail
+ * cells (only when two AND three columns would both strand one city) span a third of
+ * the row instead. Nothing here scrolls, masks, animates or hides.
  */
 
 .sac {
@@ -12,24 +13,47 @@
 }
 
 .sac-row {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 10px;
+  display: grid;
+  grid-template-columns: repeat(60, minmax(0, 1fr));
+  gap: 8px 10px;
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
 .sac-city {
-  flex: 0 0 auto;
-  padding: 8px 16px;
+  grid-column: span var(--sac-span-s, 30);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  padding: 7px 10px;
   border-radius: 999px;
   font-size: 14px;
   font-weight: 600;
-  line-height: 1.2;
-  white-space: nowrap;
+  line-height: 1.25;
+  text-align: center;
+  overflow-wrap: anywhere;
   background: color-mix(in srgb, var(--brand-primary, #234) 6%, #ffffff);
   border: 1px solid color-mix(in srgb, var(--brand-primary, #234) 18%, #e2e2dd);
   color: color-mix(in srgb, var(--brand-primary, #234) 72%, #000000);
+}
+
+@media (max-width: 767px) {
+  .sac-city--tail {
+    grid-column: span var(--sac-span-tail, 20);
+  }
+}
+
+@media (min-width: 768px) {
+  .sac-city {
+    grid-column: span var(--sac-span-m, 15);
+    padding: 8px 14px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .sac-city {
+    grid-column: span var(--sac-span-l, 12);
+  }
 }
