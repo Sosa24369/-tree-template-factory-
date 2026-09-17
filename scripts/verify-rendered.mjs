@@ -84,6 +84,7 @@ for (const route of all) {
   const rec = record(route); const cities = cityCount(rec);
   for (const vp of VIEWPORTS) {
     await page.setViewport(vp, 1000, 2); await page.goto(base + route + '?cb=' + Date.now()); await sleep(900);
+    await page.eval(`document.documentElement.style.scrollBehavior = 'auto'; document.body.style.scrollBehavior = 'auto'; return 1;`); // the pages scroll smoothly; measure at rest
     await page.eval(SETTLE);
     const r = await page.eval(CHECK);
     for (const b of r.boxes) hits.push(`${route} @${vp} · ${b.cls} ${b.box} · ${b.bad}${b.src ? ' · ' + b.src : ''}`);
