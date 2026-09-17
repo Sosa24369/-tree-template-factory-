@@ -1,17 +1,20 @@
 Lighthouse AFTER measurement: J Valdez / removal-a
-page: http://localhost:4182/p/j-valdez/removal-a/  (built site at app/dist, branch batch/four-pages, commit 7ca924e)
-method (August method): Lighthouse 13.4.1, --only-categories=performance, --throttling-method=devtools (applied), --form-factor=mobile, Chrome --headless=new; served by `vite preview --port 4182 --strictPort` with gzip (Content-Encoding: gzip confirmed); build marker ra-reviews-link present (count 1)
+note: RE-RUN on the final build after the proof-cell swap and the two card photographs — replacing the previous after-run (99 / 1.73 s / 381865 B, measured 2026-09-17 on port 4184 from /tmp/lh-final-jv-removal-a-*.json at commit d8a8066). Same method, same blocked patterns; only the build changed.
+page: http://localhost:4185/p/j-valdez/removal-a/  (built site at app/dist, branch batch/four-pages, commit 07da3d5 plus the uncommitted working tree; dist/index.html mtime 2026-09-17 02:41:54, 55 index.html files under app/dist — served as built, not rebuilt for this measurement)
+method (August method): Lighthouse 13.4.1, --only-categories=performance, --throttling-method=devtools (applied), --form-factor=mobile, Chrome --headless=new; served by `vite preview --port 4185 --strictPort` with gzip (Content-Encoding: gzip confirmed); build markers in the served HTML: ra-areas (count 2), ra-call--bar (count 1)
 blocked URL patterns: *googletagmanager.com* *google-analytics.com* *googleadservices.com* *doubleclick.net* *callrail.com* *calltrk.com* *leadconnectorhq.com* *msgsndr.com*
-runs: 1 discarded warm-up, then 3 measured runs (raw JSON: /tmp/lh-after-1.json, -2.json, -3.json)
-measured: 2026-09-16T06:21:07.374Z, 2026-09-16T06:21:31.387Z, 2026-09-16T06:21:55.513Z
+runs: 1 discarded warm-up, then 3 measured runs (raw JSON: /tmp/lh-cards-jv-removal-a-1.json, -2.json, -3.json)
+measured: 2026-09-17T07:44:55.756Z, 2026-09-17T07:45:19.733Z, 2026-09-17T07:45:43.710Z
 LCP element source: audits[lcp-breakdown-insight].details.items[] node (Lighthouse 13 has no largest-contentful-paint-element audit)
 image bytes = sum of transferSize over audits[network-requests].details.items with resourceType == Image (every image the page requested during the run)
 
-run 1: score 99 | LCP 1.72 s | CLS 0 | TBT 0 ms | FCP 1.72 s | LCP element: <p class="ra-body ra-hero-body"> "Get $300 Off With Your Tree Removal Service All Summer! Whether you need a tree…" | image bytes (first viewport, mobile): 381865 | gtm requests completed: 0
-run 2: score 99 | LCP 1.72 s | CLS 0 | TBT 0 ms | FCP 1.72 s | LCP element: <p class="ra-body ra-hero-body"> "Get $300 Off With Your Tree Removal Service All Summer! Whether you need a tree…" | image bytes (first viewport, mobile): 381865 | gtm requests completed: 0
-run 3: score 99 | LCP 1.74 s | CLS 0 | TBT 8 ms | FCP 1.74 s | LCP element: <p class="ra-body ra-hero-body"> "Get $300 Off With Your Tree Removal Service All Summer! Whether you need a tree…" | image bytes (first viewport, mobile): 381865 | gtm requests completed: 0
+run 1: score 99 | LCP 1.71 s | CLS 0 | TBT 0 ms | FCP 1.71 s | LCP element: <p class="ra-body ra-hero-body"> "Get $300 Off With Your Tree Removal Service All Summer! Whether you need a tree…" | image bytes (first viewport, mobile): 381865 | gtm requests completed: 0
+run 2: score 99 | LCP 1.70 s | CLS 0 | TBT 0 ms | FCP 1.70 s | LCP element: <p class="ra-body ra-hero-body"> "Get $300 Off With Your Tree Removal Service All Summer! Whether you need a tree…" | image bytes (first viewport, mobile): 381865 | gtm requests completed: 0
+run 3: score 99 | LCP 1.70 s | CLS 0 | TBT 0 ms | FCP 1.70 s | LCP element: <p class="ra-body ra-hero-body"> "Get $300 Off With Your Tree Removal Service All Summer! Whether you need a tree…" | image bytes (first viewport, mobile): 381865 | gtm requests completed: 0
 
-image requests (identical across all 3 runs; path and transferSize in bytes; total 381865):
+Exact values: LCP 1712.341 / 1703.175 / 1700.208 ms; FCP identical to LCP in each run (the LCP element is hero text, painted at first contentful paint); CLS 0 in all; TBT 0.0 / 0.0 / 0.0 ms. LCP selector: section.ra-hero > div.ra-container > div.ra-hero-copy > p.ra-body. No runWarnings.
+
+image requests (identical set and sizes across all 3 runs; path and transferSize in bytes; total 381865 — the same 13 entries and the same total as the previous after-run, so the two card photographs did not change which files this page fetches during the run):
   /assets/j-valdez/logo-header-2ea7dab6.webp  8858
   data:image/svg+xml (inline icon)  0
   /assets/texas-tree-tops/bg-section-evifliwtqp-6b6b2797.webp  3548
@@ -25,6 +28,10 @@ image requests (identical across all 3 runs; path and transferSize in bytes; tot
   /assets/_shared/benefit-icon-2-6710e15b.svg  1036
   /assets/_shared/benefit-icon-3-8423c543.svg  843
   /assets/_shared/benefit-icon-4-2b31db6c.svg  1175
-googletagmanager.com requests: 1 attempted, 0 completed (blocked, statusCode -1) in every run
+googletagmanager.com requests: 1 attempted (https://www.googletagmanager.com/gtm.js?id=GTM-PFZPR33H), 0 completed (blocked, statusCode -1) in every run
 
-copied: run 1 (median score 99; all three scored 99/99/99, tie broken by median LCP 1.719 s) -> lighthouse-after.json
+Main bundles (identical across all three runs; transferSize, gzip server):
+  /assets/index-CDH6xwUk.js     133473 B  (resourceSize 490963 B)   — new hash; the previous after-run served index-DDz9ZRfL.js at 133294 B
+  /assets/index-D6r_9LcV.css     27947 B  (resourceSize 162862 B)   — unchanged
+
+copied: run 2 (median score 99; all three scored 99/99/99, tie broken by median LCP 1703.175 ms) -> lighthouse-after.json

@@ -1,20 +1,20 @@
 Lighthouse AFTER — Texas Tree Tops storm-a
 ==========================================
-Note:        RE-RUN on the final build after the J Valdez record pin (clients/j-valdez.json). This replaces the earlier after-run of 99 / 1.74 s / 13,990 B (which was measured on port 4182 from /tmp/lh-s4-after-*.json before the pin).
-Page:        http://localhost:4183/p/texas-tree-tops/storm-a/
-Source:      commit 81141ad (batch/four-pages) + uncommitted J Valdez record pin, served as already built from app/dist (dist/index.html mtime 2026-09-16 02:27:23; 55 index.html files under app/dist — not rebuilt for this measurement)
-Server:      `npx vite preview --port 4183 --strictPort` (gzip confirmed via Accept-Encoding: gzip -> Content-Encoding: gzip)
+Note:        RE-RUN on the final build after the hold — the areas grid, the call bar, the sweep's fixes — replacing the earlier after-run of 99 / 1.73 s / 13,990 B (which was measured 2026-09-16 on port 4183 from /tmp/lh-s4-after2-*.json at commit 81141ad + the J Valdez record pin). Same method, same blocked patterns; only the build changed.
+Page:        http://localhost:4184/p/texas-tree-tops/storm-a/
+Source:      commit d8a8066 (batch/four-pages), served as already built from app/dist (dist/index.html mtime 2026-09-17 00:02:15; 55 index.html files under app/dist — not rebuilt for this measurement); final-build markers in the served HTML: st-areas (count 1), st-call--bar (count 1)
+Server:      `npx vite preview --port 4184 --strictPort` (gzip confirmed via Accept-Encoding: gzip -> Content-Encoding: gzip)
 Tool:        Lighthouse 13.4.1 (global), Chrome --headless=new
 Method:      August method — --only-categories=performance --throttling-method=devtools --form-factor=mobile
              blocked-url-patterns: *googletagmanager.com* *google-analytics.com* *googleadservices.com* *doubleclick.net* *callrail.com* *calltrk.com* *leadconnectorhq.com* *msgsndr.com*
-Runs:        1 discarded warm-up, then 3 real runs (/tmp/lh-s4-after2-1.json, -2.json, -3.json)
-Date:        2026-09-16
+Runs:        1 discarded warm-up, then 3 real runs (/tmp/lh-final-ttt-storm-a-1.json, -2.json, -3.json)
+Date:        2026-09-17 (fetchTime 05:42:37.173Z, 05:42:59.344Z, 05:43:21.233Z)
 
-run 1: score 99 | LCP 1.73 s | CLS 0 | TBT 0 ms | FCP 1.73 s | LCP element: <p class="st-hero-body"> "A tree on the house, a fence flattened, a yard full of wreckage. You need it go…" | image bytes (all images fetched during the run, mobile, no scroll): 13990 | gtm requests completed: 0
-run 2: score 99 | LCP 1.73 s | CLS 0 | TBT 0 ms | FCP 1.73 s | LCP element: <p class="st-hero-body"> "A tree on the house, a fence flattened, a yard full of wreckage. You need it go…" | image bytes (all images fetched during the run, mobile, no scroll): 13990 | gtm requests completed: 0
-run 3: score 99 | LCP 1.75 s | CLS 0 | TBT 0 ms | FCP 1.75 s | LCP element: <p class="st-hero-body"> "A tree on the house, a fence flattened, a yard full of wreckage. You need it go…" | image bytes (all images fetched during the run, mobile, no scroll): 13990 | gtm requests completed: 0
+run 1: score 99 | LCP 1.74 s | CLS 0 | TBT 0 ms | FCP 1.74 s | LCP element: <p class="st-hero-body"> "A tree on the house, a fence flattened, a yard full of wreckage. You need it go…" | image bytes (all images fetched during the run, mobile, no scroll): 13990 | gtm requests completed: 0
+run 2: score 99 | LCP 1.74 s | CLS 0 | TBT 0 ms | FCP 1.74 s | LCP element: <p class="st-hero-body"> "A tree on the house, a fence flattened, a yard full of wreckage. You need it go…" | image bytes (all images fetched during the run, mobile, no scroll): 13990 | gtm requests completed: 0
+run 3: score 99 | LCP 1.74 s | CLS 0 | TBT 0 ms | FCP 1.74 s | LCP element: <p class="st-hero-body"> "A tree on the house, a fence flattened, a yard full of wreckage. You need it go…" | image bytes (all images fetched during the run, mobile, no scroll): 13990 | gtm requests completed: 0
 
-(exact LCP ms: run 1 = 1725, run 2 = 1733, run 3 = 1746. The one googletagmanager.com request per run was blocked, statusCode -1.)
+(exact LCP ms: run 1 = 1741.127, run 2 = 1741.453, run 3 = 1742.670; FCP equals LCP in each run; TBT 0.0 ms in all. LCP selector: section.st-hero > div.st-container > div.st-hero-copy > p.st-hero-body. The one googletagmanager.com request per run (https://www.googletagmanager.com/gtm.js?id=GTM-W32M4C6F) was blocked, statusCode -1. No runWarnings.)
 
 Images fetched (identical across all three runs; transferSize, gzip server):
   /assets/texas-tree-tops/logo-header-e9743261.webp      13990 B
@@ -22,8 +22,7 @@ Images fetched (identical across all three runs; transferSize, gzip server):
   total image transfer: 13990 B (1 network image)
 
 Main bundles (identical across all three runs; transferSize, gzip server):
-  /assets/index-CaHf7MVv.js     132323 B  (resourceSize 487504 B)
-  /assets/index-DGACwqe1.css     27729 B  (resourceSize 162310 B)
+  /assets/index-DDz9ZRfL.js     133294 B  (resourceSize 489600 B)
+  /assets/index-D6r_9LcV.css     27947 B  (resourceSize 162862 B)
 
-After copied: run 2 (median score 99 of 99/99/99; tie-break median LCP 1733 ms) -> lighthouse-after.json
-(The J Valdez pin the Source line calls uncommitted is commit cdbffed on batch/four-pages.)
+After copied: run 2 (median score 99 of 99/99/99; tie-break median LCP 1741.453 ms) -> lighthouse-after.json

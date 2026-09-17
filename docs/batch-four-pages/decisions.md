@@ -449,5 +449,9 @@ is logged and the run continues. No firing came from a publish, deploy or push c
     2 takes `restoration-grid-2` (the aerial lift at a dead tree — the strongest removal image
     and, at 51 KB, the lightest candidate), the grinder goes to grid slot 3 and the rigging
     crew to card 3. The poster stays at its quality (5 KB for a visible tile is a bad trade).
-    Expected first-viewport bytes ≈ 418 KB: above the gate's 386 KB by the poster, below the
-    original 442 KB. The re-run's numbers are in the page summary.
+    Measured: 97 / 2.06 s / 418,743 B; then the poster regenerated at 320 px (15.7 KB, the tile
+    is 143 × 190 CSS px): 97 / 2.00 s / 405,003 B (runs 97/98/97). 37 KB under the baseline,
+    one point and ~100 ms behind it; the remaining gap is the poster, which a <video poster>
+    loads eagerly and which cannot be lazy without ~150 B of observer code against 152 B of
+    bundle headroom. Not decided here: the owner chooses between the frame, a lazy poster,
+    and no clip (REPORT, "the one open trade-off").

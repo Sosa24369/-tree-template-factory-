@@ -52,3 +52,21 @@ No regression on score, LCP or first-viewport bytes.
 - `bg-section-*` template art and the logo preloaded twice: template items (page 1 summary).
 - `_template/removal-a/benefit-strip-art` stays: it is Texas Tree Tops' own photograph, now with
   a descriptive alt.
+
+## The hold (owner's second instruction, 2026-09-16/17) — what changed on this page
+
+- **Areas** — the alphabetical grid, 2 (+ tail of three) / 5 / 5 columns, nothing clipped.
+- **Call bar** — hidden while a section call button is in view, the space inside the footer
+  (91 px + safe-area); after: 0 rule failures (before: 5 stops stacked, text under the bar).
+- **Sweep** (9 rows, all fixed): the grid overflow; the clip's black tile → a poster frame
+  (`PhotoSet.poster`); `gallery-04` (equipment only) out of the proof strip, the grid and the
+  rail; card 3's helmet crop → the rigging crew; the stock pruning photo out of the rail; the
+  rail curated to nine client photographs + the clip (the spec's no-photo-twice rule);
+  `gallery-05`'s roof worker whole (focal y = 0.75). Then, by Lighthouse weight: proof cell 2
+  = the aerial lift (`restoration-grid-2`, 51 KB), the grinder in the deferred grid.
+- **Lighthouse, final build**: 97 / 2.00 s / 405,003 B (runs 97/98/97, 1.98–2.01 s) against
+  98 / 1.90 s / 441,941 B before and 98 / 1.90 s / 386,105 B at the gate — 37 KB under the
+  baseline, one point and ~100 ms behind it; the remaining difference is the poster's
+  15.7 KB, which a `<video poster>` loads eagerly. The owner's call (REPORT, "the one open
+  trade-off"): accept, a lazy poster (~150 B of the 152 B bundle headroom), or no clip.
+- Guards on the final build: pre 6/6, post 7/7, rendered 2/2; compare zero; criterion 8 clean.
