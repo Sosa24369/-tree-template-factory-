@@ -285,7 +285,16 @@ a:focus-visible {
    cloaking and is also what fails the check.
    ========================================================================== */
 .gads-call-asset {
-  margin: 10px 0 0;
+  /* The line is a direct child of <footer>, after the template's container, so it painted
+     flush at x = 0 outside the gutter (the sweep, 2026-09-16). It takes the container's own
+     measure — each template's max width and gutter, via its custom properties, which are
+     set on the template root and inherit — so it sits under the legal line, not the edge.
+     No markup change: the number's HTML stays byte-identical. */
+  box-sizing: border-box;
+  width: 100%;
+  max-width: var(--ra-max, var(--ta-max, var(--ag-max, var(--rb-max, var(--tb-max, var(--rc-max, var(--tc-max, 1120px)))))));
+  padding-inline: var(--ra-gutter, var(--ta-gutter, var(--ag-gutter, var(--rb-gutter, var(--tb-gutter, clamp(18px, 5vw, 44px))))));
+  margin: 10px auto 0;
   font-size: 13px;
   line-height: 1.5;
   font-weight: 400;
