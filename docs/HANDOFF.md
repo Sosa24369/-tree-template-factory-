@@ -1,31 +1,24 @@
-# HANDOFF — batch/four-pages, ON HOLD after the gate (2026-09-16, owner's second instruction)
+# HANDOFF — batch/four-pages, the hold is DONE bar the last numbers (2026-09-17)
 
-The owner held the publish (two page-1 screenshots showed defects the evidence denied; the
-"dead space 0" check measured the wrapper, not the photo). The five parts and where each is:
+Read `docs/batch-four-pages/REPORT.md` (the gate section, then "The hold" below its rule)
+and `hold/sweep-table.md`. All five parts of the owner's second instruction are complete:
 
-1. **Check** — DONE (decisions 29–30; `hold/step1-check.txt`, `hold/rendered-hits.txt`).
-   Guards: static `image-boxes` (post), browser `rendered` + `call-bar` (a `rendered` phase,
-   local only). Committed b4e7fb0, ac2b441. Card-1 focal committed a580518.
-2. **Call bar** — code written and measured (decisions 33): observer in `lib/callbar.ts` +
-   `main.tsx`; hide rule + footer spacer in `styles/base.css`; per-template main paddings
-   removed; storm sub-label full ink. After (instant-scroll probe): scroll-end 0/27, contrast
-   ≥ 5.03, stacked 0 except the guard's own over-count (it counted the header's number;
-   narrowed to `main a[href^=tel]`, re-run `$SP/callbar-after4` in progress). UNCOMMITTED.
-3. **Areas** — grid committed cd192b0, then the sweep found the 60-track column-gap overflow
-   at 390 (decisions 35): fix in `service-areas-carousel.css`, UNCOMMITTED, unbuilt.
-4. **Sweep** — three of four tables in (`hold/sweep-table.md`, 18 rows); TTT removal-a's
-   subagent still reading its slices. Fixes written, UNCOMMITTED, unbuilt: storm tiles
-   `!important` + handle column (36–37), focal points gallery-slide-3 / work-photo-1 /
-   IMG_1119 (39–40, row "proof cell 2"), call-asset line CSS (41), re-ingested IMG_1122 /
-   IMG_1126 with new hashes and old files deleted (42), rail pins 12 → 8 (43); needs-photo
-   rows (38, 44). Then: ONE COMMIT PER FINDING with the row in the message.
-5. **Gate** — after the rebuild: `node scripts/run-guards.mjs pre|post|rendered`, compare,
-   `zsh $SP/evidence.sh`, Lighthouse ×4 (prompt at `$SP/lighthouse-after-prompt.txt`),
-   REPORT.md additions (step-1 outputs, hit list, callbar files, areas three widths both
-   clients, the sweep table), hold.
+1. Check fixed, red then green; guards `image-boxes` (post) + `rendered`/`call-bar` (rendered
+   phase, this machine). 2. Call bar: observer + footer spacer + full-ink sub-label; 27/27
+   pages clean. 3. Areas: alphabetical grid, computed columns, no lonely last row; both
+   templates' own lists replaced by the shared component. 4. Sweep: 27 rows, 22 fixed (one
+   partly), 5 needs-photo; one commit per row (`git log --oneline | grep 'Sweep'`); two
+   off-page grids and a guard blind spot fixed (decisions 48). 5. Evidence pack re-run on the
+   final build: compare zero; pre 6/6, post 7/7, rendered 2/2; criterion 8 clean; diff 28
+   pages labelled; bundle +2,732 B of 3,072. Committed (d8a8066).
 
-Order now: wait for `$SP/callbar-after4.txt` and the last sweep → `npm run build` (app/) →
-post + rendered + call-bar guards → compare → commits per finding → evidence → REPORT.
+STILL OPEN at the moment of writing: the Lighthouse ×4 subagent on the final build (writes
+`<folder>/lighthouse-after.json` + `-summary.txt`); then replace `@@LH@@` in REPORT.md with the
+four before→after rows, add a "hold" addendum to each `<folder>/summary.md`, commit
+"Hold evidence: Lighthouse after ×4 + summaries", refresh this file, and HOLD for the owner.
+
+Guard stays on until the owner has read the REPORT. Nothing pushed, nothing published.
+Decisions 29–48 in decisions.md.
 
 DO NOT BUILD while a background run is reading app/dist. Guard stays on; nothing pushed.
 

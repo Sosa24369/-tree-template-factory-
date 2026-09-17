@@ -283,8 +283,59 @@ and fixed: twelve tracks gave `span 2.4` for five columns (invalid, chips collap
 
 One subagent per page, looking at the rendered build at three widths, returning only a
 findings table; every row fixed in its own commit (the row is in the message) or marked
-needs-photo with the slot and the photograph it needs. @@SWEEP-SUMMARY@@
+needs-photo with the slot and the photograph it needs. Four subagents, one per page, 27 rows in all: **22 fixed** (one partly), **5 needs-photo**,
+each fix its own commit with the row in the message:
+
+- **storm-a** (4): the 390 grid overflow — mine, the sixty-track column gap (fixed); ragged
+  work tiles — DeferredImage's inline ratio outranking the template's uniform rule (fixed;
+  decision 26 corrected); the handle section's hole at 1440 (fixed); tile 5, an equipment
+  shot shown uncropped — **needs-photo** (`photoSlots.storm-a.tile.5`).
+- **J Valdez trimming-a** (4): the grid overflow; `gallery-slide-3`'s crowns cut in the
+  band; `work-photo-1`'s bucket sliced in the grid (focal points on the photographs); the
+  Google Ads call-asset line flush at x = 0 (its container's measure, CSS only) — all fixed.
+- **J Valdez removal-a** (10): the grid overflow; proof cell 2's bucket/cab (focal);
+  IMG_1122's pole (re-ingested, the left 12 % trimmed) and IMG_1126's cut heads
+  (re-ingested, band higher — partly: the hand truck is the job's tool and stays); four
+  composites in the rail (dropped, eight single photographs remain); the call-asset line —
+  fixed. Benefits and the three services cards — **needs-photo**: every removal original is
+  placed once and the spec forbids a photograph twice on a page
+  (`photoSlots.removal-a.service-photo.1/.2/.3`, `.benefits`; decisions 44).
+- **Texas Tree Tops removal-a** (9): the grid overflow; the rail's lead clip painting as a
+  black box (a poster frame, a new `PhotoSet.poster` field, four templates, a guard rule);
+  `gallery-04` (equipment only) in the proof strip, the grid and the rail, the helmet crop
+  on card 3 and its rail tile, a stock pruning photo in the rail — three slots re-pointed
+  to removal work and the rail curated to the eleven photographs not placed elsewhere
+  (the spec's no-photo-twice rule, which `pick: all` was breaking); `gallery-05`'s roof
+  worker cut at the waist (focal) — all fixed.
+
+Off the four pages, the rendered guard on all 55 found two more (decisions 48): removal-c's
+and trimming-c's ragged work grids (pre-existing on live; cells uniform 3:4 now) and a
+blind spot in the guard's own settle pass (horizontal rails). What only Texas Tree Tops and
+J Valdez can supply is unchanged: the five needs-photo slots above, the storm originals,
+the Texas Tree Tops removal originals ≥ 1600 px.
 
 ## 5. The evidence pack, re-run on the final build
 
-@@FINAL-NUMBERS@@
+Final build: `batch/four-pages` at the head after the hold (the evidence commit lists it),
+still fast-forwardable onto `main` (`3c685d1`). Nothing pushed, nothing published, the guard on.
+
+| gate | result on the final build |
+|---|---|
+| 55-page phone / GTM compare | **zero differences** (183 `tel:`, 373 `data-dni`, 367 visible numbers, 68 GTM ids) |
+| guards, pre / post / rendered | **6/6 · 7/7 · 2/2** — post now includes `image-boxes`; rendered = `rendered` + `call-bar` on all 55 pages, settled, three widths, rails scrolled |
+| criterion 8 (declared `sizes` within 10 % of the box, 390/820/1440) | clean on the four targets, 150 boxes |
+| call bar, 27 bar pages at 390 × 844 | 0 rule failures — no text under the bar at scroll end, hidden at every stop where a section button is in view, contrast 5.03–13.5:1 |
+| prerender diff vs the live build | 28 of 55 pages, every row labelled; the four protected pages the targets of their own page |
+| bundle, gzip | **+2,732 B of 3,072** (JS +2,819, CSS −87 vs live): the areas grid, the bar observer, the poster field; 340 B of headroom |
+| Lighthouse, August method, four pages | @@LH@@ |
+
+Per page folder: `after-*.png` (settled, the bar out of section clips), `crops/` for every
+cell the hold changed, `callbar-overlap.txt` and `-before.txt`, `guards.txt`,
+`phone-gtm-compare.txt`, `prerender-diff.txt`, `bundle.txt`, `lighthouse-before/after`.
+`hold/`: `step1-check.txt`, `rendered-hits.txt`, `callbar-before-all-pages.txt`,
+`sweep-table.md`.
+
+**What only you can supply, updated:** the five needs-photo slots (page 1's three services
+cards and benefits; storm-a's tile 5), plus the earlier asks (reviews text, Texas Tree Tops
+removal and storm originals ≥ 1600 px, the two trimming-a cities). **Approval and publish
+steps** are unchanged from the section above the line. Stage 4 stays paused.
