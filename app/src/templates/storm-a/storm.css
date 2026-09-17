@@ -821,7 +821,12 @@
 .storm .st-tile-box {
   display: block;
   width: 100%;
-  aspect-ratio: 4 / 3;
+  /* !important: DeferredImage reserves each box with the photo's OWN ratio as an inline
+     style, which outranks this rule — so a portrait (gallery-15, 382×510) and a square
+     (restoration-grid-2) sat at native shape among the 4:3 tiles and every row left empty
+     paper under its shorter photos (the sweep, 2026-09-16). Uniform, as the comment above
+     always said. */
+  aspect-ratio: 4 / 3 !important;
   overflow: hidden;
   border-radius: var(--st-radius-sm);
 }
