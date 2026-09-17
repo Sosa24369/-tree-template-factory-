@@ -91,7 +91,11 @@
         "alt": "Professionally trimmed trees with raised canopies along a residential street, East Dallas TX",
         "width": 1080,
         "height": 1080,
-        "srcset": "/assets/j-valdez/gallery-slide-3-650f67b6-400w.webp 400w, /assets/j-valdez/gallery-slide-3-650f67b6-800w.webp 800w, /assets/j-valdez/gallery-slide-3-650f67b6.webp 1000w"
+        "srcset": "/assets/j-valdez/gallery-slide-3-650f67b6-400w.webp 400w, /assets/j-valdez/gallery-slide-3-650f67b6-800w.webp 800w, /assets/j-valdez/gallery-slide-3-650f67b6.webp 1000w",
+        "focal": {
+          "x": 0.5,
+          "y": 0.4
+        }
       },
       {
         "src": "/assets/j-valdez/gallery-slide-4-07c07931.webp",
