@@ -378,3 +378,46 @@ is logged and the run continues. No firing came from a publish, deploy or push c
     side (the box is 488 × 520 at 1440) with no foreground obstruction. Card 1's focal
     (decisions 34) remains the best the current photograph allows; it stays until the
     replacements arrive.
+45. **Texas Tree Tops removal-a: three slots re-pointed to removal work (the sweep).** The
+    proof strip's cell 2, the grid's slot 3 and the rail all showed `gallery-04` — the
+    branded box truck and chipper, no tree, no work. The set's unplaced removal-work
+    photographs (decisions 22 looked at them): `restoration-photo-5` (a stump grinder at
+    work at a front-yard stump) → proof cell 2, focal y = 0.55 for the 2.2:1 box;
+    `restoration-grid-2` (an aerial lift raised to a dead tree beside a garage, crane-
+    assisted removal — the card's own list) → services card 3, replacing
+    `restoration-grid-5`, whose foreground helmet sits in the frame itself (a 4:3 file in
+    a 4:3 card shows the whole frame; no focal point can move it); `restoration-photo-3`
+    (two crew rigging a rope from a large oak) → grid slot 3. Descriptive alts on the four
+    restoration photographs that had none (alt text is not copy: T5). `gallery-05` gets a
+    focal point (y = 0.75) so the worker on the trailer roof is whole and the pole leaves
+    the corner. The 1200 px files also upscale less than the 800/680 px ones they replace.
+46. **Texas Tree Tops removal-a's rail is curated, and honours "no photo twice".** The rail
+    took the whole set (`pick: all`, 24 tiles) — so every photograph placed elsewhere on the
+    page repeated in it (decision 10 had left that as pre-existing), and it carried the
+    three the sweep flagged: `gallery-04` (equipment), the stock pruning photograph
+    (trimming, on a removal page), `restoration-grid-5` (the helmet). Pinned to the eleven
+    not placed elsewhere — the clip, gallery-08…15, stock photo 2 (an old stump) and
+    `restoration-photo-4` (chipper cleanup) — with the remaining cells deliberately empty
+    (''), which the resolver honours. Record only. gallery-08…15 are 382 × 510 legacy
+    files (2.2× upscaled in the rail), reported before, still Texas Tree Tops' to replace.
+47. **The clip gets a poster frame.** The rail's lead tile is `gallery-01.mp4` with
+    `preload="none"` and no poster — a black box with controls until someone presses play
+    (the sweep's "empty tile"; the template's own comment: "No poster frame was captured").
+    No ffmpeg on this Mac: the frame is captured at 1.0 s with the harness's Chrome through
+    a range-capable server (Chrome cannot seek without Range) and written as
+    `gallery-01-poster-<sha1-8>.webp` (480 × 640, 29 KB). `PhotoSet.poster` is a new
+    optional field; the four templates that render a clip (removal-a, agnostic, removal-b,
+    trimming-a) set the attribute when present; the static guard now fails any clip
+    without a poster (or with a missing poster file). Reaches Texas Tree Tops' agnostic
+    and removal-b tiles too.
+48. **Three ragged grids the rendered guard found off the target pages, fixed.** Pre-existing
+    on live (the gate build shows the same 45 rows): removal-c's and trimming-c's work grids
+    hold portrait (382 × 510) and 4:3 photos in the same rows, each frame at its own inline
+    ratio, so a row stretched to the tallest and the 4:3 ones sat over paper. The cell now
+    owns the box (3:4 — six of Texas Tree Tops' nine are portrait, so it crops least) and
+    the frame fills it (reaches J Valdez's and Summit's removal-c/trimming-c, no spend on
+    any). And a guard blind spot: trimming-a's Recent jobs band is a horizontal scroller of
+    deferred cells — 23 on Texas Tree Tops — and the settle pass only scrolled vertically,
+    so cells off to the right never met the viewport and read "NO IMAGE"; the pass now
+    scrolls every horizontal scroller to its end and back, as a reader would, before
+    judging. With both, the guard is clean on the five affected pages.

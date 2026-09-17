@@ -214,3 +214,77 @@ dry-run push to main and a real deploy attempt in the proof run were both refuse
    and write the deploy record in the BUILD-LOG.
 
 Stage 4 stays paused; the 4b prediction is not written.
+
+---
+
+# The hold — a check lied, two defects, a sweep (owner's second instruction, 2026-09-16)
+
+Everything below is on `batch/four-pages` after the gate commit; evidence files under
+`hold/` and in each page folder. Nothing pushed, nothing published; the guard is still on.
+
+## 1. The check that lied — red, then green (`hold/step1-check.txt`)
+
+The "dead space 0" line measured the wrapper against itself when no `<img>` was inside
+(`ib = im ? im.getBoundingClientRect() : wb`), so an empty box scored perfect.
+
+- **Unchanged, page 1's build** — `dead 0px` on all nine cards at 390 / 820 / 1440.
+- **Changed** (a rendered box with no loaded image, or whose image does not fill it, fails),
+  run under the screenshot's own conditions (the harness's fast scroll pass, measure at once):
+  `ra-service-shot 348×261: NO IMG` on cards 2 and 3 at 390 — the failure the screenshot shows.
+- **The same check, settled** (slow pass, every image loaded): 0 failures; the three cards
+  hold `work-photo-3/4/5` filling their boxes.
+
+Diagnosis: not empty slots, not a resolver miss — the record's three `service-photo` pins
+resolve and the built HTML carries all three sources. `DeferredImage` inserts the `<img>`
+only when an IntersectionObserver fires within 300 px of the viewport, and the capture ran
+ahead of the two lower cards: "photos that didn't load in the harness". The harness now
+settles and hides the fixed bar before a section clip (the second screenshot was the bar
+painted mid-clip by `captureBeyondViewport`).
+
+**In the guard suite, on every page.** `image-boxes` (post phase, static — runs on any host,
+the studio's publish included): every reserved box holds an image fallback, every grid or
+tile cell an image or a clip, every image file exists. `rendered` and `call-bar` (a new
+`rendered` phase, browser, settled at three widths on all 55 pages): image boxes, the city
+grid, the call bar. The studio host (Railpack) has no browser and the suite forbids
+skip-as-pass, so the rendered phase runs from this machine before a publish; publish.mjs
+runs and lists pre/post only (decisions 30). The all-55 hit lists before any fix:
+`hold/rendered-hits.txt` (gate build: 150 areas rows — the new grid's rules against the old
+wrapped row — and zero image-box rows settled) and `$SP/rendered-after2` (first hold build:
+129 rows, the 390 overflow and the storm tiles, both fixed below). Page 1's cards: the
+slots were filled; card 1's focal point re-set on the photograph (decisions 34).
+
+## 2. The call bar (`<page>/callbar-overlap.txt`, `callbar-overlap-before.txt`; `hold/callbar-before-all-pages.txt`)
+
+The bar is in the spec ("A tap-to-call bar stays visible while scrolling on mobile") and
+predates the batch. Measured before on all 27 bar pages at 390 × 844: shown over a
+section call button on 25 pages (storm-a/b/c at 10–12 of ~13 stops); text under it at
+scroll end on 24 (every template reserved on `main`; the footer comes after); storm-b's
+sub-label 3.91:1. Fix (commit f174ae9, decisions 33): one observer hides the bar while any
+`main a[href^="tel:"]` is in view; the space is a spacer inside each footer at the bar's
+measured height + safe-area (the eight `main` paddings gone); storm's sub-label at full
+ink. After: **27 pages, 0 rule failures** — no text under the bar at the bottom of any
+page, the bar hidden at every stop with a section button in view, contrast 5.03–13.5:1.
+The per-stop listings show the mid-page intersections a fixed overlay makes over flowing
+text (2–22 per page); zero there needs a scroll container, which breaks window-scroll
+tracking — not done, on the record. Cost, with the areas grid: +472 B JS, +113 B CSS gzip.
+
+## 3. Areas We Serve (`<page>/after-areas-{390,820,1440}.png`, both clients)
+
+Every city once, alphabetical, all at once, no scroll or mask; a grid whose column count
+comes from the city count so the last row is never one city — Texas Tree Tops' 25 is
+5 × 5: two (+ a tail of three) / 5 / 5 columns at 390 / 820 / 1440; J Valdez 2 / 4 / 5;
+Summit 2 / 4 / 5 (decisions 31). removal-a and trimming-a use the shared component too
+(32). Guard: chip count = the record's on every route, every chip inside its section and
+the viewport, alphabetical, last row ≥ 2. Two of my own misses on the way, both caught
+and fixed: twelve tracks gave `span 2.4` for five columns (invalid, chips collapsed at
+820/1440); sixty tracks' column gaps overflowed 390 (found by the sweep, decisions 35).
+
+## 4. The sweep (`hold/sweep-table.md`)
+
+One subagent per page, looking at the rendered build at three widths, returning only a
+findings table; every row fixed in its own commit (the row is in the message) or marked
+needs-photo with the slot and the photograph it needs. @@SWEEP-SUMMARY@@
+
+## 5. The evidence pack, re-run on the final build
+
+@@FINAL-NUMBERS@@
