@@ -1,0 +1,144 @@
+/demo/summit-tree/agnostic/ at 390×844 — bar .ag-sticky 71px tall; reserved bottom padding 84px; page 1839px, 3 stops
+contrast — label color(srgb 0.0578824 0.0752941 0.0428235) on rgb(123, 160, 91): 7.02:1 at 16px; sub-label null at opacity null: null:1 at null
+text under the bar at scroll end: 1; stops with a section call button in view while the bar shows: 3; text intersections across all stops: 2
+/demo/summit-tree/removal-a/ at 390×844 — bar .ra-sticky 91px tall; reserved bottom padding 84px; page 11571px, 14 stops
+contrast — label color(srgb 0.0578824 0.0752941 0.0428235) on rgb(123, 160, 91): 7.02:1 at 16px; sub-label color(srgb 0.0578824 0.0752941 0.0428235) at opacity 0.85: 6.04:1 at 12px
+text under the bar at scroll end: 1; stops with a section call button in view while the bar shows: 3; text intersections across all stops: 31
+/demo/summit-tree/removal-b/ at 390×844 — bar .rb-sticky 67px tall; reserved bottom padding 0px; page 9508px, 12 stops
+contrast — label rgb(255, 255, 255) on rgb(28, 63, 74): 11.29:1 at 16px; sub-label rgb(255, 255, 255) at opacity 0.8: 7.9:1 at 10.88px
+text under the bar at scroll end: 0; stops with a section call button in view while the bar shows: 2; text intersections across all stops: 22
+/demo/summit-tree/removal-c/ at 390×844 — bar .rc-sticky 80px tall; reserved bottom padding 84px; page 9159px, 11 stops
+contrast — label rgb(255, 255, 255) on rgb(28, 63, 74): 11.29:1 at 16px; sub-label rgb(255, 255, 255) at opacity 0.85: 8.64:1 at 12px
+text under the bar at scroll end: 1; stops with a section call button in view while the bar shows: 4; text intersections across all stops: 20
+/demo/summit-tree/storm-a/ at 390×844 — bar .st-sticky 67px tall; reserved bottom padding 76px; page 7790px, 10 stops
+contrast — label rgb(26, 18, 5) on rgb(123, 160, 91): 6.2:1 at 15.2px; sub-label rgb(26, 18, 5) at opacity 0.8: 4.64:1 at 10.56px
+text under the bar at scroll end: 1; stops with a section call button in view while the bar shows: 10; text intersections across all stops: 15
+/demo/summit-tree/storm-b/ at 390×844 — bar .st-sticky 67px tall; reserved bottom padding 76px; page 7831px, 10 stops
+contrast — label rgb(26, 18, 5) on rgb(183, 119, 47): 5.03:1 at 15.2px; sub-label rgb(26, 18, 5) at opacity 0.8: 3.91:1 at 10.56px
+text under the bar at scroll end: 1; stops with a section call button in view while the bar shows: 10; text intersections across all stops: 17
+/demo/summit-tree/storm-c/ at 390×844 — bar .st-sticky 67px tall; reserved bottom padding 76px; page 7957px, 10 stops
+contrast — label rgb(26, 18, 5) on rgb(192, 138, 62): 6.13:1 at 15.2px; sub-label rgb(26, 18, 5) at opacity 0.8: 4.56:1 at 10.56px
+text under the bar at scroll end: 1; stops with a section call button in view while the bar shows: 10; text intersections across all stops: 12
+/demo/summit-tree/trimming-a/ at 390×844 — bar .ta-sticky 91px tall; reserved bottom padding 84px; page 10206px, 13 stops
+contrast — label color(srgb 0.0578824 0.0752941 0.0428235) on rgb(123, 160, 91): 7.02:1 at 16px; sub-label color(srgb 0.0578824 0.0752941 0.0428235) at opacity 0.85: 6.04:1 at 12px
+text under the bar at scroll end: 1; stops with a section call button in view while the bar shows: 6; text intersections across all stops: 26
+/demo/summit-tree/trimming-b/ at 390×844 — bar .tb-sticky 91px tall; reserved bottom padding 84px; page 7687px, 10 stops
+contrast — label rgb(255, 255, 255) on rgb(28, 63, 74): 11.29:1 at 16px; sub-label rgb(255, 255, 255) at opacity 0.85: 8.64:1 at 12px
+text under the bar at scroll end: 3; stops with a section call button in view while the bar shows: 0; text intersections across all stops: 23
+/demo/summit-tree/trimming-c/ at 390×844 — bar .tc-sticky 80px tall; reserved bottom padding 84px; page 8988px, 11 stops
+contrast — label rgb(255, 255, 255) on rgb(28, 63, 74): 11.29:1 at 16px; sub-label rgb(255, 255, 255) at opacity 0.85: 8.64:1 at 12px
+text under the bar at scroll end: 1; stops with a section call button in view while the bar shows: 3; text intersections across all stops: 23
+/p/j-valdez/agnostic/ at 390×844 — bar .ag-sticky 71px tall; reserved bottom padding 84px; page 2838px, 4 stops
+contrast — label color(srgb 0.105412 0.0682353 0.0272941) on rgb(224, 145, 58): 8.28:1 at 16px; sub-label null at opacity null: null:1 at null
+text under the bar at scroll end: 2; stops with a section call button in view while the bar shows: 1; text intersections across all stops: 9
+/p/j-valdez/removal-a/ at 390×844 — bar .ra-sticky 91px tall; reserved bottom padding 84px; page 12252px, 15 stops
+contrast — label color(srgb 0.105412 0.0682353 0.0272941) on rgb(224, 145, 58): 8.28:1 at 16px; sub-label color(srgb 0.105412 0.0682353 0.0272941) at opacity 0.85: 6.98:1 at 12px
+text under the bar at scroll end: 2; stops with a section call button in view while the bar shows: 5; text intersections across all stops: 40
+/p/j-valdez/removal-b/ at 390×844 — bar .rb-sticky 67px tall; reserved bottom padding 0px; page 10532px, 13 stops
+contrast — label rgb(255, 255, 255) on rgb(20, 52, 43): 13.5:1 at 16px; sub-label rgb(255, 255, 255) at opacity 0.8: 9.17:1 at 10.88px
+text under the bar at scroll end: 0; stops with a section call button in view while the bar shows: 1; text intersections across all stops: 16
+/p/j-valdez/removal-c/ at 390×844 — bar .rc-sticky 80px tall; reserved bottom padding 84px; page 10488px, 13 stops
+contrast — label rgb(255, 255, 255) on rgb(20, 52, 43): 13.5:1 at 16px; sub-label rgb(255, 255, 255) at opacity 0.85: 10.21:1 at 12px
+text under the bar at scroll end: 2; stops with a section call button in view while the bar shows: 5; text intersections across all stops: 27
+/p/j-valdez/trimming-a/ at 390×844 — bar .ta-sticky 91px tall; reserved bottom padding 84px; page 11877px, 15 stops
+contrast — label color(srgb 0.105412 0.0682353 0.0272941) on rgb(224, 145, 58): 8.28:1 at 16px; sub-label color(srgb 0.105412 0.0682353 0.0272941) at opacity 0.85: 6.98:1 at 12px
+text under the bar at scroll end: 2; stops with a section call button in view while the bar shows: 6; text intersections across all stops: 40
+/p/j-valdez/trimming-b/ at 390×844 — bar .tb-sticky 91px tall; reserved bottom padding 84px; page 9545px, 12 stops
+contrast — label rgb(255, 255, 255) on rgb(20, 52, 43): 13.5:1 at 16px; sub-label rgb(255, 255, 255) at opacity 0.85: 10.21:1 at 12px
+text under the bar at scroll end: 3; stops with a section call button in view while the bar shows: 0; text intersections across all stops: 26
+/p/j-valdez/trimming-c/ at 390×844 — bar .tc-sticky 80px tall; reserved bottom padding 84px; page 10169px, 13 stops
+contrast — label rgb(255, 255, 255) on rgb(20, 52, 43): 13.5:1 at 16px; sub-label rgb(255, 255, 255) at opacity 0.85: 10.21:1 at 12px
+text under the bar at scroll end: 2; stops with a section call button in view while the bar shows: 3; text intersections across all stops: 32
+/p/texas-tree-tops/agnostic/ at 390×844 — bar .ag-sticky 71px tall; reserved bottom padding 84px; page 4130px, 5 stops
+contrast — label color(srgb 0.0941176 0.0701177 0.0202353) on rgb(200, 149, 43): 7.79:1 at 16px; sub-label null at opacity null: null:1 at null
+text under the bar at scroll end: 1; stops with a section call button in view while the bar shows: 1; text intersections across all stops: 0
+/p/texas-tree-tops/removal-a/ at 390×844 — bar .ra-sticky 91px tall; reserved bottom padding 84px; page 12972px, 16 stops
+contrast — label color(srgb 0.0941176 0.0701177 0.0202353) on rgb(200, 149, 43): 7.79:1 at 16px; sub-label color(srgb 0.0941176 0.0701177 0.0202353) at opacity 0.85: 6.64:1 at 12px
+text under the bar at scroll end: 1; stops with a section call button in view while the bar shows: 5; text intersections across all stops: 22
+/p/texas-tree-tops/removal-b/ at 390×844 — bar .rb-sticky 67px tall; reserved bottom padding 0px; page 10843px, 13 stops
+contrast — label rgb(255, 255, 255) on rgb(31, 61, 43): 11.93:1 at 16px; sub-label rgb(255, 255, 255) at opacity 0.8: 8.25:1 at 10.88px
+text under the bar at scroll end: 0; stops with a section call button in view while the bar shows: 1; text intersections across all stops: 29
+/p/texas-tree-tops/removal-c/ at 390×844 — bar .rc-sticky 80px tall; reserved bottom padding 84px; page 11249px, 14 stops
+contrast — label rgb(255, 255, 255) on rgb(31, 61, 43): 11.93:1 at 16px; sub-label rgb(255, 255, 255) at opacity 0.85: 9.1:1 at 12px
+text under the bar at scroll end: 1; stops with a section call button in view while the bar shows: 5; text intersections across all stops: 32
+/p/texas-tree-tops/storm-a/ at 390×844 — bar .st-sticky 67px tall; reserved bottom padding 76px; page 9123px, 11 stops
+contrast — label rgb(26, 18, 5) on rgb(200, 149, 43): 6.88:1 at 15.2px; sub-label rgb(26, 18, 5) at opacity 0.8: 4.98:1 at 10.56px
+text under the bar at scroll end: 1; stops with a section call button in view while the bar shows: 11; text intersections across all stops: 21
+/p/texas-tree-tops/storm-b/ at 390×844 — bar .st-sticky 67px tall; reserved bottom padding 76px; page 9140px, 11 stops
+contrast — label rgb(26, 18, 5) on rgb(183, 119, 47): 5.03:1 at 15.2px; sub-label rgb(26, 18, 5) at opacity 0.8: 3.91:1 at 10.56px
+text under the bar at scroll end: 1; stops with a section call button in view while the bar shows: 11; text intersections across all stops: 18
+/p/texas-tree-tops/storm-c/ at 390×844 — bar .st-sticky 67px tall; reserved bottom padding 76px; page 9343px, 12 stops
+contrast — label rgb(26, 18, 5) on rgb(192, 138, 62): 6.13:1 at 15.2px; sub-label rgb(26, 18, 5) at opacity 0.8: 4.56:1 at 10.56px
+text under the bar at scroll end: 1; stops with a section call button in view while the bar shows: 12; text intersections across all stops: 25
+/p/texas-tree-tops/trimming-a/ at 390×844 — bar .ta-sticky 91px tall; reserved bottom padding 84px; page 12732px, 16 stops
+contrast — label color(srgb 0.0941176 0.0701177 0.0202353) on rgb(200, 149, 43): 7.79:1 at 16px; sub-label color(srgb 0.0941176 0.0701177 0.0202353) at opacity 0.85: 6.64:1 at 12px
+text under the bar at scroll end: 1; stops with a section call button in view while the bar shows: 7; text intersections across all stops: 38
+/p/texas-tree-tops/trimming-b/ at 390×844 — bar .tb-sticky 91px tall; reserved bottom padding 84px; page 9481px, 12 stops
+contrast — label rgb(255, 255, 255) on rgb(31, 61, 43): 11.93:1 at 16px; sub-label rgb(255, 255, 255) at opacity 0.85: 9.1:1 at 12px
+text under the bar at scroll end: 3; stops with a section call button in view while the bar shows: 0; text intersections across all stops: 20
+/p/texas-tree-tops/trimming-c/ at 390×844 — bar .tc-sticky 80px tall; reserved bottom padding 84px; page 11129px, 14 stops
+contrast — label rgb(255, 255, 255) on rgb(31, 61, 43): 11.93:1 at 16px; sub-label rgb(255, 255, 255) at opacity 0.85: 9.1:1 at 12px
+text under the bar at scroll end: 1; stops with a section call button in view while the bar shows: 3; text intersections across all stops: 32
+call-bar: 27 page(s) with a bar at 390; 62 rule failure(s)
+  FAIL /demo/summit-tree/agnostic/ · 1 text element(s) under the bar at scroll end
+  FAIL /demo/summit-tree/agnostic/ · bar shown while a section call button is in view at 3 stop(s)
+  FAIL /demo/summit-tree/removal-a/ · reserved bottom padding 84px < bar 91px
+  FAIL /demo/summit-tree/removal-a/ · 1 text element(s) under the bar at scroll end
+  FAIL /demo/summit-tree/removal-a/ · bar shown while a section call button is in view at 3 stop(s)
+  FAIL /demo/summit-tree/removal-b/ · reserved bottom padding 0px < bar 67px
+  FAIL /demo/summit-tree/removal-b/ · bar shown while a section call button is in view at 2 stop(s)
+  FAIL /demo/summit-tree/removal-c/ · 1 text element(s) under the bar at scroll end
+  FAIL /demo/summit-tree/removal-c/ · bar shown while a section call button is in view at 4 stop(s)
+  FAIL /demo/summit-tree/storm-a/ · 1 text element(s) under the bar at scroll end
+  FAIL /demo/summit-tree/storm-a/ · bar shown while a section call button is in view at 10 stop(s)
+  FAIL /demo/summit-tree/storm-b/ · 1 text element(s) under the bar at scroll end
+  FAIL /demo/summit-tree/storm-b/ · sub-label contrast 3.91:1
+  FAIL /demo/summit-tree/storm-b/ · bar shown while a section call button is in view at 10 stop(s)
+  FAIL /demo/summit-tree/storm-c/ · 1 text element(s) under the bar at scroll end
+  FAIL /demo/summit-tree/storm-c/ · bar shown while a section call button is in view at 10 stop(s)
+  FAIL /demo/summit-tree/trimming-a/ · reserved bottom padding 84px < bar 91px
+  FAIL /demo/summit-tree/trimming-a/ · 1 text element(s) under the bar at scroll end
+  FAIL /demo/summit-tree/trimming-a/ · bar shown while a section call button is in view at 6 stop(s)
+  FAIL /demo/summit-tree/trimming-b/ · reserved bottom padding 84px < bar 91px
+  FAIL /demo/summit-tree/trimming-b/ · 3 text element(s) under the bar at scroll end
+  FAIL /demo/summit-tree/trimming-c/ · 1 text element(s) under the bar at scroll end
+  FAIL /demo/summit-tree/trimming-c/ · bar shown while a section call button is in view at 3 stop(s)
+  FAIL /p/j-valdez/agnostic/ · 2 text element(s) under the bar at scroll end
+  FAIL /p/j-valdez/agnostic/ · bar shown while a section call button is in view at 1 stop(s)
+  FAIL /p/j-valdez/removal-a/ · reserved bottom padding 84px < bar 91px
+  FAIL /p/j-valdez/removal-a/ · 2 text element(s) under the bar at scroll end
+  FAIL /p/j-valdez/removal-a/ · bar shown while a section call button is in view at 5 stop(s)
+  FAIL /p/j-valdez/removal-b/ · reserved bottom padding 0px < bar 67px
+  FAIL /p/j-valdez/removal-b/ · bar shown while a section call button is in view at 1 stop(s)
+  FAIL /p/j-valdez/removal-c/ · 2 text element(s) under the bar at scroll end
+  FAIL /p/j-valdez/removal-c/ · bar shown while a section call button is in view at 5 stop(s)
+  FAIL /p/j-valdez/trimming-a/ · reserved bottom padding 84px < bar 91px
+  FAIL /p/j-valdez/trimming-a/ · 2 text element(s) under the bar at scroll end
+  FAIL /p/j-valdez/trimming-a/ · bar shown while a section call button is in view at 6 stop(s)
+  FAIL /p/j-valdez/trimming-b/ · reserved bottom padding 84px < bar 91px
+  FAIL /p/j-valdez/trimming-b/ · 3 text element(s) under the bar at scroll end
+  FAIL /p/j-valdez/trimming-c/ · 2 text element(s) under the bar at scroll end
+  FAIL /p/j-valdez/trimming-c/ · bar shown while a section call button is in view at 3 stop(s)
+  FAIL /p/texas-tree-tops/agnostic/ · 1 text element(s) under the bar at scroll end
+  FAIL /p/texas-tree-tops/agnostic/ · bar shown while a section call button is in view at 1 stop(s)
+  FAIL /p/texas-tree-tops/removal-a/ · reserved bottom padding 84px < bar 91px
+  FAIL /p/texas-tree-tops/removal-a/ · 1 text element(s) under the bar at scroll end
+  FAIL /p/texas-tree-tops/removal-a/ · bar shown while a section call button is in view at 5 stop(s)
+  FAIL /p/texas-tree-tops/removal-b/ · reserved bottom padding 0px < bar 67px
+  FAIL /p/texas-tree-tops/removal-b/ · bar shown while a section call button is in view at 1 stop(s)
+  FAIL /p/texas-tree-tops/removal-c/ · 1 text element(s) under the bar at scroll end
+  FAIL /p/texas-tree-tops/removal-c/ · bar shown while a section call button is in view at 5 stop(s)
+  FAIL /p/texas-tree-tops/storm-a/ · 1 text element(s) under the bar at scroll end
+  FAIL /p/texas-tree-tops/storm-a/ · bar shown while a section call button is in view at 11 stop(s)
+  FAIL /p/texas-tree-tops/storm-b/ · 1 text element(s) under the bar at scroll end
+  FAIL /p/texas-tree-tops/storm-b/ · sub-label contrast 3.91:1
+  FAIL /p/texas-tree-tops/storm-b/ · bar shown while a section call button is in view at 11 stop(s)
+  FAIL /p/texas-tree-tops/storm-c/ · 1 text element(s) under the bar at scroll end
+  FAIL /p/texas-tree-tops/storm-c/ · bar shown while a section call button is in view at 12 stop(s)
+  FAIL /p/texas-tree-tops/trimming-a/ · reserved bottom padding 84px < bar 91px
+  FAIL /p/texas-tree-tops/trimming-a/ · 1 text element(s) under the bar at scroll end
+  FAIL /p/texas-tree-tops/trimming-a/ · bar shown while a section call button is in view at 7 stop(s)
+  FAIL /p/texas-tree-tops/trimming-b/ · reserved bottom padding 84px < bar 91px
+  FAIL /p/texas-tree-tops/trimming-b/ · 3 text element(s) under the bar at scroll end
+  FAIL /p/texas-tree-tops/trimming-c/ · 1 text element(s) under the bar at scroll end
+  FAIL /p/texas-tree-tops/trimming-c/ · bar shown while a section call button is in view at 3 stop(s)

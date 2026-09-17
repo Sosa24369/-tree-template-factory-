@@ -272,3 +272,109 @@ is logged and the run continues. No firing came from a publish, deploy or push c
     sliver of eave (~6 % of the frame) can remain in the corner — shown in the crop, and
     the sweep's row says whether it reads as a defect. The same focal reaches the photo's
     other cells (removal-a benefits and rail, trimming-a grid cell 3).
+33. **The call bar: one observer, the space inside the footer, full-ink sub-label.** Measured
+    before, 27 bar pages at 390 × 844 (`scripts/verify-callbar.mjs`, the per-stop listings
+    in each page folder): the bar sat directly over a section's own call button on 25 pages
+    (storm-a/b/c at 10–12 of ~13 stops; removal-a and trimming-a at 5–7); text sat under
+    the bar at scroll end on 24 pages, because every template reserved its padding on
+    `main` and the footer comes after `main`; three templates reserved 84 px for a 91 px
+    bar and removal-b reserved on its root, none on `main`; storm's sub-label at opacity
+    0.8 measured 3.91:1 on storm-b (5.03 label), 4.56 / 4.64 on -c / -a. Labels 5.0–13.5:1.
+    Fix, one place each: (a) `lib/callbar.ts`, hooked in `main.tsx` — an IntersectionObserver
+    over `main a[href^="tel:"]` (the sticky header's number is at the top of the screen,
+    never stacked with a bottom bar) sets `<html data-cta-in-view>`, and `base.css` slides
+    every template's bar off the bottom edge while it is set (transform only, no layout
+    shift; reduced-motion: no transition) — chosen over moving the bar, which would put
+    it over something else; (b) the reserved space is a `::after` spacer INSIDE each
+    footer, `--callbar-h` = the bar's measured height (ResizeObserver-kept), static
+    fallback = the height measured at 390 + `env(safe-area-inset-bottom)` — inside the
+    footer so it keeps the footer's colour rather than showing a band whenever the bar
+    hides; the eight `main`/root paddings are gone; (c) storm's sub-label at full ink.
+    The bar IS in the spec ("A tap-to-call bar stays visible while scrolling on mobile")
+    and predates the batch, so its bundle cost is not a batch question; measured anyway
+    in the REPORT. The per-stop intersections a fixed overlay makes mid-page cannot be zero
+    without a scroll container (which breaks window-scroll tracking); the record shows
+    them, the rules above are what the fix guarantees.
+
+## 2026-09-16 — the sweep (hold, item 4): findings and what each got
+
+35. **Areas grid at 390 overflowed the viewport on the 60-track build (my miss).** The
+    column-gap multiplies with the tracks: 59 × 10 px = 590 px of gap alone in a 351 px
+    column, the tracks collapsed to zero and twelve pills ran off the right edge; my 390
+    look had been taken on the 12-track build and I only re-checked 820/1440 after the
+    change. Fix: row-gap only; the horizontal breathing room is a 5 px margin on each cell
+    (with −5 px on the row), which does not multiply. Found by the storm-a sweep.
+36. **Storm-a's work tiles: decision 26 was wrong — the three shapes were not by design.**
+    The template declares "uniform aspect, aligned edges, no ragged rows" and
+    `.st-tile-box { aspect-ratio: 4 / 3 }`, but DeferredImage reserves each box with the
+    photo's own ratio as an INLINE style, which outranks the stylesheet — so gallery-15
+    (382 × 510) painted portrait and restoration-grid-2 (square) painted square, and every
+    row left empty paper under its shorter photos (199 px at 1440). `!important`, as
+    removal-a's service cards already do. With uniform 4:3 tiles every cell is 680 × 510
+    device px at most, which the five 800 × 600 storm files fit (the B4 rule: a file is
+    fine in any cell whose real box it covers).
+37. **Storm-a's "What we handle" at ≥ 980: one column of panels, the photo a full-height
+    panel.** The rule's own comment says the three panels stack in the left column; the
+    `auto-fit minmax(200px, 1fr)` it used gave two per row at 1440, an orphan third beside
+    an empty slot, and the square photo (inline ratio again) top-aligned over ~320 px of
+    paper. One column; the photo box stretches to the row (`object-fit: cover`), 4:3 below
+    980 as intended. Rejected: centring the photo (halves the hole, keeps it).
+38. **Storm-a tile 5 is needs-photo.** `hero-photo-2` (800 × 600) is an equipment shot — a
+    bucket-truck boom and cab, the bucket cut by the top edge, no storm damage — and it is
+    shown uncropped in a 4:3 tile, so no focal point can help. The record's storm set is
+    six files and all six are in the grid; the removal set is off-service here. Slot:
+    `photoSlots.storm-a.tile.5`; photo needed: storm damage — a tree on a roof / fence /
+    car, an uprooted root plate, or a crew at a storm job — ≥ 800 px wide for this cell
+    (≥ 1600 for the hero wash). Left in place until Texas Tree Tops supplies one.
+39. **J Valdez trimming-a hero band, cell 1: `gallery-slide-3` gets a focal point.** A square
+    photograph in a 348 × 148 band box at 390 loses 57 % of its height; centred, it cut the
+    tree crowns at the top edge (the sweep). Focal `{x: 0.5, y: 0.4}` on the photograph
+    keeps the crowns and the house, gives up road. Reaches its other cells (the Recent jobs
+    band, and the agnostic / removal-b / removal-c lists pinned in decisions 28) as
+    `object-position` — square cells show no crop.
+40. **J Valdez trimming-a grid, cell 1: `work-photo-1` gets a focal point.** The bucket sits
+    at the very top of the frame; a 4:3 tile drops 25 % of the square and sliced it at
+    every width (the sweep). Focal `{x: 0.6, y: 0.0}`: the crop comes off the bottom (road,
+    cones, the truck's wheels), the bucket, the boom and the crown stay. The removal-a
+    proof cell uses the original file (IMG_1119), unaffected.
+41. **The Google Ads call-asset line sits in the footer's measure.** The line is deliberate
+    and must stay visible (its own comment: hiding it fails Google's check and is cloaking);
+    it is a direct child of `<footer>` after the template's container, so it painted flush
+    at x = 0 outside the gutter on all seven J Valdez pages (the sweep). One CSS rule gives
+    it the container's max width and gutter through each template's own custom properties
+    (nested fallbacks; removal-c/trimming-c use the literal clamp their containers use). No
+    markup change — the number's HTML, `data-dni="exclude"` and its position among the
+    page's phone tokens are byte-identical; proven by the compare.
+42. **Two removal originals re-ingested with a better band.** The originals are portrait
+    (1320 × 1911 and 1320 × 1928) and the pipeline keeps a full-width 4:3 band around the
+    focal point, so the framing is decided at ingest, not by CSS. IMG_1126 (log rounds):
+    the band at y = 0.5 cut both crew members' heads (the sweep); re-ingested with the
+    focal at y = 0.28 the band starts 45 px from the top and the heads are in. IMG_1122
+    (felled trunk): a pole and a hooded figure ran down the whole left edge of the frame
+    itself, which no band can remove; the left 12 % is trimmed before the band (recorded
+    in the entry's `pipeline.note`), master 1162 × 872 — above the grid cell's 706 px need.
+    Same pipeline steps as page 1 (rotate, band, WebP q80 master, 400/800/1200 variants
+    never enlarged, sha1-8 names, focal remapped); old files removed, pins re-pointed.
+    The hand truck in IMG_1126's left third is the job's tool and the alt's subject —
+    left in.
+43. **The Recent jobs rail drops its four composites.** hero-photo-1 (two photos stacked),
+    gallery-slide-1 and -2 (before/after pairs), work-photo-2 (a side-by-side pair) — the
+    sweep's "composite / before-after collage" class, and two of them trimming
+    before-afters on a removal page. The owner's earlier ruling kept the rail's trimming
+    photos as they were ("grid only, rest unchanged"); the hold's instruction lists
+    composites as defects to fix, and is later — so the rail keeps its eight single
+    photographs (truck, gallery-slide-3/4/5, work-photo-1/3/4/5) in their order. Record
+    only: `photoSlots.removal-a.rail.1–8`.
+44. **Page 1's needs-photo slots.** Under "Tree Removal Services We Offer" the three cards
+    show trimming work (work-photo-3, a climber; work-photo-4, pole-saw pruning) and
+    equipment only (work-photo-5, trucks by an empty lot), and the Benefits side photo is
+    work-photo-3 again with its eave in a near-square box no focal can crop. Every removal
+    original is already placed once (six in the grid, the seventh in the proof strip) and
+    the spec forbids a photograph twice on a page, so these are needs-photo:
+    `photoSlots.removal-a.service-photo.1`, `.2`, `.3` — three removal job photographs
+    (≥ 1472 × 1104 device px at 820: the 1320-wide originals' size or better), one per
+    card: cutting/felling, stump grinding or debris haul-away, and a crane/bucket removal;
+    and `photoSlots.removal-a.benefits` — a removal job photograph ≥ 1000 px on the short
+    side (the box is 488 × 520 at 1440) with no foreground obstruction. Card 1's focal
+    (decisions 34) remains the best the current photograph allows; it stays until the
+    replacements arrive.

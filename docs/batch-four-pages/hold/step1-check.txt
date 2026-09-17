@@ -1,0 +1,55 @@
+STEP 1 — the check that lied, red then green (2026-09-16, page 1's build at cdbffed state)
+
+1a. The EXISTING check, unchanged ($SP/probe/afterC.mjs, the "services" line that produced
+    "cards 4:3, dead space 0"). It measured `dead = list.top − image.bottom`, with
+    `ib = im ? im.getBoundingClientRect() : wb` — no <img> inside → the wrapper stands in for
+    the image → dead 0 by construction. Output on page 1's current build:
+
+    === 390
+      services: ["348x261 ratio 1.33 dead 0px","348x261 ratio 1.33 dead 0px","348x261 ratio 1.33 dead 0px"]
+    === 820
+      services: ["736x552 ratio 1.33 dead 0px","736x552 ratio 1.33 dead 0px","736x552 ratio 1.33 dead 0px"]
+    === 1440
+      services: ["343x257 ratio 1.33 dead 0px","343x257 ratio 1.33 dead 0px","343x258 ratio 1.33 dead 0px"]
+
+    → passes on every card — the proof it measures the wrapper, not the photo.
+
+1b. The CHANGED check: a rendered image box with no loaded <img> inside, or whose <img> does
+    not fill it within 1.5 px, fails ($SP/probe/imgboxes.mjs → scripts/verify-rendered.mjs).
+    Run under the SCREENSHOT'S OWN CONDITIONS (the harness's fast scroll pass, measure at once):
+
+    === 390 (capture) 22 boxes, 2 FAIL
+      *** ra-services ra-service-shot 348x261: NO IMG
+      *** ra-services ra-service-shot 348x261: NO IMG
+    === 820 (capture) 22 boxes, 0 FAIL
+    === 1440 (capture) 22 boxes, 0 FAIL
+
+    → fails on cards 2 and 3 at 390, as the screenshot shows.
+
+    The same check run SETTLED (slow pass, wait for every image to finish loading):
+
+    === 390 (settled) 22 boxes, 0 FAIL
+          ra-services ra-service-shot 348x261 work-photo-3-1e169c6d-800w.webp
+          ra-services ra-service-shot 348x261 work-photo-4-8f836a7b-800w.webp
+          ra-services ra-service-shot 348x261 work-photo-5-50729f8b-800w.webp
+
+    Diagnosis: not empty slots and not a resolver miss — the record's service-photo.1–3 pins
+    resolve and the built HTML carries all three sources as <noscript> fallbacks; DeferredImage
+    inserts the <img> only when an IntersectionObserver fires within 300 px of the viewport,
+    and the capture ran ahead of the two lower cards. "Photos that didn't load in the harness."
+    The harness now settles (slow pass, wait for every image) and hides the fixed bar before a
+    section clip; the deferred-placeholder window is itself a finding for the sweep.
+
+1c. In the guard suite, on every page (scripts/verify-image-boxes.mjs, post phase — static,
+    runs on any host including the studio's publish):
+
+    image-boxes: 54 pages, 355 <img>, 260 reserved boxes, 158 grid/tile cells checked
+    image-boxes: PASS — every box holds an image and every image file exists
+
+    (its first run flagged two <video> cells — gallery-01.mp4 leading Texas Tree Tops'
+    agnostic and removal-b galleries — a clip counts as filled; and the same check on the
+    live copies, assets resolved from the build: 55 pages, PASS.)
+
+    And rendered, settled, all 55 pages at 390/820/1440 (scripts/verify-rendered.mjs, the
+    `rendered` phase — needs Chrome, so it runs from the release machine, never skipped-as-
+    passed): see rendered-hits.txt in this folder — the all-page hit list before any fix.

@@ -1,31 +1,31 @@
 # HANDOFF — batch/four-pages, ON HOLD after the gate (2026-09-16, owner's second instruction)
 
-The owner held the publish: two page-1 screenshots showed defects the evidence denied (empty
-photo boxes on services cards 2–3; the call bar painted over a review), and the check that
-said "dead space 0" measured the wrapper, not the photo. The instruction, verbatim, is in the
-conversation; its five parts and where each stands:
+The owner held the publish (two page-1 screenshots showed defects the evidence denied; the
+"dead space 0" check measured the wrapper, not the photo). The five parts and where each is:
 
-1. **Fix the check first** — DONE, red then green (decisions 29–30): old check `dead 0px` ×9;
-   new check under the screenshot's conditions fails cards 2/3 `NO IMG`; settled, passes
-   (DeferredImage placeholders, not empty slots). Static guard `image-boxes` (post; 0 hits on
-   build and live), rendered guards `rendered` + `call-bar` in a new `rendered` phase (studio
-   host has no browser). Committed b4e7fb0. All-55 rendered hit list: running to
-   `$SP/rendered-prefix.txt` (then: fill every hit; card 1 focal set to {0.55,1.0} in the
-   record, uncommitted).
-2. **The call bar** — code written, uncommitted: `app/src/lib/callbar.ts` (hides the bar while
-   a `main a[href^=tel:]` is in view) hooked in `main.tsx`; hide rule in `styles/base.css`.
-   STILL TO DO: per-template `main { padding-bottom: calc(<bar height>px + env(safe-area-
-   inset-bottom)) }` from the measured heights (`$SP/callbar-before/*/callbar-overlap.txt`,
-   running); contrast check; `callbar-overlap.txt` into each page folder; decision 33. The bar
-   IS in the spec ("A tap-to-call bar stays visible while scrolling on mobile").
-3. **Areas relayout** — code written, uncommitted (decisions 31–32): grid with computed
-   columns, alphabetical, no lonely last row (25 → tail of three at <768);
-   removal-a/trimming-a switched to the shared component. Needs the build + rendered guard.
-4. **The sweep** — prompt drafted at `$SP/sweep-prompt.txt`; launch one subagent per target
-   page AFTER the build with fixes 1–3; fix each finding, one commit per finding with the row.
-5. **Back to the gate** — `$SP/evidence.sh` regenerates the pack on the final build (all but
-   Lighthouse, which a subagent runs ×4); then REPORT.md additions (step-1 outputs, the hit
-   list, callbar files, areas at three widths both clients, the sweep table).
+1. **Check** — DONE (decisions 29–30; `hold/step1-check.txt`, `hold/rendered-hits.txt`).
+   Guards: static `image-boxes` (post), browser `rendered` + `call-bar` (a `rendered` phase,
+   local only). Committed b4e7fb0, ac2b441. Card-1 focal committed a580518.
+2. **Call bar** — code written and measured (decisions 33): observer in `lib/callbar.ts` +
+   `main.tsx`; hide rule + footer spacer in `styles/base.css`; per-template main paddings
+   removed; storm sub-label full ink. After (instant-scroll probe): scroll-end 0/27, contrast
+   ≥ 5.03, stacked 0 except the guard's own over-count (it counted the header's number;
+   narrowed to `main a[href^=tel]`, re-run `$SP/callbar-after4` in progress). UNCOMMITTED.
+3. **Areas** — grid committed cd192b0, then the sweep found the 60-track column-gap overflow
+   at 390 (decisions 35): fix in `service-areas-carousel.css`, UNCOMMITTED, unbuilt.
+4. **Sweep** — three of four tables in (`hold/sweep-table.md`, 18 rows); TTT removal-a's
+   subagent still reading its slices. Fixes written, UNCOMMITTED, unbuilt: storm tiles
+   `!important` + handle column (36–37), focal points gallery-slide-3 / work-photo-1 /
+   IMG_1119 (39–40, row "proof cell 2"), call-asset line CSS (41), re-ingested IMG_1122 /
+   IMG_1126 with new hashes and old files deleted (42), rail pins 12 → 8 (43); needs-photo
+   rows (38, 44). Then: ONE COMMIT PER FINDING with the row in the message.
+5. **Gate** — after the rebuild: `node scripts/run-guards.mjs pre|post|rendered`, compare,
+   `zsh $SP/evidence.sh`, Lighthouse ×4 (prompt at `$SP/lighthouse-after-prompt.txt`),
+   REPORT.md additions (step-1 outputs, hit list, callbar files, areas three widths both
+   clients, the sweep table), hold.
+
+Order now: wait for `$SP/callbar-after4.txt` and the last sweep → `npm run build` (app/) →
+post + rendered + call-bar guards → compare → commits per finding → evidence → REPORT.
 
 DO NOT BUILD while a background run is reading app/dist. Guard stays on; nothing pushed.
 
