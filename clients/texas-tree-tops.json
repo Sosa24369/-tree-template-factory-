@@ -102,7 +102,11 @@
         "src": "/assets/texas-tree-tops/gallery-05-9d8b0283.webp",
         "alt": "Texas Tree Tops tree removal in Fort Worth",
         "width": 382,
-        "height": 510
+        "height": 510,
+        "focal": {
+          "x": 0.5,
+          "y": 0.75
+        }
       },
       {
         "src": "/assets/texas-tree-tops/gallery-07-aaac105d.webp",
@@ -168,31 +172,43 @@
       },
       {
         "src": "/assets/texas-tree-tops/restoration-grid-2-5247928c.webp",
-        "alt": "",
+        "alt": "Aerial lift raised to a dead tree being taken down beside a garage",
         "width": 1200,
         "height": 1200,
-        "srcset": "/assets/texas-tree-tops/restoration-grid-2-5247928c-400w.webp 400w, /assets/texas-tree-tops/restoration-grid-2-5247928c-800w.webp 800w, /assets/texas-tree-tops/restoration-grid-2-5247928c.webp 1000w"
+        "srcset": "/assets/texas-tree-tops/restoration-grid-2-5247928c-400w.webp 400w, /assets/texas-tree-tops/restoration-grid-2-5247928c-800w.webp 800w, /assets/texas-tree-tops/restoration-grid-2-5247928c.webp 1000w",
+        "focal": {
+          "x": 0.5,
+          "y": 0.45
+        }
       },
       {
         "src": "/assets/texas-tree-tops/restoration-photo-3-2f02713f.webp",
-        "alt": "",
+        "alt": "Two crew members rigging a rope from a large oak at the kerb",
         "width": 1200,
         "height": 1200,
-        "srcset": "/assets/texas-tree-tops/restoration-photo-3-2f02713f-400w.webp 400w, /assets/texas-tree-tops/restoration-photo-3-2f02713f-800w.webp 800w, /assets/texas-tree-tops/restoration-photo-3-2f02713f.webp 1000w"
+        "srcset": "/assets/texas-tree-tops/restoration-photo-3-2f02713f-400w.webp 400w, /assets/texas-tree-tops/restoration-photo-3-2f02713f-800w.webp 800w, /assets/texas-tree-tops/restoration-photo-3-2f02713f.webp 1000w",
+        "focal": {
+          "x": 0.6,
+          "y": 0.6
+        }
       },
       {
         "src": "/assets/texas-tree-tops/restoration-photo-4-874dca20.webp",
-        "alt": "",
+        "alt": "Crew member clearing chips at a chipper and truck in a driveway",
         "width": 1200,
         "height": 1200,
         "srcset": "/assets/texas-tree-tops/restoration-photo-4-874dca20-400w.webp 400w, /assets/texas-tree-tops/restoration-photo-4-874dca20-800w.webp 800w, /assets/texas-tree-tops/restoration-photo-4-874dca20.webp 1000w"
       },
       {
         "src": "/assets/texas-tree-tops/restoration-photo-5-d8516a62.webp",
-        "alt": "",
+        "alt": "Stump grinder at work on a front-yard stump beside a stone border",
         "width": 1200,
         "height": 1200,
-        "srcset": "/assets/texas-tree-tops/restoration-photo-5-d8516a62-400w.webp 400w, /assets/texas-tree-tops/restoration-photo-5-d8516a62-800w.webp 800w, /assets/texas-tree-tops/restoration-photo-5-d8516a62.webp 1000w"
+        "srcset": "/assets/texas-tree-tops/restoration-photo-5-d8516a62-400w.webp 400w, /assets/texas-tree-tops/restoration-photo-5-d8516a62-800w.webp 800w, /assets/texas-tree-tops/restoration-photo-5-d8516a62.webp 1000w",
+        "focal": {
+          "x": 0.5,
+          "y": 0.55
+        }
       },
       {
         "src": "/assets/_shared/services-card-photo-1-ecd55f38.webp",
