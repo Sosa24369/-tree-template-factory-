@@ -480,3 +480,18 @@ is logged and the run continues. No firing came from a publish, deploy or push c
     words, not mine; trimming-c carries no override of its own and reads trimming-a's copy
     object (the a→c parity guard checks both). Its own commit, guards and the compare re-run,
     pushed before the studio publish — one deploy.
+
+## 2026-09-17 — the deploy
+
+53. **Deployed from here on the OAuth login, on the owner's word.** The owner changed the plan
+    from a studio click to a direct deploy with a six-line preflight. Preflight found no
+    `CLOUDFLARE_API_TOKEN` in the environment (the owner's stop condition) and wrangler on
+    an OAuth login as `fred@treeleads.io` with account write scopes — the auth that had
+    deployed `5f2a92f1`; stopped, reported, and the owner said "go on the OAuth login".
+    A clean build of `68c9013` reproduced the verified build (post 7/7, compare zero vs the
+    pre-batch live copies); `wrangler pages deploy dist --project-name=tree-template-factory
+    --branch=main --commit-hash=68c9013…` → `82c8746a` (previous `5f2a92f1`, from `e3394aa`,
+    kept for a Cloudflare rollback). Proved on the live domain: the four routes 200 with the
+    new bundle, 55/55 refetched, the compare zero, the four protected pages' phone hrefs
+    identical to pre-batch, the route set identical, the batch's markers present. Live
+    Lighthouse in `deploy/`; the deploy record in BUILD-LOG.

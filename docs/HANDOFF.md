@@ -1,26 +1,22 @@
-# HANDOFF — APPROVED; main pushed (with the cities copy); waiting for the owner's Publish click (2026-09-17)
+# HANDOFF — DEPLOYED (2026-09-17): the four-page batch is live as Cloudflare Pages deployment 82c8746a
 
-The owner approved all four pages, accepted the poster trade-off on Texas Tree Tops
-removal-a, kept the 16/18 card pairing, and asked for the guard off, main fast-forwarded
-and pushed (decisions 51). DONE: the guard is out of both settings files and the repo;
-`main` is `cac5f84` (fast-forward from `3c685d1`, 82 commits) and pushed; the branch
-`batch/four-pages` is pushed too. The publish guard hook no longer exists — pushes and
-deploys are unblocked.
+`origin/main` = `68c9013`, deployed from a clean build on the OAuth login (decisions 53;
+the record in `docs/BUILD-LOG.md`, "deploy record 82c8746a"). Previous production deployment
+`5f2a92f1` (from `e3394aa`) — promote it in Cloudflare Pages to roll back. Evidence in
+`docs/batch-four-pages/deploy/`: `live-compare.txt` (55 pages refetched after the deploy, zero
+differences), `lighthouse-live-*.json` + summary (the four live URLs, August method).
 
-NEXT, in order:
-1. The owner clicks Publish in the studio and confirms the four protected routes
-   (`/p/texas-tree-tops/removal-a`, `/p/texas-tree-tops/storm-a`, `/p/j-valdez/removal-a`,
-   `/p/j-valdez/trimming-a`). Do not deploy from here unless the owner says so.
-2. After it: `python3 $SP/compare55.py` against the LIVE domain (refetch the 55 live pages
-   into /tmp/live55 first — the current copies are the PRE-batch pages), Lighthouse on the
-   four live URLs (August method, a subagent), and the deploy record in `docs/BUILD-LOG.md`
-   in the style of the 3c685d1 entry (deploy id from the studio's receipt).
-3. DONE — Forney and Lake Ray Hubbard added to J Valdez trimming-a's paragraph (the owner's
-   choice; decisions 52), its own commit, guards and compare green, pushed with main.
-4. Follow-ups, not now: the three needs-photo slots (J Valdez removal-a `service-photo.1`,
-   `benefits`; storm-a `tile.5`); Stage 4 stays paused.
+Follow-ups, none started: the stubbed reviews; areas motion; the three needs-photo slots
+(J Valdez removal-a `service-photo.1`, `benefits`; storm-a `tile.5`); Texas Tree Tops removal
+and storm originals ≥ 1600 px; the studio on Railway is still its older deploy (`railway up`
+needs the `sosa24369` workspace login — see the BUILD-LOG); Stage 4 paused, no 4b prediction.
 
-main is pushed with the cities commit and this file; the studio builds from the head.
+Tooling that survives in the repo: `scripts/verify-image-boxes.mjs` (post guard),
+`scripts/verify-rendered.mjs` + `scripts/verify-callbar.mjs` (the `rendered` phase, run with
+`node scripts/run-guards.mjs rendered` from a machine with Chrome — the studio host has none),
+`scripts/lib/cdp.mjs` (the headless-Chrome harness; every tracker blocked on every load).
+The scratchpad probes (`$SP/probe/*`, `compare55.py`, `prediff.py`, `pagediff.sh`,
+`evidence.sh`) are session-local — recreate from the REPORT's descriptions if needed.
 
 DO NOT BUILD while a background run is reading app/dist. Guard stays on; nothing pushed.
 

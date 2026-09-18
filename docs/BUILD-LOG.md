@@ -3187,3 +3187,42 @@ The studio on Railway is **still the older deploy**: `railway whoami` shows
 blocked on the owner logging in as `fred@treeleads.io`. Records saved by the older studio UI
 keep the new `photoSlots` keys (its writer spreads what it does not touch), but it cannot show
 the removal-a Benefits slot until it is redeployed.
+
+## 2026-09-17 — deploy record `82c8746a` — the four-page batch is live
+
+**What shipped.** `batch/four-pages`, approved by the owner on 2026-09-17 (decisions 51–52), fast-
+forwarded onto `main` as `68c9013` (85 commits on `3c685d1`). The four target pages — J Valdez
+removal-a and trimming-a, Texas Tree Tops removal-a and storm-a — plus the shared changes their
+diff lists (28 of 55 pages): the alphabetical areas grid on every page that had the marquee,
+the call bar hidden while a section call button is in view with its space inside the footer,
+uniform 4:3 grids, the reviews slider unclamped on the three ad templates, the stock-photo
+alts, removal-c/trimming-c work cells uniform, the clip's poster, the cities paragraph.
+Report: `docs/batch-four-pages/REPORT.md`; the hold: `hold/`; decisions 1–52.
+
+**How.** Preflight: `origin/main` `68c9013`, tree clean, wrangler on the OAuth login
+(`fred@treeleads.io`; no API token in the environment — the owner said go on the login);
+production deployment before: `5f2a92f1-2051-4b7d-8afc-2f1705b62885` from `e3394aa`. A clean
+build of `68c9013` reproduced the verified build (post guards 7/7, 55-page compare against the
+pre-batch live copies zero). Then, from `app/`, account `ef07a2f5…`:
+`wrangler pages deploy dist --project-name=tree-template-factory --branch=main
+--commit-hash=68c90132… --commit-dirty=false` → **deployment `82c8746a-4688-4fd0-ad63-dfc3690a89df`**
+(104 files uploaded, 154 already uploaded, 258 total, 2.24 s). Roll back in Cloudflare Pages by
+promoting `5f2a92f1` if needed.
+
+**Proved on the live domain after the deploy (evidence in `docs/batch-four-pages/deploy/`):**
+
+| check | result |
+|---|---|
+| The four routes | `/p/j-valdez/removal-a`, `/p/j-valdez/trimming-a`, `/p/texas-tree-tops/removal-a`, `/p/texas-tree-tops/storm-a` — **200**, no redirect, the new bundle (`index-uUk-RkhP.js`) |
+| Phone / GTM tokens across all 55 live pages, refetched after the deploy | **0 differences** vs the build (183 `tel:`, 373 `data-dni`, 367 visible numbers, 68 GTM ids) — `live-compare.txt` |
+| Phone hrefs on the four protected pages | identical to the pre-batch live copies (kept at `/tmp/live55-prebatch` for the session) |
+| Route set | 55/55 HTTP 200; identical set to before |
+| The changes are live | areas grid on all four; the old marquee track gone; J Valdez removal-a's rail at eight tiles; Texas Tree Tops removal-a's clip behind its poster; the reviews button; the call-asset line; storm-a's six uniform tiles; J Valdez trimming-a's paragraph naming all ten cities |
+| Lighthouse on the four live URLs (August method) | J Valdez removal-a **99 / 1.71 s / 375,691 B**; J Valdez trimming-a **98 / 1.84 s / 79,396 B**; Texas Tree Tops removal-a **98 / 1.99 s / 394,159 B**; Texas Tree Tops storm-a **99 / 1.77 s / 14,090 B** (medians of 3 runs each; LCP = the hero paragraph on all four; CLS 0; GTM blocked, 0 completed) — `lighthouse-live-*.json`, `lighthouse-live-summary.txt` |
+
+**Not in this deploy** (follow-ups, Phase 0 line 5): the stubbed reviews; areas motion; the
+three needs-photo slots (J Valdez removal-a `service-photo.1` and `benefits`, storm-a `tile.5`);
+Texas Tree Tops removal and storm originals ≥ 1600 px; the poster trade-off (accepted: Texas
+Tree Tops removal-a 97 / 2.00 s); the pre-existing items listed in the REPORT; Stage 4 paused.
+**The studio on Railway is still its older deploy** — the `rendered` guard phase, `image-boxes`,
+the poster field and the minimum waiver reach it only with a `railway up`.
