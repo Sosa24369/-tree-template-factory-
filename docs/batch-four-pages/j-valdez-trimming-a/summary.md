@@ -44,8 +44,9 @@ No regression on score, LCP or first-viewport bytes.
 - `crops/` — hero band ×2 (unchanged), grid ×6, longform.
 
 ## Reported, not changed
-- The 8-vs-10 cities mismatch lives in the record's own trimming-a body-copy override
-  (Forney, Lake Ray Hubbard are chips only); ads are tuned to that copy (decisions 15).
+- The 8-vs-10 cities mismatch lived in the record's own trimming-a body-copy override —
+  resolved on 2026-09-17 by the owner: Forney and Lake Ray Hubbard added to the paragraph
+  (decisions 52).
 - Longform renders grid cell 2, not the contract's `longform` slot (decisions 20).
 
 ## The hold (owner's second instruction, 2026-09-16/17) — what changed on this page

@@ -472,3 +472,11 @@ is logged and the run continues. No firing came from a publish, deploy or push c
     fast-forwards (the branch is linear on 3c685d1), the owner publishes from the studio and
     confirms the four protected routes; then the live compare, Lighthouse on the four live
     URLs, and the deploy record.
+52. **Forney and Lake Ray Hubbard join J Valdez trimming-a's paragraph (owner's choice).** The
+    record's `copyOverrides.trimming-a["why.body"]` named eight of the ten cities the chips
+    show (decision 15 left it as record copy, the owner's to change). The owner chose the
+    paragraph over dropping the chips: the two cities are inserted in the list's own order
+    ("…Heath, Fate, Forney, Lake Ray Hubbard, and East Dallas."). Copy, so it is the owner's
+    words, not mine; trimming-c carries no override of its own and reads trimming-a's copy
+    object (the a→c parity guard checks both). Its own commit, guards and the compare re-run,
+    pushed before the studio publish — one deploy.
