@@ -1,4 +1,4 @@
-# HANDOFF — APPROVED; main pushed; waiting for the owner's Publish click (2026-09-17)
+# HANDOFF — APPROVED; main pushed (with the cities copy); waiting for the owner's Publish click (2026-09-17)
 
 The owner approved all four pages, accepted the poster trade-off on Texas Tree Tops
 removal-a, kept the 16/18 card pairing, and asked for the guard off, main fast-forwarded
@@ -15,16 +15,12 @@ NEXT, in order:
    into /tmp/live55 first — the current copies are the PRE-batch pages), Lighthouse on the
    four live URLs (August method, a subagent), and the deploy record in `docs/BUILD-LOG.md`
    in the style of the 3c685d1 entry (deploy id from the studio's receipt).
-3. OPEN, owner's answer pending — Forney and Lake Ray Hubbard on J Valdez trimming-a: their
-   line came as "[add them to the trimming-a paragraph / drop the two chips]". Adding = a
-   copy edit to the record's `copyOverrides.trimming-a["why.body"]` (+ trimming-c for the
-   a→c parity guard); dropping = removing two cities from `serviceAreaList`, which every
-   J Valdez page's areas grid reads. Its own commit, guards, compare, then push.
+3. DONE — Forney and Lake Ray Hubbard added to J Valdez trimming-a's paragraph (the owner's
+   choice; decisions 52), its own commit, guards and compare green, pushed with main.
 4. Follow-ups, not now: the three needs-photo slots (J Valdez removal-a `service-photo.1`,
    `benefits`; storm-a `tile.5`); Stage 4 stays paused.
 
-This HANDOFF commit is local on main and NOT pushed, so the main the studio builds is
-exactly cac5f84 until the owner has published.
+main is pushed with the cities commit and this file; the studio builds from the head.
 
 DO NOT BUILD while a background run is reading app/dist. Guard stays on; nothing pushed.
 
