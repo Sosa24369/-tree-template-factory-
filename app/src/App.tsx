@@ -6,6 +6,7 @@ import { getClient, listClients } from './lib/clientRegistry';
 import { TEMPLATE_META, isTemplateApplicable, isTemplateId, renderTemplate } from './templates/registry';
 import { modeFor, pagePath, type PageMode } from './lib/pagePath';
 import { ThankYou } from './routes/ThankYou';
+import { pageClient, pageFor } from './lib/pages';
 import './styles/base.css';
 
 /**
@@ -29,7 +30,12 @@ function TemplateRoute({ mode }: { mode: PageMode }) {
   // account under /demo/. Hitting the other prefix is not-found, so there is
   // never a second copy of a page at an address the robots rules do not cover.
   if (entry && modeFor(entry.client) !== mode) return <Missing what={`client "${clientSlug}" at this address`} />;
-  if (!isTemplateId(templateId)) return <Missing what={`template "${templateId}"`} />;
+  if (!isTemplateId(templateId)) {
+    // canopy-pages: v1 — a location page renders its base template.
+    const page = pageFor(entry.client, templateId);
+    if (!page || !isTemplateApplicable(entry.client, page.templateId)) return <Missing what={`template "${templateId}"`} />;
+    return renderTemplate(page.templateId, pageClient(entry.client, page));
+  }
 
   const { client, issues } = entry;
   // A template this client has opted out of (a service they do not sell) is never a

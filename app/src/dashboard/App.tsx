@@ -53,6 +53,17 @@ export function App() {
     setDirty(false);
   }, []);
 
+  // Deep link (Canopy P14): /?client=<slug>&template=<id> opens that client with
+  // that template in the preview. Read once, on load; an unknown slug or template
+  // is ignored and the studio opens as it always has.
+  useEffect(() => {
+    const q = new URLSearchParams(window.location.search);
+    const wantClient = q.get('client');
+    const wantTpl = q.get('template');
+    if (wantTpl && TEMPLATE_META.some((t) => t.id === wantTpl)) setPreviewTpl(wantTpl as TemplateId);
+    if (wantClient && /^[a-z0-9][a-z0-9-]*$/.test(wantClient)) selectClient(wantClient).catch(() => {});
+  }, [selectClient]);
+
   const validation = useMemo(() => (record ? validate(record) : { errors: [], warnings: [] }), [record]);
 
   // Push the edited record into the preview iframe whenever it changes.

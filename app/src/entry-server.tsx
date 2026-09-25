@@ -23,6 +23,7 @@ export function render(url: string): string {
 }
 
 export { listClients } from './lib/clientRegistry';
+export { pageClient } from './lib/pages';
 export { TEMPLATE_META, COPY_DEFAULTS } from './templates/registry';
 // The prerenderer needs the slot contract's `sizes` so the LCP <link rel="preload"> can
 // advertise the same width the <img> does. Exported here rather than duplicated in

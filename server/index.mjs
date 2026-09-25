@@ -22,6 +22,7 @@
  *   CLOUDFLARE_API_TOKEN CLOUDFLARE_ACCOUNT_ID CF_PAGES_PROJECT PUBLIC_BASE_URL PORT
  */
 
+import { CANOPY_PREFIX, makeCanopyApi } from './canopy-api.mjs';
 import { Hono } from 'hono';
 import { serve } from '@hono/node-server';
 import { serveStatic } from '@hono/node-server/serve-static';
@@ -110,6 +111,12 @@ app.post('/login', async (c) => {
   return c.redirect('/', 303);
 });
 app.post('/logout', (c) => { c.header('Set-Cookie', clearSessionCookie()); return c.redirect('/login', 303); });
+
+/* ---- the Canopy API: token-authenticated, six routes, BEFORE the gate ----
+ * It answers everything under its prefix itself (its last route is a 404), so a
+ * request there never reaches the session gate or any human route, and the human
+ * routes never read its token. See server/canopy-api.mjs. */
+app.route(CANOPY_PREFIX, makeCanopyApi({ repoDir: REPO_DIR, core, publisher }));
 
 /* ---- the gate: everything below requires a session ---- */
 app.use('*', async (c, next) => {

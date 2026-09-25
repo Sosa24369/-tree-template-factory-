@@ -392,6 +392,27 @@ export interface ClientRecord {
    * photos for stays applicable and is handled by the R5 degradation rules.
    */
   excludedTemplates?: TemplateId[];
+  /**
+   * canopy-pages: v1 — location pages (Canopy P14, brief §12.3).
+   *
+   * One base template per service, cloned per location: each entry renders the
+   * template at `/p|demo/<client>/<page.slug>/` with this client's copy, the
+   * page's own `copyOverrides` on top, and `{{areaName}}` set to `location`.
+   * Omitted or empty means no location pages — the client renders exactly what
+   * it rendered before this field existed. The Studio's Canopy API checks for the
+   * `canopy-pages: v1` marker above before it will write a page.
+   */
+  pages?: ClientPage[];
+}
+
+/** One location page (see `ClientRecord.pages`). */
+export interface ClientPage {
+  /** `<service>-<location>`, lowercase-hyphenated; never a template id. */
+  slug: string;
+  templateId: TemplateId;
+  service: string;
+  location: string;
+  copyOverrides?: Record<string, string>;
 }
 
 /* ------------------------------------------------------------------ *

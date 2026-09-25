@@ -169,6 +169,22 @@ export function dashboardCore(opts) {
 
   if (!record?.consent?.smsCopy?.trim?.()) errors.push('SMS consent copy is required.');
 
+  // canopy-pages: v1 — location pages. Absent is fine; present must be well formed.
+  if (record?.pages !== undefined) {
+    if (!Array.isArray(record.pages)) errors.push('pages must be a list.');
+    else {
+      const seen = new Set();
+      for (const p of record.pages) {
+        if (!p || !/^[a-z0-9][a-z0-9-]*$/.test(p.slug ?? '')) errors.push(`Page slug "${p?.slug}" must be lowercase letters, numbers and hyphens.`);
+        else if (/^(removal|trimming|storm)-[abc]$|^agnostic$|^thank-you$/.test(p.slug)) errors.push(`Page slug "${p.slug}" is a template name.`);
+        else if (seen.has(p.slug)) errors.push(`Page slug "${p.slug}" is used twice.`);
+        else seen.add(p.slug);
+        if (!/^(removal|trimming|storm)-[abc]$|^agnostic$/.test(p?.templateId ?? '')) errors.push(`Page "${p?.slug}" names an unknown template.`);
+        if (!String(p?.location ?? '').trim()) errors.push(`Page "${p?.slug}" needs a location.`);
+      }
+    }
+  }
+
   if (!record?.consent?.privacyPolicyUrl?.trim?.() || !record?.consent?.termsOfServiceUrl?.trim?.())
     warnings.push('Privacy Policy and/or Terms of Service URL is blank (legalUrlsPending). Allowed, but A2P registration needs both before running SMS.');
 

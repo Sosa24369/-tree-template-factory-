@@ -27,7 +27,7 @@ if (!existsSync(SSR)) {
 }
 
 const shell = readFileSync(join(DIST, 'index.html'), 'utf8');
-const { render, listClients, TEMPLATE_META, slotSizes, slotPhotos } = await import(SSR);
+const { render, listClients, TEMPLATE_META, slotSizes, slotPhotos, pageClient } = await import(SSR);
 
 const escapeHtml = (s) =>
   String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
@@ -194,6 +194,16 @@ for (const { client } of listClients()) {
     const base = client.isDemo ? '/demo' : '/p';
     routes.push({ url: `${base}/${client.slug}/${template.id}`, client, template });
     routes.push({ url: `${base}/${client.slug}/${template.id}/thank-you`, client, template, isThankYou: true });
+  }
+  // canopy-pages: v1 — location pages, each its base template with the page's
+  // location and copy. A client without `pages` adds nothing here.
+  for (const page of client.pages ?? []) {
+    const template = TEMPLATE_META.find((t) => t.id === page.templateId && t.built);
+    if (!template || (client.excludedTemplates ?? []).includes(template.id)) continue;
+    const base = client.isDemo ? '/demo' : '/p';
+    const pc = pageClient(client, page);
+    routes.push({ url: `${base}/${client.slug}/${page.slug}`, client: pc, template });
+    routes.push({ url: `${base}/${client.slug}/${page.slug}/thank-you`, client: pc, template, isThankYou: true });
   }
 }
 // The bare root prerenders PublicRoot (the roster is dev-only — see App.tsx):
