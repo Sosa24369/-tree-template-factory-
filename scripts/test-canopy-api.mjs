@@ -163,8 +163,15 @@ async function main() {
     console.log('\n6. publish status is readable; the POST never confirms protected pages');
     const pub = await call(base, 'GET', '/api/canopy/v1/publish', { headers: bearer() });
     check('publish status is readable with the token', pub.status === 200 && 'state' in pub.json);
-    const src = readFileSync(join(ROOT, 'server/canopy-api.mjs'), 'utf8');
-    check('the Canopy publish route never passes confirmProtected', /publisher\.run\(\{\}\)/.test(src) && !/confirmProtected\s*:/.test(src.split("api.post('/publish'")[1] || ''));
+    // Behaviour, not a source grep: a fake publisher records what it was asked to run.
+    const { makeCanopyApi } = await import(join(ROOT, 'server/canopy-api.mjs'));
+    const calls = [];
+    const fakePublisher = { status: { state: 'blocked', confirmToken: '/p/texas-tree-tops/removal-a' }, baseUrl: 'https://x', run(arg) { calls.push(arg); } };
+    const unit = makeCanopyApi({ repoDir: REPO, core: async () => false, publisher: fakePublisher, token: () => TOKEN });
+    const r = await unit.request('/publish', { method: 'POST', headers: { ...bearer(), 'content-type': 'application/json' },
+      body: JSON.stringify({ confirmProtected: '/p/texas-tree-tops/removal-a' }) });
+    check('publish from Canopy never confirms the protected pages, even when asked',
+      r.status === 202 && calls.length === 1 && calls[0] && !('confirmProtected' in calls[0]), JSON.stringify(calls));
   } finally {
     srv.kill();
   }
