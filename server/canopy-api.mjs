@@ -78,6 +78,7 @@ export function slugify(...parts) {
     .join('-')
     .toLowerCase()
     .normalize('NFKD')
+    .replace(/[\u0300-\u036f]/g, '') // "ñ" → "n", not "n-"
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-+|-+$/g, '')
     .slice(0, 60)
