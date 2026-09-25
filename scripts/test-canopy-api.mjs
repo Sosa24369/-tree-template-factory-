@@ -93,7 +93,7 @@ async function main() {
     check('no token → 401', (await call(base, 'GET', '/api/canopy/v1/templates')).status === 401);
     check('a wrong token → 401', (await call(base, 'GET', '/api/canopy/v1/templates', { headers: bearer('nope') })).status === 401);
     const t = await call(base, 'GET', '/api/canopy/v1/templates', { headers: bearer() });
-    check('the token → the ten templates', t.status === 200 && t.json.templates.length === 10, String(t.json?.templates?.length));
+    check('the token → the ten templates', t.status === 200 && t.json?.templates?.length === 10, String(t.json?.templates?.length));
     check('the token does not open the dashboard API', (await call(base, 'GET', '/api/dash/clients', { headers: bearer() })).status === 401);
     check('the token does not open publish', (await call(base, 'POST', '/api/publish', { headers: bearer(), body: {} })).status === 401);
     const root = await call(base, 'GET', '/', { headers: bearer() });
@@ -195,4 +195,11 @@ async function main() {
   }
   console.log(`all ${CHECKS} checks passed`);
 }
-main().catch((e) => { console.log(`  FAIL  ran to completion (${e?.stack?.split('\n').slice(0, 2).join(' | ')})`); process.exit(1); });
+main().catch((e) => {
+  // A crash is a failing check with a verdict, never a silent death: the
+  // mutation runner reads the summary line.
+  check('the suite ran to completion', false, e?.stack?.split('\n').slice(0, 2).join(' | '));
+  console.log(`\n${'='.repeat(60)}\n${FAILS.length} of ${CHECKS} checks FAILED:`);
+  for (const f of FAILS) console.log(`  - ${f}`);
+  process.exit(1);
+});
