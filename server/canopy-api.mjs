@@ -8,6 +8,7 @@
  *   POST /api/canopy/v1/clients/:slug/pages        add or update one location page
  *   POST /api/canopy/v1/publish                    start the existing publisher
  *   GET  /api/canopy/v1/publish                    the publisher's status and receipt
+ *   PATCH /api/canopy/v1/clients/:slug/fields      (P21) whitelisted record fields on a real client — old → new, dry run first
  *
  * AUTH. `Authorization: Bearer <STUDIO_API_TOKEN>`, compared as SHA-256 digests
  * in constant time. No token configured → every route answers 503; the door is
@@ -83,6 +84,44 @@ export function slugify(...parts) {
     .replace(/^-+|-+$/g, '')
     .slice(0, 60)
     .replace(/-+$/g, '');
+}
+
+// ---- P21: the fields Canopy may write on a real client, and their rules -----
+const E164 = /^\+\d{10,15}$/;
+const HTTPS = /^https:\/\/[^\s]+$/;
+const text = (max) => (v) => (typeof v === 'string' && v.trim().length > 0 && v.length <= max ? null : `a non-empty string of at most ${max} characters`);
+const optText = (max) => (v) => (v === null || (typeof v === 'string' && v.length <= max) ? null : `a string of at most ${max} characters, or null`);
+export const FIELD_RULES = [
+  { path: 'phone.googleAdsCallAsset', check: (v) => (v === null || (typeof v === 'string' && E164.test(v)) ? null : 'E.164 like +16825551234, or null') },
+  { path: 'phone.displayOverride', check: optText(40) },
+  { path: 'serviceArea', check: text(80) },
+  { path: 'serviceAreaList', check: (v) => (Array.isArray(v) && v.length <= 60 && v.every((x) => typeof x === 'string' && x.trim() && x.length <= 60) ? null : 'a list of up to 60 place names') },
+  { path: 'consent.privacyPolicyUrl', check: (v) => (v === null || (typeof v === 'string' && HTTPS.test(v)) ? null : 'an https URL, or null') },
+  { path: 'consent.termsOfServiceUrl', check: (v) => (v === null || (typeof v === 'string' && HTTPS.test(v)) ? null : 'an https URL, or null') },
+  { path: 'consent.smsCopy', check: text(400) },
+  { path: 'brand.logoUrl', check: (v) => (v === null || (typeof v === 'string' && HTTPS.test(v)) ? null : 'an https URL, or null') },
+];
+const COPY_PATH = /^copyOverrides\.([a-z0-9-]+)\.([A-Za-z0-9_.]+)$/;
+const PHOTO_PATH = /^photoSlots\.([A-Za-z0-9_-]+)$/;
+export function fieldRule(path, templates, repoDir) {
+  const fixed = FIELD_RULES.find((r) => r.path === path);
+  if (fixed) return fixed;
+  const m = COPY_PATH.exec(path);
+  if (m) {
+    const [, templateId, key] = m;
+    if (!templates.some((t) => t.id === templateId)) return null;
+    if (!copyKeys(repoDir, templateId).has(key)) return null;
+    return { path, check: text(300) };
+  }
+  if (PHOTO_PATH.test(path)) return { path, check: (v) => (v === null || (typeof v === 'string' && HTTPS.test(v)) ? null : 'an https image URL, or null') };
+  return null;
+}
+export const getPath = (obj, path) => path.split('.').reduce((o, k) => (o && typeof o === 'object' ? o[k] : undefined), obj);
+export function setPath(obj, path, value) {
+  const keys = path.split('.');
+  let o = obj;
+  for (const k of keys.slice(0, -1)) { if (!o[k] || typeof o[k] !== 'object') o[k] = {}; o = o[k]; }
+  o[keys[keys.length - 1]] = value;
 }
 
 export function readTemplates(repoDir) {
@@ -230,6 +269,44 @@ export function makeCanopyApi({ repoDir, core, publisher, token = () => process.
     const saved = await callCore(core, 'POST', '/api/dash/save', { slug, record: next, message: `canopy: ${existing ? 'update' : 'create'} ${slug}` });
     if (saved.status !== 200) return c.json({ error: 'save_failed', detail: saved.body }, saved.status);
     return c.json({ slug, created: !existing, commit: saved.body?.commit ?? null, view: view({ ...next, slug }) });
+  });
+
+  // P21 (Canopy brief §8.2): the ONE write Canopy may make to a real client's
+  // record — a whitelist of fields, each validated, old → new returned, a dry
+  // run first. Nothing else about the record can be touched here; the studio
+  // stays the editor. Publishing is the existing POST /publish, which never
+  // confirms a protected page — the call-asset footer line is the single
+  // exception the protected comparison ignores (server/protected.mjs), so the
+  // one edit Canopy exists to make on a live page does not need a person to
+  // confirm a diff that is exactly that line.
+  api.patch('/clients/:slug/fields', async (c) => {
+    const slug = c.req.param('slug');
+    if (!OK_SLUG.test(slug)) return c.json({ error: 'bad_slug' }, 400);
+    const body = await c.req.json().catch(() => ({}));
+    const dryRun = body.dryRun === true;
+    const record = readRecord(slug);
+    if (!record) return c.json({ error: 'no_such_client' }, 404);
+    const fields = body.fields && typeof body.fields === 'object' ? body.fields : null;
+    if (!fields || !Object.keys(fields).length) return c.json({ error: 'no_fields', message: 'fields is a non-empty object of dotted paths' }, 422);
+    const templates = readTemplates(repoDir);
+    const changes = [];
+    const next = JSON.parse(JSON.stringify(record));
+    for (const [path, value] of Object.entries(fields)) {
+      const rule = fieldRule(path, templates, repoDir);
+      if (!rule) return c.json({ error: 'field_not_allowed', message: `${path} is not a field Canopy may write`, allowed: FIELD_RULES.map((r) => r.path) }, 422);
+      const problem = rule.check(value);
+      if (problem) return c.json({ error: 'bad_value', message: `${path}: ${problem}` }, 422);
+      const before = getPath(record, path);
+      if (JSON.stringify(before) === JSON.stringify(value)) continue;
+      setPath(next, path, value);
+      if (path === 'phone.googleAdsCallAsset' && value) setPath(next, 'phone.googleAdsCallAssetPending', null);
+      changes.push({ path, before: before === undefined ? null : before, after: value });
+    }
+    if (!changes.length) return c.json({ dryRun, changed: [], record: view({ ...record, slug }), note: 'nothing to change' });
+    if (dryRun) return c.json({ dryRun: true, changed: changes, record: next });
+    const saved = await callCore(core, 'POST', '/api/dash/save', { slug, record: next, message: `canopy: fields ${slug} (${changes.map((x) => x.path).join(', ')})` });
+    if (saved.status !== 200) return c.json({ error: 'save_failed', detail: saved.body }, saved.status);
+    return c.json({ slug, changed: changes, commit: saved.body?.commit ?? null, view: view({ ...next, slug }) });
   });
 
   api.post('/clients/:slug/pages', async (c) => {

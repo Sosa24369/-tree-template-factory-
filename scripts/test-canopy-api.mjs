@@ -172,6 +172,33 @@ async function main() {
       body: JSON.stringify({ confirmProtected: '/p/texas-tree-tops/removal-a' }) });
     check('publish from Canopy never confirms the protected pages, even when asked',
       r.status === 202 && calls.length === 1 && calls[0] && !('confirmProtected' in calls[0]), JSON.stringify(calls));
+
+    console.log('\n6b. (P21) PATCH /clients/:slug/fields — a whitelist, old → new, dry run first, on a REAL client');
+    const nope = await call(base, 'PATCH', '/api/canopy/v1/clients/texas-tree-tops/fields', { headers: bearer(), body: { fields: { 'crm.ghlLocationId': 'x' }, dryRun: true } });
+    check('a field outside the whitelist → 422 field_not_allowed, with the allowed list', nope.status === 422 && nope.json.error === 'field_not_allowed' && Array.isArray(nope.json.allowed) && nope.json.allowed.includes('phone.googleAdsCallAsset'));
+    const badv = await call(base, 'PATCH', '/api/canopy/v1/clients/texas-tree-tops/fields', { headers: bearer(), body: { fields: { 'phone.googleAdsCallAsset': '682-222-9624' }, dryRun: true } });
+    check('a value that is not E.164 → 422 bad_value with the rule', badv.status === 422 && badv.json.error === 'bad_value' && /E\.164/.test(badv.json.message));
+    const badc = await call(base, 'PATCH', '/api/canopy/v1/clients/texas-tree-tops/fields', { headers: bearer(), body: { fields: { 'copyOverrides.removal-a.made.up': 'x' }, dryRun: true } });
+    check('a copy key the template does not have → 422', badc.status === 422 && badc.json.error === 'field_not_allowed');
+    const h7 = originHead();
+    const dry7 = await call(base, 'PATCH', '/api/canopy/v1/clients/texas-tree-tops/fields', { headers: bearer(), body: { fields: { 'phone.googleAdsCallAsset': '+16822229624' }, dryRun: true } });
+    check('a dry run returns old → new (null → the number) and the record it would write, and writes nothing',
+      dry7.status === 200 && dry7.json.dryRun === true && dry7.json.changed.length === 1 && dry7.json.changed[0].path === 'phone.googleAdsCallAsset' && dry7.json.changed[0].before === null
+      && dry7.json.changed[0].after === '+16822229624' && dry7.json.record.phone.googleAdsCallAsset === '+16822229624' && dry7.json.record.phone.googleAdsCallAssetPending === null && originHead() === h7,
+      JSON.stringify(dry7.json).slice(0, 200));
+    const same = await call(base, 'PATCH', '/api/canopy/v1/clients/texas-tree-tops/fields', { headers: bearer(), body: { fields: { 'serviceArea': JSON.parse(readFileSync(join(REPO, 'clients/texas-tree-tops.json'), 'utf8')).serviceArea } } });
+    check('a value that is already there changes nothing and commits nothing', same.status === 200 && same.json.changed.length === 0 && originHead() === h7);
+    const real7 = await call(base, 'PATCH', '/api/canopy/v1/clients/texas-tree-tops/fields', { headers: bearer(), body: { fields: { 'phone.googleAdsCallAsset': '+16822229624' } } });
+    const rec7 = JSON.parse(git(ORIGIN, 'show', 'refs/heads/main:clients/texas-tree-tops.json'));
+    check('a real write on a REAL client commits (to the throwaway origin): the number set, the pending marker cleared, the rest untouched',
+      real7.status === 200 && real7.json.commit && originHead() !== h7 && rec7.phone.googleAdsCallAsset === '+16822229624' && rec7.phone.googleAdsCallAssetPending === null && rec7.phone.e164 === '+16824520735',
+      JSON.stringify(real7.json).slice(0, 160));
+    check('...the commit is the studio’s, naming the field', git(ORIGIN, 'log', '-1', '--format=%an|%s', 'refs/heads/main').trim() === 'Template Studio|canopy: fields texas-tree-tops (phone.googleAdsCallAsset)');
+    const { normalise } = await import(join(ROOT, 'server/protected.mjs'));
+    const live = '<html><body><p>Hi</p><p class="gads-call-asset" data-dni="exclude" data-call-asset="google-ads"><span class="notranslate">(682) 452-0735</span></p><script src="/assets/index-AAA.js"></script></body></html>';
+    const next = live.replace('(682) 452-0735', '(682) 222-9624').replace('index-AAA.js', 'index-BBB.js');
+    check('the protected comparison ignores exactly the call-asset footer line (and the bundle hash)', normalise(live) === normalise(next));
+    check('...and nothing else: one other byte still differs', normalise(live) !== normalise(next.replace('<p>Hi</p>', '<p>Hi!</p>')));
   } finally {
     srv.kill();
   }

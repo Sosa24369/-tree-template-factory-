@@ -47,8 +47,14 @@ export function loadProtectedRoutes(repoDir) {
   }
 }
 
-/** Bundle filenames are content-hashed; a hash change is not a content change. */
-export const normalise = (html) => html.replace(/index-[A-Za-z0-9_-]+\.(js|css)/g, 'index-HASH.$1');
+/** Bundle filenames are content-hashed; a hash change is not a content change.
+ *  P21: the Google Ads call-asset footer line (`<p class="gads-call-asset" …>`)
+ *  is the ONE edit Canopy makes on a live page through the API, by design
+ *  (Canopy brief §8.3), so a difference that is exactly that line does not
+ *  need a person to confirm it; every other byte still does. */
+export const normalise = (html) => html
+  .replace(/index-[A-Za-z0-9_-]+\.(js|css)/g, 'index-HASH.$1')
+  .replace(/<p class="gads-call-asset"[^>]*>[\s\S]*?<\/p>/g, '<p class="gads-call-asset">CALL-ASSET-LINE</p>');
 
 /** Where the built HTML for a route lives inside dist. */
 const distFileFor = (repoDir, route) => join(repoDir, 'app', 'dist', route.replace(/^\//, ''), 'index.html');
