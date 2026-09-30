@@ -66,8 +66,10 @@ console.log('\nvalidation matrix');
   ok('honeypot -> 200 dropped, nothing forwarded', r.status === 200 && r.json.dropped === 'honeypot' && r.logs.length === 0, JSON.stringify(r.json));
 }
 {
-  const r = await call({ ...base, clientSlug: 'j-valdez', templateId: 'storm-a' });
-  ok('excluded template (j-valdez storm-a) -> 400', r.status === 400, JSON.stringify(r.json));
+  // storm-a became a live j-valdez page (run 3 Amendment B.2); storm-b stays
+  // deliberately excluded, so the exclusion contract is tested on it.
+  const r = await call({ ...base, clientSlug: 'j-valdez', templateId: 'storm-b' });
+  ok('excluded template (j-valdez storm-b) -> 400', r.status === 400, JSON.stringify(r.json));
 }
 {
   // valid, no token, NOT dry-run -> refuses (503) and never reaches the network.
@@ -119,9 +121,15 @@ console.log('\nadversarial hardening (T3)');
   ok('array templateId -> 400 invalid', r.status === 400 && r.json.error === 'invalid templateId', JSON.stringify(r.json));
 }
 {
-  // Excluded template still rejected for the real client.
+  // Excluded template still rejected for the real client (storm-b stays
+  // excluded; storm-a is a live j-valdez page since run 3 Amendment B.2).
+  const r = await call({ ...base, clientSlug: 'j-valdez', templateId: 'storm-b' });
+  ok('excluded storm-b for j-valdez still -> 400', r.status === 400);
+}
+{
+  // The page the storm ads land on accepts a lead (Amendment B.2).
   const r = await call({ ...base, clientSlug: 'j-valdez', templateId: 'storm-a' });
-  ok('excluded storm-a for j-valdez still -> 400', r.status === 400);
+  ok('j-valdez storm-a (now live) accepts -> 200 dry-run', r.status === 200, JSON.stringify(r.json));
 }
 {
   // Oversized name/email are capped, not forwarded verbatim, and control chars
