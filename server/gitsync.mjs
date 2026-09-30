@@ -54,5 +54,9 @@ export function makeGit({ repoDir, repo, token, branch = 'main', identity = { na
     dirtyTracked() {
       return run(['status', '--porcelain', '--untracked-files=no']).split('\n').map((l) => l.trim()).filter(Boolean);
     },
+    /** Discard ONE tracked file's uncommitted changes (failed-build residue). */
+    discard(file) {
+      run(['checkout', '--', file]);
+    },
   };
 }

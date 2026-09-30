@@ -109,6 +109,18 @@ export function makePublisher({ repoDir, git, cfToken, cfAccountId, cfProject, b
       // name the files — the fix is to re-save that client, which overwrites and
       // commits the same file.
       {
+        // A FAILED publish leaves its own build residue behind: the build
+        // regenerates committed *.generated.json files in the clone, and that
+        // residue would refuse every publish after a failure until someone
+        // shells in. A generated file is a build product — the next build
+        // remakes it from committed sources — so ITS residue is discarded
+        // here, never carried. Records and hand-written files still refuse.
+        for (const line of git.dirtyTracked()) {
+          const file = line.replace(/^[A-Z? ]+\s+/, '');
+          if (/\.generated\.json$/.test(file)) {
+            try { git.discard(file); } catch { /* the dirty check below still refuses */ }
+          }
+        }
         const dirty = git.dirtyTracked();
         if (dirty.length) {
           return fail('pulling', 1, [
