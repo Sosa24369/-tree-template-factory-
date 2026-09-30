@@ -34,7 +34,6 @@
       ],
       "leadSource": "Google Ads — Landing Page",
       "excludedTemplates": [
-        "storm-a",
         "storm-b",
         "storm-c"
       ]
