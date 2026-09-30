@@ -489,6 +489,165 @@
           "measuredBox": 736
         }
       }
+    ],
+    "storm": [
+      {
+        "src": "/assets/j-valdez/removal-boom-over-house-nf3-a0ee64e0.webp",
+        "alt": "Bucket lift raised into a tall tree beside a house for removal",
+        "width": 1600,
+        "height": 1200,
+        "srcset": "/assets/j-valdez/removal-boom-over-house-nf3-a0ee64e0-400w.webp 400w, /assets/j-valdez/removal-boom-over-house-nf3-a0ee64e0-800w.webp 800w, /assets/j-valdez/removal-boom-over-house-nf3-a0ee64e0-1200w.webp 1200w, /assets/j-valdez/removal-boom-over-house-nf3-a0ee64e0.webp 1600w",
+        "focal": {
+          "x": 0.55,
+          "y": 0.5
+        },
+        "pipeline": {
+          "version": 2,
+          "at": "2026-09-16T04:44:43.242Z",
+          "source": {
+            "width": 1638,
+            "height": 2048,
+            "format": "jpeg",
+            "bytes": 536435
+          },
+          "master": [
+            1600,
+            1200
+          ],
+          "aspect": "4:3"
+        }
+      },
+      {
+        "src": "/assets/j-valdez/removal-felled-trunk-img1122-b4a0031b.webp",
+        "alt": "Two crew members sawing a felled trunk into rounds in a back yard",
+        "width": 1200,
+        "height": 900,
+        "srcset": "/assets/j-valdez/removal-felled-trunk-img1122-b4a0031b-400w.webp 400w, /assets/j-valdez/removal-felled-trunk-img1122-b4a0031b-800w.webp 800w, /assets/j-valdez/removal-felled-trunk-img1122-b4a0031b.webp 1200w",
+        "focal": {
+          "x": 0.5,
+          "y": 0.5
+        },
+        "pipeline": {
+          "version": 2,
+          "at": "2026-09-17T04:59:14.180Z",
+          "source": {
+            "width": 1320,
+            "height": 1911,
+            "format": "jpeg",
+            "bytes": 1231671
+          },
+          "master": [
+            1200,
+            900
+          ],
+          "aspect": "4:3",
+          "note": "left 120px trimmed"
+        }
+      },
+      {
+        "src": "/assets/j-valdez/removal-stump-cut-img1120-19e31d35.webp",
+        "alt": "Crew member cutting a tree stump down with a chainsaw",
+        "width": 1320,
+        "height": 990,
+        "srcset": "/assets/j-valdez/removal-stump-cut-img1120-19e31d35-400w.webp 400w, /assets/j-valdez/removal-stump-cut-img1120-19e31d35-800w.webp 800w, /assets/j-valdez/removal-stump-cut-img1120-19e31d35-1200w.webp 1200w, /assets/j-valdez/removal-stump-cut-img1120-19e31d35.webp 1320w",
+        "focal": {
+          "x": 0.45,
+          "y": 0.5
+        },
+        "pipeline": {
+          "version": 2,
+          "at": "2026-09-16T04:44:42.355Z",
+          "source": {
+            "width": 1320,
+            "height": 1906,
+            "format": "jpeg",
+            "bytes": 931076
+          },
+          "master": [
+            1320,
+            990
+          ],
+          "aspect": "4:3"
+        }
+      },
+      {
+        "src": "/assets/j-valdez/removal-bucket-over-water-nf4-16d47bf5.webp",
+        "alt": "Crew member in a bucket lift cutting a large trunk over the water",
+        "width": 1542,
+        "height": 1157,
+        "srcset": "/assets/j-valdez/removal-bucket-over-water-nf4-16d47bf5-400w.webp 400w, /assets/j-valdez/removal-bucket-over-water-nf4-16d47bf5-800w.webp 800w, /assets/j-valdez/removal-bucket-over-water-nf4-16d47bf5-1200w.webp 1200w, /assets/j-valdez/removal-bucket-over-water-nf4-16d47bf5.webp 1542w",
+        "focal": {
+          "x": 0.5,
+          "y": 0.5
+        },
+        "pipeline": {
+          "version": 2,
+          "at": "2026-09-16T04:44:42.792Z",
+          "source": {
+            "width": 1542,
+            "height": 2048,
+            "format": "jpeg",
+            "bytes": 609008
+          },
+          "master": [
+            1542,
+            1157
+          ],
+          "aspect": "4:3"
+        }
+      },
+      {
+        "src": "/assets/j-valdez/removal-downed-limbs-img1124-2d1172e3.webp",
+        "alt": "Two crew members with a chainsaw cutting up downed limbs",
+        "width": 1320,
+        "height": 990,
+        "srcset": "/assets/j-valdez/removal-downed-limbs-img1124-2d1172e3-400w.webp 400w, /assets/j-valdez/removal-downed-limbs-img1124-2d1172e3-800w.webp 800w, /assets/j-valdez/removal-downed-limbs-img1124-2d1172e3-1200w.webp 1200w, /assets/j-valdez/removal-downed-limbs-img1124-2d1172e3.webp 1320w",
+        "focal": {
+          "x": 0.5,
+          "y": 0.5
+        },
+        "pipeline": {
+          "version": 2,
+          "at": "2026-09-16T04:44:43.703Z",
+          "source": {
+            "width": 1320,
+            "height": 1984,
+            "format": "jpeg",
+            "bytes": 1187889
+          },
+          "master": [
+            1320,
+            990
+          ],
+          "aspect": "4:3"
+        }
+      },
+      {
+        "src": "/assets/j-valdez/removal-log-rounds-img1126-490447e4.webp",
+        "alt": "Crew member hauling log rounds on a hand truck after a removal",
+        "width": 1320,
+        "height": 990,
+        "srcset": "/assets/j-valdez/removal-log-rounds-img1126-490447e4-400w.webp 400w, /assets/j-valdez/removal-log-rounds-img1126-490447e4-800w.webp 800w, /assets/j-valdez/removal-log-rounds-img1126-490447e4-1200w.webp 1200w, /assets/j-valdez/removal-log-rounds-img1126-490447e4.webp 1320w",
+        "focal": {
+          "x": 0.55,
+          "y": 0.5
+        },
+        "pipeline": {
+          "version": 2,
+          "at": "2026-09-17T03:39:09.017Z",
+          "source": {
+            "width": 1320,
+            "height": 1928,
+            "format": "jpeg",
+            "bytes": 1254277
+          },
+          "master": [
+            1320,
+            990
+          ],
+          "aspect": "4:3"
+        }
+      }
     ]
   },
   "reviews": [
@@ -564,7 +723,6 @@
   },
   "reviewAvatarStyle": "initials",
   "excludedTemplates": [
-    "storm-a",
     "storm-b",
     "storm-c"
   ],
