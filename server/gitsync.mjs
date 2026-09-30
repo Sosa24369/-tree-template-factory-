@@ -32,6 +32,18 @@ export function makeGit({ repoDir, repo, token, branch = 'main', identity = { na
         execFileSync('git', [...base, ...authed, 'clone', '--branch', branch, '--single-branch', url, repoDir], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] });
         return `cloned ${repo}@${branch} into ${repoDir}`;
       }
+      // A failed publish's build leaves *.generated.json residue in the
+      // clone, and a dirty file blocks the ff-only pull — which used to fail
+      // BOOT itself, so no new deployment could pass its healthcheck until
+      // someone shelled in. Generated files are build products (the next
+      // build remakes them from committed sources): their residue is
+      // discarded before the pull. Anything else dirty still fails loudly.
+      for (const line of run(['status', '--porcelain', '--untracked-files=no']).split('\n').map((l) => l.trim()).filter(Boolean)) {
+        const file = line.replace(/^[A-Z? ]+\s+/, '');
+        if (/\.generated\.json$/.test(file)) {
+          try { run(['checkout', '--', file]); } catch { /* the pull below reports */ }
+        }
+      }
       run([...authed, 'pull', '--ff-only', 'origin', branch]);
       return `pulled ${repo}@${branch} (ff-only)`;
     },
