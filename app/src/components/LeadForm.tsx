@@ -17,6 +17,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import type { ResolvedClient } from '../schema/resolve';
 import { getAttribution } from '../lib/attribution';
 import { getSubmissionId } from '../lib/submissionId';
+import { consentShownText, displayedTrackingNumber, getSessionId } from '../lib/datumContext';
 import { fetchSiteKey, loadTurnstile } from '../lib/turnstile';
 import { LeadSubmitError, submitLead, type LeadPayload } from '../lib/leads';
 import { basePathFor } from '../lib/pagePath';
@@ -157,6 +158,14 @@ export function LeadForm({ client, labels, className }: Props) {
       templateId: templateId ?? '',
       submissionId,
       turnstileToken,
+      // Datum dual-write context: read by the Function's relay only. Nothing here renders.
+      consentShownText: consentShownText() || client.consent.smsCopy,
+      landingPage: attribution.landingPage,
+      referrer: attribution.referrer,
+      pageUrl: window.location.href,
+      sessionId: getSessionId(),
+      trackingNumber: displayedTrackingNumber(),
+      adParams: attribution.adParams ?? {},
     };
 
     try {

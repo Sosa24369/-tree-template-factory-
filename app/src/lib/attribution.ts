@@ -14,6 +14,10 @@ export type ClickIdParam = (typeof CLICK_ID_PARAMS)[number];
 
 const UTM_PARAMS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content'] as const;
 
+/** Ad-network parameters beyond the click ids — what a tracking template can add (campaign, ad group, keyword…).
+ *  Carried to Datum only; the GHL mapping never reads them. */
+export const AD_PARAMS = ['campaignid', 'adgroupid', 'keyword', 'matchtype', 'network', 'device', 'msclkid'] as const;
+
 const STORE_KEY = 'ttf_attribution_v1';
 
 export interface Attribution {
@@ -26,6 +30,8 @@ export interface Attribution {
   utm: Partial<Record<(typeof UTM_PARAMS)[number], string>>;
   landingPage: string;
   referrer: string;
+  /** AD_PARAMS seen on the landing URL, as sent. */
+  adParams: Partial<Record<(typeof AD_PARAMS)[number], string>>;
 }
 
 const EMPTY: Attribution = {
@@ -35,6 +41,7 @@ const EMPTY: Attribution = {
   utm: {},
   landingPage: '',
   referrer: '',
+  adParams: {},
 };
 
 function read(): Attribution | null {
@@ -85,6 +92,12 @@ export function captureAttribution(search = window.location.search): Attribution
     if (v) utm[key] = v;
   }
 
+  const adParams = { ...existing.adParams };
+  for (const key of AD_PARAMS) {
+    const v = params.get(key);
+    if (v) adParams[key] = v;
+  }
+
   const next: Attribution = {
     adClickId: source ? clickIds[source]! : existing.adClickId,
     adClickIdSource: source || existing.adClickIdSource,
@@ -92,6 +105,7 @@ export function captureAttribution(search = window.location.search): Attribution
     utm,
     landingPage: existing.landingPage || window.location.pathname + window.location.search,
     referrer: existing.referrer || document.referrer || '',
+    adParams,
   };
 
   if (foundNew || !read()) write(next);

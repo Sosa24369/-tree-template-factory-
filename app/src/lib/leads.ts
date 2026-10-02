@@ -37,6 +37,18 @@ export interface LeadPayload {
   /** Cloudflare Turnstile token (Q1 bot gate). Empty string when Turnstile is
    *  not configured; the Function is fail-open in that state. */
   turnstileToken: string;
+
+  /** Datum dual-write context, read only by functions/api/_datum.mjs (the GHL mapping
+   *  ignores it). consentShownText is the consent wording as rendered, ticked or not —
+   *  consentText above stays empty when the box is unticked, as before. */
+  consentShownText: string;
+  landingPage: string;
+  referrer: string;
+  pageUrl: string;
+  sessionId: string;
+  /** The phone number the page displayed (call tracking swaps it in place). */
+  trackingNumber: string;
+  adParams: Record<string, string>;
 }
 
 export interface LeadResult {
