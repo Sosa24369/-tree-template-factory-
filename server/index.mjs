@@ -167,10 +167,19 @@ app.post('/api/publish', async (c) => {
   // The confirmation names the exact set of live campaign pages the caller was shown.
   // A token for a different set (or no token) leaves the publish blocked.
   const body = await c.req.json().catch(() => ({}));
-  publisher.run({ confirmProtected: typeof body?.confirmProtected === 'string' ? body.confirmProtected : undefined });
+  publisher.run({ confirmProtected: typeof body?.confirmProtected === 'string' ? body.confirmProtected : undefined }).catch((e) => console.error('[publish] unexpected:', String(e?.stack || e)));
   await new Promise((r) => setTimeout(r, 50));
   return c.json({ ...publisher.status, suite: publisher.guards, baseUrl: publisher.baseUrl }, 202);
 });
+
+/* ---- the preview's own probes ---- */
+// The landing-page bundle asks its Pages Function for the Turnstile site key on every
+// load. The studio is not that Function; answering "not configured" (the key's own
+// unconfigured shape) keeps the preview's console clean instead of a 404 per client open.
+app.get('/api/turnstile-config', (c) => c.json({ siteKey: null }));
+// Every other unknown /api/* path is JSON, as the header promises — never the static
+// handler's text/plain 404.
+app.all('/api/*', (c) => c.json({ error: 'unknown endpoint', path: c.req.path }, 404));
 
 /* ---- static: photos for the preview, then the built UI ---- */
 // A photo that has been uploaded but not yet saved lives in .studio-staging, not in

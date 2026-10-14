@@ -23,7 +23,7 @@
  * the request (any /api/dash/* path) and false otherwise.
  */
 
-import { readFileSync, writeFileSync, readdirSync, existsSync, mkdirSync, rmSync, renameSync } from 'node:fs';
+import { readFileSync, writeFileSync, readdirSync, existsSync, mkdirSync, rmSync, renameSync, unlinkSync } from 'node:fs';
 import { join } from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { createHash, randomBytes } from 'node:crypto';
@@ -383,7 +383,13 @@ export function dashboardCore(opts) {
       const current = existsSync(clientFile(slug)) ? clientFile(slug) : '/dev/null';
       let diff = '';
       try { diff = git(['diff', '--no-index', '--', current, tmp]); } catch (e) { diff = e.stdout || ''; }
-      return send(res, 200, { diff: diff.replace(new RegExp(tmp, 'g'), `clients/${slug}.json`) });
+      finally { try { unlinkSync(tmp); } catch { /* already gone */ } }
+      // git prints both absolute paths (`a/private/tmp/…`, `a/data/repo/…`) and strips
+      // their leading slash, so a bare replace of the temp path produced `bclients/…`.
+      // Both sides become the record's repo path; split/join, because a path is not a regex.
+      const shown = `/clients/${slug}.json`;
+      for (const abs of new Set([tmp, current].filter((f) => f !== '/dev/null'))) diff = diff.split(abs).join(shown);
+      return send(res, 200, { diff });
     }
 
     // POST /api/dash/upload  { slug, filename, dataBase64, focal?, aspect?, set?, index?, count? }

@@ -66,11 +66,12 @@ export function App() {
   }, [dirty]);
   const iframeRef = useRef<HTMLIFrameElement>(null);
 
-  const loadClients = useCallback(() => api.clients().then((r) => setClients(r.clients)), []);
+  const loadClients = useCallback(() => api.clients().then((r) => setClients(r.clients)).catch((e: any) => { if (!e.signedOut) setToast('Could not load the client list: ' + e.message); }), []);
   useEffect(() => { loadClients(); }, [loadClients]);
 
   const selectClient = useCallback(async (s: string) => {
-    const { record } = await api.client(s);
+    let record: Json;
+    try { ({ record } = await api.client(s)); } catch (e: any) { if (!e.signedOut) setToast(`Could not open ${s}: ${e.message}`); return; }
     setSlug(s);
     setRecord(record);
     setDirty(false);

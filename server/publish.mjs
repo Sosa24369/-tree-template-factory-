@@ -215,6 +215,12 @@ export function makePublisher({ repoDir, git, cfToken, cfAccountId, cfProject, b
       catch (e) { log(`[receipt] could not record this deploy's route list: ${String(e?.message || e)}`); }
       status = { ...status, state: 'live', stage: 'live', exitCode: 0, tail: tailOf(d.lines), url: wr.url, receipt, finishedAt };
       return status;
+    } catch (e) {
+      // An unexpected throw (a guard runner, the live-page comparison, a receipt read)
+      // used to leave `status` mid-stage forever — the UI said "Publishing…" with the
+      // button disabled — and, unhandled, took the process down with it. It is a failure
+      // like any other: named stage, the error as the tail, re-startable.
+      return fail(status.stage ?? 'publish', -1, [String(e?.stack || e?.message || e)]);
     } finally {
       running = false;
     }
