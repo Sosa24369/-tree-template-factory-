@@ -42,6 +42,15 @@ export function App() {
   const [diff, setDiff] = useState<string | null>(null);
   const [commitMsg, setCommitMsg] = useState('');
   const [showNew, setShowNew] = useState(false);
+  // "Saved 2:41 PM" — the one line that answers "did it save?". Reset when another client opens.
+  const [savedAt, setSavedAt] = useState<Date | null>(null);
+  // Leaving the page with unsaved edits asks first. The browser shows its own wording.
+  useEffect(() => {
+    if (!dirty) return;
+    const onLeave = (e: BeforeUnloadEvent) => { e.preventDefault(); e.returnValue = ''; };
+    window.addEventListener('beforeunload', onLeave);
+    return () => window.removeEventListener('beforeunload', onLeave);
+  }, [dirty]);
   const iframeRef = useRef<HTMLIFrameElement>(null);
 
   const loadClients = useCallback(() => api.clients().then((r) => setClients(r.clients)), []);
@@ -52,6 +61,7 @@ export function App() {
     setSlug(s);
     setRecord(record);
     setDirty(false);
+    setSavedAt(null);
   }, []);
 
   const validation = useMemo(() => (record ? validate(record) : { errors: [], warnings: [] }), [record]);
@@ -160,7 +170,8 @@ export function App() {
       const res = await api.save(slug, record, commitMsg);
       setDiff(null);
       setDirty(false);
-      setToast(res.commit ? `Saved & committed ${res.commit}` : 'Saved (no net change to commit)');
+      setSavedAt(new Date());
+      setToast(res.commit ? `Saved ${new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })} — change ${res.commit} is in the history` : 'Saved — nothing had changed');
       await loadClients();
     } catch (e: any) {
       const b = e.body ?? {};
@@ -227,12 +238,14 @@ export function App() {
             <header className="dash-head">
               <div>
                 <h1>{record.name || slug}</h1>
-                <code>clients/{slug}.json{dirty ? ' •' : ''}</code>
+                <span className={`dash-savestate ${dirty ? 'is-dirty' : ''}`} title={`clients/${slug}.json`} aria-live="polite">
+                  {dirty ? <><span className="dash-savestate-dot" aria-hidden="true" />Unsaved changes</> : savedAt ? `Saved ${savedAt.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}` : 'All changes saved'}
+                </span>
               </div>
               <div className="dash-head-actions">
                 {validation.errors.length > 0 && <span className="dash-pill dash-pill--err">{validation.errors.length} error{validation.errors.length === 1 ? '' : 's'}</span>}
                 {validation.warnings.length > 0 && <span className="dash-pill dash-pill--warn">{validation.warnings.length} warning{validation.warnings.length === 1 ? '' : 's'}</span>}
-                <button className="dash-btn" type="button" disabled={busy || !dirty || validation.errors.length > 0} onClick={reviewSave}>
+                <button className="dash-btn" type="button" disabled={busy || !dirty || validation.errors.length > 0} onClick={reviewSave} title={!dirty ? 'Nothing to save yet' : validation.errors.length ? 'Fix the errors first' : 'Shows what changed, then saves'}>
                   Review &amp; save
                 </button>
                 <button className="dash-btn dash-btn--ghost" type="button" disabled={busy || PUBLISH_RUNNING.includes(pub.state)} onClick={() => startPublish()} title="Build and deploy every committed record to Cloudflare, behind the guard suite">{PUBLISH_RUNNING.includes(pub.state) ? `Publishing… (${pub.stage || pub.state})` : pub.state === 'live' ? 'Publish again' : pub.state === 'failed' ? 'Publish (last failed)' : 'Publish'}</button>
@@ -295,11 +308,12 @@ export function App() {
       {diff !== null && (
         <div className="dash-modal" role="dialog" aria-modal="true">
           <div className="dash-modal-card dash-modal-card--wide">
-            <h3>Review changes to clients/{slug}.json</h3>
+            <h3>Review your changes</h3>
+            <p className="dash-help">Lines starting with − are what the page says now, + is what it will say after you save. <span title={`clients/${slug}.json`}>Technical: the diff of this client's record.</span></p>
             {validation.warnings.length > 0 && <p className="dash-v-warn">⚠ {validation.warnings.join(' ')}</p>}
             <pre className="dash-diff">{colorless(diff)}</pre>
             <label className="dash-field">
-              <span className="dash-label">Commit message</span>
+              <span className="dash-label">Note for the history <span className="dash-help" title="Technical: the git commit message">(what changed, in a few words)</span></span>
               <input className="dash-input" value={commitMsg} onChange={(e) => setCommitMsg(e.target.value)} />
             </label>
             {saveError && (
@@ -315,7 +329,7 @@ export function App() {
             )}
             <div className="dash-modal-actions">
               <button className="dash-btn dash-btn--ghost" type="button" onClick={() => { setDiff(null); setSaveError(null); }}>Cancel</button>
-              <button className="dash-btn" type="button" disabled={busy} onClick={confirmSave}>{saveError ? 'Try again' : busy ? 'Saving…' : 'Write & commit'}</button>
+              <button className="dash-btn" type="button" disabled={busy} onClick={confirmSave}>{saveError ? 'Try again' : busy ? 'Saving…' : 'Save'}</button>
             </div>
           </div>
         </div>

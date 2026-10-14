@@ -394,3 +394,9 @@ body { margin: 0; background: var(--d-bg); color: var(--d-ink); font-family: ui-
 .dash-health-list .is-ok .dash-health-icon { color: var(--d-accent); }
 .dash-health-list .is-bad .dash-health-icon { color: var(--d-err); }
 .dash-health-fix { display: block; color: #6b4a3a; margin-top: 2px; }
+
+/* ---- save state under the client name ---- */
+.dash-savestate { display: inline-flex; align-items: center; gap: 6px; font-size: 0.78rem; color: var(--d-muted); }
+.dash-savestate.is-dirty { color: var(--d-warn); font-weight: 600; }
+.dash-savestate-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--d-warn); animation: dash-pulse 1.6s ease-in-out infinite; }
+@keyframes dash-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
