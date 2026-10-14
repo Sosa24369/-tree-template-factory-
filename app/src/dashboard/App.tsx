@@ -20,6 +20,7 @@ import { Slots } from './Slots';
 import { Copy } from './Copy';
 import { SectionArt } from './SectionArt';
 import { Readiness } from './Readiness';
+import { DeployHealth } from './DeployHealth';
 import { TEMPLATE_META } from '../templates/meta';
 import type { TemplateId } from '../schema/client';
 
@@ -212,6 +213,7 @@ export function App() {
       </aside>
 
       <main className="dash-main">
+        <DeployHealth />
         {signedOut && (
           <div className="dash-session" role="alert">
             <strong>Signed out — sign in again.</strong> The session expired.{' '}

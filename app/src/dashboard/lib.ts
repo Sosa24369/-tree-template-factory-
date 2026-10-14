@@ -84,6 +84,8 @@ async function j<T>(res: Response): Promise<T> {
 }
 
 export const api = {
+  /** Deploy health — booleans only. The dev plugin has no such route (the card hides itself). */
+  health: () => fetch('/api/health').then((r) => (r.ok ? r.json() : Promise.reject(new Error(String(r.status))))),
   publishStatus: () => fetch('/api/publish').then((r) => j<any>(r)),
   // `confirmProtected` is the token the studio was shown when a publish was blocked
   // for touching a live campaign page. It names that exact route set.

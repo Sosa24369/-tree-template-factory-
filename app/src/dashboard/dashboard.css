@@ -378,3 +378,19 @@ body { margin: 0; background: var(--d-bg); color: var(--d-ink); font-family: ui-
 }
 .dash-slot-picker .dash-pick { width: 56px; height: 42px; padding: 0; }
 .dash-slot-picker .dash-thumb { width: 56px; height: 42px; object-fit: cover; border-radius: 3px; }
+
+/* ---- Deploy health card (top of the editor column) ---- */
+.dash-health { border: 1px solid var(--d-line); border-radius: 10px; margin: 0 0 14px; background: #fbfcfd; font-size: 0.85rem; }
+.dash-health--loading { padding: 10px 12px; color: var(--d-muted); }
+.dash-health--bad { border-color: var(--d-err); background: #fff6f5; }
+.dash-health-head { display: flex; align-items: center; gap: 10px; width: 100%; padding: 10px 12px; background: none; border: 0; text-align: left; cursor: pointer; font: inherit; color: inherit; flex-wrap: wrap; }
+.dash-health-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--d-accent); flex: none; }
+.dash-health--bad .dash-health-dot { background: var(--d-err); }
+.dash-health-meta { color: var(--d-muted); font-size: 0.78rem; }
+.dash-health-toggle { margin-left: auto; color: var(--d-muted); font-size: 0.78rem; text-decoration: underline; }
+.dash-health-list { list-style: none; margin: 0; padding: 0 12px 10px; display: grid; gap: 6px; }
+.dash-health-list li { display: flex; gap: 8px; align-items: flex-start; }
+.dash-health-icon { font-weight: 700; flex: none; width: 1.2em; }
+.dash-health-list .is-ok .dash-health-icon { color: var(--d-accent); }
+.dash-health-list .is-bad .dash-health-icon { color: var(--d-err); }
+.dash-health-fix { display: block; color: #6b4a3a; margin-top: 2px; }
