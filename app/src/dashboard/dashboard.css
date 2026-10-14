@@ -400,3 +400,7 @@ body { margin: 0; background: var(--d-bg); color: var(--d-ink); font-family: ui-
 .dash-savestate.is-dirty { color: var(--d-warn); font-weight: 600; }
 .dash-savestate-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--d-warn); animation: dash-pulse 1.6s ease-in-out infinite; }
 @keyframes dash-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
+
+/* ---- the save bar stays reachable: the copy editor alone is 100+ fields ---- */
+.dash-head { position: sticky; top: -22px; z-index: 5; background: var(--d-bg); padding: 22px 0 10px; margin: -22px 0 4px; border-bottom: 1px solid var(--d-line); }
+.dash-head-actions { flex-wrap: wrap; justify-content: flex-end; }

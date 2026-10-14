@@ -162,9 +162,9 @@ function PhotoService({ svc, slug, record, excluded, list, onList }: { svc: Serv
               <div className="dash-photo-badges">
                 {video && <span className="dash-badge" title="a video entry: templates skip it when slotting stills">video</span>}
                 {heroPlate && <span className="dash-badge dash-badge--hero" title="removal-a paints this behind the headline on tablet and desktop">hero plate</span>}
-                {cover.length > 0 && (p.focal ? <span className="dash-badge dash-badge--ok" title={cover.map((s) => `${s.template}/${s.id}`).join(', ')}>focal ✓</span> : <span className="dash-badge dash-badge--warn" title={cover.map((s) => `${s.template}/${s.id}`).join(', ')}>no focal · cropped by {cover.length}</span>)}
+                {cover.length > 0 && (p.focal ? <span className="dash-badge dash-badge--ok" title={cover.map((s) => `${s.template}/${s.id}`).join(', ')}>focal ✓</span> : <span className="dash-badge dash-badge--warn" title={`No focal point set. Cropped in ${cover.length} place${cover.length === 1 ? '' : 's'}: ${cover.map((s) => `${s.template}/${s.id}`).join(', ')}`}>Set the subject</span>)}
                 {cover.length === 0 && slots.length > 0 && <span className="dash-badge" title={slots.map((s) => `${s.template}/${s.id}`).join(', ')}>shown whole</span>}
-                {small && <span className="dash-badge dash-badge--warn" title={`the slots this position feeds want ${need} px`}>{p.width} px · needs {need}</span>}
+                {small && <span className="dash-badge dash-badge--warn" title={`${p.width} px wide; the places this photo goes want ${need} px. Photos are never enlarged.`}>Too small — send {need} px or wider</span>}
                 {isLegacy(p) && <span className="dash-badge" title="imported before the image contract; reported by the image-spec guard, not blocked">legacy</span>}
               </div>
               <input className="dash-input dash-input--sm" placeholder="alt text" value={p.alt ?? ''} onChange={(e) => setAt(i, { alt: e.target.value })} />

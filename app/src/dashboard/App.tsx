@@ -188,7 +188,7 @@ export function App() {
       setDiff(null);
       setDirty(false);
       setSavedAt(new Date());
-      setToast(res.commit ? `Saved ${new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })} — change ${res.commit} is in the history` : 'Saved — nothing had changed');
+      setToast(res.commit ? `Saved ${new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}. Not on your live page yet — click Publish when you're ready.` : 'Saved — nothing had changed.');
       await loadClients();
     } catch (e: any) {
       const b = e.body ?? {};
@@ -215,7 +215,7 @@ export function App() {
       <aside className="dash-side">
         <div className="dash-brand">
           <strong>Template Studio</strong>
-          <span className="dash-brand-sub">edits the client records · previews · publishes behind the guard suite</span>
+          <span className="dash-brand-sub" title="edits the client records · previews · publishes behind the guard suite">Edit a client's pages, preview them, publish them</span>
         </div>
         <button className="dash-btn dash-btn--block" type="button" onClick={() => setShowNew(true)}>
           + New client
@@ -260,10 +260,19 @@ export function App() {
                 </span>
               </div>
               <div className="dash-head-actions">
+                {selected?.built && pub.baseUrl && (
+                  <a className="dash-live-link" href={pageUrl(pub.baseUrl, selected.route) ?? '#'} target="_blank" rel="noreferrer" title="The page as customers see it right now — only Publish changes it">Open live page ↗</a>
+                )}
                 {validation.errors.length > 0 && <span className="dash-pill dash-pill--err">{validation.errors.length} error{validation.errors.length === 1 ? '' : 's'}</span>}
                 {validation.warnings.length > 0 && <span className="dash-pill dash-pill--warn">{validation.warnings.length} warning{validation.warnings.length === 1 ? '' : 's'}</span>}
+                {dirty && (
+                  <button className="dash-btn dash-btn--ghost" type="button" disabled={busy} title="Throw away the edits since the last save and reload the saved version"
+                    onClick={() => { if (window.confirm(`Discard the unsaved edits on ${record.name || slug}? The saved version will be reloaded.`)) selectClient(slug!); }}>
+                    Discard changes
+                  </button>
+                )}
                 <button className="dash-btn" type="button" disabled={busy || !dirty || validation.errors.length > 0} onClick={reviewSave} title={!dirty ? 'Nothing to save yet' : validation.errors.length ? 'Fix the errors first' : 'Shows what changed, then saves'}>
-                  Review &amp; save
+                  Save changes
                 </button>
                 <button className="dash-btn dash-btn--ghost" type="button" disabled={busy || PUBLISH_RUNNING.includes(pub.state)} onClick={() => startPublish()} title={`Puts every client's saved pages live at ${pub.baseUrl ?? 'the live site'} after the safety checks (technical: build + guard suite + wrangler pages deploy)`}>{PUBLISH_RUNNING.includes(pub.state) ? `Publishing… ${stageLabel(pub.stage || pub.state).toLowerCase()}` : pub.state === 'live' ? 'Publish again' : pub.state === 'failed' ? 'Publish (last one failed)' : 'Publish'}</button>
               </div>
