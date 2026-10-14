@@ -32,6 +32,7 @@ import { dashboardCore, STUDIO_IDENTITY } from '../app/dashboard-core.mjs';
 import { verifyPassword, makeSessionCookie, clearSessionCookie, readSession, makeLimiter, loginPage } from './auth.mjs';
 import { makeGit } from './gitsync.mjs';
 import { makePublisher } from './publish.mjs';
+import { readLastDeploy } from './receipt.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const env = (k, d) => (process.env[k] ?? d);
@@ -98,6 +99,32 @@ const authed = (c) => readSession(c.req.header('cookie'), SESSION_SECRET);
 
 /* ---- open routes ---- */
 app.get('/healthz', (c) => c.text('ok'));
+// Deploy health: BOOLEANS ONLY, never a value. Open like /healthz so `npm run
+// studio:deploy` can poll it without a session; the dashboard's "Deploy health" card
+// reads the same JSON and turns every red item into one sentence saying what to do.
+// `build` is this checkout's own commit (Railway sets it for repo deploys, `railway up`
+// may not) so a poller can tell a new deployment from the old container.
+app.get('/api/health', (c) => {
+  let cloneClean = false, cloneHead = null;
+  try { cloneClean = git.dirtyTracked().length === 0; cloneHead = git.head(); } catch { /* clone unreadable: reported red */ }
+  const last = readLastDeploy(REPO_DIR);
+  const checks = {
+    gitIdentity: Boolean(IDENTITY.name && IDENTITY.email),
+    githubToken: Boolean(GITHUB_TOKEN),
+    cloudflareToken: Boolean(env('CLOUDFLARE_API_TOKEN', '')),
+    cloneClean,
+    uiBuilt: existsSync(join(UI_DIR, 'dashboard.html')),
+  };
+  return c.json({
+    ok: Object.values(checks).every(Boolean),
+    checks,
+    lastPublishAt: last?.at ?? null,
+    uptimeSeconds: Math.round(process.uptime()),
+    cloneHead,
+    build: (env('RAILWAY_GIT_COMMIT_SHA', '') || '').slice(0, 7) || null,
+    publishState: publisher.status.state,
+  });
+});
 app.get('/login', (c) => c.html(loginPage({ error: c.req.query('e') === '1' ? 'Wrong password.' : c.req.query('e') === '2' ? 'Too many attempts — wait 15 minutes.' : '' })));
 app.post('/login', async (c) => {
   const who = ip(c);

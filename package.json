@@ -9,7 +9,11 @@
   "scripts": {
     "build": "npm --prefix app ci --no-audit --no-fund && npm --prefix app run build:dashboard && npm --prefix server ci --no-audit --no-fund",
     "start": "node server/index.mjs",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "guards": "node scripts/run-guards.mjs pre",
+    "guards:post": "node scripts/run-guards.mjs post",
+    "studio:deploy": "node scripts/studio-deploy.mjs",
+    "studio:health": "node scripts/studio-deploy.mjs --health-only"
   },
   "keywords": [],
   "author": "",
