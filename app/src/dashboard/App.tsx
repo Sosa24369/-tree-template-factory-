@@ -30,6 +30,19 @@ import type { TemplateId } from '../schema/client';
 
 /** The publish states during which the button is disabled and the panel is "running". */
 const PUBLISH_RUNNING = ['pulling', 'checking', 'building', 'protected', 'deploying'];
+/** Plain-English name for each publish stage; the stage id stays in the tooltip. */
+const STAGE_LABEL: Record<string, string> = {
+  pulling: 'Getting the latest saved changes',
+  checking: 'Running the safety checks',
+  building: 'Building the pages',
+  protected: 'Making sure the live ad pages are unchanged',
+  deploying: 'Uploading to the web host',
+  live: 'Live',
+  failed: 'Failed',
+  blocked: 'Stopped for your OK',
+  idle: 'Not running',
+};
+const stageLabel = (id: string | null | undefined) => (id ? STAGE_LABEL[id] ?? id : '');
 
 export function App() {
   const [clients, setClients] = useState<{ slug: string; name: string }[]>([]);
@@ -107,8 +120,11 @@ export function App() {
    * told us which live campaign pages would change. The token names that exact set,
    * so it cannot be reused for a later publish that touches different pages.
    */
+  const [askPublish, setAskPublish] = useState(false);
   async function startPublish(confirmProtected?: string) {
-    if (dirty) { setToast('Save first — publish deploys what is committed, not what is on screen.'); return; }
+    if (dirty) { setToast('Save first — Publish puts the saved version live, not what is on screen.'); return; }
+    if (!confirmProtected && !askPublish) { setAskPublish(true); return; }
+    setAskPublish(false);
     setPubOpen(true);
     try { setPub(await api.publish(confirmProtected)); } catch (e: any) { if (!e.signedOut) setToast('Publish request failed: ' + e.message); }
   }
@@ -248,7 +264,7 @@ export function App() {
                 <button className="dash-btn" type="button" disabled={busy || !dirty || validation.errors.length > 0} onClick={reviewSave} title={!dirty ? 'Nothing to save yet' : validation.errors.length ? 'Fix the errors first' : 'Shows what changed, then saves'}>
                   Review &amp; save
                 </button>
-                <button className="dash-btn dash-btn--ghost" type="button" disabled={busy || PUBLISH_RUNNING.includes(pub.state)} onClick={() => startPublish()} title="Build and deploy every committed record to Cloudflare, behind the guard suite">{PUBLISH_RUNNING.includes(pub.state) ? `Publishing… (${pub.stage || pub.state})` : pub.state === 'live' ? 'Publish again' : pub.state === 'failed' ? 'Publish (last failed)' : 'Publish'}</button>
+                <button className="dash-btn dash-btn--ghost" type="button" disabled={busy || PUBLISH_RUNNING.includes(pub.state)} onClick={() => startPublish()} title={`Puts every client's saved pages live at ${pub.baseUrl ?? 'the live site'} after the safety checks (technical: build + guard suite + wrangler pages deploy)`}>{PUBLISH_RUNNING.includes(pub.state) ? `Publishing… ${stageLabel(pub.stage || pub.state).toLowerCase()}` : pub.state === 'live' ? 'Publish again' : pub.state === 'failed' ? 'Publish (last one failed)' : 'Publish'}</button>
               </div>
             </header>
 
@@ -335,6 +351,20 @@ export function App() {
         </div>
       )}
 
+      {askPublish && (
+        <div className="dash-modal" role="dialog" aria-modal="true" aria-labelledby="dash-publish-ask">
+          <div className="dash-modal-card">
+            <h3 id="dash-publish-ask">Publish the saved changes?</h3>
+            <p>This builds every client's pages and puts them live{pub.baseUrl ? <> at <code>{pub.baseUrl}</code></> : null}. It usually takes one to two minutes; you can keep editing while it runs.</p>
+            <p className="dash-help">Pages that carry live ads are compared with what is online now. If any would change, publishing stops and asks you first. Nothing goes live if a safety check fails.</p>
+            <div className="dash-modal-actions">
+              <button className="dash-btn dash-btn--ghost" type="button" onClick={() => setAskPublish(false)}>Cancel</button>
+              <button className="dash-btn" type="button" onClick={() => startPublish()}>Publish now</button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {showNew && <NewClient onClose={() => setShowNew(false)} onCreated={async (s) => { setShowNew(false); await loadClients(); await selectClient(s); }} />}
     </div>
   );
@@ -371,7 +401,7 @@ function PublishPanel({ pub, selected, onHide, onConfirm }: { pub: any; selected
   const okCount = results.filter((g) => g.ok).length;
   const ms = pub.startedAt && pub.finishedAt ? new Date(pub.finishedAt).getTime() - new Date(pub.startedAt).getTime() : null;
   const summary = `${okCount}/${suite.length} guards${prot ? ` · ${gateOk}/${prot.checked} gate unchanged` : ''}${ms != null ? ` · ${(ms / 1000).toFixed(1)} s` : ''}`;
-  const title = live ? 'Published' : failed ? 'Publish failed' : blocked ? 'Publish stopped' : `Publishing… ${pub.stage ?? pub.state}`;
+  const title = live ? 'Published' : failed ? 'Publish failed' : blocked ? 'Publish stopped' : `Publishing… ${stageLabel(pub.stage ?? pub.state).toLowerCase()}`;
   const r = pub.receipt;
   // Where the links land: the selected page, never the deployment root.
   const deployHref = r?.deploymentUrl ? (selected?.built ? pageUrl(r.deploymentUrl, selected.route) : r.deploymentUrl) : null;
@@ -381,8 +411,8 @@ function PublishPanel({ pub, selected, onHide, onConfirm }: { pub: any; selected
     <section className={`dash-publish dash-publish--${pub.state}`} aria-live="polite">
       <div className="dash-publish-head">
         <strong>{title}</strong>
-        {failed && failedGuards.length > 0 && <span className="dash-publish-fail">at {pub.stage}: {failedGuards.join(', ')}</span>}
-        {failed && failedGuards.length === 0 && <span className="dash-publish-fail">at {pub.stage}{pub.exitCode != null ? ` (exit ${pub.exitCode})` : ''}</span>}
+        {failed && failedGuards.length > 0 && <span className="dash-publish-fail" title={`stage: ${pub.stage}`}>while {stageLabel(pub.stage).toLowerCase()}: {failedGuards.join(', ')}</span>}
+        {failed && failedGuards.length === 0 && <span className="dash-publish-fail" title={`stage: ${pub.stage}`}>while {stageLabel(pub.stage).toLowerCase()}{pub.exitCode != null ? ` (exit ${pub.exitCode})` : ''}</span>}
         {live && r?.deploymentId && deployHref && (
           <a className="dash-deploy-id" href={deployHref} target="_blank" rel="noreferrer" title={selected?.built ? `${selected.templateId} as served by this deployment` : "this deployment's own address"}>
             deployment {r.deploymentId}{selected?.built ? ` · ${selected.templateId}` : ''}
@@ -399,13 +429,13 @@ function PublishPanel({ pub, selected, onHide, onConfirm }: { pub: any; selected
         {/* A failure is the first thing in the panel, always. */}
         {failed && failedGuards.length > 0 && (
           <p className="dash-v-err dash-publish-verdict">
-            ✗ Nothing was deployed. {failedGuards.length} guard{failedGuards.length === 1 ? '' : 's'} failed:{' '}
-            <strong>{failedGuards.join(', ')}</strong>. Fix the cause and publish again — there is no override.
+            ✗ Nothing went live. {failedGuards.length} safety check{failedGuards.length === 1 ? '' : 's'} failed:{' '}
+            <strong>{failedGuards.join(', ')}</strong>. The reason is in the list below; fix it and publish again — there is no override.
           </p>
         )}
         {failed && failedGuards.length === 0 && (
           <p className="dash-v-err dash-publish-verdict">
-            ✗ Nothing was deployed. The <strong>{pub.stage}</strong> step failed{pub.exitCode != null ? ` (exit ${pub.exitCode})` : ''}. Its output is below.
+            ✗ Nothing went live. The step <strong title={pub.stage}>{stageLabel(pub.stage).toLowerCase()}</strong> failed{pub.exitCode != null ? ` (exit ${pub.exitCode})` : ''}. Its output is below; if it mentions a token, see the Deploy health card at the top.
           </p>
         )}
 
@@ -429,8 +459,8 @@ function PublishPanel({ pub, selected, onHide, onConfirm }: { pub: any; selected
         {blocked && (
           <div className="dash-blocked">
             <p className="dash-v-warn">
-              ⚠ Stopped before deploying. This build would change {prot?.changed?.length ?? 0} live
-              campaign page{(prot?.changed?.length ?? 0) === 1 ? '' : 's'}
+              ⚠ Stopped before anything went live. This would change {prot?.changed?.length ?? 0} page{(prot?.changed?.length ?? 0) === 1 ? '' : 's'} that
+              {(prot?.changed?.length ?? 0) === 1 ? ' is' : ' are'} running paid ads right now
               {(prot?.unreachable?.length ?? 0) > 0 && `, and ${prot.unreachable.length} could not be verified`}.
               Nothing has been uploaded.
             </p>
@@ -458,7 +488,7 @@ function PublishPanel({ pub, selected, onHide, onConfirm }: { pub: any; selected
 
         {live ? (
           <details className="dash-publish-log">
-            <summary>wrangler output</summary>
+            <summary>Upload log <span className="dash-help">(technical: wrangler output)</span></summary>
             <pre className="dash-publish-tail">{(pub.tail ?? []).join('\n') || '…'}</pre>
           </details>
         ) : (
